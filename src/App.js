@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+// src\App.js
+import "./App.css";
+import { Routes, Route, Link } from "react-router-dom";
+
+// Import your page components
+import GettingStartedPage from "./pages/getting_started/GettingStartedPage";
+import MapPage from "./pages/map/MapPage";
+import ItineraryPage from "./pages/itinerary/ItineraryPage";
+import ExpensesPage from "./pages/expenses/ExpensesPage";
+import MyTripsPage from "./pages/my_trips/MyTripsPage";
+import LoginPage from "./pages/login/LoginPage";
+import RegisterPage from "./pages/register/RegisterPage";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <nav>
+        <Link to="/getting-started">Getting Started</Link> |
+        <Link to="/map">Map</Link> |<Link to="/itinerary">Itinerary</Link> |
+        <Link to="/expenses">Expenses</Link> |
+        <Link to="/my-trips">My Trips</Link> |<Link to="/login">Login</Link> |
+        <Link to="/register">Register</Link>
+      </nav>
+      <Routes>
+        <Route path="/getting-started" element={<GettingStartedPage />} />
+        <Route path="/map" element={<MapPage />} />
+        <Route path="/itinerary" element={<ItineraryPage />} />
+        <Route path="/expenses" element={<ExpensesPage />} />
+        <Route path="/my-trips" element={<MyTripsPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Routes>
     </div>
   );
 }
