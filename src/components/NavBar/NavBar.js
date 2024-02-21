@@ -21,6 +21,7 @@ import {
 import { ColorModeContext } from "./ToggleTheme";
 import { Link } from "react-router-dom";
 
+// pages that we will use
 const pages = [
 	"Expenses",
 	"Getting-Started",
@@ -30,28 +31,45 @@ const pages = [
 	"Login",
 	"Register",
 ];
+
+// settings that we will use for user
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
+	// this is mean that the menu is not open for the 3 lines menu
 	const [anchorElNav, setAnchorElNav] = useState(null);
+	// this is mean that the menu is not open
 	const [anchorElUser, setAnchorElUser] = useState(null);
+
+	// get the current theme
 	const theme = useTheme();
+	// get the current color mode
 	const colorMode = useContext(ColorModeContext);
 
+	// handle the open and close of the menu
 	const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
 	const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
 	const handleCloseNavMenu = () => setAnchorElNav(null);
 	const handleCloseUserMenu = () => setAnchorElUser(null);
 
+	// render the menu items
+	// items is the array of items that we want to render
+	// handleClose is the function that we want to call when we click on the item
 	const renderMenuItems = (items, handleClose) =>
+		// map the items and return the MenuItem component
 		items.map((item) => (
+			// key is the item that we want to render and onClick is the function that we want to call when we click on the item
 			<MenuItem key={item} onClick={handleClose}>
 				<Typography textAlign="center">{item}</Typography>
 			</MenuItem>
 		));
 
 	return (
+		// AppBar is the component that we use to create the app bar
 		<AppBar position="static">
+			{/* Box is the component that we use to create the layout 
+                This is use for the layout of the app bar  or the header of the app / or the logo
+            */}
 			<Box maxWidth="xl" component={Toolbar} disableGutters>
 				<AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
 				<Typography
@@ -72,6 +90,8 @@ function ResponsiveAppBar() {
 				>
 					LOGO
 				</Typography>
+
+				{/* Add 3 lines menu for the responsive */}
 				<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
 					<IconButton
 						size="large"
@@ -102,6 +122,8 @@ function ResponsiveAppBar() {
 						{renderMenuItems(pages, handleCloseNavMenu)}
 					</Menu>
 				</Box>
+
+				{/* AbdIcon means the logo */}
 				<AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
 				<Typography
 					variant="h5"
@@ -122,7 +144,7 @@ function ResponsiveAppBar() {
 					LOGO
 				</Typography>
 
-				{/* Add link to pages*/}
+				{/* Add link to pages for normal display*/}
 				<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
 					{pages.map((page) => (
 						<Link
@@ -153,6 +175,7 @@ function ResponsiveAppBar() {
 					)}
 				</IconButton>
 
+				{/* Add user menu */}
 				<Box sx={{ flexGrow: 0 }}>
 					<Tooltip title="Open settings">
 						<IconButton onClick={handleOpenUserMenu} sx={{ p: 0, mr: 1 }}>

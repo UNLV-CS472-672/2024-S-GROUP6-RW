@@ -21,6 +21,7 @@ import React, { useEffect } from "react";
 
 function App() {
 	return (
+		// Wrap the app in the ToggleColorMode component so that the theme can be toggled
 		<ToggleColorMode>
 			<AppContent />
 		</ToggleColorMode>
@@ -28,15 +29,18 @@ function App() {
 }
 
 function AppContent() {
+	// Get the current theme
 	const theme = useTheme();
 
+	// Apply the background color to the body element
 	useEffect(() => {
 		// Apply the background color to the body element
 		document.body.style.backgroundColor = theme.palette.background.default;
 	}, [theme.palette.background.default]);
 
 	return (
-		<div className="App">
+		// Apply the theme to the app
+		<div className="App" style={{ color: theme.palette.text.primary }}>
 			<NavBar />
 			<Routes>
 				<Route path="/getting-started" element={<GettingStartedPage />} />
