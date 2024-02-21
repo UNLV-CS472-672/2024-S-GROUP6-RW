@@ -21,13 +21,14 @@ import {
 import { ColorModeContext } from "./ToggleTheme";
 import { Link } from "react-router-dom";
 
-// pages that we will use
-const pages = ["Expenses", "Itinerary", "Map", "My-Trips", "Login", "Register"];
-
+// pages that we will use In general
+const pages = ["Expenses", "Itinerary", "Map", "My-Trips"];
+// 1st time
+const authPages = ["Login", "Register"];
 // settings that we will use for user
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const userPages = ["Profile", "Account", "Dashboard", "Logout"];
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({ user }) {
 	// this is mean that the menu is not open for the 3 lines menu
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	// this is mean that the menu is not open
@@ -51,7 +52,12 @@ function ResponsiveAppBar() {
 		// map the items and return the MenuItem component
 		items.map((item) => (
 			// key is the item that we want to render and onClick is the function that we want to call when we click on the item
-			<MenuItem key={item} onClick={handleClose}>
+			<MenuItem
+				key={item}
+				onClick={handleClose}
+				component={Link}
+				to={`/${item.toLowerCase().replace(" ", "")}`}
+			>
 				<Typography textAlign="center">{item}</Typography>
 			</MenuItem>
 		));
@@ -112,6 +118,8 @@ function ResponsiveAppBar() {
 						}}
 					>
 						{renderMenuItems(pages, handleCloseNavMenu)}
+						{/*Handle the way it display if user or not in the 3 lines menu*/}
+						{!user && renderMenuItems(authPages, handleCloseNavMenu)}
 					</Menu>
 				</Box>
 
@@ -120,7 +128,8 @@ function ResponsiveAppBar() {
 				<Typography
 					variant="h5"
 					noWrap
-					component="a"
+					component={Link}
+					to="/"
 					href="#app-bar-with-responsive-menu"
 					sx={{
 						mr: 2,
@@ -167,16 +176,41 @@ function ResponsiveAppBar() {
 					)}
 				</IconButton>
 
+				{/* if the user is logged in then we will show the user pages
+                    & if not -> display getting started page */}
+				<Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+					{!user &&
+						authPages.map((page) => (
+							<Link
+								to={`/${page.toLowerCase().replace(" ", "")}`}
+								key={page}
+								sx={{ textDecoration: "none" }}
+							>
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{ my: 2, color: "white", display: "block" }}
+								>
+									{page}
+								</Button>
+							</Link>
+						))}
+				</Box>
+
 				{/* Add user menu */}
 				<Box sx={{ flexGrow: 0 }}>
-					<Tooltip title="Open settings">
-						<IconButton onClick={handleOpenUserMenu} sx={{ p: 0, mr: 1 }}>
-							<Avatar
-								alt="Remy Sharp"
-								src="/static/images/avatar/2.jpg"
-							/>
-						</IconButton>
-					</Tooltip>
+					{user && (
+						<Tooltip title="Open settings">
+							<IconButton
+								onClick={handleOpenUserMenu}
+								sx={{ p: 0, mr: 1 }}
+							>
+								<Avatar
+									alt="Remy Sharp"
+									src="/static/images/avatar/2.jpg"
+								/>
+							</IconButton>
+						</Tooltip>
+					)}
 					<Menu
 						sx={{ mt: "45px" }}
 						id="menu-appbar"
@@ -187,7 +221,7 @@ function ResponsiveAppBar() {
 						open={Boolean(anchorElUser)}
 						onClose={handleCloseUserMenu}
 					>
-						{renderMenuItems(settings, handleCloseUserMenu)}
+						{renderMenuItems(userPages, handleCloseUserMenu)}
 					</Menu>
 				</Box>
 			</Box>

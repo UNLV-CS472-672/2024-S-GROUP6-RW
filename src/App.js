@@ -17,18 +17,35 @@ import ToggleColorMode from "./components/NavBar/ToggleTheme";
 
 // import theme and stuff to deal with toggle
 import { useTheme } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 function App() {
+	// hard code for testing as we not have databse/back end yet
+	const [user, setUser] = useState(null);
+
+	const toggleUser = () => {
+		if (user) {
+			setUser(null); // log out simulation
+		} else {
+			setUser({
+				id: 1,
+				username: "test User 1",
+				email: "testUser1@example.com",
+			}); // some fake user
+		}
+	};
+
 	return (
 		// Wrap the app in the ToggleColorMode component so that the theme can be toggled
 		<ToggleColorMode>
-			<AppContent />
+			<AppContent user={user} />
+			{/*Add some button to test the user by simulate log out*/}
+			<button onClick={toggleUser}>{user ? "Log out" : "Log in"}</button>
 		</ToggleColorMode>
 	);
 }
 
-function AppContent() {
+function AppContent({ user }) {
 	// Get the current theme
 	const theme = useTheme();
 
@@ -41,7 +58,7 @@ function AppContent() {
 	return (
 		// Apply the theme to the app
 		<div className="App" style={{ color: theme.palette.text.primary }}>
-			<NavBar />
+			<NavBar user={user} />
 			<Routes>
 				<Route path="/" element={<GettingStartedPage />} />
 				<Route path="/map" element={<MapPage />} />
