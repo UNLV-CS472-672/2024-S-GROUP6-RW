@@ -43,7 +43,7 @@ function AppContent() {
 		<div className="App" style={{ color: theme.palette.text.primary }}>
 			<NavBar />
 			<Routes>
-				<Route path="/getting-started" element={<GettingStartedPage />} />
+				<Route path="/" element={<GettingStartedPage />} />
 				<Route path="/map" element={<MapPage />} />
 				<Route path="/itinerary" element={<ItineraryPage />} />
 				<Route path="/expenses" element={<ExpensesPage />} />

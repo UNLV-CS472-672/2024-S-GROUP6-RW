@@ -22,15 +22,7 @@ import { ColorModeContext } from "./ToggleTheme";
 import { Link } from "react-router-dom";
 
 // pages that we will use
-const pages = [
-	"Expenses",
-	"Getting-Started",
-	"Itinerary",
-	"Map",
-	"My-Trips",
-	"Login",
-	"Register",
-];
+const pages = ["Expenses", "Itinerary", "Map", "My-Trips", "Login", "Register"];
 
 // settings that we will use for user
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
