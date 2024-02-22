@@ -4,6 +4,7 @@ import ExpenseForm from "./ExpensesForm/ExpensesForm";
 function ExpensesPage() {
 	return (
 		<div>
+			{/* Form for adding new expenses as well as list of expenses */}
 			<ExpenseForm />
 			{/* ...other components if necessary */}
 		</div>
