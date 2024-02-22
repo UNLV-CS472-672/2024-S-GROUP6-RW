@@ -146,7 +146,7 @@ const ExpenseForm = () => {
 									expense={dialogExpense} // pass the expense
 									open={dialogOpen} // pass the open state
 									onClose={() => setDialogOpen(false)} // pass the function to close the dialog
-									newData={dialogExpense === null} // pass the newData
+									newData={true} // pass the newData
 								/>
 							</Grid>
 
