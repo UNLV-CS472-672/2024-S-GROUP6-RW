@@ -32,10 +32,17 @@ const placesData = [
 //rand for testing
 const randomPlace = placesData[Math.floor(Math.random() * placesData.length)];
 
+let idUniqueSet = new Set();
+
 // make new functions that auto generate the expenseData
 const generateRandomExpenseData = () => {
 	//use rand to generate the id
-	const id = Math.floor(Math.random() * 1000);
+	let id = Math.floor(Math.random() * 1000);
+	//do unique id to prevent duplicate
+	while (idUniqueSet.has(id)) {
+		id = Math.floor(Math.random() * 1000);
+	}
+	idUniqueSet.add(id);
 	//generate name by using random string
 	const name = "Expense " + Math.floor(Math.random() * 1000);
 	const amount = Math.floor(Math.random() * 1000);
@@ -45,12 +52,19 @@ const generateRandomExpenseData = () => {
 
 const ExpenseForm = () => {
 	//Use for loop to generate the expenseData 20x
-	const [expensesData, setExpensesData] = useState(
-		Array.from({ length: 20 }, () => generateRandomExpenseData())
-	);
+	// Generate and sort the expenseData
+	const [expensesData, setExpensesData] = useState(() => {
+		const expenses = Array.from({ length: 20 }, () =>
+			generateRandomExpenseData()
+		);
+		expenses.sort((a, b) =>
+			a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+		);
+		return expenses;
+	});
 
 	// sort array
-	expensesData.sort((a, b) => String(a.name).localeCompare(String(b.name)));
+	//expensesData.sort((a, b) => String(a.name).localeCompare(String(b.name)));
 
 	//state to manage the dialog open and close
 	const [dialogExpense, setDialogExpense] = useState(null);
@@ -70,10 +84,8 @@ const ExpenseForm = () => {
 	const handleAddExpense = useCallback((expense) => {
 		// add the new expense to the expensesData array
 		setExpensesData((prevExpenses) => {
-			// add the new expense to the array
-			const newExpenses = [...prevExpenses, expense];
-			// sort the array by the name of the expense
-			newExpenses.sort((a, b) => a.name.localeCompare(b.name));
+			// add the new expense to the array at the beginning
+			const newExpenses = [expense, ...prevExpenses];
 			// return the sorted array
 			return newExpenses;
 		});
