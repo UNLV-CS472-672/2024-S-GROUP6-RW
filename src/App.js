@@ -38,9 +38,9 @@ function App() {
 	return (
 		// Wrap the app in the ToggleColorMode component so that the theme can be toggled
 		<ToggleColorMode>
+			<button onClick={toggleUser}>{user ? "Log out" : "Log in"}</button>
 			<AppContent user={user} />
 			{/*Add some button to test the user by simulate log out*/}
-			<button onClick={toggleUser}>{user ? "Log out" : "Log in"}</button>
 		</ToggleColorMode>
 	);
 }
