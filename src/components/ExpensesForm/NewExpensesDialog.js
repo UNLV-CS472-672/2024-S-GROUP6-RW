@@ -61,7 +61,6 @@ const NewExpenseDialog = ({
 		setAmount("");
 		setPayer("");
 		setDate("");
-		setError("");
 	};
 
 	// function to handle the add event of the expense
@@ -69,12 +68,18 @@ const NewExpenseDialog = ({
 		//data validation
 		if (name === "" || amount === "" || payer === "" || date === "") {
 			setError("All fields are required.");
+			clearForm();
 			return;
 		}
 
 		if (parseFloat(amount) <= 0) {
 			setError("Amount must be greater than 0.");
+			clearForm();
 			return;
+		}
+
+		if (error) {
+			clearForm();
 		}
 
 		// Call the onAddExpense or onEditExpense function with the new expense details
@@ -145,6 +150,7 @@ const NewExpenseDialog = ({
 					</DialogContentText>
 					{/* show the error message if there is any data validation fail */}
 					{error && <Alert severity="error">{error}</Alert>}
+
 					{/* text field for the name */}
 					<TextField
 						autoFocus

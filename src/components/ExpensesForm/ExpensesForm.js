@@ -39,7 +39,19 @@ const cols = [
 		field: "date",
 		headerName: "Date",
 		width: 150,
-		valueGetter: (params) => params.value.toDateString(),
+		valueGetter: (params) => {
+			if (params.value instanceof Date) {
+				return params.value.toDateString();
+			} else {
+				// params.value is not a Date object
+				try {
+					return new Date(params.value).toDateString();
+				} catch (error) {
+					// invalid so we jus ttakje the date of today
+					return new Date().toDateString();
+				}
+			}
+		},
 	},
 	{ field: "actions", headerName: "", width: 150, sortable: false },
 ];
