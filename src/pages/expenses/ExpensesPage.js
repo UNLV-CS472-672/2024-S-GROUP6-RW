@@ -1,5 +1,5 @@
 import React from "react";
-import ExpenseForm from "./ExpensesForm/ExpensesForm";
+import ExpenseForm from "../../components/ExpensesForm/ExpensesForm";
 
 function ExpensesPage() {
 	return (

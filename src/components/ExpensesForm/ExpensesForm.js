@@ -1,12 +1,9 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
 	AppBar,
 	Toolbar,
 	Typography,
 	Button,
-	List,
-	ListItem,
-	ListItemText,
 	Container,
 	Paper,
 	TextField,
@@ -16,6 +13,9 @@ import {
 	Grid,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+
+//use dataGrid for fancy display and sorting with pagination
+import { DataGrid } from "@mui/x-data-grid";
 
 import NewExpenseDialog from "./NewExpensesDialog";
 
@@ -34,6 +34,21 @@ const randomPlace = placesData[Math.floor(Math.random() * placesData.length)];
 
 let idUniqueSet = new Set();
 
+//this will be used to store data from database later on
+// will ahve to modify
+const cols = [
+	{ field: "name", headerName: "Name", width: 150 },
+	{ field: "amount", headerName: "Amount", width: 150 },
+	{ field: "payer", headerName: "Payer", width: 150 },
+	{
+		field: "date",
+		headerName: "Date",
+		width: 150,
+		valueGetter: (params) => params.value.toDateString(),
+	},
+	{ field: "actions", headerName: "", width: 150, sortable: false },
+];
+
 // make new functions that auto generate the expenseData
 const generateRandomExpenseData = () => {
 	//use rand to generate the id
@@ -47,7 +62,10 @@ const generateRandomExpenseData = () => {
 	const name = "Expense " + Math.floor(Math.random() * 1000);
 	const amount = Math.floor(Math.random() * 1000);
 	const payer = "User " + Math.floor(Math.random() * 1000);
-	return { id, name, amount, payer };
+	//make some date so that we can do the history of the expense
+	const date = new Date();
+	date.setDate(date.getDate() - Math.floor(Math.random() * 1000));
+	return { id, name, amount, payer, date };
 };
 
 const ExpenseForm = () => {
@@ -99,23 +117,30 @@ const ExpenseForm = () => {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [searchType, setSearchType] = useState("name");
 
-	// Create a new function for the search logic
-	const filterExpenses = () => {
-		return expensesData.filter((expense) => {
-			// need to conver to lower case to make the search case insensitive
-			// but we might need to take care of the case sensitive in the future?
-			if (searchType === "payer") {
-				return expense.payer
-					.toLowerCase()
-					.includes(searchTerm.toLowerCase());
-			} else if (searchType === "name") {
-				return expense.name
-					.toLowerCase()
-					.includes(searchTerm.toLowerCase());
-			}
-			return true;
-		});
-	};
+	const [filteredExpenses, setFilteredExpenses] = useState([]);
+
+	// Use the useEffect hook to filter the expensesData array based on the search term and search type
+	// and doing this will help to filter the data without the need to refresh the page
+	useEffect(() => {
+		// arrow function to filter the expensesData array based on the search term and search type
+		setFilteredExpenses(
+			expensesData.filter((expense) => {
+				// if the search type is payer, use the payer field to filter the array
+				if (searchType === "payer") {
+					return expense.payer
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase());
+				} else if (searchType === "name") {
+					// if the search type is name, use the name field to filter the array
+					return expense.name
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase());
+				}
+				return true;
+			})
+		);
+		// add the expensesData, searchTerm, and searchType to the dependency array
+	}, [expensesData, searchTerm, searchType]);
 
 	return (
 		// Container = used to center the content and set the max-width
@@ -188,39 +213,60 @@ const ExpenseForm = () => {
 				</AppBar>
 			</Paper>
 
-			{/* Box = used to create a container for the content and to make it consistence with rest of design */}
-			<Box
-				sx={{
-					border: 2,
-					borderColor: "divider",
-					borderRadius: 2,
-					overflow: "hidden",
+			{/* Use the new DataGrid component to display the expensesData array for fancy UI
+				row per page = 5 and options to show row per oage 5, 10, 15, 20
+			*/}
+			<DataGrid
+				// set the height and width of the data grid (esp the ehight to make it scrollable)
+				sx={{ height: 400, width: "100%" }}
+				// populate the data grid with the expensesData array
+				{...expensesData}
+				// set the initial state of the data grid with the expensesData array
+				// and we also set the pagination to show 5 rows per page
+				initialState={{
+					...expensesData.initialState,
+					pagination: { paginationModel: { pageSize: 5 } },
 				}}
-			>
-				{/* List = used to create a list of items and we use dense to make the list more compact.
-    			We will also set max-height and display the scrollbar if the content is too long */}
-				<List dense sx={{ maxHeight: "400px", overflow: "auto" }}>
-					{/* Use the new function to filter the expensesData array */}
-					{filterExpenses().map((expense) => (
-						<ListItem key={expense.id} divider>
-							<ListItemText
-								primary={expense.name}
-								secondary={`Amount: $${expense.amount} - Paid by: ${expense.payer}`}
-							/>
-							<NewExpenseDialog
-								onAddExpense={handleAddExpense}
-								expense={dialogExpense}
-								open={dialogOpen}
-								onClose={() => setDialogOpen(false)}
-								newData={false}
-							/>
-							<Button onClick={() => handleRemoveExpense(expense.id)}>
-								<DeleteIcon />
-							</Button>
-						</ListItem>
-					))}
-				</List>
-			</Box>
+				// set the page size options to show 5, 10, 25, 50, and 100 rows per page
+				pageSizeOptions={[5, 10, 25, 50, 100]}
+				// set the columns of the data grid
+				columns={cols.map((col) => ({
+					...col,
+					// we have to do it this way bc the way I set up the NewExpenseDialog component
+					// TODO: Think of better way to redo the NewExpenseDialog component
+					// so that we wont have to do renderCell if we ever want to add more columns
+					renderCell: (params) => {
+						if (col.field === "actions") {
+							return (
+								// Box = used to create a container for the content
+								// this will be like div in html but with more features
+								<Box display="flex" flexDirection="row">
+									<NewExpenseDialog
+										onAddExpense={handleAddExpense}
+										expense={dialogExpense}
+										open={dialogOpen}
+										onClose={() => setDialogOpen(false)}
+										newData={false}
+									/>
+									{/* delete button*/}
+									<Button
+										onClick={() => handleRemoveExpense(params.value)}
+									>
+										<DeleteIcon />
+									</Button>
+								</Box>
+							);
+						}
+						// return the value of the cell if it is not the actions column
+						return params.value;
+					},
+				}))}
+				// set the rows of the data grid to the filteredExpenses array to display the filtered expenses
+				rows={filteredExpenses.map((expense) => ({
+					...expense,
+					actions: expense.id,
+				}))}
+			/>
 		</Container>
 	);
 };

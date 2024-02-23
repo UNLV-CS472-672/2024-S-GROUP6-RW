@@ -39,6 +39,8 @@ const NewExpenseDialog = ({
 	const [name, setName] = useState(expense ? expense.name : "");
 	const [amount, setAmount] = useState(expense ? expense.amount : "");
 	const [payer, setPayer] = useState(expense ? expense.payer : "");
+	// state var for the date
+	const [date, setDate] = useState(expense ? expense.date : "");
 	// state variable to manage the error message
 	const [error, setError] = useState("");
 
@@ -58,13 +60,14 @@ const NewExpenseDialog = ({
 		setName("");
 		setAmount("");
 		setPayer("");
+		setDate("");
 		setError("");
 	};
 
 	// function to handle the add event of the expense
 	const handleAdd = () => {
 		//data validation
-		if (name === "" || amount === "" || payer === "") {
+		if (name === "" || amount === "" || payer === "" || date === "") {
 			setError("All fields are required.");
 			return;
 		}
@@ -81,6 +84,7 @@ const NewExpenseDialog = ({
 				name,
 				amount,
 				payer,
+				date,
 			});
 		} else {
 			onAddExpense({
@@ -88,6 +92,7 @@ const NewExpenseDialog = ({
 				name,
 				amount,
 				payer,
+				date,
 			});
 		}
 
@@ -100,6 +105,7 @@ const NewExpenseDialog = ({
 		setName(expense ? expense.name : "");
 		setAmount(expense ? expense.amount : "");
 		setPayer(expense ? expense.payer : "");
+		setDate(expense ? expense.date : "");
 	}, [expense]); //the [expense] array is the dependency array
 	// it means that the useEffect will run when the expense changes
 	// and it will update the name, amount and payer state variables
@@ -128,11 +134,14 @@ const NewExpenseDialog = ({
 			)}
 
 			<Dialog open={open} onClose={handleClose}>
-				<DialogTitle>Add a new expense</DialogTitle>
+				<DialogTitle>
+					{newData ? "Add a new expense" : "Edit expense"}
+				</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						Please enter the name, the amount and the payer to add new
-						expense.
+						{newData
+							? "Enter the details of the new expense."
+							: "Edit the details of the expense."}
 					</DialogContentText>
 					{/* show the error message if there is any data validation fail */}
 					{error && <Alert severity="error">{error}</Alert>}
@@ -163,6 +172,15 @@ const NewExpenseDialog = ({
 						fullWidth
 						value={payer}
 						onChange={(e) => setPayer(e.target.value)}
+					/>
+
+					{/* text field for the date */}
+					<TextField
+						margin="dense"
+						type="date"
+						fullWidth
+						value={date}
+						onChange={(e) => setDate(e.target.value)}
 					/>
 				</DialogContent>
 				{/* buttons for cancel and add */}
