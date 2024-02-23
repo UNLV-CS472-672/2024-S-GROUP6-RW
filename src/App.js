@@ -1,6 +1,6 @@
 // src\App.js
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 // Import your page components
 import GettingStartedPage from "./pages/getting_started/GettingStartedPage";
@@ -47,6 +47,7 @@ function App() {
 		<ToggleColorMode>
 			<AppContent user={user} updateUser={updateUser}/>
 			{/*Add some button to test the user by simulate log out*/}
+			<button onClick={toggleUser}>{user ? "Log out" : "Log in"}</button>
 		</ToggleColorMode>
 	);
 }
@@ -55,21 +56,10 @@ function AppContent({ user, updateUser }) {
 	// Get the current theme
 	const theme = useTheme();
 
-	//these 2 will make reload browser go to home page
-	// but I comment it out for sake of testing easier
-	//const navigate = useNavigate();
-	//const [hasNavigated, setHasNavigated] = useState(false);
-
 	// Apply the background color to the body element
 	useEffect(() => {
 		// Apply the background color to the body element
 		document.body.style.backgroundColor = theme.palette.background.default;
-		/*if (!hasNavigated) {
-			// Navigate to the home page when the app first loads and when we click reload
-			navigate("/");
-			setHasNavigated(true);
-		}*/
-		// add naviagte and hasNavigated to the dependency array if you want to use it
 	}, [theme.palette.background.default]);
 
 	return (
