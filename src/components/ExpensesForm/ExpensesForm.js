@@ -80,6 +80,17 @@ const ExpenseForm = () => {
 		return expenses;
 	});
 
+	// sort array
+	//expensesData.sort((a, b) => String(a.name).localeCompare(String(b.name)));
+
+	//state to manage the dialog open and close
+	const [dialogExpense, setDialogExpense] = useState(null);
+	const [dialogOpen, setDialogOpen] = useState(false);
+	// Add new state variables for the search term and search type
+	const [searchTerm, setSearchTerm] = useState("");
+	const [searchType, setSearchType] = useState("name");
+	const [filteredExpenses, setFilteredExpenses] = useState([]);
+
 	// Use the useEffect hook to filter the expensesData array based on the search term and search type
 	// and doing this will help to filter the data without the need to refresh the page
 	useEffect(() => {
@@ -102,17 +113,6 @@ const ExpenseForm = () => {
 		);
 		// add the expensesData, searchTerm, and searchType to the dependency array
 	}, [expensesData, searchTerm, searchType]);
-
-	// sort array
-	//expensesData.sort((a, b) => String(a.name).localeCompare(String(b.name)));
-
-	//state to manage the dialog open and close
-	const [dialogExpense, setDialogExpense] = useState(null);
-	const [dialogOpen, setDialogOpen] = useState(false);
-	// Add new state variables for the search term and search type
-	const [searchTerm, setSearchTerm] = useState("");
-	const [searchType, setSearchType] = useState("name");
-	const [filteredExpenses, setFilteredExpenses] = useState([]);
 
 	// function to handle the remove event of the expense
 	// use useCallback to prevent the function from being recreated on every render
