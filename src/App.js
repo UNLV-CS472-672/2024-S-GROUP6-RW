@@ -15,6 +15,8 @@ import RegisterPage from "./pages/register/RegisterPage";
 import NavBar from "./components/NavBar/NavBar";
 import ToggleColorMode from "./components/NavBar/ToggleTheme";
 
+import SignInDialog from "./components/NavBar/SignInDialog";
+
 // import theme and stuff to deal with toggle
 import { useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -31,21 +33,25 @@ function App() {
 				id: 1,
 				username: "test User 1",
 				email: "testUser1@example.com",
+				password: "********",
 			}); // some fake user
 		}
 	};
+	
+	  const updateUser = (newUser) => {
+		setUser(newUser);
+	  };
 
 	return (
 		// Wrap the app in the ToggleColorMode component so that the theme can be toggled
 		<ToggleColorMode>
-			<button onClick={toggleUser}>{user ? "Log out" : "Log in"}</button>
-			<AppContent user={user} />
+			<AppContent user={user} updateUser={updateUser}/>
 			{/*Add some button to test the user by simulate log out*/}
 		</ToggleColorMode>
 	);
 }
 
-function AppContent({ user }) {
+function AppContent({ user, updateUser }) {
 	// Get the current theme
 	const theme = useTheme();
 
@@ -69,7 +75,8 @@ function AppContent({ user }) {
 	return (
 		// Apply the theme to the app
 		<div className="App" style={{ color: theme.palette.text.primary }}>
-			<NavBar user={user} />
+			<NavBar user={user} updateUser={updateUser}/>
+			<SignInDialog />
 			<Routes>
 				<Route path="/" element={<GettingStartedPage />} />
 				<Route path="/map" element={<MapPage />} />
