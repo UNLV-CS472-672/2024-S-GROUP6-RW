@@ -91,29 +91,6 @@ const ExpenseForm = () => {
 	const [searchType, setSearchType] = useState("name");
 	const [filteredExpenses, setFilteredExpenses] = useState([]);
 
-	// Use the useEffect hook to filter the expensesData array based on the search term and search type
-	// and doing this will help to filter the data without the need to refresh the page
-	useEffect(() => {
-		// arrow function to filter the expensesData array based on the search term and search type
-		setFilteredExpenses(
-			expensesData.filter((expense) => {
-				// if the search type is payer, use the payer field to filter the array
-				if (searchType === "payer") {
-					return expense.payer
-						.toLowerCase()
-						.includes(searchTerm.toLowerCase());
-				} else if (searchType === "name") {
-					// if the search type is name, use the name field to filter the array
-					return expense.name
-						.toLowerCase()
-						.includes(searchTerm.toLowerCase());
-				}
-				return true;
-			})
-		);
-		// add the expensesData, searchTerm, and searchType to the dependency array
-	}, [expensesData, searchTerm, searchType]);
-
 	// function to handle the remove event of the expense
 	// use useCallback to prevent the function from being recreated on every render
 	const handleRemoveExpense = useCallback((id) => {
@@ -138,6 +115,29 @@ const ExpenseForm = () => {
 		// open the dialog
 		setDialogOpen(true);
 	}, []);
+
+	// Use the useEffect hook to filter the expensesData array based on the search term and search type
+	// and doing this will help to filter the data without the need to refresh the page
+	useEffect(() => {
+		// arrow function to filter the expensesData array based on the search term and search type
+		setFilteredExpenses(
+			expensesData.filter((expense) => {
+				// if the search type is payer, use the payer field to filter the array
+				if (searchType === "payer") {
+					return expense.payer
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase());
+				} else if (searchType === "name") {
+					// if the search type is name, use the name field to filter the array
+					return expense.name
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase());
+				}
+				return true;
+			})
+		);
+		// add the expensesData, searchTerm, and searchType to the dependency array
+	}, [expensesData, searchTerm, searchType]);
 
 	return (
 		// Container = used to center the content and set the max-width
