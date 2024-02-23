@@ -29,11 +29,6 @@ const placesData = [
 	// ... other places
 ];
 
-//rand for testing
-const randomPlace = placesData[Math.floor(Math.random() * placesData.length)];
-
-let idUniqueSet = new Set();
-
 //this will be used to store data from database later on
 // will ahve to modify
 const cols = [
@@ -48,6 +43,10 @@ const cols = [
 	},
 	{ field: "actions", headerName: "", width: 150, sortable: false },
 ];
+
+//rand for testing
+const randomPlace = placesData[Math.floor(Math.random() * placesData.length)];
+let idUniqueSet = new Set();
 
 // make new functions that auto generate the expenseData
 const generateRandomExpenseData = () => {
@@ -81,12 +80,39 @@ const ExpenseForm = () => {
 		return expenses;
 	});
 
+	// Use the useEffect hook to filter the expensesData array based on the search term and search type
+	// and doing this will help to filter the data without the need to refresh the page
+	useEffect(() => {
+		// arrow function to filter the expensesData array based on the search term and search type
+		setFilteredExpenses(
+			expensesData.filter((expense) => {
+				// if the search type is payer, use the payer field to filter the array
+				if (searchType === "payer") {
+					return expense.payer
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase());
+				} else if (searchType === "name") {
+					// if the search type is name, use the name field to filter the array
+					return expense.name
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase());
+				}
+				return true;
+			})
+		);
+		// add the expensesData, searchTerm, and searchType to the dependency array
+	}, [expensesData, searchTerm, searchType]);
+
 	// sort array
 	//expensesData.sort((a, b) => String(a.name).localeCompare(String(b.name)));
 
 	//state to manage the dialog open and close
 	const [dialogExpense, setDialogExpense] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
+	// Add new state variables for the search term and search type
+	const [searchTerm, setSearchTerm] = useState("");
+	const [searchType, setSearchType] = useState("name");
+	const [filteredExpenses, setFilteredExpenses] = useState([]);
 
 	// function to handle the remove event of the expense
 	// use useCallback to prevent the function from being recreated on every render
@@ -112,35 +138,6 @@ const ExpenseForm = () => {
 		// open the dialog
 		setDialogOpen(true);
 	}, []);
-
-	// Add new state variables for the search term and search type
-	const [searchTerm, setSearchTerm] = useState("");
-	const [searchType, setSearchType] = useState("name");
-
-	const [filteredExpenses, setFilteredExpenses] = useState([]);
-
-	// Use the useEffect hook to filter the expensesData array based on the search term and search type
-	// and doing this will help to filter the data without the need to refresh the page
-	useEffect(() => {
-		// arrow function to filter the expensesData array based on the search term and search type
-		setFilteredExpenses(
-			expensesData.filter((expense) => {
-				// if the search type is payer, use the payer field to filter the array
-				if (searchType === "payer") {
-					return expense.payer
-						.toLowerCase()
-						.includes(searchTerm.toLowerCase());
-				} else if (searchType === "name") {
-					// if the search type is name, use the name field to filter the array
-					return expense.name
-						.toLowerCase()
-						.includes(searchTerm.toLowerCase());
-				}
-				return true;
-			})
-		);
-		// add the expensesData, searchTerm, and searchType to the dependency array
-	}, [expensesData, searchTerm, searchType]);
 
 	return (
 		// Container = used to center the content and set the max-width
