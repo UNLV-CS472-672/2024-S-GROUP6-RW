@@ -24,7 +24,6 @@ import React, { useEffect, useState } from "react";
 function App() {
 	// hard code for testing as we not have databse/back end yet
 	const [user, setUser] = useState(null);
-
 	const toggleUser = () => {
 		if (user) {
 			setUser(null); // log out simulation
@@ -37,15 +36,15 @@ function App() {
 			}); // some fake user
 		}
 	};
-	
-	  const updateUser = (newUser) => {
+
+	const updateUser = (newUser) => {
 		setUser(newUser);
-	  };
+	};
 
 	return (
 		// Wrap the app in the ToggleColorMode component so that the theme can be toggled
 		<ToggleColorMode>
-			<AppContent user={user} updateUser={updateUser}/>
+			<AppContent user={user} updateUser={updateUser} />
 			{/*Add some button to test the user by simulate log out*/}
 			<button onClick={toggleUser}>{user ? "Log out" : "Log in"}</button>
 		</ToggleColorMode>
@@ -55,6 +54,7 @@ function App() {
 function AppContent({ user, updateUser }) {
 	// Get the current theme
 	const theme = useTheme();
+	const [openSignIn, setOpenSignIn] = useState(false);
 
 	// Apply the background color to the body element
 	useEffect(() => {
@@ -65,8 +65,15 @@ function AppContent({ user, updateUser }) {
 	return (
 		// Apply the theme to the app
 		<div className="App" style={{ color: theme.palette.text.primary }}>
-			<NavBar user={user} updateUser={updateUser}/>
-			<SignInDialog />
+			<NavBar user={user} updateUser={updateUser} />
+			<SignInDialog
+				open={openSignIn}
+				onClose={() => setOpenSignIn(false)}
+				onSubmit={(details) => {
+					updateUser(details);
+					setOpenSignIn(false);
+				}}
+			/>
 			<Routes>
 				<Route path="/" element={<GettingStartedPage />} />
 				<Route path="/map" element={<MapPage />} />
