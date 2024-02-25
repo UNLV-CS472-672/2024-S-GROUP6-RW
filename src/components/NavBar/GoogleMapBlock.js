@@ -11,11 +11,14 @@ const center = {
   lng: -98.7129
 };
 
+
+
 function GoogleMapBlock() {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyAiheTBtRNXYtN3Y3mnuqXi64dSbX0O_hI"
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
   })
+
 
   const [map, setMap] = React.useState(null)
 
