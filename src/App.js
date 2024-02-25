@@ -19,6 +19,7 @@ import ToggleColorMode from "./components/NavBar/ToggleTheme";
 import { useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
+
 function App() {
 	// hard code for testing as we not have databse/back end yet
 	const [user, setUser] = useState(null);
