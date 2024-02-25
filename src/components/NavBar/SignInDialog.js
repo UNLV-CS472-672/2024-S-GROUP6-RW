@@ -11,7 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 const dialogContainerStyle = {
 	backdropFilter: "blur(5px)",
-	"& .MuiPaper-root": {
+	"& .MuiPaperRoot": {
 		borderRadius: "8px",
 	},
 };

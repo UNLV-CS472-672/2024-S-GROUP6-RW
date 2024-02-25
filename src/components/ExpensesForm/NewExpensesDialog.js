@@ -15,6 +15,13 @@ import {
 // icons for edit button
 import EditIcon from "@mui/icons-material/Edit";
 
+const dialogContainerStyle = {
+	backdropFilter: "blur(5px)",
+	"& .MuiPaperRoot": {
+		borderRadius: "8px",
+	},
+};
+
 /**
  * NewExpenseDialog component is used to add new expense to the list of expenses.
     * It is a dialog component that opens when the user clicks on the "New expense" button.
@@ -138,7 +145,7 @@ const NewExpenseDialog = ({
 				</Button>
 			)}
 
-			<Dialog open={open} onClose={handleClose}>
+			<Dialog open={open} onClose={handleClose} style={dialogContainerStyle}>
 				<DialogTitle>
 					{newData ? "Add a new expense" : "Edit expense"}
 				</DialogTitle>
