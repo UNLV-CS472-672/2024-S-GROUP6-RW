@@ -20,19 +20,24 @@ import {
 } from "@mui/icons-material";
 import { ColorModeContext } from "./ToggleTheme";
 import { Link } from "react-router-dom";
+import SignInDialog from "./SignInDialog";
 
 // pages that we will use In general
 const pages = ["Expenses", "Itinerary", "Map", "My-Trips"];
-// 1st time
-const authPages = ["Login", "Register"];
 // settings that we will use for user
 const userPages = ["Profile", "Account", "Dashboard", "Logout"];
 
-function ResponsiveAppBar({ user }) {
+const props = {
+	userDetails: () => {},
+};
+
+function ResponsiveAppBar({ user, updateUser }) {
 	// this is mean that the menu is not open for the 3 lines menu
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	// this is mean that the menu is not open
 	const [anchorElUser, setAnchorElUser] = useState(null);
+
+	const [openSignIn, setOpenSignIn] = useState(false);
 
 	// get the current theme
 	const theme = useTheme();
@@ -61,6 +66,16 @@ function ResponsiveAppBar({ user }) {
 				<Typography textAlign="center">{item}</Typography>
 			</MenuItem>
 		));
+
+	const sendDetails = (username, email, password) => {
+		updateUser({
+			id: 1,
+			username: username,
+			email: email,
+			password: password,
+		});
+		setOpenSignIn(false);
+	};
 
 	return (
 		// AppBar is the component that we use to create the app bar
@@ -119,7 +134,6 @@ function ResponsiveAppBar({ user }) {
 					>
 						{renderMenuItems(pages, handleCloseNavMenu)}
 						{/*Handle the way it display if user or not in the 3 lines menu*/}
-						{!user && renderMenuItems(authPages, handleCloseNavMenu)}
 					</Menu>
 				</Box>
 
@@ -179,21 +193,21 @@ function ResponsiveAppBar({ user }) {
 				{/* if the user is logged in then we will show the user pages
                     & if not -> display getting started page */}
 				<Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-					{!user &&
-						authPages.map((page) => (
-							<Link
-								to={`/${page.toLowerCase().replace(" ", "")}`}
-								key={page}
-								sx={{ textDecoration: "none" }}
-							>
-								<Button
-									onClick={handleCloseNavMenu}
-									sx={{ my: 2, color: "white", display: "block" }}
-								>
-									{page}
-								</Button>
-							</Link>
-						))}
+					<Button
+						sx={{ my: 2, color: "white", display: "block" }}
+						onClick={() => setOpenSignIn(true)}
+					>
+						Sign In
+					</Button>
+
+					{!user && (
+						<SignInDialog
+							open={openSignIn}
+							onClick={() => setOpenSignIn(true)}
+							onClose={() => setOpenSignIn(false)}
+							onSubmit={sendDetails}
+						/>
+					)}
 				</Box>
 
 				{/* Add user menu */}

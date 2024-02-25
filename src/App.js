@@ -15,6 +15,8 @@ import RegisterPage from "./pages/register/RegisterPage";
 import NavBar from "./components/NavBar/NavBar";
 import ToggleColorMode from "./components/NavBar/ToggleTheme";
 
+import SignInDialog from "./components/NavBar/SignInDialog";
+
 // import theme and stuff to deal with toggle
 import { useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -23,7 +25,6 @@ import React, { useEffect, useState } from "react";
 function App() {
 	// hard code for testing as we not have databse/back end yet
 	const [user, setUser] = useState(null);
-
 	const toggleUser = () => {
 		if (user) {
 			setUser(null); // log out simulation
@@ -32,23 +33,29 @@ function App() {
 				id: 1,
 				username: "test User 1",
 				email: "testUser1@example.com",
+				password: "********",
 			}); // some fake user
 		}
+	};
+
+	const updateUser = (newUser) => {
+		setUser(newUser);
 	};
 
 	return (
 		// Wrap the app in the ToggleColorMode component so that the theme can be toggled
 		<ToggleColorMode>
-			<AppContent user={user} />
+			<AppContent user={user} updateUser={updateUser} />
 			{/*Add some button to test the user by simulate log out*/}
 			<button onClick={toggleUser}>{user ? "Log out" : "Log in"}</button>
 		</ToggleColorMode>
 	);
 }
 
-function AppContent({ user }) {
+function AppContent({ user, updateUser }) {
 	// Get the current theme
 	const theme = useTheme();
+	const [openSignIn, setOpenSignIn] = useState(false);
 
 	// Apply the background color to the body element
 	useEffect(() => {
@@ -59,7 +66,15 @@ function AppContent({ user }) {
 	return (
 		// Apply the theme to the app
 		<div className="App" style={{ color: theme.palette.text.primary }}>
-			<NavBar user={user} />
+			<NavBar user={user} updateUser={updateUser} />
+			<SignInDialog
+				open={openSignIn}
+				onClose={() => setOpenSignIn(false)}
+				onSubmit={(details) => {
+					updateUser(details);
+					setOpenSignIn(false);
+				}}
+			/>
 			<Routes>
 				<Route path="/" element={<GettingStartedPage />} />
 				<Route path="/map" element={<MapPage />} />
