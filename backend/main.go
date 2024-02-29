@@ -4,8 +4,8 @@ import (
     "context"
     "log"
     "net/http"
-    "time"
 
+	"github.com/gin-contrib/cors"
     "github.com/gin-gonic/gin"
     "go.mongodb.org/mongo-driver/bson"
     "go.mongodb.org/mongo-driver/mongo"
@@ -21,17 +21,26 @@ type User struct {
 
 // Connect to MongoDB
 func connectToMongoDB() *mongo.Collection {
-    clientOptions := options.Client().ApplyURI("YOUR_MONGODB_ATLAS_CONNECTION_STRING")
+    clientOptions := options.Client().ApplyURI("mongodb+srv://rightway:Ht6LAv40QOo3CiVZ@usermanagement.rmb4fbb.mongodb.net/?retryWrites=true&w=majority&appName=UserManagement")
     client, err := mongo.Connect(context.TODO(), clientOptions)
     if err != nil {
         log.Fatal(err)
     }
-    collection := client.Database("YOUR_DATABASE_NAME").Collection("YOUR_COLLECTION_NAME")
+    collection := client.Database("UserManagement").Collection("Users")
     return collection
 }
 
 func main() {
     r := gin.Default()
+
+    // Setup CORS middleware options
+    r.Use(cors.New(cors.Config{
+        AllowOrigins:     []string{"http://localhost:3000"}, // Specify the allowed origin
+        AllowMethods:     []string{"GET", "POST", "OPTIONS"}, // Specify the allowed methods
+        AllowHeaders:     []string{"Origin", "Content-Type"}, // Specify the allowed headers
+        AllowCredentials: true,
+        // Optionally, you can include more settings, such as ExposeHeaders, AllowAllOrigins, etc.
+    }))
 
     r.POST("/signin", func(c *gin.Context) {
         var user User
