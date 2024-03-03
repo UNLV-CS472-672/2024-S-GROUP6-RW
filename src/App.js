@@ -36,7 +36,7 @@ function App() {
 			}); // some fake user
 		}
 	};
-	
+
 	const updateUser = (newUser) => {
 		setUser(newUser);
 	};
