@@ -1,5 +1,5 @@
 import React from "react";
-import TripsList from "../../components/ExpensesStuff/TripsList";
+import TripsList from "../../components/ExpensesTripStuff/TripsList";
 
 function TripsExpensesPage() {
 	return (
