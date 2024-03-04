@@ -7,17 +7,17 @@ import { Link } from 'react-router-dom';
 
 const images = [
   {
-    url: '/vegaspic.jpg',
+    url: '/test.jpg',
     title: 'Las Vegas',
     width: '30%',
   },
   {
-    url: '/hobbit.jpg',
+    url: '/hobbithome.jpg',
     title: 'New Zealand',
     width: '30%',
   },
   {
-    url: 'house.jpg',
+    url: 'mchouse.jpg',
     title: 'ur moms house',
     width: '30%',
     link: '/expensesform',
