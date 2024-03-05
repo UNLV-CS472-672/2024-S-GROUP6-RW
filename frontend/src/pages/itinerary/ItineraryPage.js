@@ -10,6 +10,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
+import DatePickerComponent from '../../components/ItineraryForm/DatePickerComponent'; // Import your DatePickerComponent
+
 
 const ActivityAccordion = ({ activity, onEdit, onRemove }) => {
   const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false);
@@ -129,17 +131,65 @@ const ItineraryAccordion = ({ day, activities, onAddActivity, onEditActivity, on
   );
 };
 
+const possibleActivities = [
+  'Explore the city',
+  'Visit a museum',
+  'Dinner at a local restaurant',
+  'City park exploration',
+  'Relax at the beach',
+  'Sunset Cruise',
+  // Add more activities as needed
+];
+
+const getRandomActivity = () => {
+  const randomIndex = Math.floor(Math.random() * possibleActivities.length);
+  return possibleActivities[randomIndex];
+};
+
 const ItineraryPage = () => {
   const [currentCity] = useState('Your City');
-  const [itinerary, setItinerary] = useState([
-    {
-      activities: ['9:00 AM - 12:00 PM: Explore the city', '2:00 PM - 4:00 PM: Visit a museum', '7:00 PM - 9:00 PM: Dinner at a local restaurant'],
-    },
-    {
-      activities: ['10:00 AM - 12:00 PM: City park exploration', '2:00 PM - 4:00 PM: Relax at the beach', '6:00 PM - 8:00 PM: Sunset Cruise'],
-    },
-    // Add more days and activities as needed
-  ]);
+  const [itinerary, setItinerary] = useState([]);
+  const [currentStep, setCurrentStep] = useState('datePicker');
+
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
+
+  const handleStartDateSelect = (date) => {
+    setSelectedStartDate(date);
+  };
+
+  const handleEndDateSelect = (date) => {
+    setSelectedEndDate(date);
+  };
+
+  const handleDateSelectionComplete = () => {
+    const numberOfDays = calculateNumberOfDays(selectedStartDate, selectedEndDate);
+
+    if (numberOfDays > 0) {
+      generateRandomItinerary(numberOfDays);
+      setCurrentStep('itinerary');
+    } else {
+      // Handle invalid date range
+      alert('Please select a valid date range.');
+    }
+  };
+
+  const calculateNumberOfDays = (startDate, endDate) => {
+    const oneDay = 24 * 60 * 60 * 1000;
+    return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
+  };
+
+  const generateRandomItinerary = (numberOfDays) => {
+    setItinerary(Array.from({ length: numberOfDays }, () => ({
+      activities: Array.from({ length: 3 }, () => getRandomActivity()), // Adjust the number of activities as needed
+    })));
+  };
+
+  const generateItinerary = (numberOfDays) => {
+    setItinerary(Array.from({ length: numberOfDays }, (_, index) => ({
+      activities: [],
+    })));
+  };
 
   const handleAddActivity = (day, newActivity) => {
     setItinerary((prevItinerary) => {
@@ -153,7 +203,7 @@ const ItineraryPage = () => {
     setItinerary((prevItinerary) => [
       ...prevItinerary,
       {
-        activities: [], // Initialize a new day with no activities
+        activities: [],
       },
     ]);
   };
@@ -184,17 +234,29 @@ const ItineraryPage = () => {
     <div>
       <h1>Itinerary</h1>
       <h2>Current City: {currentCity}</h2>
-      {itinerary.map((day, index) => (
-        <ItineraryAccordion
-          key={index}
-          day={index + 1}
-          activities={day.activities}
-          onAddActivity={handleAddActivity}
-          onEditActivity={handleEditActivity}
-          onRemoveActivity={handleRemoveActivity}
+
+      {currentStep === 'datePicker' && (
+        <DatePickerComponent
+          onSelectStartDate={handleStartDateSelect}
+          onSelectEndDate={handleEndDateSelect}
+          onDateSelectionComplete={handleDateSelectionComplete}
         />
-      ))}
-      <Button onClick={handleAddDay}>Add Another Day</Button>
+      )}
+
+      {currentStep === 'itinerary' && (
+        <>
+          {itinerary.map((day, index) => (
+            <ItineraryAccordion
+              key={index}
+              day={index + 1}
+              activities={day.activities}
+              onAddActivity={handleAddActivity}
+              // ... (Other props)
+            />
+          ))}
+          <Button onClick={handleAddDay}>Add Another Day</Button>
+        </>
+      )}
     </div>
   );
 };
