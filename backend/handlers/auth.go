@@ -10,10 +10,43 @@ import (
     "golang.org/x/crypto/bcrypt"
     "go.mongodb.org/mongo-driver/bson"
     "context"
+	"github.com/dgrijalva/jwt-go"
+    "time"
+	"fmt"
 )
+
+
+var jwtSecretKey = []byte("one_way_is_the_right_way")
+
+// GenerateJWT creates a JWT token for a given username and sends a response with it.
+func GenerateJWT(username string, c *gin.Context) {
+	expirationTime := time.Now().Add(1 * time.Hour) // Token valid for 1 hour
+
+	// Create the JWT claims, which includes the username and expiry time
+	claims := &jwt.StandardClaims{
+		Subject:   username,
+		ExpiresAt: expirationTime.Unix(),
+	}
+
+	// Declare the token with the algorithm used for signing, and the claims
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	// Create the JWT string
+	tokenString, err := token.SignedString(jwtSecretKey)
+	if err != nil {
+		// If there is an error in creating the JWT return an internal server error
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not create token"})
+		return
+	}
+
+	// Send the response with the JWT to the client
+	c.JSON(http.StatusOK, gin.H{"token": tokenString})
+}
 
 // SignInHandler handles user login requests
 func SignInHandler(c *gin.Context) {
+
+	fmt.Println("Attempting to sign in a user")
         
 	// Declare a variable 'user' of type 'User' to store the parsed JSON request body.
 	var user models.User
@@ -25,6 +58,9 @@ func SignInHandler(c *gin.Context) {
 		return // Stop further execution if there's an error
 	}
 
+	// After finding the user in the database
+	fmt.Printf("Found user: %s\n", user.Email)
+
 	// Connect to MongoDB using a helper function that returns a reference to the collection.
 	collection := db.ConnectToMongoDB()
 
@@ -35,19 +71,24 @@ func SignInHandler(c *gin.Context) {
 		// If no document is found or any other error occurs, respond with a 401 Unauthorized error.
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
 		return // Stop further execution if there's an error
+	}else{
+		fmt.Print("Email Found")
 	}
 
 	// Compare the provided password with the one stored in the database.
-	// In a real application, you would hash the provided password and compare it with the stored hash.
-	// This is just a placeholder comparison; always use a secure method like bcrypt for password comparison.
-	if result["password"] != user.Password {
-		// Respond with a 401 Unauthorized error if the passwords do not match.
+	// We use bcrypt.CompareHashAndPassword to safely compare the hashed password with the provided password.
+	if err := bcrypt.CompareHashAndPassword([]byte(result["password"].(string)), []byte(user.Password)); err != nil {
+		// If CompareHashAndPassword returns an error, the passwords do not match.
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
 		return // Stop further execution if there's an error
+	} else {
+		fmt.Println("Password matches")
 	}
 
-	// If the password matches, respond with a 200 OK and a success message.
-	c.JSON(http.StatusOK, gin.H{"message": "Sign in successful"})
+	// Right before generating JWT
+	fmt.Println("Generating JWT for user")
+	GenerateJWT(result["username"].(string), c)
+
 }
 
 // RegisterHandler handles user registration requests
@@ -85,5 +126,5 @@ func RegisterHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully"})
+	GenerateJWT(newUser.Username, c)
 }

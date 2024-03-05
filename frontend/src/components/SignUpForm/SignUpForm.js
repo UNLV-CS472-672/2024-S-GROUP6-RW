@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Button, TextField, Box } from "@mui/material";
+import useAuth from '../../auth/useAuth';
 
 const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
+  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -66,31 +68,29 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
           "Content-Type": "application/json", // Specify the content type as JSON
         },
         body: JSON.stringify(userData), // Convert the userData object into a JSON string
-      })
-      
-        .then((response) => {
-          if (response.ok) {
-            return response.json(); // Parse the JSON response body
-          }
-          return response.json().then((errData) => {
-            throw new Error(errData.error || "Network response was not ok.");
-          });
-        
         })
-        .then((data) => {
-          console.log(data); // Process the response data
-          // Here you can redirect the user or show a success message
+        .then(response => response.json())
+        .then(data => {
+            if (data.token) {
+                // Use the login function to save the token and update auth state
+                login(data.token);
+                console.log(data.token) //Needs to be deleted after testing
+                
+                // Redirect to dashboard or show success message
+            } else {
+                // Handle the case where no token is returned
+                throw new Error('No token received after registration.');
+            }
         })
-        .catch((error) => {
-          console.error("There was a problem with the fetch operation:", error);
-          // Here you can show an error message to the user
+        .catch(error => {
+            // Handle any errors
+            console.error("There was a problem with the registration:", error);
         });
-
     } else {
-      console.log("ERROR");
+        // Handle validation errors
+        console.log("ERROR: Invalid input.");
     }
-    
-  };
+};
 
   const isValidName = (name) => {
     // Regular expression to validate email address
