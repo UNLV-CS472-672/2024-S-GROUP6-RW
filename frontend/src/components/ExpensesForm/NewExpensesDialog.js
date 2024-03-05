@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import NavigationIcon from '@mui/icons-material/Navigation';
+import Fab from '@mui/material/Fab';
 
 // dialog components as well as text field and button
 import {
@@ -18,7 +20,7 @@ import EditIcon from "@mui/icons-material/Edit";
 const dialogContainerStyle = {
 	backdropFilter: "blur(5px)",
 	"& .MuiPaperRoot": {
-		borderRadius: "8px",
+		borderRadius: "10px",
 	},
 };
 
@@ -43,7 +45,7 @@ const NewExpenseDialog = ({
 	// state variables to manage the dialog open and close
 	const [open, setOpen] = useState(false);
 	// state variables to manage the form fields
-	const [name, setName] = useState(expense ? expense.name : "");
+	const [test, setTest] = useState(expense ? expense.test : "");
 	const [amount, setAmount] = useState(expense ? expense.amount : "");
 	const [payer, setPayer] = useState(expense ? expense.payer : "");
 	// state var for the date
@@ -64,7 +66,7 @@ const NewExpenseDialog = ({
 
 	// function to clear the form fields and error message
 	const clearForm = () => {
-		setName("");
+		setTest("");
 		setAmount("");
 		setPayer("");
 		setDate("");
@@ -73,7 +75,7 @@ const NewExpenseDialog = ({
 	// function to handle the add event of the expense
 	const handleAdd = () => {
 		//data validation
-		if (name === "" || amount === "" || payer === "" || date === "") {
+		if (test === "" || amount === "" || payer === "" || date === "") {
 			setError("All fields are required.");
 			clearForm();
 			return;
@@ -93,7 +95,7 @@ const NewExpenseDialog = ({
 		if (expense) {
 			onEditExpense({
 				id: expense.id,
-				name,
+				test,
 				amount,
 				payer,
 				date,
@@ -101,7 +103,7 @@ const NewExpenseDialog = ({
 		} else {
 			onAddExpense({
 				id: Math.floor(Math.random() * 1000),
-				name,
+				test,
 				amount,
 				payer,
 				date,
@@ -114,7 +116,7 @@ const NewExpenseDialog = ({
 
 	// Update state variables when expense prop changes
 	useEffect(() => {
-		setName(expense ? expense.name : "");
+		setTest(expense ? expense.test : "");
 		setAmount(expense ? expense.amount : "");
 		setPayer(expense ? expense.payer : "");
 		setDate(expense ? expense.date : "");
@@ -162,16 +164,16 @@ const NewExpenseDialog = ({
 					<TextField
 						autoFocus
 						margin="dense"
-						label="Name"
+						label="description"
 						type="text"
 						fullWidth
-						value={name}
-						onChange={(e) => setName(e.target.value)}
+						value={test}
+						onChange={(e) => setTest(e.target.value)}
 					/>
 					{/* text field for the amount */}
 					<TextField
 						margin="dense"
-						label="Amount"
+						label="0.00"
 						type="number"
 						fullWidth
 						value={amount}
@@ -180,7 +182,7 @@ const NewExpenseDialog = ({
 					{/* text field for the payer */}
 					<TextField
 						margin="dense"
-						label="Payer"
+						label="paid by:"
 						type="text"
 						fullWidth
 						value={payer}
