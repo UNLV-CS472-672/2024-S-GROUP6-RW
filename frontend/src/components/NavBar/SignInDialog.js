@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useAuth from '../../auth/useAuth';
 import {
   Dialog,
   Button,
@@ -8,6 +9,7 @@ import {
   Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { convertLength } from "@mui/material/styles/cssUtils";
 
 const dialogContainerStyle = {
   backdropFilter: "blur(5px)",
@@ -20,6 +22,7 @@ const dialogContainerStyle = {
 const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -53,20 +56,28 @@ const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
         },
         body: JSON.stringify(userData), // Convert the userData object into a JSON string
       })
-        .then((response) => {
-          if (response.ok) {
-            return response.json(); // Parse the JSON response body
-          }
-          throw new Error("Network response was not ok."); // Handle server errors
-        })
-        .then((data) => {
-          console.log(data); // Process the response data
-          // Here you can redirect the user or show a success message
-        })
-        .catch((error) => {
-          console.error("There was a problem with the fetch operation:", error);
-          // Here you can show an error message to the user
-        });
+      .then(response => {
+        if (!response.ok) {
+          // If server response is not ok, throw an error with the status
+          throw new Error(`HTTP error! status: ${response.status}`);
+        } else {
+          return response.json(); // Continue to process the response
+        }
+      })
+      .then(data => {
+        if (data.token) {
+          // Use the login function to save the token and update auth state
+          login(data.token);
+          // Redirect to dashboard or show success message here
+        } else {
+          // Handle the case where no token is returned
+          throw new Error('No token received after registration.');
+        }
+      })
+      .catch(error => {
+        console.error("There was a problem with the fetch operation:", error.message);
+        // Here you can show an error message to the user based on `error.message`
+      });
       onSubmit({ email, password });
     } else {
       console.log("ERROR");
