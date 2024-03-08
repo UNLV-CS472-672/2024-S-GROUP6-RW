@@ -2,7 +2,7 @@
 // from the database and allow the user to select people to add to the
 // expense split. The user can also add new people to the database from
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import {
 	Button,
@@ -20,20 +20,58 @@ import {
 	Grid,
 	Select,
 	MenuItem,
+	Typography,
 } from "@mui/material";
 
-function AddPersonDialog() {
-	const [open, setOpen] = useState(false);
-	const [splitMethod, setSplitMethod] = useState("equal");
+const generateRandomPeople = () => {
+	const people = [];
+	for (let i = 0; i < 10; i++) {
+		const person = {
+			id: i,
+			name: `Person ${i}`,
+			email: `person${i}@example.com`,
+			splitMethod: "equal",
+		};
+		people.push(person);
+	}
+	return people;
+};
+
+function AddPersonDialog({ open, onClose }) {
 	const [people, setPeople] = useState([]);
 	const [totalExpense, setTotalExpense] = useState(0);
+	const [splitMethod, setSplitMethod] = useState("equal");
 
 	const columns = [
-		//{ field: "id", headerName: "ID", width: 70 },
 		{ field: "name", headerName: "Name", width: 130 },
 		{ field: "email", headerName: "Email", width: 200 },
-		{ field: "share", headerName: "Share", width: 130 },
+		{
+			field: "splitMethod",
+			headerName: "Split Method",
+			width: 200,
+			renderCell: (params) => (
+				<Select
+					value={params.row.splitMethod}
+					onChange={(event) =>
+						handleSplitMethodChange(params.row.id, event.target.value)
+					}
+				>
+					<MenuItem value="equal">Equal</MenuItem>
+					<MenuItem value="unequal">Unequal</MenuItem>
+				</Select>
+			),
+		},
 	];
+
+	const handleSplitMethodChange = (id, newSplitMethod) => {
+		setPeople((prevPeople) =>
+			prevPeople.map((person) =>
+				person.id === id
+					? { ...person, splitMethod: newSplitMethod }
+					: person
+			)
+		);
+	};
 
 	const handleAddPerson = () => {
 		// Add logic to add a new person
@@ -43,12 +81,13 @@ function AddPersonDialog() {
 		// Add logic to calculate the split
 	};
 
+	useEffect(() => {
+		setPeople(generateRandomPeople());
+	}, []);
+
 	return (
 		<div>
-			<Button variant="contained" onClick={() => setOpen(true)}>
-				Add Person
-			</Button>
-			<Dialog open={open} onClose={() => setOpen(false)}>
+			<Dialog open={open} onClose={onClose} maxWidth="xl">
 				<DialogTitle>Add Person</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
@@ -62,8 +101,8 @@ function AddPersonDialog() {
 					/>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={() => setOpen(false)}>Cancel</Button>
-					<Button onClick={() => setOpen(false)}>Add</Button>
+					<Button onClick={onClose}>Cancel</Button>
+					<Button onClick={onClose}>Add</Button>
 				</DialogActions>
 			</Dialog>
 		</div>

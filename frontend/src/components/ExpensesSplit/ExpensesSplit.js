@@ -24,7 +24,7 @@ import AddPersonDialog from "./AddPersonDialog";
 function ExpensesSplit() {
 	const [splitMethod, setSplitMethod] = useState("equal");
 	const [people, setPeople] = useState([]);
-	const [totalExpense, setTotalExpense] = useState(0);
+	//const [totalExpense, setTotalExpense] = useState(0);
 	const [open, setOpen] = useState(false);
 
 	const columns = [
@@ -70,23 +70,17 @@ function ExpensesSplit() {
 								</Typography>
 							</Grid>
 
-							<Grid item xs={12} sm={2}>
-								<FormControl>
-									<Select
-										value={splitMethod}
-										onChange={(e) => setSplitMethod(e.target.value)}
-										sx={{ height: 40, width: 200, textAlign: "left" }}
-									>
-										<MenuItem value="equal">Split Equally</MenuItem>
-										<MenuItem value="amount">
-											Split by Amount
-										</MenuItem>
-									</Select>
-								</FormControl>
-							</Grid>
-
 							<Grid item xs={12} sm={2} sx={{ marginLeft: 12 }}>
-								<AddPersonDialog open={open} onClose={handleClose} />
+								<Button
+									variant="contained"
+									onClick={() => setOpen(true)}
+								>
+									Add Person
+								</Button>
+								<AddPersonDialog
+									open={open}
+									onClose={() => setOpen(false)}
+								/>
 							</Grid>
 						</Grid>
 					</Toolbar>
