@@ -1,51 +1,99 @@
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 
-const containerStyle = {
-  width: '400px',
-  height: '400px'
-};
+function GoogleMapBlock({ width = '400px', height = '400px', lat = 39.50, lng = -98.7129, markerCoordinatesArray }) {
+  const containerStyle = {
+    width: width,
+    height: height
+  };
 
-const center = {
-  lat: 39.50,
-  lng: -98.7129
-};
+  const center = {
+    lat: lat,
+    lng: lng
+  };
 
-
-
-function GoogleMapBlock() {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
-  })
+  });
 
+  const [map, setMap] = useState(null);
+  const [markers, setMarkers] = useState([]);
+  const [infoWindows, setInfoWindows] = useState([]);
 
-  const [map, setMap] = React.useState(null)
+  const onLoad = useCallback(function callback(map) {
+    const bounds = new window.google.maps.LatLngBounds();
 
-  const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
+    if (markerCoordinatesArray && markerCoordinatesArray.length > 0) {
+      // Create markers and infoWindows dynamically based on the provided array
+      const newMarkers = markerCoordinatesArray.map((markerData, index) => {
+        const marker = new window.google.maps.Marker({
+          position: markerData,
+          map: map,
+          title: `Marker ${index + 1}`
+        });
 
-    setMap(map)
-  }, [])
+        bounds.extend(markerData);  // Extend bounds for each marker
 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null)
-  }, [])
+        // Create an InfoWindow for each marker with custom message
+        const infoWindow = new window.google.maps.InfoWindow({
+          content: `<div>${markerData.message}</div>`,
+        });
+
+        // Attach the click event to each marker
+        window.google.maps.event.addListener(marker, 'click', () => {
+          // Close all other infoWindows before opening the current one
+          infoWindows.forEach((iw) => iw.close());
+          infoWindow.open(map, marker);
+        });
+
+        setInfoWindows((prevInfoWindows) => [...prevInfoWindows, infoWindow]);
+
+        return marker;
+      });
+
+      setMarkers(newMarkers);
+    }
+
+    map.fitBounds(bounds);  // Fit the map to the bounds after adding all markers
+    setMap(map);
+  }, [center, markerCoordinatesArray, infoWindows]);
+
+  const onUnmount = useCallback(function callback(map) {
+    setMap(null);
+    if (infoWindows) {
+      infoWindows.forEach((iw) => iw.close());
+    }
+    setMarkers([]);
+    setInfoWindows([]);
+  }, [infoWindows]);
+
+  useEffect(() => {
+    if (map && markers.length > 0) {
+      // Update the bounds when markers are added dynamically
+      const bounds = new window.google.maps.LatLngBounds();
+      markers.forEach((marker) => bounds.extend(marker.getPosition()));
+      map.fitBounds(bounds);
+    }
+  }, [map, markers]);
 
   return isLoaded ? (
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={3}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
-      >
-        { /* Child components, such as markers, info windows, etc. */ }
-        <></>
-      </GoogleMap>
-  ) : <></>
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={center}
+      zoom={3}
+      onLoad={onLoad}
+      onUnmount={onUnmount}
+    >
+      {/* Child components, such as markers, info windows, etc. */}
+    </GoogleMap>
+  ) : <></>;
 }
 
-export default React.memo(GoogleMapBlock)
+export default React.memo(GoogleMapBlock);
+
+
+
+
+
+
