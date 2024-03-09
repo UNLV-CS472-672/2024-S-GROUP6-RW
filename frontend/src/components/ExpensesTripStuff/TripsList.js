@@ -1,12 +1,22 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Grid, Card, CardActionArea, CardMedia } from "@mui/material";
+
+const currTrip = [
+	{
+		url: "mchouse.jpg",
+		title: "ur moms house",
+		width: "50%",
+		height: "50%",
+		link: "/expensesform",
+	},
+];
 
 const images = [
 	{
@@ -20,13 +30,6 @@ const images = [
 		title: "New Zealand",
 		width: "50%",
 		height: "50%",
-	},
-	{
-		url: "mchouse.jpg",
-		title: "ur moms house",
-		width: "50%",
-		height: "50%",
-		link: "/expensesform",
 	},
 	{
 		url: "seoul.jpg",
@@ -48,196 +51,99 @@ const images = [
 	},
 ];
 
-const ImageButton = styled(ButtonBase)(({ theme }) => ({
-	position: "relative",
-	height: "100%",
-	margin: "35px", // Add margin to create space between buttons
-	minWidth: "50%",
-	[theme.breakpoints.down("sm")]: {
-		width: "100% !important", // Overrides inline-style
-		height: "100%",
-	},
-	"&:hover, &.Mui-focusVisible": {
-		zIndex: 1,
-		"& .MuiImageBackdrop-root": {
-			opacity: 0.15,
-		},
-		"& .MuiImageMarked-root": {
-			opacity: 0,
-		},
-		"& .MuiTypography-root": {
-			border: "4px solid currentColor",
-		},
-	},
-}));
-
-//fill the image to the button container
-const ImageSrc = styled("span")({
-	position: "absolute",
-	left: 3,
-	right: 3,
-	top: 3,
-	bottom: 3,
-	backgroundSize: "cover",
-	backgroundPosition: "center 40%",
-});
-
-const Image = styled("span")(({ theme }) => ({
-	position: "absolute",
-	left: 0,
-	right: 0,
-	top: 0,
-	bottom: 0,
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "center",
-	color: theme.palette.common.white,
-}));
-
-//hover over effect
-const ImageBackdrop = styled("span")(({ theme }) => ({
-	position: "absolute",
-	left: 0,
-	right: 0,
-	top: 0,
-	bottom: 0,
-	backgroundColor: theme.palette.common.black,
-	opacity: 0.4,
-	transition: theme.transitions.create("opacity"),
-}));
-
-const ImageMarked = styled("span")(({ theme }) => ({
-	height: 3,
-	width: 18,
-	backgroundColor: theme.palette.common.white,
-	position: "absolute",
-	bottom: -2,
-	left: "calc(50% - 9px)",
-	transition: theme.transitions.create("opacity"),
-}));
-
 export default function ButtonBaseDemo() {
-	const scrollContainerRef = useRef();
-
-	const scroll = (scrollOffset) => {
-		scrollContainerRef.current.scrollLeft += scrollOffset;
-	};
-
 	return (
-		<div style={{ position: "relative", width: "100%" }}>
-			<Button
-				onClick={() => scroll(-300)}
-				style={{
-					position: "absolute",
-					left: 0,
-					top: "50%",
-					transform: "translateY(-50%)",
-					zIndex: 2,
-				}}
-			>
-				<ArrowBackIosIcon />
-			</Button>
-			<Box
-				ref={scrollContainerRef}
-				sx={{
-					display: "flex",
-					overflowX: "auto",
-					flexWrap: "nowrap",
-					minWidth: 300,
-					width: "100%",
-					height: "500px",
-					scrollbarWidth: "none",
-					gap: 2,
-					"& > *": {
-						flexShrink: 0,
-						width: "50%",
-					},
-					"&::-webkit-scrollbar": {
-						display: "none",
-					},
-					"-ms-overflow-style": "none",
-					//"scrollbar-width": "none",
-				}}
-			>
-				{images.map((image, index) => (
-					<React.Fragment key={index}>
-						{image.link ? (
-							<Link to={image.link}>
-								<ImageButton
-									focusRipple
-									style={{
-										width: "100%",
-									}}
-								>
-									<ImageSrc
-										style={{ backgroundImage: `url(${image.url})` }}
-									/>
-									<ImageBackdrop className="MuiImageBackdrop-root" />
-									<Image>
-										<Typography
-											component="span"
-											variant="subtitle1"
-											color="inherit"
+		<div>
+			{/*This is for the drop down menu */}
+			<Accordion>
+				<AccordionSummary expandIcon={<ExpandMoreIcon />}>
+					<h2>Current Trips</h2>
+				</AccordionSummary>
+				<AccordionDetails>
+					{/*This is for the grid of images */}
+					<Grid container spacing={5}>
+						{currTrip.map((trip, index) => (
+							<Grid item xs={12} sm={6} md={3} key={index}>
+								<Card component={Link} to={trip.link}>
+									<CardActionArea>
+										<CardMedia
+											component="img"
+											height="180"
+											image={trip.url}
+											alt={trip.title}
+										/>
+										<Box
+											component="div"
 											sx={{
-												position: "relative",
-												p: 4,
-												pt: 2,
-												pb: (theme) =>
-													`calc(${theme.spacing(1)} + 6px)`,
+												position: "absolute",
+												top: 0,
+												bottom: 0,
+												right: 0,
+												left: 0,
+												display: "flex",
+												alignItems: "center",
+												justifyContent: "center",
+												bgcolor: "black",
+												color: "white",
+												opacity: 0.6,
 											}}
 										>
-											{image.title}
-											<ImageMarked className="MuiImageMarked-root" />
-										</Typography>
-									</Image>
-								</ImageButton>
-							</Link>
-						) : (
-							<ImageButton
-								focusRipple
-								key={image.title}
-								style={{
-									width: image.width,
-								}}
-							>
-								<ImageSrc
-									style={{ backgroundImage: `url(${image.url})` }}
-								/>
-								<ImageBackdrop className="MuiImageBackdrop-root" />
-								<Image>
-									<Typography
-										component="span"
-										variant="subtitle1"
-										color="inherit"
-										sx={{
-											position: "relative",
-											p: 4,
-											pt: 2,
-											pb: (theme) =>
-												`calc(${theme.spacing(1)} + 6px)`,
-										}}
-									>
-										{image.title}
-										<ImageMarked className="MuiImageMarked-root" />
-									</Typography>
-								</Image>
-							</ImageButton>
-						)}
-					</React.Fragment>
-				))}
-			</Box>
-			<Button
-				onClick={() => scroll(300)}
-				style={{
-					position: "absolute",
-					right: 0,
-					top: "50%",
-					transform: "translateY(-50%)",
-					zIndex: 2,
-				}}
-			>
-				<ArrowForwardIosIcon />
-			</Button>
+											<Typography variant="h5">
+												{trip.title}
+											</Typography>
+										</Box>
+									</CardActionArea>
+								</Card>
+							</Grid>
+						))}
+					</Grid>
+				</AccordionDetails>
+			</Accordion>
+
+			<Accordion>
+				<AccordionSummary expandIcon={<ExpandMoreIcon />}>
+					<h2>Past Trips</h2>
+				</AccordionSummary>
+				<AccordionDetails>
+					<Grid container spacing={2}>
+						{images.map((trip, index) => (
+							<Grid item xs={12} sm={6} md={3} key={index}>
+								<Card component={Link} to={trip.link}>
+									<CardActionArea>
+										<CardMedia
+											component="img"
+											height="180"
+											image={trip.url}
+											alt={trip.title}
+											style={{ position: "relative" }}
+										/>
+										<Box
+											component="div"
+											sx={{
+												position: "absolute",
+												top: 0,
+												bottom: 0,
+												right: 0,
+												left: 0,
+												display: "flex",
+												alignItems: "center",
+												justifyContent: "center",
+												bgcolor: "black",
+												color: "white",
+												opacity: 0.6,
+											}}
+										>
+											<Typography variant="h5">
+												{trip.title}
+											</Typography>
+										</Box>
+									</CardActionArea>
+								</Card>
+							</Grid>
+						))}
+					</Grid>
+				</AccordionDetails>
+			</Accordion>
 		</div>
 	);
 }
