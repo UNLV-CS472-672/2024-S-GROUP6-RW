@@ -20,8 +20,8 @@ const dialogContainerStyle = {
 };
 
 const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
   const { login } = useAuth();
 
   const handleEmailChange = (event) => {
@@ -34,17 +34,17 @@ const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
 
   const handleSubmit = () => {
     // Check for errors in username, email, and password
-    const emailValid = isValidEmailAddress(email);
-    const passwordValid = isValidPassword(password);
+    const emailValid = isValidEmailAddress(Email);
+    const passwordValid = isValidPassword(Password);
 
     // Check if any of the fields are empty
-    const fieldsNotEmpty = email.trim() !== "" && password.trim() !== "";
+    const fieldsNotEmpty = Email.trim() !== "" && Password.trim() !== "";
 
     // Define the API endpoint URL
     const apiUrl = "http://localhost:8080/signin";
 
     // Prepare the data to be sent in the request
-    const userData = { email, password };
+    const userData = { Email, Password };
 
     // Call onSubmit only if there are no errors
     if (emailValid && passwordValid && fieldsNotEmpty) {
@@ -78,7 +78,7 @@ const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
         console.error("There was a problem with the fetch operation:", error.message);
         // Here you can show an error message to the user based on `error.message`
       });
-      onSubmit({ email, password });
+      onSubmit({ Email, Password });
     } else {
       console.log("ERROR");
     }
@@ -129,11 +129,11 @@ const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
             variant="outlined"
             fullWidth
             margin="normal"
-            value={email}
+            value={Email}
             onChange={handleEmailChange}
-            error={!isValidEmailAddress(email)}
+            error={!isValidEmailAddress(Email)}
             helperText={
-              isValidEmailAddress(email) ? "" : "Format: johndoe@gmail.com"
+              isValidEmailAddress(Email) ? "" : "Format: johndoe@gmail.com"
             }
           />
           <TextField
@@ -142,11 +142,11 @@ const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
             variant="outlined"
             fullWidth
             margin="normal"
-            value={password}
+            value={Password}
             onChange={handlePasswordChange}
-            error={!isValidPassword(password)}
+            error={!isValidPassword(Password)}
             helperText={
-              isValidPassword(password) ? "" : "Password cannot contain spaces"
+              isValidPassword(Password) ? "" : "Password cannot contain spaces"
             }
           />
           <Button onClick={handleSubmit} sx={{ marginRight: 1 }}>

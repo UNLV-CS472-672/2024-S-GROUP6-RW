@@ -4,11 +4,11 @@ import useAuth from '../../auth/useAuth';
 
 const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
   const { login } = useAuth();
-  const [username, setUsername] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [Username, setUsername] = useState("");
+  const [FirstName, setFirstName] = useState("");
+  const [LastName, setLastName] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -32,25 +32,27 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
 
   const handleSubmit = () => {
     // Check for errors in username, email, and password
-    const usernameValid = isValidName(username);
-    const firstNameValid = isValidName(firstName);
-    const lastNameValid = isValidName(lastName);
-    const emailValid = isValidEmailAddress(email);
-    const passwordValid = isValidPassword(password);
+    const usernameValid = isValidName(Username);
+    const firstNameValid = isValidName(FirstName);
+    const lastNameValid = isValidName(LastName);
+    const emailValid = isValidEmailAddress(Email);
+    const passwordValid = isValidPassword(Password);
 
     // Check if any of the fields are empty
     const fieldsNotEmpty =
-      username.trim() !== "" &&
-      firstName.trim() !== "" &&
-      lastName.trim() !== "" &&
-      email.trim() !== "" &&
-      password.trim() !== "";
+      Username.trim() !== "" &&
+      FirstName.trim() !== "" &&
+      LastName.trim() !== "" &&
+      Email.trim() !== "" &&
+      Password.trim() !== "";
 
     // Define the API endpoint URL
     const apiUrl = "http://localhost:8080/register";
 
     // Prepare the data to be sent in the request
-    const userData = { username, firstName, lastName, email, password };
+    const userData = { Username, FirstName, LastName, Email, Password };
+
+    console.log(userData);
 
     // Call onSubmit only if there are no errors
     if (
@@ -129,11 +131,11 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
           variant="outlined"
           fullWidth
           margin="normal"
-          value={username}
+          value={Username}
           onChange={handleUsernameChange}
-          error={!isValidName(username)}
+          error={!isValidName(Username)}
           helperText={
-            isValidName(username)
+            isValidName(Username)
               ? ""
               : "Username cannot contain spaces or special characters"
           }
@@ -146,11 +148,11 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
             variant="outlined"
             fullWidth
             margin="normal"
-            value={firstName}
+            value={FirstName}
             onChange={handleFirstNameChange}
-            error={!isValidName(firstName)}
+            error={!isValidName(FirstName)}
             helperText={
-              isValidName(firstName)
+              isValidName(FirstName)
                 ? ""
                 : "First Name cannot contain spaces or special characters"
             }
@@ -162,11 +164,11 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
             variant="outlined"
             fullWidth
             margin="normal"
-            value={lastName}
+            value={LastName}
             onChange={handleLastNameChange}
-            error={!isValidName(lastName)}
+            error={!isValidName(LastName)}
             helperText={
-              isValidName(lastName)
+              isValidName(LastName)
                 ? ""
                 : "Last Name cannot contain spaces or special characters"
             }
@@ -178,11 +180,11 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
           variant="outlined"
           fullWidth
           margin="normal"
-          value={email}
+          value={Email}
           onChange={handleEmailChange}
-          error={!isValidEmailAddress(email)}
+          error={!isValidEmailAddress(Email)}
           helperText={
-            isValidEmailAddress(email) ? "" : "Format: johndoe@gmail.com"
+            isValidEmailAddress(Email) ? "" : "Format: johndoe@gmail.com"
           }
         />
         <TextField
@@ -191,11 +193,11 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
           variant="outlined"
           fullWidth
           margin="normal"
-          value={password}
+          value={Password}
           onChange={handlePasswordChange}
-          error={!isValidPassword(password)}
+          error={!isValidPassword(Password)}
           helperText={
-            isValidPassword(password) ? "" : "Password cannot contain spaces"
+            isValidPassword(Password) ? "" : "Password cannot contain spaces"
           }
         />
         <Button onClick={handleSubmit} sx={{ marginRight: 1 }}>
