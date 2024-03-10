@@ -3,19 +3,28 @@
 package db
 
 import (
-    "context"
-    "log"
+	"context"
+	"log"
 
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"backend/secrets"
 )
 
-func ConnectToMongoDB() *mongo.Collection {
-    clientOptions := options.Client().ApplyURI("mongodb+srv://rightway:Ht6LAv40QOo3CiVZ@usermanagement.rmb4fbb.mongodb.net/?retryWrites=true&w=majority&appName=UserManagement")
-    client, err := mongo.Connect(context.TODO(), clientOptions)
-    if err != nil {
-        log.Fatal(err)
-    }
-    collection := client.Database("UserManagement").Collection("Users")
-    return collection
+var connection_URI, env_err = secrets.GetEnv("MONGO")
+
+func ConnectToMongoDB(db_name, collection_name string) *mongo.Collection {
+	if env_err != nil {
+		log.Fatal(env_err)
+		return nil
+	}
+
+	clientOptions := options.Client().ApplyURI(connection_URI)
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+	collection := client.Database(db_name).Collection(collection_name)
+	return collection
 }
