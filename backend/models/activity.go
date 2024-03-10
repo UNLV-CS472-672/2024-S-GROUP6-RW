@@ -11,6 +11,6 @@ type Activity struct {
 	Date         primitive.DateTime `bson:"Date,omitempty"`
 	Address      string             `bson:"Address,omitempty"`
 	Coordinate   string             `bson:"Coordinate,omitempty"`
-	IsMapBased   bool               `bson:IsMapBased,omitempty"`
+	IsMapBased   bool               `bson:"IsMapBased,omitempty"`
 	LocationName string             `bson:"LocationName,omitempty"`
 }
