@@ -10,7 +10,6 @@ type User struct {
 	TripIDs    []primitive.ObjectID `bson:"TripIDs,omitempty"`
 	FriendIDs  []primitive.ObjectID `bson:"FriendIDs,omitempty"`
 	Username   string               `bson:"Username,omitempty"`
-	FullName   string               `bson:"FullName,omitempty"`
 	FirstName  string
 	LastName   string
 	Password   string

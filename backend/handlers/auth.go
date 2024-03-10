@@ -139,7 +139,6 @@ func RegisterHandler(c *gin.Context) {
 
 	// Initialize user data into struct fields
 	newUser.PassHash = string(hashedPasswordBytes)
-	newUser.FullName = newUser.FirstName + " " + newUser.LastName
 	newUser.TripIDs = make([]primitive.ObjectID, 0)
 	newUser.FriendIDs = make([]primitive.ObjectID, 0)
 	newUser.InvoiceIDs = make([]primitive.ObjectID, 0)
@@ -147,11 +146,16 @@ func RegisterHandler(c *gin.Context) {
 	ProfileDetails := db.ConnectToMongoDB("User", "ProfileDetails")
 
 	// Create new profile
+	newProfile := models.Profile{}
+
+	newProfile.DisplayName = newUser.FirstName + " " + newUser.LastName
+	newProfile.Joined = primitive.NewDateTimeFromTime(time.Now())
+
 	var ProfileID *mongo.InsertOneResult
 
 	ProfileID, err = ProfileDetails.InsertOne(context.TODO(), bson.M{
-		"DisplayName": newUser.FullName,
-		"Joined":      primitive.NewDateTimeFromTime(time.Now()),
+		"DisplayName": newProfile.DisplayName,
+		"Joined":      newProfile.Joined,
 	})
 
 	if err != nil {
