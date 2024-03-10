@@ -7,6 +7,7 @@ import (
 	"backend/models"
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -16,12 +17,27 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
+
+	"backend/secrets"
 )
 
-var jwtSecretKey = []byte("one_way_is_the_right_way")
+var jwtSecretKey []byte
+var jwt_err error
+
+func JWTSetup() {
+	var tmp string
+	tmp, jwt_err = secrets.GetEnv("JWT")
+	jwtSecretKey = []byte(tmp)
+}
+
 
 // GenerateJWT creates a JWT token for a given username and sends a response with it.
 func GenerateJWT(username string, c *gin.Context) {
+	if jwt_err != nil {
+		log.Fatal(jwt_err)
+		return
+	}
+
 	expirationTime := time.Now().Add(1 * time.Hour) // Token valid for 1 hour
 
 	// Create the JWT claims, which includes the username and expiry time
@@ -36,6 +52,7 @@ func GenerateJWT(username string, c *gin.Context) {
 	// Create the JWT string
 	tokenString, err := token.SignedString(jwtSecretKey)
 	if err != nil {
+		fmt.Printf("%T SecretKey = %s\n", jwtSecretKey, jwtSecretKey)
 		// If there is an error in creating the JWT return an internal server error
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not create token"})
 		return
@@ -119,8 +136,6 @@ func RegisterHandler(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(newUser)
-
 	UserDetails := db.ConnectToMongoDB("User", "UserDetails")
 
 	// Check if user already exists
@@ -144,6 +159,8 @@ func RegisterHandler(c *gin.Context) {
 	newUser.InvoiceIDs = make([]primitive.ObjectID, 0)
 
 	ProfileDetails := db.ConnectToMongoDB("User", "ProfileDetails")
+	
+	fmt.Println("Creating Profile.")
 
 	// Create new profile
 	newProfile := models.Profile{}
@@ -164,6 +181,8 @@ func RegisterHandler(c *gin.Context) {
 		return
 	}
 
+	fmt.Println("Creating User.")
+
 	// Create the new user
 	_, err = UserDetails.InsertOne(context.TODO(), bson.M{
 		"ProfileID":  ProfileID.InsertedID,
@@ -182,5 +201,6 @@ func RegisterHandler(c *gin.Context) {
 		return
 	}
 
+	fmt.Println("Generating JWT for user")
 	GenerateJWT(newUser.Username, c)
 }

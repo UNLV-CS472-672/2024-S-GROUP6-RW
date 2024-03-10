@@ -5,12 +5,11 @@ package main
 import (
 	"backend/handlers"
 	"fmt"
+	"time"
 	"log"
-
+	
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-
-	"time"
 )
 
 func main() {
@@ -21,6 +20,8 @@ func main() {
 
 	r.POST("/signin", handlers.SignInHandler)
 	r.POST("/register", handlers.RegisterHandler)
+
+	handlers.JWTSetup()
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal(err)

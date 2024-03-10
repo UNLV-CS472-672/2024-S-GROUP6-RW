@@ -8,11 +8,18 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"backend/secrets"
 )
 
-const connection_URI string = "mongodb+srv://rightway:Ht6LAv40QOo3CiVZ@usermanagement.rmb4fbb.mongodb.net/?retryWrites=true&w=majority&appName=UserManagement"
+var connection_URI, env_err = secrets.GetEnv("MONGO")
 
 func ConnectToMongoDB(db_name, collection_name string) *mongo.Collection {
+	if env_err != nil {
+		log.Fatal(env_err)
+		return nil
+	}
+
 	clientOptions := options.Client().ApplyURI(connection_URI)
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
