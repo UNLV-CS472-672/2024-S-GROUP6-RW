@@ -5,8 +5,7 @@ import (
 )
 
 type Activity struct {
-	_id          primitive.ObjectID `bson:"_id,omitempty"`
-	Description  string             `bson:"Description,omitempty`
+	Description  string             `bson:"Description,omitempty"`
 	ImageURI     string             `bson:"ImageURI,omitempty"`
 	Date         primitive.DateTime `bson:"Date,omitempty"`
 	Address      string             `bson:"Address,omitempty"`

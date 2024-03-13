@@ -5,7 +5,6 @@ import (
 )
 
 type User struct {
-	_id        primitive.ObjectID   `bson:"_id,omitempty"`
 	ProfileID  primitive.ObjectID   `bson:"ProfileID,omitempty"`
 	TripIDs    []primitive.ObjectID `bson:"TripIDs,omitempty"`
 	FriendIDs  []primitive.ObjectID `bson:"FriendIDs,omitempty"`

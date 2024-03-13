@@ -5,8 +5,8 @@ import (
 )
 
 type Trip struct {
-	_id          primitive.ObjectID   `bson:"_id,omitempty"`
-	TripOwnerID  primitive.ObjectID   `bson:"TripOwnerID,omitempty"`
+	TripOwnerID  primitive.ObjectID `bson:"TripOwnerID,omitempty"`
+	Username     string
 	LocationName string               `bson:"LocationName,omitempty"`
 	ActivityIDs  []primitive.ObjectID `bson:"ActivityIDs,omitempty"`
 	MemberIDs    []primitive.ObjectID `bson:"MemberIDs,omitempty"`
