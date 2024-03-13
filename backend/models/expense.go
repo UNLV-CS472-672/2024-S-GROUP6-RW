@@ -5,6 +5,7 @@ import (
 )
 
 type Expense struct {
+	// Fields for actual Expense document in database
 	Description      string               `bson:"Description,omitempty"`
 	Amount           float64              `bson:"Amount,omitempty"`
 	InvoiceIDs       []primitive.ObjectID `bson:"InvoiceIDs,omitempty"`

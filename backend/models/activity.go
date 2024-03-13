@@ -5,6 +5,7 @@ import (
 )
 
 type Activity struct {
+	// Fields for actual Activity document in database
 	Description  string             `bson:"Description,omitempty"`
 	ImageURI     string             `bson:"ImageURI,omitempty"`
 	Date         primitive.DateTime `bson:"Date,omitempty"`
