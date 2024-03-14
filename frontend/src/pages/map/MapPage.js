@@ -1,5 +1,6 @@
 import React from "react";
 import GoogleMapBlock from "../../components/GoogleMapBlock/GoogleMapBlock";
+import AutoComplete from "../../components/GoogleMapBlock/AutoComplete";
 
 const markers = [
   { lat: 40.7128, lng: -74.0060, message: "Hello from New York City" },  // Example: New York City
@@ -12,6 +13,7 @@ function MapPage() {
   return (
     <div>
       <h2>Map Page</h2>
+      <AutoComplete />
       <GoogleMapBlock width="800px" height="600px" markerCoordinatesArray={markers} />
     </div>
   );
