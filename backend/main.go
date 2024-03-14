@@ -3,20 +3,27 @@
 package main
 
 import (
-    "github.com/gin-contrib/cors"
-    "github.com/gin-gonic/gin"
-    "backend/handlers"
-    "log"
+	"backend/handlers"
+	"fmt"
+	"time"
+	"log"
+	
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-    r := gin.Default()
-    r.Use(cors.Default()) // Setup CORS middleware as needed
+	fmt.Printf("Current Time: %s\n", time.Now())
 
-    r.POST("/signin", handlers.SignInHandler)
-    r.POST("/register", handlers.RegisterHandler)
+	r := gin.Default()
+	r.Use(cors.Default()) // Setup CORS middleware as needed
 
-    if err := r.Run(":8080"); err != nil {
-        log.Fatal(err)
-    }
+	r.POST("/signin", handlers.SignInHandler)
+	r.POST("/register", handlers.RegisterHandler)
+
+	handlers.JWTSetup()
+
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal(err)
+	}
 }
