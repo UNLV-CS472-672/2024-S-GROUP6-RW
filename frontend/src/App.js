@@ -10,6 +10,7 @@ import TripsExpensesPage from "./pages/expenses/TripsExpensesPage";
 import MyTripsPage from "./pages/my_trips/MyTripsPage";
 import LoginPage from "./pages/login/LoginPage";
 import RegisterPage from "./pages/register/RegisterPage";
+import FriendsPage from "./pages/friends/FriendsPage";
 
 // import nav components
 import NavBar from "./components/NavBar/NavBar";
@@ -84,6 +85,7 @@ function AppContent({ user, updateUser }) {
 				<Route path="/my-trips" element={<MyTripsPage />} />
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
+				<Route path="/friends" element={<FriendsPage />} />
 			</Routes>
 		</div>
 	);
