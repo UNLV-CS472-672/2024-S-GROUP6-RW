@@ -30,7 +30,6 @@ func JWTSetup() {
 	jwtSecretKey = []byte(tmp)
 }
 
-
 // GenerateJWT creates a JWT token for a given username and sends a response with it.
 func GenerateJWT(username string, c *gin.Context) {
 	if jwt_err != nil {
@@ -118,7 +117,13 @@ func SignInHandler(c *gin.Context) {
 
 		update := bson.M{"$set": bson.M{"LastLogin": primitive.NewDateTimeFromTime(time.Now())}}
 
-		UserDetails.UpdateOne(context.TODO(), filter, update)
+		_, err := UserDetails.UpdateOne(context.TODO(), filter, update)
+
+		if err != nil {
+			fmt.Println("Error: " + err.Error())
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not update user."})
+			return
+		}
 	}
 
 	// Right before generating JWT
@@ -159,7 +164,7 @@ func RegisterHandler(c *gin.Context) {
 	newUser.InvoiceIDs = make([]primitive.ObjectID, 0)
 
 	ProfileDetails := db.ConnectToMongoDB("User", "ProfileDetails")
-	
+
 	fmt.Println("Creating Profile.")
 
 	// Create new profile
