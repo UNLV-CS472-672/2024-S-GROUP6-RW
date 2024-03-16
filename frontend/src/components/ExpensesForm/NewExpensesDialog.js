@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import NavigationIcon from '@mui/icons-material/Navigation';
-import Fab from '@mui/material/Fab';
+import NavigationIcon from "@mui/icons-material/Navigation";
+import Fab from "@mui/material/Fab";
 
 // dialog components as well as text field and button
 import {
@@ -164,7 +164,7 @@ const NewExpenseDialog = ({
 					<TextField
 						autoFocus
 						margin="dense"
-						label="description"
+						label="Description"
 						type="text"
 						fullWidth
 						value={test}
@@ -173,7 +173,7 @@ const NewExpenseDialog = ({
 					{/* text field for the amount */}
 					<TextField
 						margin="dense"
-						label="0.00"
+						label="Amount"
 						type="number"
 						fullWidth
 						value={amount}
@@ -182,7 +182,7 @@ const NewExpenseDialog = ({
 					{/* text field for the payer */}
 					<TextField
 						margin="dense"
-						label="paid by:"
+						label="Paid by:"
 						type="text"
 						fullWidth
 						value={payer}
@@ -192,7 +192,7 @@ const NewExpenseDialog = ({
 					{/* text field for the date */}
 					<TextField
 						margin="dense"
-						type="date"
+						type="Date"
 						fullWidth
 						value={date}
 						onChange={(e) => setDate(e.target.value)}
