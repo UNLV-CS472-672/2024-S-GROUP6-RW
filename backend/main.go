@@ -5,9 +5,9 @@ package main
 import (
 	"backend/handlers"
 	"fmt"
-	"time"
 	"log"
-	
+	"time"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -27,10 +27,10 @@ func main() {
 
 	// Trip Details
 	r.POST("/create_trip", handlers.CreateTripHandler)
-	// r.GET("/get_all_trips", handlers.GetAllTripsHandler)
-	// r.GET("/get_trip", handlers.GetTripHandler)
-	// r.POST("/edit_trip", handlers.EditTripHandler)
-	// r.POST("/delete_trip", handlers.DeleteTripHandler)
+	r.POST("/get_all_trips", handlers.GetAllTripsHandler)
+	r.POST("/get_trip_details", handlers.GetTripDetailsHandler)
+	r.POST("/edit_trip", handlers.EditTripHandler)
+	r.POST("/delete_trip", handlers.DeleteTripHandler)
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal(err)
