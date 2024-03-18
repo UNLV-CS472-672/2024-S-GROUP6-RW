@@ -22,13 +22,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh; /* Take up 80% of the viewport height */
+    height: 100vh; /* Take up 80% of the viewport height */
   }
   
   .map-placeholder {
     width: 80%; /* Set the width of the black box */
     height: 80%; /* Set the height of the black box */
-    max-width: 1000px; /* Set maximum width to prevent the container from becoming too wide */
+    /*max-width: 1000px; /* Set maximum width to prevent the container from becoming too wide */
     background-color: #000; /* Set the background color to black */
     border-radius: 5px; /* Add border radius */
     display: flex;
