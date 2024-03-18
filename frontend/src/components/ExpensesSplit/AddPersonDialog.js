@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 import { DataGrid } from "@mui/x-data-grid";
+import DetailDialog from "./DetailDialog";
 
 const generateRandomPeople = () => {
 	const people = [];
@@ -28,6 +29,8 @@ const generateRandomPeople = () => {
 function AddPersonDialog({ open, onClose, onAdd }) {
 	const [people, setPeople] = useState([]);
 	const [selectedIDs, setSelectedIDs] = useState([]);
+	const [detailDialogOpen, setDetailDialogOpen] = React.useState(false);
+	const [currentRow, setCurrentRow] = React.useState(null);
 
 	useEffect(() => {
 		// Initialize or fetch people when the dialog opens
@@ -39,7 +42,7 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 	}, [open]);
 
 	const columns = [
-		{ field: "id", headerName: "ID", width: 90, hide: true },
+		//{ field: "id", headerName: "ID", width: 90, hide: true },
 		{ field: "name", headerName: "Name", width: 150 },
 		{ field: "email", headerName: "Email", width: 200 },
 		{
@@ -55,6 +58,24 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 					<MenuItem value="equal">Equal</MenuItem>
 					<MenuItem value="specific">Specific</MenuItem>
 				</Select>
+			),
+		},
+		{
+			field: "detail",
+			headerName: "Detail",
+			sortable: false,
+			width: 100,
+			renderCell: (params) => (
+				<Button
+					variant="contained"
+					color="primary"
+					onClick={() => {
+						setCurrentRow(params.row);
+						setDetailDialogOpen(true);
+					}}
+				>
+					Detail
+				</Button>
 			),
 		},
 	];
@@ -99,6 +120,11 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 				>
 					Add Selected
 				</Button>
+				<DetailDialog
+					open={detailDialogOpen}
+					onClose={() => setDetailDialogOpen(false)}
+					row={currentRow}
+				/>
 			</DialogActions>
 		</Dialog>
 	);
