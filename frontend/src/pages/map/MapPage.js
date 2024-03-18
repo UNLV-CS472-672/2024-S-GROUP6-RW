@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import GoogleMapBlock from "../../components/GoogleMapBlock/GoogleMapBlock";
-import "../../css/MapPage.css"
-//import "../MapPage.css";
+import "../../css/MapPage.css";
 
 function MapPage() {
   const [isListVisible, setListVisible] = useState(false);
@@ -94,8 +93,8 @@ function MapPage() {
         </div>
         <div className="map-placeholder">
           <GoogleMapBlock
-            width="99%"
-            height="98%"
+            height="98%" // Adjusted to take fit black box which takes up 80% of the screen height
+            width="99%" // Takes up entire width of the container
             markerCoordinatesArray={[]}
           />
         </div>
