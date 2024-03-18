@@ -5,6 +5,8 @@ import {
 	DialogContent,
 	DialogActions,
 	Button,
+	Select,
+	MenuItem,
 } from "@mui/material";
 
 import { DataGrid } from "@mui/x-data-grid";
@@ -40,7 +42,21 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 		{ field: "id", headerName: "ID", width: 90, hide: true },
 		{ field: "name", headerName: "Name", width: 150 },
 		{ field: "email", headerName: "Email", width: 200 },
-		{ field: "splitMethod", headerName: "Split Method", width: 130 },
+		{
+			field: "splitMethod",
+			headerName: "Split Method",
+			width: 130,
+			renderCell: (params) => (
+				<Select
+					value={params.row.splitMethod}
+					onChange={(event) => handleSplitMethodChange(event, params.row)}
+					style={{ width: "200px" }}
+				>
+					<MenuItem value="equal">Equal</MenuItem>
+					<MenuItem value="specific">Specific</MenuItem>
+				</Select>
+			),
+		},
 	];
 
 	const handleAddSelected = () => {
@@ -49,6 +65,13 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 			people.find((person) => person.id === id)
 		);
 		onAdd(selectedPeople);
+	};
+
+	const handleSplitMethodChange = (event, person) => {
+		const updatedPeople = people.map((p) =>
+			p.id === person.id ? { ...p, splitMethod: event.target.value } : p
+		);
+		setPeople(updatedPeople);
 	};
 
 	return (

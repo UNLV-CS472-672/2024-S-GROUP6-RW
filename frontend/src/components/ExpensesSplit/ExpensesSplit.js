@@ -14,7 +14,6 @@ import {
 import AddPersonDialog from "./AddPersonDialog";
 
 function ExpensesSplit() {
-	const [splitMethod, setSplitMethod] = useState("equal");
 	const [people, setPeople] = useState([]);
 	//const [totalExpense, setTotalExpense] = useState(0);
 	const [open, setOpen] = useState(false);
@@ -23,16 +22,13 @@ function ExpensesSplit() {
 		//{ field: "id", headerName: "ID", width: 70 },
 		{ field: "name", headerName: "Name", width: 130 },
 		{ field: "email", headerName: "Email", width: 200 },
-		{ field: "share", headerName: "Share", width: 130 },
+		{ field: "splitMethod", headerName: "Split Method", width: 150 },
+		{ field: "amount", headerName: "Amount", width: 150 },
 	];
 
 	const handleAddPeople = (selectedPeople) => {
 		const updatedPeople = [...people, ...selectedPeople];
 		setPeople(updatedPeople);
-		setOpen(false);
-	};
-
-	const handleClose = () => {
 		setOpen(false);
 	};
 
