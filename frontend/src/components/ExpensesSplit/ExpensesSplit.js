@@ -12,24 +12,70 @@ import {
 } from "@mui/material";
 
 import AddPersonDialog from "./AddPersonDialog";
+import DetailDialog from "./DetailDialog";
+// icons for edit button
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function ExpensesSplit() {
 	const [people, setPeople] = useState([]);
 	//const [totalExpense, setTotalExpense] = useState(0);
 	const [open, setOpen] = useState(false);
+	const [detailDialogOpen, setDetailDialogOpen] = React.useState(false);
+	const [currentRow, setCurrentRow] = React.useState(null);
 
 	const columns = [
 		//{ field: "id", headerName: "ID", width: 70 },
 		{ field: "name", headerName: "Name", width: 130 },
 		{ field: "email", headerName: "Email", width: 200 },
 		{ field: "splitMethod", headerName: "Split Method", width: 150 },
-		{ field: "amount", headerName: "Amount", width: 150 },
+		{
+			field: "actions",
+			headerName: "",
+			sortable: false,
+			width: 150,
+			renderCell: (params) => (
+				<div>
+					<EditIcon
+						color="primary"
+						onClick={() => {
+							const person = {
+								...people.find((p) => p.id === params.row.id),
+							};
+							if (!person.splitMethod) {
+								person.splitMethod = "equal"; // Set a default value
+							}
+							setCurrentRow({ ...person });
+							setDetailDialogOpen(true);
+						}}
+						style={{ cursor: "pointer", marginRight: "30px" }}
+					/>
+					<DeleteIcon
+						color="primary"
+						onClick={() => handleDelete(params.row.id)}
+						style={{ cursor: "pointer" }}
+					/>
+				</div>
+			),
+		},
 	];
 
 	const handleAddPeople = (selectedPeople) => {
 		const updatedPeople = [...people, ...selectedPeople];
 		setPeople(updatedPeople);
 		setOpen(false);
+	};
+
+	const handleDelete = (id) => {
+		setPeople(people.filter((person) => person.id !== id));
+	};
+
+	const handleEditPerson = (editedPerson) => {
+		setPeople(
+			people.map((person) =>
+				person.id === editedPerson.id ? editedPerson : person
+			)
+		);
 	};
 
 	const handleCalculate = () => {
@@ -61,16 +107,24 @@ function ExpensesSplit() {
 			</Paper>
 			<Box style={{ height: 400, width: "100%" }}>
 				<DataGrid
+					key={people.length} // Add this line
 					rows={people}
 					columns={columns}
 					pageSize={5}
-					checkboxSelection
+					//checkboxSelection
 				/>
 			</Box>
 			<AddPersonDialog
 				open={open}
 				onClose={() => setOpen(false)}
 				onAdd={handleAddPeople}
+			/>
+			<DetailDialog
+				open={detailDialogOpen}
+				onClose={() => setDetailDialogOpen(false)}
+				row={currentRow}
+				isEditing={true}
+				onEdit={handleEditPerson}
 			/>
 		</Container>
 	);

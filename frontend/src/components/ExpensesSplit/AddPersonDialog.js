@@ -56,6 +56,7 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 					style={{ width: "200px" }}
 				>
 					<MenuItem value="equal">Equal</MenuItem>
+					<MenuItem value="percent">Percent</MenuItem>
 					<MenuItem value="specific">Specific</MenuItem>
 				</Select>
 			),
@@ -69,7 +70,8 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 				<Button
 					variant="contained"
 					color="primary"
-					onClick={() => {
+					onClick={(event) => {
+						event.stopPropagation(); // Add this line
 						setCurrentRow(params.row);
 						setDetailDialogOpen(true);
 					}}
@@ -88,11 +90,21 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 		onAdd(selectedPeople);
 	};
 
+	const handleEditPerson = (editedPerson) => {
+		setPeople(
+			people.map((person) =>
+				person.id === editedPerson.id ? editedPerson : person
+			)
+		);
+	};
+
 	const handleSplitMethodChange = (event, person) => {
 		const updatedPeople = people.map((p) =>
 			p.id === person.id ? { ...p, splitMethod: event.target.value } : p
 		);
-		setPeople(updatedPeople);
+		// Create a new array with the updated people
+		const newPeople = [...updatedPeople];
+		setPeople(newPeople);
 	};
 
 	return (
@@ -121,9 +133,15 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 					Add Selected
 				</Button>
 				<DetailDialog
+					key={currentRow ? currentRow.id : null} // Add this line
 					open={detailDialogOpen}
-					onClose={() => setDetailDialogOpen(false)}
+					onClose={() => {
+						setDetailDialogOpen(false);
+						setCurrentRow(null); // Reset the currentRow when closing the dialog
+					}}
 					row={currentRow}
+					isEditing={false}
+					onEdit={handleEditPerson}
 				/>
 			</DialogActions>
 		</Dialog>

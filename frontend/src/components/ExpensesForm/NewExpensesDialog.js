@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import NavigationIcon from "@mui/icons-material/Navigation";
-import Fab from "@mui/material/Fab";
 
 // dialog components as well as text field and button
 import {
