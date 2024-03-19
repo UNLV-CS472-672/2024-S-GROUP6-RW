@@ -6,7 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import GettingStartedPage from "./pages/getting_started/GettingStartedPage";
 import MapPage from "./pages/map/MapPage";
 import ItineraryPage from "./pages/itinerary/ItineraryPage";
-import ExpensesPage from "./pages/expenses/ExpensesPage";
+import TripsExpensesPage from "./pages/expenses/TripsExpensesPage";
 import MyTripsPage from "./pages/my_trips/MyTripsPage";
 import LoginPage from "./pages/login/LoginPage";
 import RegisterPage from "./pages/register/RegisterPage";
@@ -20,6 +20,7 @@ import SignInDialog from "./components/NavBar/SignInDialog";
 // import theme and stuff to deal with toggle
 import { useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import ExpensesPage from "./pages/expenses/ExpensesPage";
 
 function App() {
 	// hard code for testing as we not have databse/back end yet
@@ -78,7 +79,8 @@ function AppContent({ user, updateUser }) {
 				<Route path="/" element={<GettingStartedPage />} />
 				<Route path="/map" element={<MapPage />} />
 				<Route path="/itinerary" element={<ItineraryPage />} />
-				<Route path="/expenses" element={<ExpensesPage />} />
+				<Route path="/expenses" element={<TripsExpensesPage />} />
+				<Route path="/expensesform" element={<ExpensesPage />} />
 				<Route path="/my-trips" element={<MyTripsPage />} />
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />

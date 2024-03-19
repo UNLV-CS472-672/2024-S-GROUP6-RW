@@ -160,7 +160,12 @@ function ResponsiveAppBar({ user, updateUser }) {
 				</Typography>
 
 				{/* Add link to pages for normal display*/}
-				<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+				<Box
+					sx={{
+						flexGrow: 1,
+						display: { xs: "none", md: "flex", ml: "auto" },
+					}}
+				>
 					{pages.map((page) => (
 						<Link
 							to={`/${page.toLowerCase().replace(" ", "")}`}
@@ -192,7 +197,12 @@ function ResponsiveAppBar({ user, updateUser }) {
 
 				{/* if the user is logged in then we will show the user pages
                     & if not -> display getting started page */}
-				<Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+				<Box
+					sx={{
+						flexGrow: 0,
+						display: { xs: "none", md: "flex", ml: "auto" },
+					}}
+				>
 					<Button
 						sx={{ my: 2, color: "white", display: "block" }}
 						onClick={() => setOpenSignIn(true)}
@@ -211,7 +221,12 @@ function ResponsiveAppBar({ user, updateUser }) {
 				</Box>
 
 				{/* Add user menu */}
-				<Box sx={{ flexGrow: 0 }}>
+				<Box
+					sx={{
+						flexGrow: 0,
+						display: { xs: "none", md: "flex", ml: "auto" },
+					}}
+				>
 					{user && (
 						<Tooltip title="Open settings">
 							<IconButton
