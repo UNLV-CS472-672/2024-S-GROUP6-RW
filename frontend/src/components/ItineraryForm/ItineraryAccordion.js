@@ -1,22 +1,43 @@
 // ItineraryAccordion.js
 
-import React, { useState } from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import React, { useState } from "react";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import Activity from "./Activity";
 
-const ItineraryAccordion = ({ day, activities }) => {
-  const [newActivity, setNewActivity] = useState('');
+const ItineraryAccordion = ({
+  day,
+  activities,
+  onAddActivity,
+  onEditActivity,
+  onRemoveActivity,
+}) => {
+  const [isAddDialogOpen, setAddDialogOpen] = useState(false);
+  const [newActivity, setNewActivity] = useState("");
 
-  const handleAddActivity = () => {
-    if (newActivity.trim() !== '') {
-      // You can further validate or format the new activity as needed
-      console.log(`Adding activity for Day ${day}: ${newActivity}`);
-      // TODO: Implement the logic to add the activity to your data structure
+  const handleAddClick = () => {
+    setAddDialogOpen(true);
+  };
+
+  const handleConfirmAdd = () => {
+    setAddDialogOpen(false);
+    if (newActivity) {
+      onAddActivity(day, newActivity);
+      setNewActivity("");
     }
+  };
+
+  const handleCancelAdd = () => {
+    setAddDialogOpen(false);
   };
 
   return (
@@ -29,19 +50,43 @@ const ItineraryAccordion = ({ day, activities }) => {
           <ul>
             {activities.map((activity, index) => (
               <li key={index}>
-                <Typography>{activity}</Typography>
+                <Activity
+                  activity={activity}
+                  onEdit={() => onEditActivity(day, index)}
+                  onRemove={() => onRemoveActivity(day, index)}
+                />
               </li>
             ))}
           </ul>
-          <TextField
-            label="New Activity"
-            variant="outlined"
-            value={newActivity}
-            onChange={(e) => setNewActivity(e.target.value)}
-          />
-          <Button onClick={handleAddActivity} variant="contained" color="primary">
-            Add Activity
-          </Button>
+          <Button onClick={handleAddClick}>Add Activity</Button>
+
+          {/* Add Activity Dialog */}
+          <Dialog open={isAddDialogOpen} onClose={handleCancelAdd}>
+            <DialogTitle>Add New Activity</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Enter the details for the new activity:
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="activity"
+                label="Activity"
+                type="text"
+                fullWidth
+                value={newActivity}
+                onChange={(e) => setNewActivity(e.target.value)}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCancelAdd} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleConfirmAdd} color="primary">
+                Add
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </AccordionDetails>
     </Accordion>
