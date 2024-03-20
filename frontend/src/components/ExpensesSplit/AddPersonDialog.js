@@ -140,7 +140,7 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 						setCurrentRow(null); // Reset the currentRow when closing the dialog
 					}}
 					row={currentRow}
-					isEditing={false}
+					isEditing={true}
 					onEdit={handleEditPerson}
 				/>
 			</DialogActions>

@@ -36,40 +36,86 @@ const DetailDialog = ({ open, onClose, row, isEditing, onEdit }) => {
 
 	return (
 		<Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-			<DialogTitle>Person Details</DialogTitle>
+			<DialogTitle>Expense Details</DialogTitle>
 			<Tabs value={tabValue} onChange={handleTabChange}>
 				<Tab label="Overview" />
+				<Tab label="Description" />
 				<Tab label="Details" />
 			</Tabs>
 			<DialogContent>
 				{tabValue === 0 && (
 					<Box>
+						<Typography variant="h6">Snapshot</Typography>
 						<TextField
-							label="Name"
-							value={editedPerson?.name || ""}
-							onChange={handleChange("name")}
+							label="Total Amount"
+							value={editedPerson?.totalAmount || ""}
+							onChange={handleChange("totalAmount")}
 							disabled={!isEditing}
-							sx={{ mt: 2 }}
+							margin="normal"
+							type="number"
+							style={{ marginRight: "10px" }}
 						/>
 						<TextField
-							label="Email"
-							value={editedPerson?.email || ""}
-							onChange={handleChange("email")}
+							label="Date"
+							type="date" // Add this line
+							value={editedPerson?.date || ""}
+							onChange={handleChange("date")}
 							disabled={!isEditing}
-							sx={{ mt: 2 }}
+							margin="normal"
+							style={{ marginRight: "10px" }}
+							InputLabelProps={{
+								shrink: true,
+							}}
 						/>
-						<InputLabel id="split-method-label">Split Method</InputLabel>
+						<TextField
+							label="Paid By"
+							value="User 1" // hard code
+							onChange={handleChange("paidBy")}
+							disabled={!isEditing}
+							margin="normal"
+							style={{ marginRight: "10px" }}
+						/>
+						<TextField
+							label="Involved"
+							value={editedPerson?.involved || ""}
+							onChange={handleChange("involved")}
+							disabled={!isEditing}
+							margin="normal"
+							style={{ marginRight: "10px" }}
+						/>
+
+						<Typography variant="h6">Current Status</Typography>
+						<TextField
+							label="Status"
+							value={editedPerson?.status || ""}
+							onChange={handleChange("status")}
+							disabled={!isEditing}
+							margin="normal"
+							style={{ marginRight: "10px" }}
+						/>
+						<TextField
+							label="Outstanding Amount"
+							value={editedPerson?.outstandingAmount || ""}
+							onChange={handleChange("outstandingAmount")}
+							disabled={!isEditing}
+							margin="normal"
+							style={{ marginRight: "10px" }}
+						/>
+
+						<Typography variant="h6">Split Method</Typography>
 						<Select
 							labelId="split-method-label"
 							value={editedPerson?.splitMethod}
 							onChange={handleChange("splitMethod")}
 							disabled={!isEditing}
-							sx={{ mt: 2 }}
 						>
 							<MenuItem value="equal">Equal</MenuItem>
 							<MenuItem value="percent">Percent</MenuItem>
 							<MenuItem value="specific">Specific</MenuItem>
 						</Select>
+
+						{/* Visual Indicators */}
+						{/* You can use a library like react-chartjs-2 to create charts */}
 					</Box>
 				)}
 				{tabValue === 1 && <Box>{/* Details content goes here */}</Box>}

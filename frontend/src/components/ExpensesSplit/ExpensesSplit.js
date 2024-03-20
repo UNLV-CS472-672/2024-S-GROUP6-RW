@@ -107,7 +107,7 @@ function ExpensesSplit() {
 			</Paper>
 			<Box style={{ height: 400, width: "100%" }}>
 				<DataGrid
-					key={people.length} // Add this line
+					key={people.length}
 					rows={people}
 					columns={columns}
 					pageSize={5}
