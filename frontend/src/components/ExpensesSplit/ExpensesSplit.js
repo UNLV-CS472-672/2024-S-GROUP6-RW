@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 
 import AddPersonDialog from "./AddPersonDialog";
+import AddExpenseDialog from "./AddExpenseDialog";
 import DetailDialog from "./DetailDialog";
 // icons for edit button
 import EditIcon from "@mui/icons-material/Edit";
@@ -66,6 +67,10 @@ function ExpensesSplit() {
 		setOpen(false);
 	};
 
+	const handleAddExpense = (expense) => {
+		// Add logic to add expense
+	};
+
 	const handleDelete = (id) => {
 		setPeople(people.filter((person) => person.id !== id));
 	};
@@ -83,22 +88,26 @@ function ExpensesSplit() {
 	};
 
 	return (
-		<Container maxWidth="md" sx={{ mt: 4 }}>
+		<Container maxWidth="xl" sx={{ mt: 4 }}>
 			<Paper elevation={3} sx={{ mb: 2 }}>
 				<AppBar position="static" color="inherit" elevation={0}>
 					<Toolbar>
 						<Grid container spacing={1}>
 							<Grid item xs={12} sm={6}>
 								<Typography variant="h6" sx={{ flexGrow: 1 }}>
-									Split Method
+									Split Menu
 								</Typography>
 							</Grid>
 							<Grid item xs={12} sm={6}>
 								<Button
 									variant="contained"
-									onClick={() => setOpen(true)}
+									onClick={() => {
+										setCurrentRow({}); // Set currentRow to an empty object
+										//setDetailDialogOpen(true); // Open the DetailDialog
+										setOpen(true);
+									}}
 								>
-									Add Person
+									Add Expense
 								</Button>
 							</Grid>
 						</Grid>
@@ -114,11 +123,13 @@ function ExpensesSplit() {
 					//checkboxSelection
 				/>
 			</Box>
+
 			<AddPersonDialog
 				open={open}
 				onClose={() => setOpen(false)}
 				onAdd={handleAddPeople}
 			/>
+
 			<DetailDialog
 				open={detailDialogOpen}
 				onClose={() => setDetailDialogOpen(false)}

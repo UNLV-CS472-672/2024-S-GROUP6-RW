@@ -33,7 +33,7 @@ const placesData = [
 // will ahve to modify
 const cols = [
 	{ field: "name", headerName: "Name", width: 150 },
-	{ field: "amount", headerName: "Amount", width: 150 },
+	{ field: "amount", headerName: "Amount ($)", width: 150 },
 	{ field: "payer", headerName: "Payer", width: 150 },
 	{
 		field: "date",
@@ -53,6 +53,8 @@ const cols = [
 			}
 		},
 	},
+	//description
+	{ field: "description", headerName: "Description", width: 150 },
 	{ field: "actions", headerName: "", width: 150, sortable: false },
 ];
 
@@ -75,8 +77,9 @@ const generateRandomExpenseData = () => {
 	const payer = "User " + Math.floor(Math.random() * 1000);
 	//make some date so that we can do the history of the expense
 	const date = new Date();
+	const description = "";
 	date.setDate(date.getDate() - Math.floor(Math.random() * 1000));
-	return { id, name, amount, payer, date };
+	return { id, name, amount, payer, date, description };
 };
 
 const ExpenseForm = () => {
@@ -87,7 +90,9 @@ const ExpenseForm = () => {
 			generateRandomExpenseData()
 		);
 		expenses.sort((a, b) =>
-			a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+			(a.name || "")
+				.toLowerCase()
+				.localeCompare((b.name || "").toLowerCase())
 		);
 		return expenses;
 	});
@@ -110,6 +115,10 @@ const ExpenseForm = () => {
 		setExpensesData((prevExpenses) =>
 			prevExpenses.filter((expense) => expense.id !== id)
 		);
+
+		// set the dialogExpense to null and close the dialog
+		setDialogExpense(null);
+		setDialogOpen(false);
 	}, []);
 
 	// function to handle the add event of the expense
@@ -131,29 +140,25 @@ const ExpenseForm = () => {
 	// Use the useEffect hook to filter the expensesData array based on the search term and search type
 	// and doing this will help to filter the data without the need to refresh the page
 	useEffect(() => {
-		// arrow function to filter the expensesData array based on the search term and search type
 		setFilteredExpenses(
 			expensesData.filter((expense) => {
-				// if the search type is payer, use the payer field to filter the array
 				if (searchType === "payer") {
-					return expense.payer
+					return (expense.payer || "")
 						.toLowerCase()
-						.includes(searchTerm.toLowerCase());
+						.includes((searchTerm || "").toLowerCase());
 				} else if (searchType === "name") {
-					// if the search type is name, use the name field to filter the array
-					return expense.name
+					return (expense.name || "")
 						.toLowerCase()
-						.includes(searchTerm.toLowerCase());
+						.includes((searchTerm || "").toLowerCase());
 				}
 				return true;
 			})
 		);
-		// add the expensesData, searchTerm, and searchType to the dependency array
 	}, [expensesData, searchTerm, searchType]);
 
 	return (
 		// Container = used to center the content and set the max-width
-		<Container maxWidth="md" sx={{ mt: 4 }}>
+		<Container maxWidth="xl" sx={{ mt: 4 }}>
 			{/* Paper = used to create a surface to display the content */}
 			<Paper elevation={3} sx={{ mb: 2 }}>
 				{/* AppBar = used to create a header for the content */}
@@ -275,6 +280,13 @@ const ExpenseForm = () => {
 					...expense,
 					actions: expense.id,
 				}))}
+				onRowClick={(params) => {
+					const clickedExpense = expensesData.find(
+						(expense) => expense.id === params.id
+					);
+					setDialogExpense(clickedExpense);
+					setDialogOpen(true);
+				}}
 			/>
 		</Container>
 	);

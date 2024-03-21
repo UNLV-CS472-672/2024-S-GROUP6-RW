@@ -10,16 +10,35 @@ import {
 	Alert,
 	TextField,
 	Button,
+	Tab,
+	Tabs,
 } from "@mui/material";
 
 // icons for edit button
 import EditIcon from "@mui/icons-material/Edit";
+
+//add the DetailsDialog component
+import DetailsDialog from "../ExpensesSplit/DetailDialog";
+import AddPersonDialog from "../ExpensesSplit/AddPersonDialog";
+import ExpensesSplit from "../ExpensesSplit/ExpensesSplit";
 
 const dialogContainerStyle = {
 	backdropFilter: "blur(5px)",
 	"& .MuiPaperRoot": {
 		borderRadius: "10px",
 	},
+};
+
+const formatDateForInput = (date) => {
+	const d = new Date(date);
+	let month = "" + (d.getMonth() + 1),
+		day = "" + d.getDate(),
+		year = d.getFullYear();
+
+	if (month.length < 2) month = "0" + month;
+	if (day.length < 2) day = "0" + day;
+
+	return [year, month, day].join("-");
 };
 
 /**
@@ -43,37 +62,71 @@ const NewExpenseDialog = ({
 	// state variables to manage the dialog open and close
 	const [open, setOpen] = useState(false);
 	// state variables to manage the form fields
-	const [test, setTest] = useState(expense ? expense.test : "");
-	const [amount, setAmount] = useState(expense ? expense.amount : "");
+	const [name, setName] = useState(expense ? expense.name : "");
+	const [amount, setAmount] = useState(
+		expense ? expense.amount.toString() : ""
+	);
 	const [payer, setPayer] = useState(expense ? expense.payer : "");
 	// state var for the date
-	const [date, setDate] = useState(expense ? expense.date : "");
+	// Assuming formatDateForInput is imported or defined in this file
+	const [date, setDate] = useState(
+		expense
+			? formatDateForInput(expense.date)
+			: formatDateForInput(new Date())
+	);
+
+	// state var for the description
+	const [description, setDescription] = useState(
+		expense ? expense.description : ""
+	);
 	// state variable to manage the error message
 	const [error, setError] = useState("");
+	const [tabValue, setTabValue] = useState(0);
+	const [detailsOpen, setDetailsOpen] = useState(false);
 
 	// function to handle the open event of the dialog
 	const handleClickOpen = () => {
+		if (!expense) {
+			// Also clear the form when opening in create mode
+			clearForm();
+		}
 		setOpen(true);
 	};
 
 	// function to handle the close event of the dialog
 	const handleClose = () => {
-		clearForm();
+		if (!expense) {
+			// Only clear the form if in create mode (no expense prop provided)
+			clearForm();
+		}
 		setOpen(false);
+	};
+
+	const handleTabChange = (event, newValue) => {
+		setTabValue(newValue);
+		if (newValue === 1) {
+			setDetailsOpen(true);
+		}
+	};
+
+	const handleDetailsClose = () => {
+		setDetailsOpen(false);
+		setTabValue(0);
 	};
 
 	// function to clear the form fields and error message
 	const clearForm = () => {
-		setTest("");
+		setName("");
 		setAmount("");
 		setPayer("");
 		setDate("");
+		setDescription("");
 	};
 
 	// function to handle the add event of the expense
 	const handleAdd = () => {
 		//data validation
-		if (test === "" || amount === "" || payer === "" || date === "") {
+		if (name === "" || amount === "" || payer === "" || date === "") {
 			setError("All fields are required.");
 			clearForm();
 			return;
@@ -93,18 +146,20 @@ const NewExpenseDialog = ({
 		if (expense) {
 			onEditExpense({
 				id: expense.id,
-				test,
+				name,
 				amount,
 				payer,
 				date,
+				description,
 			});
 		} else {
 			onAddExpense({
 				id: Math.floor(Math.random() * 1000),
-				test,
+				name,
 				amount,
 				payer,
 				date,
+				description,
 			});
 		}
 
@@ -114,11 +169,22 @@ const NewExpenseDialog = ({
 
 	// Update state variables when expense prop changes
 	useEffect(() => {
-		setTest(expense ? expense.test : "");
-		setAmount(expense ? expense.amount : "");
-		setPayer(expense ? expense.payer : "");
-		setDate(expense ? expense.date : "");
-	}, [expense]); //the [expense] array is the dependency array
+		//if it is add new expense, then clear the form
+		if (newData) {
+			clearForm();
+		} else {
+			//console.log("Expense:", expense);
+			setName(expense ? expense.name : "");
+			setAmount(expense ? expense.amount.toString() : "");
+			setPayer(expense ? expense.payer : "");
+			setDate(
+				expense
+					? formatDateForInput(expense.date)
+					: formatDateForInput(new Date())
+			);
+			setDescription(expense ? expense.description : "");
+		}
+	}, [expense, newData]); //the [expense] array is the dependency array
 	// it means that the useEffect will run when the expense changes
 	// and it will update the name, amount and payer state variables
 
@@ -132,7 +198,7 @@ const NewExpenseDialog = ({
 				<Button
 					color="primary"
 					variant="outlined"
-					sx={{ mr: 1 }}
+					sx={{ mr: 1, mt: 1 }}
 					onClick={handleClickOpen}
 				>
 					New expense
@@ -145,7 +211,12 @@ const NewExpenseDialog = ({
 				</Button>
 			)}
 
-			<Dialog open={open} onClose={handleClose} style={dialogContainerStyle}>
+			<Dialog
+				open={open}
+				onClose={handleClose}
+				style={dialogContainerStyle}
+				maxWidth="xl"
+			>
 				<DialogTitle>
 					{newData ? "Add a new expense" : "Edit expense"}
 				</DialogTitle>
@@ -158,43 +229,74 @@ const NewExpenseDialog = ({
 					{/* show the error message if there is any data validation fail */}
 					{error && <Alert severity="error">{error}</Alert>}
 
-					{/* text field for the name */}
-					<TextField
-						autoFocus
-						margin="dense"
-						label="Description"
-						type="text"
-						fullWidth
-						value={test}
-						onChange={(e) => setTest(e.target.value)}
-					/>
-					{/* text field for the amount */}
-					<TextField
-						margin="dense"
-						label="Amount"
-						type="number"
-						fullWidth
-						value={amount}
-						onChange={(e) => setAmount(e.target.value)}
-					/>
-					{/* text field for the payer */}
-					<TextField
-						margin="dense"
-						label="Paid by:"
-						type="text"
-						fullWidth
-						value={payer}
-						onChange={(e) => setPayer(e.target.value)}
-					/>
+					<Tabs value={tabValue} onChange={handleTabChange}>
+						<Tab label="Overview" />
+						<Tab label="Expense Split" />
+					</Tabs>
 
-					{/* text field for the date */}
-					<TextField
-						margin="dense"
-						type="Date"
-						fullWidth
-						value={date}
-						onChange={(e) => setDate(e.target.value)}
-					/>
+					{tabValue === 0 && (
+						<>
+							{/* text field for the name */}
+							<TextField
+								autoFocus
+								margin="dense"
+								label="Name"
+								type="text"
+								fullWidth
+								value={name || ""}
+								onChange={(e) => setName(e.target.value)}
+							/>
+							{/* text field for the amount */}
+							<TextField
+								margin="dense"
+								label="Amount"
+								type="number"
+								fullWidth
+								value={amount || ""}
+								onChange={(e) => setAmount(e.target.value)}
+							/>
+							{/* text field for the payer */}
+							<TextField
+								margin="dense"
+								label="Paid by:"
+								type="text"
+								fullWidth
+								value={payer || ""}
+								onChange={(e) => setPayer(e.target.value)}
+							/>
+
+							{/* text field for the date */}
+							<TextField
+								margin="dense"
+								type="date"
+								fullWidth
+								value={date || formatDateForInput(new Date())}
+								onChange={(e) =>
+									setDate(formatDateForInput(e.target.value))
+								}
+							/>
+
+							{/* text field for the description */}
+							<TextField
+								margin="dense"
+								label="Description"
+								type="text"
+								fullWidth
+								value={description}
+								onChange={(e) => {
+									const words = e.target.value.split(" ");
+									if (words.length <= 300) {
+										setDescription(e.target.value);
+									}
+								}}
+								helperText={`${
+									description ? description.split(" ").length : 0
+								}/300`}
+							/>
+						</>
+					)}
+
+					{tabValue === 1 && <ExpensesSplit />}
 				</DialogContent>
 				{/* buttons for cancel and add */}
 				<DialogActions>

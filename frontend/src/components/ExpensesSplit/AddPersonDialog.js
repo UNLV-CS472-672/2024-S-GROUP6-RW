@@ -61,7 +61,7 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 				</Select>
 			),
 		},
-		{
+		/*{
 			field: "detail",
 			headerName: "Detail",
 			sortable: false,
@@ -71,7 +71,7 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 					variant="contained"
 					color="primary"
 					onClick={(event) => {
-						event.stopPropagation(); // Add this line
+						event.stopPropagation();
 						setCurrentRow(params.row);
 						setDetailDialogOpen(true);
 					}}
@@ -79,7 +79,7 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 					Detail
 				</Button>
 			),
-		},
+		},*/
 	];
 
 	const handleAddSelected = () => {
@@ -132,8 +132,8 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 				>
 					Add Selected
 				</Button>
-				<DetailDialog
-					key={currentRow ? currentRow.id : null} // Add this line
+				{/*<DetailDialog
+					key={currentRow ? currentRow.id : null}
 					open={detailDialogOpen}
 					onClose={() => {
 						setDetailDialogOpen(false);
@@ -142,7 +142,7 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 					row={currentRow}
 					isEditing={true}
 					onEdit={handleEditPerson}
-				/>
+				/>*/}
 			</DialogActions>
 		</Dialog>
 	);
