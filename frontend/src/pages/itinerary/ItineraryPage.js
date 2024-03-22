@@ -1,27 +1,6 @@
 import React, { useState } from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import DatePickerComponent from "../../components/ItineraryForm/DatePickerComponent";
 import ItineraryAccordion from "../../components/ItineraryForm/ItineraryAccordion";
-
-const possibleActivities = [
-  "Explore the city",
-  "Visit a museum",
-  "Dinner at a local restaurant",
-  "City park exploration",
-  "Relax at the beach",
-  "Sunset Cruise",
-  // Add more activities as needed
-];
-
-const getRandomActivity = () => {
-  const randomIndex = Math.floor(Math.random() * possibleActivities.length);
-  return possibleActivities[randomIndex];
-};
 
 const ItineraryPage = () => {
   const [currentCity] = useState("Your City");
@@ -46,7 +25,7 @@ const ItineraryPage = () => {
     );
 
     if (numberOfDays > 0) {
-      generateRandomItinerary(numberOfDays);
+      generateItinerary(numberOfDays);
       setCurrentStep("itinerary");
     } else {
       // Handle invalid date range
@@ -57,14 +36,6 @@ const ItineraryPage = () => {
   const calculateNumberOfDays = (startDate, endDate) => {
     const oneDay = 24 * 60 * 60 * 1000;
     return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
-  };
-
-  const generateRandomItinerary = (numberOfDays) => {
-    setItinerary(
-      Array.from({ length: numberOfDays }, () => ({
-        activities: Array.from({ length: 3 }, () => getRandomActivity()), // Adjust the number of activities as needed
-      }))
-    );
   };
 
   const generateItinerary = (numberOfDays) => {
@@ -92,31 +63,6 @@ const ItineraryPage = () => {
     ]);
   };
 
-  const handleEditActivity = (day, activityIndex) => {
-    // Implement your logic for editing an activity here
-    // For simplicity, let's just add a placeholder logic
-    const updatedActivity = prompt(
-      "Edit activity:",
-      itinerary[day - 1].activities[activityIndex]
-    );
-    if (updatedActivity) {
-      setItinerary((prevItinerary) => {
-        const updatedItinerary = [...prevItinerary];
-        updatedItinerary[day - 1].activities[activityIndex] = updatedActivity;
-        return updatedItinerary;
-      });
-    }
-  };
-
-  const handleRemoveActivity = (day, activityIndex) => {
-    // Implement your logic for removing an activity here
-    setItinerary((prevItinerary) => {
-      const updatedItinerary = [...prevItinerary];
-      updatedItinerary[day - 1].activities.splice(activityIndex, 1);
-      return updatedItinerary;
-    });
-  };
-
   return (
     <div>
       <h1>Itinerary</h1>
@@ -138,10 +84,10 @@ const ItineraryPage = () => {
               day={index + 1}
               activities={day.activities}
               onAddActivity={handleAddActivity}
-              // ... (Other props)
+              // You can pass other necessary props here
             />
           ))}
-          <Button onClick={handleAddDay}>Add Another Day</Button>
+          <button onClick={handleAddDay}>Add Another Day</button>
         </>
       )}
     </div>

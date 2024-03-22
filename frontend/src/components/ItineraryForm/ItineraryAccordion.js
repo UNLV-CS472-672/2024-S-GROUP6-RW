@@ -13,8 +13,16 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Activity from "./Activity";
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { DndContext, KeyboardSensor, PointerSensor, TouchSensor, closestCorners, useSensor, useSensors } from "@dnd-kit/core";
 
 const ItineraryAccordion = ({
+  key,
   day,
   activities,
   onAddActivity,
@@ -23,15 +31,31 @@ const ItineraryAccordion = ({
 }) => {
   const [isAddDialogOpen, setAddDialogOpen] = useState(false);
   const [newActivity, setNewActivity] = useState("");
+  const [tasks, setTasks] = useState([  //Preset itineraries
+    { id: "1", title: "Explore the city" },
+    { id: "2", title: "Visit a museum" },
+    { id: "3", title: "Dinner at a local restaurant" },
+    { id: "4", title: "City park exploration" },
+    { id: "5", title: "Relax at the beach" },
+    { id: "6", title: "Sunset Cruise" },
+  ]);
 
   const handleAddClick = () => {
     setAddDialogOpen(true);
   };
 
   const handleConfirmAdd = () => {
-    setAddDialogOpen(false);
     if (newActivity) {
-      onAddActivity(day, newActivity);
+      // Generate a unique ID for the new activity
+      const id = (Math.random() * 1000000).toFixed(0);
+  
+      // Create a new activity object
+      const newTask = { id: id, title: newActivity };
+  
+      // Update the tasks state with the new activity added
+      setTasks((prevTasks) => [...prevTasks, newTask]);
+  
+      // Clear the input field
       setNewActivity("");
     }
   };
@@ -39,6 +63,30 @@ const ItineraryAccordion = ({
   const handleCancelAdd = () => {
     setAddDialogOpen(false);
   };
+
+  const getTaskPos = id => tasks.findIndex(task => task.id === id)
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event; //active: element being dragged, over: element being replaced
+
+    if (active.id === over.id) return;
+
+    setTasks(tasks => {
+      const originalPos = getTaskPos(active.id);
+      const newPos = getTaskPos(over.id);
+
+      return arrayMove(tasks, originalPos, newPos);
+    })
+  };
+
+  //For mobile or keyboard compatibility
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   return (
     <Accordion>
@@ -48,15 +96,22 @@ const ItineraryAccordion = ({
       <AccordionDetails>
         <div>
           <ul>
-            {activities.map((activity, index) => (
-              <li key={index}>
-                <Activity
-                  activity={activity}
-                  onEdit={() => onEditActivity(day, index)}
-                  onRemove={() => onRemoveActivity(day, index)}
-                />
-              </li>
-            ))}
+            <DndContext  onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+              <SortableContext
+                items={tasks}
+                strategy={verticalListSortingStrategy}
+              >
+                {tasks.map((task) => (
+                  <Activity
+                    id={task.id}
+                    title={task.title}
+                    key={task.id}
+                    // onEdit={() => onEditActivity(day, index)}
+                    // onRemove={() => onRemoveActivity(day, index)}
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
           </ul>
           <Button onClick={handleAddClick}>Add Activity</Button>
 
