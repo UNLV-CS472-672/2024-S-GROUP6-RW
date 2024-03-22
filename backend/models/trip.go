@@ -38,7 +38,7 @@ func (t *Trip) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M
 	err := coll.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
-		return errors.New("Trip does not exist.")
+		return errors.New("trip does not exist")
 	}
 
 	// Acquire value and validity of Trip fields from result
@@ -61,9 +61,9 @@ func (t *Trip) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M
 	}
 
 	idConverter := []converter{
-		converter{&membersOK, &memberList, &t.MemberIDs},
-		converter{&activitiesOK, &activityList, &t.ActivityIDs},
-		converter{&expensesOK, &expenseList, &t.ExpenseIDs},
+		{&membersOK, &memberList, &t.MemberIDs},
+		{&activitiesOK, &activityList, &t.ActivityIDs},
+		{&expensesOK, &expenseList, &t.ExpenseIDs},
 	}
 
 	for i := range idConverter {
@@ -89,7 +89,7 @@ func (t *Trip) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M
 	}
 
 	if !valid {
-		return errors.New("Failed to convert result to Trip.")
+		return errors.New("failed to convert result to trip")
 	}
 
 	return nil

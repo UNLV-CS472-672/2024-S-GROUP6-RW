@@ -28,10 +28,10 @@ func (e *Expense) GetDocument(c *gin.Context, coll *mongo.Collection, filter bso
 	err := coll.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
-		return errors.New("Expense does not exist.")
+		return errors.New("expense does not exist")
 	}
 
-	// Acquire value and validity of Trip fields from result
+	// Acquire value and validity of Expense fields from result
 	var idOK, parentTripOK, descriptionOK, amountOK, invoicesOK, remainingBalanceOK, isPaidOK bool
 	var invoiceList primitive.A
 	var id primitive.ObjectID
@@ -51,7 +51,7 @@ func (e *Expense) GetDocument(c *gin.Context, coll *mongo.Collection, filter bso
 	}
 
 	idConverter := []converter{
-		converter{&invoicesOK, &invoiceList, &e.InvoiceIDs},
+		{&invoicesOK, &invoiceList, &e.InvoiceIDs},
 	}
 
 	for i := range idConverter {
@@ -77,7 +77,7 @@ func (e *Expense) GetDocument(c *gin.Context, coll *mongo.Collection, filter bso
 	}
 
 	if !valid {
-		return errors.New("Failed to convert result to Expense.")
+		return errors.New("failed to convert result to expense")
 	}
 
 	return nil

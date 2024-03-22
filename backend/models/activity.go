@@ -30,7 +30,7 @@ func (a *Activity) GetDocument(c *gin.Context, coll *mongo.Collection, filter bs
 	err := coll.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
-		return errors.New("Activity does not exist.")
+		return errors.New("activity does not exist")
 	}
 
 	// Acquire value and validity of Activity fields from result
@@ -56,7 +56,7 @@ func (a *Activity) GetDocument(c *gin.Context, coll *mongo.Collection, filter bs
 	}
 
 	if !valid {
-		return errors.New("Failed to convert result to Activity.")
+		return errors.New("failed to convert result to activity")
 	}
 
 	return nil

@@ -26,10 +26,10 @@ func (i *Invoice) GetDocument(c *gin.Context, coll *mongo.Collection, filter bso
 	err := coll.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
-		return errors.New("Invoice does not exist.")
+		return errors.New("invoice does not exist")
 	}
 
-	// Acquire value and validity of Trip fields from result
+	// Acquire value and validity of Invoice fields from result
 	var idOK, parentExpenseOK, payeeOK, descriptionOK, balanceOK bool
 
 	i.ID, idOK = result["_id"].(primitive.ObjectID)
@@ -48,7 +48,7 @@ func (i *Invoice) GetDocument(c *gin.Context, coll *mongo.Collection, filter bso
 	}
 
 	if !valid {
-		return errors.New("Failed to convert result to Invoice.")
+		return errors.New("failed to convert result to invoice")
 	}
 
 	return nil
