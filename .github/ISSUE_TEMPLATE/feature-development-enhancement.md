@@ -2,7 +2,7 @@
 name: Feature Development/Enhancement
 about: Suggest an improvement/enhancement
 title: ''
-labels: ''
+labels: enhancement
 assignees: ''
 
 ---
