@@ -10,12 +10,23 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+type ProfileModification struct {
+	// Fields to bind from profile modification request
+	FieldName string      `json:"FieldName"`
+	Date      interface{} `json:"Data"`
+}
+
 type Profile struct {
 	// Fields for actual Profile document in database
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
 	UserID      primitive.ObjectID `bson:"UserID,omitempty"`
+	Username    string             `bson:"Username,omitempty"`
 	DisplayName string             `bson:"DisplayName,omitempty"`
 	Joined      primitive.DateTime `bson:"Joined,omitempty"`
+	About       string             `bson:"About,omitempty"`
+
+	// Placeholder fields for HTTP request body information not stored to Profile database
+	Modifications []ProfileModification
 }
 
 func (p *Profile) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M) error {
@@ -25,18 +36,20 @@ func (p *Profile) GetDocument(c *gin.Context, coll *mongo.Collection, filter bso
 	err := coll.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
-		return errors.New("Profile does not exist.")
+		return errors.New("profile does not exist")
 	}
 
-	// Acquire value and validity of Trip fields from result
-	var idOK, userOK, displayNameOK, joinedOK bool
+	// Acquire value and validity of Profile fields from result
+	var idOK, userOK, usernameOK, displayNameOK, joinedOK, aboutOK bool
 
 	p.ID, idOK = result["_id"].(primitive.ObjectID)
 	p.UserID, userOK = result["UserID"].(primitive.ObjectID)
+	p.Username, usernameOK = result["Username"].(string)
 	p.DisplayName, displayNameOK = result["DisplayName"].(string)
 	p.Joined, joinedOK = result["Joined"].(primitive.DateTime)
+	p.About, aboutOK = result["About"].(string)
 
-	checklist := []bool{idOK, userOK, displayNameOK, joinedOK}
+	checklist := []bool{idOK, userOK, usernameOK, displayNameOK, joinedOK, aboutOK}
 
 	// Check if all results are valid
 	valid := true
@@ -46,7 +59,7 @@ func (p *Profile) GetDocument(c *gin.Context, coll *mongo.Collection, filter bso
 	}
 
 	if !valid {
-		return errors.New("Failed to convert result to Profile.")
+		return errors.New("failed to convert result to profile")
 	}
 
 	return nil
