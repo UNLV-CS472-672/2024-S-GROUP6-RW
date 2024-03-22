@@ -12,15 +12,16 @@ import (
 
 type User struct {
 	// Fields for actual User document in database
-	ID         primitive.ObjectID   `bson:"_id,omitempty"`
-	ProfileID  primitive.ObjectID   `bson:"ProfileID,omitempty"`
-	Username   string               `bson:"Username,omitempty"`
-	Email      string               `bson:"Email,omitempty"`
-	PassHash   string               `bson:"PassHash,omitempty"`
-	TripIDs    []primitive.ObjectID `bson:"TripIDs,omitempty"`
-	FriendIDs  []primitive.ObjectID `bson:"FriendIDs,omitempty"`
-	InvoiceIDs []primitive.ObjectID `bson:"InvoiceIDs,omitempty"`
-	LastLogin  primitive.DateTime   `bson:"LastLogin,omitempty"`
+	ID               primitive.ObjectID   `bson:"_id,omitempty"`
+	ProfileID        primitive.ObjectID   `bson:"ProfileID,omitempty"`
+	Username         string               `bson:"Username,omitempty"`
+	Email            string               `bson:"Email,omitempty"`
+	PassHash         string               `bson:"PassHash,omitempty"`
+	TripIDs          []primitive.ObjectID `bson:"TripIDs,omitempty"`
+	FriendIDs        []primitive.ObjectID `bson:"FriendIDs,omitempty"`
+	FriendRequestIDs []primitive.ObjectID `bson:"FriendRequestIDs,omitempty"`
+	InvoiceIDs       []primitive.ObjectID `bson:"InvoiceIDs,omitempty"`
+	LastLogin        primitive.DateTime   `bson:"LastLogin,omitempty"`
 
 	// Placeholder fields for user entry point data
 	FirstName string
@@ -35,12 +36,12 @@ func (u *User) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M
 	err := coll.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
-		return errors.New("User does not exist.")
+		return errors.New("user does not exist")
 	}
 
 	// Acquire value and validity of User fields from result
-	var idOK, profileOK, userOK, emailOK, passOK, tripsOK, friendsOK, invoicesOK, lastLoginOK bool
-	var tripList, friendList, invoiceList primitive.A
+	var idOK, profileOK, userOK, emailOK, passOK, tripsOK, friendsOK, friendRequestsOK, invoicesOK, lastLoginOK bool
+	var tripList, friendList, friendRequestList, invoiceList primitive.A
 	var id primitive.ObjectID
 
 	u.ID, idOK = result["_id"].(primitive.ObjectID)
@@ -51,6 +52,7 @@ func (u *User) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M
 
 	tripList, tripsOK = result["TripIDs"].(primitive.A)
 	friendList, friendsOK = result["FriendIDs"].(primitive.A)
+	friendRequestList, friendRequestsOK = result["FriendRequestIDs"].(primitive.A)
 	invoiceList, invoicesOK = result["InvoiceIDs"].(primitive.A)
 
 	if result["LastLogin"] == nil {
@@ -67,9 +69,10 @@ func (u *User) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M
 	}
 
 	idConverter := []converter{
-		converter{&tripsOK, &tripList, &u.TripIDs},
-		converter{&friendsOK, &friendList, &u.FriendIDs},
-		converter{&invoicesOK, &invoiceList, &u.InvoiceIDs},
+		{&tripsOK, &tripList, &u.TripIDs},
+		{&friendsOK, &friendList, &u.FriendIDs},
+		{&friendRequestsOK, &friendRequestList, &u.FriendRequestIDs},
+		{&invoicesOK, &invoiceList, &u.InvoiceIDs},
 	}
 
 	for i := range idConverter {
@@ -85,7 +88,7 @@ func (u *User) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M
 		}
 	}
 
-	checklist := []bool{idOK, profileOK, userOK, emailOK, passOK, tripsOK, friendsOK, invoicesOK, lastLoginOK}
+	checklist := []bool{idOK, profileOK, userOK, emailOK, passOK, tripsOK, friendsOK, friendRequestsOK, invoicesOK, lastLoginOK}
 
 	// Check if all results are valid
 	valid := true
@@ -95,7 +98,7 @@ func (u *User) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M
 	}
 
 	if !valid {
-		return errors.New("Failed to convert result to User.")
+		return errors.New("failed to convert result to user")
 	}
 
 	return nil
