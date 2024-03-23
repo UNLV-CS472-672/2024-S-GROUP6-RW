@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -14,12 +15,15 @@ import (
 )
 
 func AddFriendHandler(c *gin.Context) {
+	fmt.Printf("%s | Attempting to create a friend request.\n", time.Now())
+
 	var request models.FriendRequest
 
 	if !models.BindData(c, &request) {
 		return // Failed to bind data to request. Exit handler
 	}
 
+	// Acquire connection to 'UserDetails' collection on MongoDB
 	UserDetails := db.ConnectToMongoDB("User", "UserDetails")
 
 	var sender models.User
@@ -38,6 +42,7 @@ func AddFriendHandler(c *gin.Context) {
 		return // Failed to get target document. Exit handler
 	}
 
+	// Acquire connection to 'FriendRequestDetails' collection on MongoDB
 	FriendRequestDetails := db.ConnectToMongoDB("User", "FriendRequestDetails")
 
 	var existingRequest models.FriendRequest
@@ -93,12 +98,15 @@ func AddFriendHandler(c *gin.Context) {
 }
 
 func GetFriendRequestsHandler(c *gin.Context) {
+	fmt.Printf("%s | Attempting to acquire user's friend requests.\n", time.Now())
+
 	var user models.User
 
 	if !models.BindData(c, &user) {
 		return // Failed to bind data to user. Exit handler
 	}
 
+	// Acquire connection to 'UserDetails' collection on MongoDB
 	UserDetails := db.ConnectToMongoDB("User", "UserDetails")
 
 	// Acquire existing user entry from database
@@ -107,6 +115,7 @@ func GetFriendRequestsHandler(c *gin.Context) {
 		return // Failed to get user document. Exit handler
 	}
 
+	// Acquire connection to 'FriendRequestDetals' collection on MongoDB
 	FriendRequestDetals := db.ConnectToMongoDB("User", "FriendRequestDetails")
 
 	// Collect requests targeted at the specified user
@@ -143,12 +152,15 @@ func GetFriendRequestsHandler(c *gin.Context) {
 }
 
 func GetFriendsHandler(c *gin.Context) {
+	fmt.Printf("%s | Attempting to acquire user's friends list.\n", time.Now())
+
 	var user models.User
 
 	if !models.BindData(c, &user) {
 		return // Failed to bind data to user.
 	}
 
+	// Acquire connection to 'UserDetails' collection on MongoDB
 	UserDetails := db.ConnectToMongoDB("User", "UserDetails")
 
 	// Acquire existing user entry from database
@@ -182,12 +194,15 @@ func GetFriendsHandler(c *gin.Context) {
 }
 
 func AcknowledgeFriendRequestHandler(c *gin.Context) {
+	fmt.Printf("%s | Attempting to acknowledge a friend request.\n", time.Now())
+
 	var request models.FriendRequest
 
 	if !models.BindData(c, &request) {
 		return // Failed to bind data to request. Exit handler
 	}
 
+	// Acquire connection to 'UserDetails' collection on MongoDB
 	UserDetails := db.ConnectToMongoDB("User", "UserDetails")
 
 	var sender models.User
@@ -206,6 +221,7 @@ func AcknowledgeFriendRequestHandler(c *gin.Context) {
 		return // Failed to get target document. Exit handler
 	}
 
+	// Acquire connection to 'FriendRequestDetails' collection on MongoDB
 	FriendRequestDetails := db.ConnectToMongoDB("User", "FriendRequestDetails")
 
 	// Acquire existing request entry from database
@@ -288,12 +304,15 @@ func AcknowledgeFriendRequestHandler(c *gin.Context) {
 }
 
 func DeleteUserHandler(c *gin.Context) {
+	fmt.Printf("%s | Attempting to delete a user.\n", time.Now())
+
 	var user models.User
 
 	if !models.BindData(c, &user) {
 		return // Failed to bind data to user
 	}
 
+	// Acquire connection to 'UserDetails' collection on MongoDB
 	UserDetails := db.ConnectToMongoDB("User", "UserDetails")
 
 	// Acquire user entry from database
@@ -304,6 +323,7 @@ func DeleteUserHandler(c *gin.Context) {
 
 	fmt.Println("Removing user from trips.")
 
+	// Acquire connection to 'TripDetails' collection on MongoDB
 	TripDetails := db.ConnectToMongoDB("Trip", "TripDetails")
 
 	// Remove user from any trips they are a member of
@@ -387,6 +407,7 @@ func DeleteUserHandler(c *gin.Context) {
 				}
 			}
 
+			// Acquire connection to 'ActivityDetails' collection on MongoDB
 			ActivityDetails := db.ConnectToMongoDB("Trip", "ActivityDetails")
 
 			// Delete activities associated with trip
@@ -408,7 +429,10 @@ func DeleteUserHandler(c *gin.Context) {
 				}
 			}
 
+			// Acquire connection to 'ExpenseDetails' collection on MongoDB
 			ExpenseDetails := db.ConnectToMongoDB("Finance", "ExpenseDetails")
+
+			// Acquire connection to 'InvoiceDetails' collection on MongoDB
 			InvoiceDetails := db.ConnectToMongoDB("Finance", "InvoiceDetails")
 
 			// Delete expenses associated with trip
@@ -483,7 +507,10 @@ func DeleteUserHandler(c *gin.Context) {
 		}
 	}
 
+	// Acquire connection to 'ExpenseDetails' collection on MongoDB
 	ExpenseDetails := db.ConnectToMongoDB("Finance", "ExpenseDetails")
+
+	// Acquire connection to 'InvoiceDetails' collection on MongoDB
 	InvoiceDetails := db.ConnectToMongoDB("Finance", "InvoiceDetails")
 
 	fmt.Println("Deleting user's invoices.")
@@ -583,6 +610,7 @@ func DeleteUserHandler(c *gin.Context) {
 
 	fmt.Println("Deleting friend requests targeted at user.")
 
+	// Acquire connection to 'FriendRequestDetails' collection on MongoDB
 	FriendRequestDetails := db.ConnectToMongoDB("User", "FriendRequestDetails")
 
 	// Delete friend requests targeting user
@@ -627,6 +655,7 @@ func DeleteUserHandler(c *gin.Context) {
 	// reason. Possibly just marking the user as deleted may be a solution
 	fmt.Println("Deleting profile.")
 
+	// Acquire connection to 'ProfileDetails' collection on MongoDB
 	ProfileDetails := db.ConnectToMongoDB("User", "ProfileDetails")
 
 	// Remove profile entry from database
