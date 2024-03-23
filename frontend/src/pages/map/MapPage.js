@@ -25,7 +25,6 @@ function MapPage() {
 
   return (
     <div>
-
       <div className="search-bar">
         <input type="text" placeholder="Search..." onChange={(e) => handleSearch(e.target.value)} />
       </div>
@@ -92,24 +91,16 @@ function MapPage() {
             </ul>
           </div>
         </div>
-        {/*<div className="map-placeholder">
-          <GoogleMapBlock
-            height="98%" // Adjusted to take fit black box which takes up 80% of the screen height
-            width="99%" // Takes up entire width of the container
-            markerCoordinatesArray={[]}
-          />
-        </div>
+        {/* Commenting out the conflicting part for later use*/}
+        {/* <h2>Map Page</h2>
+        <GoogleMapBlock 
+          width="800px" 
+          height="600px" 
+          markerCoordinatesArray={markers}
+          start="Las Vegas" // Las Vegas coordinates
+          destination= "Fremont, Ohio" // Fremont, Ohio coordinates
+        /> */}
       </div>
-
-      <h2>Map Page</h2>
-      <GoogleMapBlock 
-      width="800px" 
-      height="600px" 
-      markerCoordinatesArray={markers}
-      start="Las Vegas" // Las Vegas coordinates
-      destination= "Fremont, Ohio" // Fremont, Ohio coordinates
-      /> */}
-
     </div>
   );
 }
