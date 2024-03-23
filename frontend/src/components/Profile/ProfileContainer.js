@@ -1,10 +1,11 @@
 import React, { useState, useRef } from "react";
-import { Tabs, Tab, Box } from "@mui/material";
+import { Tabs, Tab, Box, IconButton } from "@mui/material";
 import FriendsTab from "./FriendsTab";
 import AboutTab from "./AboutTab";
 import TripsTab from "./TripsTab";
 import EditProfilePic from "./EditProfilePic";
 import NameTag from "./NameTag";
+import EditIcon from "@mui/icons-material/Edit";
 
 import defaultPic from "../../images/avatars/Terence.jpg";
 import { ReactComponent as DefaultBorder } from "../../images/borders/Default_Border.svg";
@@ -22,6 +23,16 @@ export default function ProfileContainer() {
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [customAvatars, setCustomAvatars] = useState([]);
   const name = "USERNAME"; // Replace with the actual name
+
+  const [editEnabled, setEditEnabled] = useState("false");
+
+  const handleEditMode = () => {
+    if (!editEnabled) {
+      setEditEnabled("true");
+    } else {
+      setEditEnabled("false");
+    }
+  };
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
@@ -101,7 +112,16 @@ export default function ProfileContainer() {
         </Box>
         <NameTag name={name} />
       </Box>
-      <div>
+      <div style={styles.tabBox}>
+        <IconButton
+          style={{
+            ...styles.editButton,
+            background: editEnabled ? "#448EE4" : "transparent",
+          }}
+          onClick={handleEditMode}
+        >
+          <EditIcon />
+        </IconButton>
         <Tabs
           value={selectedTab}
           onChange={handleChange}
@@ -113,9 +133,9 @@ export default function ProfileContainer() {
           <Tab label="Friends" />
           <Tab label="Trips" />
         </Tabs>
-        {selectedTab === 0 && <AboutTab />}
-        {selectedTab === 1 && <FriendsTab />}
-        {selectedTab === 2 && <TripsTab />}
+        {selectedTab === 0 && <AboutTab editMode={editEnabled} />}
+        {selectedTab === 1 && <FriendsTab editMode={editEnabled} />}
+        {selectedTab === 2 && <TripsTab editMode={editEnabled} />}
       </div>
       <EditProfilePic
         open={editProfilePicOpen}
@@ -214,8 +234,20 @@ const styles = {
     padding: 0,
     position: "relative",
   },
+  tabBox: {
+    position: "relative",
+  },
   tabs: {
     width: "40vw",
     paddingTop: "1vw",
+  },
+  editButton: {
+    position: "absolute",
+    top: "1vw",
+    right: "1vw",
+    border: "0.15vw solid gray",
+    borderRadius: "10%",
+    cursor: "pointer",
+    zIndex: "999",
   },
 };
