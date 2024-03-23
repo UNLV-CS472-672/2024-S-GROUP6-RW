@@ -13,7 +13,6 @@ import (
 type User struct {
 	// Fields for actual User document in database
 	ID               primitive.ObjectID   `bson:"_id,omitempty"`
-	ProfileID        primitive.ObjectID   `bson:"ProfileID,omitempty"`
 	Username         string               `bson:"Username,omitempty"`
 	Email            string               `bson:"Email,omitempty"`
 	PassHash         string               `bson:"PassHash,omitempty"`
@@ -40,12 +39,11 @@ func (u *User) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M
 	}
 
 	// Acquire value and validity of User fields from result
-	var idOK, profileOK, userOK, emailOK, passOK, tripsOK, friendsOK, friendRequestsOK, invoicesOK, lastLoginOK bool
+	var idOK, userOK, emailOK, passOK, tripsOK, friendsOK, friendRequestsOK, invoicesOK, lastLoginOK bool
 	var tripList, friendList, friendRequestList, invoiceList primitive.A
 	var id primitive.ObjectID
 
 	u.ID, idOK = result["_id"].(primitive.ObjectID)
-	u.ProfileID, profileOK = result["ProfileID"].(primitive.ObjectID)
 	u.Username, userOK = result["Username"].(string)
 	u.Email, emailOK = result["Email"].(string)
 	u.PassHash, passOK = result["PassHash"].(string)
@@ -88,7 +86,7 @@ func (u *User) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M
 		}
 	}
 
-	checklist := []bool{idOK, profileOK, userOK, emailOK, passOK, tripsOK, friendsOK, friendRequestsOK, invoicesOK, lastLoginOK}
+	checklist := []bool{idOK, userOK, emailOK, passOK, tripsOK, friendsOK, friendRequestsOK, invoicesOK, lastLoginOK}
 
 	// Check if all results are valid
 	valid := true
