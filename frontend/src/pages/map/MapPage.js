@@ -12,7 +12,13 @@ function MapPage() {
   return (
     <div>
       <h2>Map Page</h2>
-      <GoogleMapBlock width="800px" height="600px" markerCoordinatesArray={markers} />
+      <GoogleMapBlock 
+      width="800px" 
+      height="600px" 
+      markerCoordinatesArray={markers}
+      start="Las Vegas" // Las Vegas coordinates
+      destination= "Fremont, Ohio" // Fremont, Ohio coordinates
+      /> 
     </div>
   );
 }
