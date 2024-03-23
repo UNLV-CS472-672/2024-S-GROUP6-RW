@@ -31,9 +31,9 @@ func CreateTripHandler(c *gin.Context) {
 	// Acquire connection to 'UserDetails' collection on MongoDB
 	UserDetails := db.ConnectToMongoDB("User", "UserDetails")
 
-	// Locate user entry associated with trip creation
 	var user models.User
 
+	// Acquire user document from database
 	if err := user.GetDocument(c, UserDetails, bson.M{"Username": trip.Username}); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return // Failed to get user document. Exit handler
@@ -42,9 +42,9 @@ func CreateTripHandler(c *gin.Context) {
 	// Acquire connection to 'TripDetails' collection on MongoDB
 	TripDetails := db.ConnectToMongoDB("Trip", "TripDetails")
 
-	// Verify that a trip of the same title does not already exist
 	var existingTrip models.Trip
 
+	// Verify that a trip of the same title does not already exist
 	if err := existingTrip.GetDocument(c, TripDetails, bson.M{"TripOwnerID": user.ID, "TripTitle": trip.TripTitle}); err == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Trip already exists."})
 		return // Acquired an existing trip document. Exit handler
@@ -52,23 +52,14 @@ func CreateTripHandler(c *gin.Context) {
 
 	fmt.Println("Creating new trip.")
 
-	// Set activity list (assuming this happens during trip creation, not edit)
-	trip.ActivityIDs = make([]primitive.ObjectID, 0)
-
-	// Set member list
-	trip.MemberIDs = []primitive.ObjectID{user.ID}
-
-	// Set expense list (again, assuming this happens during trip creation)
-	trip.ExpenseIDs = make([]primitive.ObjectID, 0)
-
 	// Create new trip
 	insert_result, err := TripDetails.InsertOne(context.TODO(), bson.M{
 		"TripOwnerID":  user.ID,
 		"TripTitle":    trip.TripTitle,
 		"LocationName": trip.LocationName,
-		"MemberIDs":    trip.MemberIDs,
-		"ActivityIDs":  trip.ActivityIDs,
-		"ExpenseIDs":   trip.ExpenseIDs,
+		"MemberIDs":    []primitive.ObjectID{user.ID},
+		"ActivityIDs":  make([]primitive.ObjectID, 0),
+		"ExpenseIDs":   make([]primitive.ObjectID, 0),
 	})
 
 	if err != nil {
@@ -131,6 +122,7 @@ func GetAllTripsHandler(c *gin.Context) {
 
 	fmt.Println("Acquiring user trips.")
 
+	// Acquire connection to 'UserDetails' collection on MongoDB
 	TripDetails := db.ConnectToMongoDB("Trip", "TripDetails")
 
 	// Get information for all trips the user is in
@@ -166,6 +158,7 @@ func GetAllTripsHandler(c *gin.Context) {
 			memberNames = append(memberNames, member.Username)
 		}
 
+		// Acquire connection to 'ActivityDetails' collection on MongoDB
 		ActivityDetails := db.ConnectToMongoDB("Trip", "ActivityDetails")
 
 		// Collect list of activities
@@ -191,7 +184,10 @@ func GetAllTripsHandler(c *gin.Context) {
 			})
 		}
 
+		// Acquire connection to 'ExpenseDetails' collection on MongoDB
 		ExpenseDetails := db.ConnectToMongoDB("Finance", "ExpenseDetails")
+
+		// Acquire connection to 'InvoiceDetails' collection on MongoDB
 		InvoiceDetails := db.ConnectToMongoDB("Finance", "InvoiceDetails")
 
 		// Collect list of expenses
@@ -268,6 +264,7 @@ func GetTripDetailsHandler(c *gin.Context) {
 		return
 	}
 
+	// Acquire connection to 'UserDetails' collection on MongoDB
 	UserDetails := db.ConnectToMongoDB("User", "UserDetails")
 
 	// Find the owner of this trip
@@ -277,6 +274,7 @@ func GetTripDetailsHandler(c *gin.Context) {
 		return // Failed to get owner document. Exit handler
 	}
 
+	// Acquire connection to 'TripDetails' collection on MongoDB
 	TripDetails := db.ConnectToMongoDB("Trip", "TripDetails")
 
 	// Acquire information about trip
@@ -300,6 +298,7 @@ func GetTripDetailsHandler(c *gin.Context) {
 		memberList = append(memberList, member.Username)
 	}
 
+	// Acquire connection to 'ActivityDetails' collection on MongoDB
 	ActivityDetails := db.ConnectToMongoDB("Trip", "ActivityDetails")
 
 	// Collect list of activities
@@ -325,7 +324,10 @@ func GetTripDetailsHandler(c *gin.Context) {
 		})
 	}
 
+	// Acquire connection to 'ExpenseDetails' collection on MongoDB
 	ExpenseDetails := db.ConnectToMongoDB("Finance", "ExpenseDetails")
+
+	// Acquire connection to 'InvoiceDetails' collection on MongoDB
 	InvoiceDetails := db.ConnectToMongoDB("Finance", "InvoiceDetails")
 
 	// Collect list of expenses
@@ -503,12 +505,6 @@ func EditTripHandler(c *gin.Context) {
 
 	// Only update if changes actually happened
 	if modifyTitle || modifyName || modifyMembers {
-		// If owner is not found in member list before update, then owner has been removed
-		if found, _ := utility.Find(newTrip.MemberIDs[:], existingTrip.TripOwnerID); !found {
-			fmt.Println("Invalid operation: Tried to remove trip owner from member list.")
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Cannot remove trip owner from member list."})
-			return
-		}
 
 		// Make changes from modification request
 		filter := bson.M{"_id": existingTrip.ID}
@@ -528,6 +524,14 @@ func EditTripHandler(c *gin.Context) {
 
 		if modifyMembers {
 			fmt.Println("Updating member list.")
+
+			// If owner is not found in member list before update, then owner has been removed
+			if found, _ := utility.Find(newTrip.MemberIDs[:], existingTrip.TripOwnerID); !found {
+				fmt.Println("Invalid operation: Tried to remove trip owner from member list.")
+				c.JSON(http.StatusBadRequest, gin.H{"error": "Cannot remove trip owner from member list."})
+				return
+			}
+
 			content["MemberIDs"] = newTrip.MemberIDs
 		}
 
@@ -649,9 +653,7 @@ func DeleteTripHandler(c *gin.Context) {
 	TripDetails := db.ConnectToMongoDB("Trip", "TripDetails")
 
 	// Verify that a trip of the same title exists
-	var existingTrip models.Trip
-
-	if err := existingTrip.GetDocument(c, TripDetails, bson.M{"TripOwnerID": user.ID, "TripTitle": trip.TripTitle}); err != nil {
+	if err := trip.GetDocument(c, TripDetails, bson.M{"TripOwnerID": user.ID, "TripTitle": trip.TripTitle}); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return // Failed to get existing trip document. Exit handler
 	}
@@ -659,7 +661,7 @@ func DeleteTripHandler(c *gin.Context) {
 	fmt.Println("Removing members from this trip.")
 
 	// Remove references to this trip from all members prior to deletion
-	for _, id := range existingTrip.MemberIDs {
+	for _, id := range trip.MemberIDs {
 		var existingMember models.User
 
 		if err := existingMember.GetDocument(c, UserDetails, bson.M{"_id": id}); err != nil {
@@ -668,7 +670,7 @@ func DeleteTripHandler(c *gin.Context) {
 		}
 
 		// Reconstruct trip ID list by excluding this trip
-		found, index := utility.Find(existingMember.TripIDs[:], existingTrip.ID)
+		found, index := utility.Find(existingMember.TripIDs[:], trip.ID)
 
 		if found {
 			existingMember.TripIDs = append(existingMember.TripIDs[:index], existingMember.TripIDs[index+1:]...)
@@ -690,14 +692,111 @@ func DeleteTripHandler(c *gin.Context) {
 		}
 	}
 
+	// Acquire connection to 'ActivityDetails' collection on MongoDB
+	ActivityDetails := db.ConnectToMongoDB("Trip", "ActivityDetails")
+
+	// Delete activities associated with trip
+	for _, activityID := range trip.ActivityIDs {
+		var activity models.Activity
+
+		// Acquire activity document from database
+		if err := activity.GetDocument(c, ActivityDetails, bson.M{"_id": activityID}); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return // Failed to get activity document. Exit handler
+		}
+
+		// Remove activity entry from database
+		_, err := ActivityDetails.DeleteOne(context.TODO(), bson.M{"_id": activityID})
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return // Failed to delete activity. Exit handler
+		}
+	}
+
+	// Acquire connection to 'ExpenseDetails' collection on MongoDB
+	ExpenseDetails := db.ConnectToMongoDB("Finance", "ExpenseDetails")
+
+	// Acquire connection to 'InvoiceDetails' collection on MongoDB
+	InvoiceDetails := db.ConnectToMongoDB("Finance", "InvoiceDetails")
+
+	// Delete expenses associated with trip
+	for _, expenseID := range trip.ExpenseIDs {
+		var expense models.Expense
+
+		// Acquire expense document from database
+		if err := expense.GetDocument(c, ExpenseDetails, bson.M{"_id": expenseID}); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return // Failed to get expense document. Exit handler
+		}
+
+		// Remove expense entry from database
+		_, err := ExpenseDetails.DeleteOne(context.TODO(), bson.M{"_id": expenseID})
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return // Failed to delete expense. Exit handler
+		}
+
+		// Delete invoices associated with expense
+		for _, invoiceID := range expense.InvoiceIDs {
+			var invoice models.Invoice
+
+			// Acquire invoice document from database
+			if err := invoice.GetDocument(c, InvoiceDetails, bson.M{"_id": invoiceID}); err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return // Failed to get invoice document. Exit handler
+			}
+
+			_, err := InvoiceDetails.DeleteOne(context.TODO(), bson.M{"_id": invoiceID})
+
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return // Failed to delete invoice. Exit handler
+			}
+
+			var payee models.User
+
+			// Acquire payee document from database
+			if err := payee.GetDocument(c, UserDetails, bson.M{"_id": invoice.PayeeID}); err != nil {
+				c.JSON(http.StatusInsufficientStorage, gin.H{"error": err.Error()})
+				return // Failed to get payee document. Exit handler
+			}
+
+			// Locate invoice in payee's invoice list
+			found, index := utility.Find(payee.InvoiceIDs[:], invoiceID)
+
+			if !found {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find invoice in payee's invoice list."})
+				return // Failed to find invoice in payee's invoice list. Exit handler
+			}
+
+			// Remove invoice from payee's invoice list
+			payee.InvoiceIDs = append(payee.InvoiceIDs[:index], payee.InvoiceIDs[index+1:]...)
+
+			// Update payee entry in database
+			filter := bson.M{"_id": payee.ID}
+
+			update := bson.M{"$set": bson.M{
+				"InvoiceIDs": payee.InvoiceIDs,
+			}}
+
+			_, err = UserDetails.UpdateOne(context.TODO(), filter, update)
+
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return // Failed to update payee. Exit handler
+			}
+		}
+	}
+
 	fmt.Println("Removing trip.")
 
 	// Remove existing trip document from database
-	_, err := TripDetails.DeleteOne(context.TODO(), bson.M{"_id": existingTrip.ID})
+	_, err := TripDetails.DeleteOne(context.TODO(), bson.M{"_id": trip.ID})
 
 	if err != nil {
-		fmt.Println("Error: " + err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not delete trip."})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
