@@ -19,7 +19,6 @@ type ProfileModification struct {
 type Profile struct {
 	// Fields for actual Profile document in database
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
-	UserID      primitive.ObjectID `bson:"UserID,omitempty"`
 	Username    string             `bson:"Username,omitempty"`
 	DisplayName string             `bson:"DisplayName,omitempty"`
 	Joined      primitive.DateTime `bson:"Joined,omitempty"`
@@ -40,16 +39,15 @@ func (p *Profile) GetDocument(c *gin.Context, coll *mongo.Collection, filter bso
 	}
 
 	// Acquire value and validity of Profile fields from result
-	var idOK, userOK, usernameOK, displayNameOK, joinedOK, aboutOK bool
+	var idOK, usernameOK, displayNameOK, joinedOK, aboutOK bool
 
 	p.ID, idOK = result["_id"].(primitive.ObjectID)
-	p.UserID, userOK = result["UserID"].(primitive.ObjectID)
 	p.Username, usernameOK = result["Username"].(string)
 	p.DisplayName, displayNameOK = result["DisplayName"].(string)
 	p.Joined, joinedOK = result["Joined"].(primitive.DateTime)
 	p.About, aboutOK = result["About"].(string)
 
-	checklist := []bool{idOK, userOK, usernameOK, displayNameOK, joinedOK, aboutOK}
+	checklist := []bool{idOK, usernameOK, displayNameOK, joinedOK, aboutOK}
 
 	// Check if all results are valid
 	valid := true
