@@ -23,11 +23,12 @@ img{
 
 
 .home-text-section h1{
-    font-size: 3rem;
+    font-size: 4rem;
     font-weight: 800;
-    background: #fff;
+    background: #000;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 2px #fff; /* Add a black border around the text */
 }
 
 .home-text-section h2{
@@ -48,13 +49,15 @@ img{
     letter-spacing: 2px;
     color: #222;
 }
+
 @media screen and (max-width: 555px) {
     .hero-text-section h1{
         padding: 10px 20px;
     }
 }
+
 .home-text-section p{
-    font-size: 0.75rem;
+    font-size: 2rem;
     
     color: #fff;
     padding: 0.5rem 0 2rem 0;
