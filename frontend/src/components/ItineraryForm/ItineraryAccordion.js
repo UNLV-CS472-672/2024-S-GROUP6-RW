@@ -1,5 +1,3 @@
-// ItineraryAccordion.js
-
 import React, { useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -91,7 +89,7 @@ const ItineraryAccordion = ({
   return (
     <Accordion>
       <AccordionSummary>
-        <Typography>Day {day}</Typography>
+        <Typography>{day}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <div>
