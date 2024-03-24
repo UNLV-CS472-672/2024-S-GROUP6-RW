@@ -10,6 +10,7 @@ import TripsExpensesPage from "./pages/expenses/TripsExpensesPage";
 import MyTripsPage from "./pages/my_trips/MyTripsPage";
 import LoginPage from "./pages/login/LoginPage";
 import RegisterPage from "./pages/register/RegisterPage";
+import FriendsPage from "./pages/friends/FriendsPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 
 // import nav components
@@ -63,7 +64,6 @@ function AppContent({ user, updateUser }) {
     // Apply the background color to the body element
     document.body.style.backgroundColor = theme.palette.background.default;
   }, [theme.palette.background.default]);
-
   return (
     // Apply the theme to the app
     <div className="App" style={{ color: theme.palette.text.primary }}>
@@ -86,6 +86,7 @@ function AppContent({ user, updateUser }) {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/friends" element={<FriendsPage />} />
       </Routes>
     </div>
   );
