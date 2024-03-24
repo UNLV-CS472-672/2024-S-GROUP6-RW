@@ -19,9 +19,7 @@ const ItineraryDatePickerComponent = ({ onSelectStartDate, onSelectEndDate, onDa
     onSelectEndDate(date);
   };
 
-  //Complete only if start date and end date is selected AND the end date is later or on that date of the start date.
-  const isDateSelectionComplete = startDate && endDate && startDate <= endDate; 
-
+  const isDateSelectionComplete = startDate && endDate;
 
   const handleComplete = () => {
     if (isDateSelectionComplete) {
