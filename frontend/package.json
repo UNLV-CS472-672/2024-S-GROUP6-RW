@@ -16,7 +16,6 @@
     "@react-google-maps/api": "^2.19.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "dayjs": "^1.11.10",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
@@ -30,8 +29,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll --coverage",
     "eject": "react-scripts eject"
+  },
+  "transform": {
+    "\\.js$": "/home/skript/cs472/2024-S-GROUP6-RW/frontend/node_modules/babel-jest"
   },
   "eslintConfig": {
     "extends": [
@@ -50,5 +52,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/user-event": "^14.5.2"
   }
 }
