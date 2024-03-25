@@ -202,8 +202,6 @@ func AcknowledgeFriendRequestHandler(c *gin.Context) {
 		return // Failed to bind data to request. Exit handler
 	}
 
-	ackState := request.AcceptRequest
-
 	// Acquire connection to 'UserDetails' collection on MongoDB
 	UserDetails := db.ConnectToMongoDB("User", "UserDetails")
 
@@ -235,7 +233,7 @@ func AcknowledgeFriendRequestHandler(c *gin.Context) {
 	blocked := false // block list not yet implemented; for now assume not blocked
 
 	// Acknowledge the friend request
-	if !blocked && ackState {
+	if !blocked && request.AcceptRequest {
 		fmt.Println("Accepting friend request.")
 
 		// Accepted; Add friends
@@ -289,7 +287,7 @@ func AcknowledgeFriendRequestHandler(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return // Failed to delete friend request
 		}
-	} else if !ackState {
+	} else if !request.AcceptRequest {
 		fmt.Println("Rejecting friend request.")
 
 		// Rejected; Remove request entry from database
