@@ -12,6 +12,7 @@ import LoginPage from "./pages/login/LoginPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import FriendsPage from "./pages/friends/FriendsPage";
 import ProfilePage from "./pages/profile/ProfilePage";
+import AccountPage from "./pages/account/AccountPage";
 
 // import nav components
 import NavBar from "./components/NavBar/NavBar";
@@ -87,6 +88,7 @@ function AppContent({ user, updateUser }) {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/friends" element={<FriendsPage />} />
+        <Route path="/account" element={<AccountPage />} />
       </Routes>
     </div>
   );
