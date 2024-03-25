@@ -23,6 +23,7 @@ function AddRemoveFriends() {
         setFriends(updatedFriends);
     }
 
+    //Showing a textbox to add a person as a friend which shows in a list. You can also remove someone with a button next to the person's name
     return (
         <>
         <input
