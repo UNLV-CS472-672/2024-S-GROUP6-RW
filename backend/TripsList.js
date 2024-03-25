@@ -6,6 +6,8 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import { TextField } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 const images = [
   {
@@ -89,6 +91,56 @@ const images = [
       "Username": ""
     }
   },
+  {
+    url: '/test.jpg',
+    title: 'Get Friends',
+    width: '30%',
+    method: "POST",
+    api: '/get_friends',
+    user: 'YES',
+    request_data: {
+      "Username": ""
+    }
+  },
+  {
+    url: '/test.jpg',
+    title: 'Send Friend Request',
+    width: '30%',
+    method: "POST",
+    api: '/add_friend',
+    sender: 'YES',
+    target: 'YES',
+    request_data: {
+      "SenderUsername": "",
+      "TargetUsername": "",
+    }
+  },
+  {
+    url: '/test.jpg',
+    title: 'Get Friend Requests',
+    width: '30%',
+    method: "POST",
+    api: '/get_friend_requests',
+    user: 'YES',
+    request_data: {
+      "Username": ""
+    }
+  },
+  {
+    url: '/test.jpg',
+    title: 'Acknowledge Friend Request',
+    width: '30%',
+    method: "POST",
+    api: '/acknowledge_friend_request',
+    sender: 'YES',
+    target: 'YES',
+    accept: 'YES',
+    request_data: {
+      "SenderUsername": "",
+      "TargetUsername": "",
+      "AcceptRequest": "",
+    }
+  }
 ];
 
 const Container = styled('div')({
@@ -181,10 +233,13 @@ const ImageMarked = styled('span')(({ theme }) => ({
 
 export default function ButtonBaseDemo() {
   const [UsernameValues, setUsernameValues] = useState(Array(images.length).fill(""));
+  const [SenderUsernameValues, setSenderUsernameValues] = useState(Array(images.length).fill(""));
+  const [TargetUsernameValues, setTargetUsernameValues] = useState(Array(images.length).fill(""));
   const [TripTitleValues, setTripTitleValues] = useState(Array(images.length).fill(""));
   const [LocationNameValues, setLocationNameValues] = useState(Array(images.length).fill(""));
   const [ModifyFieldName, setModifyFieldName] = useState("");
   const [ModifyFieldValue, setModifyFieldValue] = useState("");
+  const [AcceptFieldValues, setAcceptFieldValues] = useState(Array(images.length).fill(false));
 
   const handleUsernameChange = (event, index) => {
     const newValues = [...UsernameValues];
@@ -192,6 +247,18 @@ export default function ButtonBaseDemo() {
     setUsernameValues(newValues);
   }
 
+  const handleSenderUsernameChange = (event, index) => {
+    const newValues = [...SenderUsernameValues];
+    newValues[index] = event.target.value;
+    setSenderUsernameValues(newValues);
+  }
+  
+  const handleTargetUsernameChange = (event, index) => {
+    const newValues = [...TargetUsernameValues];
+    newValues[index] = event.target.value;
+    setTargetUsernameValues(newValues);
+  }
+  
   const handleTripTitleChange = (event, index) => {
     const newValues = [...TripTitleValues];
     newValues[index] = event.target.value;
@@ -211,6 +278,12 @@ export default function ButtonBaseDemo() {
   const handleModifyFieldValueChange = (event) => {
     setModifyFieldValue(event.target.value)
   }
+  
+  const handleAcceptFieldValues = (index) => {
+    const newValues = [...AcceptFieldValues];
+    newValues[index] = !AcceptFieldValues[index];
+    setAcceptFieldValues(newValues);
+  }
 
   const mockHTTP = (image, index) => {
     const apiUrl = "http://localhost:8080" + image.api;
@@ -221,6 +294,14 @@ export default function ButtonBaseDemo() {
 
     if (image.user) {
       request_data["Username"] = UsernameValues[index];
+    }
+    
+    if (image.sender) {
+      request_data["SenderUsername"] = SenderUsernameValues[index];
+    }
+    
+    if (image.target) {
+      request_data["TargetUsername"] = TargetUsernameValues[index];
     }
 
     if (image.tripTitle) {
@@ -257,6 +338,10 @@ export default function ButtonBaseDemo() {
       }
 
       request_data["Modifications"] = modifList;
+    }
+    
+    if (image.accept) {
+      request_data["AcceptRequest"] = AcceptFieldValues[index];
     }
 
     console.log(request_data);
@@ -356,6 +441,30 @@ export default function ButtonBaseDemo() {
               ) : (
                 <></>
               )}
+              {image.sender ? (
+                <TextField
+                  id={`outlined-username-field-${index}`}
+                  label="Sender User"
+                  variant="outlined"
+                  margin="normal"
+                  value={SenderUsernameValues[index]}
+                  onChange={(event) => handleSenderUsernameChange(event, index)}
+                />
+              ) : (
+                <></>
+              )}
+              {image.target ? (
+                <TextField
+                  id={`outlined-username-field-${index}`}
+                  label="Target User"
+                  variant="outlined"
+                  margin="normal"
+                  value={TargetUsernameValues[index]}
+                  onChange={(event) => handleTargetUsernameChange(event, index)}
+                />
+              ) : (
+                <></>
+              )}
               {image.tripTitle ? (
                 <TextField
                   id={`outlined-title-field-${index}`}
@@ -398,6 +507,15 @@ export default function ButtonBaseDemo() {
                     onChange={(event) => handleModifyFieldValueChange(event)}
                   />
                 </>
+              ) : (
+                <></>
+              )}
+              {image.accept ? (
+                <FormControlLabel
+                  control={<Checkbox/>}
+                  label="Accept Request"
+                  onChange={() => handleAcceptFieldValues(index)}
+                />
               ) : (
                 <></>
               )}
