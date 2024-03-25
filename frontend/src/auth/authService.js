@@ -1,5 +1,5 @@
-// authService.js
-const TOKEN_KEY = 'jwt';
+// 2024-S-GROUP6-RW\frontend\src\auth\authService.js
+const TOKEN_KEY = "jwt";
 
 export const getToken = () => {
   return localStorage.getItem(TOKEN_KEY);
@@ -16,7 +16,6 @@ export const removeToken = () => {
 export const isAuthenticated = () => {
   const token = getToken();
   if (token) {
-    // Here you could add logic to validate the token
     return true;
   }
   return false;
