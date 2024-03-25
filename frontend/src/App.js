@@ -14,6 +14,7 @@ import RegisterPage from "./pages/Auth_Pages/RegisterPage";
 import LogoutPage from "./pages/Auth_Pages/LogoutPage";
 import FriendsPage from "./pages/friends/FriendsPage";
 import ProfilePage from "./pages/profile/ProfilePage";
+import AccountPage from "./pages/account/AccountPage";
 
 // import nav components
 import NavBar from "./components/NavBar/NavBar";

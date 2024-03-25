@@ -1,0 +1,39 @@
+.account-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .field-container {
+    margin-bottom: 20px;
+  }
+  
+  .label {
+    font-weight: bold;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  .button-container {
+    margin-top: 20px;
+    text-align: right;
+  }
+  
+  .button {
+    margin-left: 10px;
+  }
+  

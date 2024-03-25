@@ -26,13 +26,24 @@ function MapPage() {
   return (
     <div>
       <div className="search-bar">
-        <input type="text" placeholder="Search..." onChange={(e) => handleSearch(e.target.value)} />
+        <input
+          type="text"
+          placeholder="Search..."
+          onChange={(e) => handleSearch(e.target.value)}
+        />
       </div>
       <div className="map-container">
-        <div className="continent-list-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-          <div className={`continent-list ${isListVisible ? 'visible' : ''}`}>
+        <div
+          className="continent-list-container"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className={`continent-list ${isListVisible ? "visible" : ""}`}>
             <ul>
-              <li className="continent-button" onClick={() => handleContinentClick("Africa")}>
+              <li
+                className="continent-button"
+                onClick={() => handleContinentClick("Africa")}
+              >
                 <strong>Africa</strong>
                 <ul className="hotspot-list">
                   <li>Hotspot 1</li>
@@ -40,7 +51,10 @@ function MapPage() {
                   <li>Hotspot 3</li>
                 </ul>
               </li>
-              <li className="continent-button" onClick={() => handleContinentClick("Asia")}>
+              <li
+                className="continent-button"
+                onClick={() => handleContinentClick("Asia")}
+              >
                 <strong>Asia</strong>
                 <ul className="hotspot-list">
                   <li>Hotspot 1</li>
@@ -48,7 +62,10 @@ function MapPage() {
                   <li>Hotspot 3</li>
                 </ul>
               </li>
-              <li className="continent-button" onClick={() => handleContinentClick("Europe")}>
+              <li
+                className="continent-button"
+                onClick={() => handleContinentClick("Europe")}
+              >
                 <strong>Europe</strong>
                 <ul className="hotspot-list">
                   <li>Hotspot 1</li>
@@ -56,7 +73,10 @@ function MapPage() {
                   <li>Hotspot 3</li>
                 </ul>
               </li>
-              <li className="continent-button" onClick={() => handleContinentClick("North America")}>
+              <li
+                className="continent-button"
+                onClick={() => handleContinentClick("North America")}
+              >
                 <strong>North America</strong>
                 <ul className="hotspot-list">
                   <li>Hotspot 1</li>
@@ -64,7 +84,10 @@ function MapPage() {
                   <li>Hotspot 3</li>
                 </ul>
               </li>
-              <li className="continent-button" onClick={() => handleContinentClick("South America")}>
+              <li
+                className="continent-button"
+                onClick={() => handleContinentClick("South America")}
+              >
                 <strong>South America</strong>
                 <ul className="hotspot-list">
                   <li>Hotspot 1</li>
@@ -72,7 +95,10 @@ function MapPage() {
                   <li>Hotspot 3</li>
                 </ul>
               </li>
-              <li className="continent-button" onClick={() => handleContinentClick("Australia")}>
+              <li
+                className="continent-button"
+                onClick={() => handleContinentClick("Australia")}
+              >
                 <strong>Australia</strong>
                 <ul className="hotspot-list">
                   <li>Hotspot 1</li>
@@ -80,7 +106,10 @@ function MapPage() {
                   <li>Hotspot 3</li>
                 </ul>
               </li>
-              <li className="continent-button" onClick={() => handleContinentClick("Antarctica")}>
+              <li
+                className="continent-button"
+                onClick={() => handleContinentClick("Antarctica")}
+              >
                 <strong>Antarctica</strong>
                 <ul className="hotspot-list">
                   <li>Hotspot 1</li>

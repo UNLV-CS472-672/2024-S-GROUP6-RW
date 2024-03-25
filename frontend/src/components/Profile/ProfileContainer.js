@@ -1,10 +1,12 @@
 import React, { useState, useRef } from "react";
-import { Tabs, Tab, Box } from "@mui/material";
+import { Tabs, Tab, Box, IconButton } from "@mui/material";
 import FriendsTab from "./FriendsTab";
 import AboutTab from "./AboutTab";
 import TripsTab from "./TripsTab";
 import EditProfilePic from "./EditProfilePic";
 import NameTag from "./NameTag";
+import EditIcon from "@mui/icons-material/Edit";
+import { useTheme } from "@mui/material/styles";
 
 import defaultPic from "../../images/avatars/Terence.jpg";
 import { ReactComponent as DefaultBorder } from "../../images/borders/Default_Border.svg";
@@ -12,6 +14,7 @@ import { ReactComponent as DefaultBorder } from "../../images/borders/Default_Bo
 export default function ProfileContainer() {
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm")); Will implement later
   const profilePicButtonRef = useRef(null);
+  const theme = useTheme();
 
   const profilePic = { img: defaultPic, title: "default picture" };
   const [selectedTab, setSelectedTab] = useState(0);
@@ -21,7 +24,18 @@ export default function ProfileContainer() {
   const [borderColor, setBorderColor] = useState("black");
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [customAvatars, setCustomAvatars] = useState([]);
+  const [description, setDescription] = useState("I am super awesome.");
   const name = "USERNAME"; // Replace with the actual name
+
+  const [editEnabled, setEditEnabled] = useState(false);
+
+  const handleEditMode = () => {
+    if (!editEnabled) {
+      setEditEnabled(true);
+    } else {
+      setEditEnabled(false);
+    }
+  };
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
@@ -53,7 +67,7 @@ export default function ProfileContainer() {
   const uploadBanner = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader(); // User selects a file and is set as the selected banner.
       reader.onload = () => {
         const imgData = reader.result;
         setSelectedBanner({ img: imgData, title: "Custom Picture" });
@@ -63,7 +77,12 @@ export default function ProfileContainer() {
   };
 
   return (
-    <Box style={styles.container}>
+    <Box
+      style={{
+        ...styles.container,
+        border: `0.5vw solid ${theme.palette.text.primary}`,
+      }}
+    >
       <Box style={styles.profileBox}>
         <label htmlFor="banner-upload">
           <Box style={styles.bannerBox}>
@@ -101,7 +120,21 @@ export default function ProfileContainer() {
         </Box>
         <NameTag name={name} />
       </Box>
-      <div>
+      <div style={styles.tabBox}>
+        {selectedTab === 0 && (
+          <div
+            style={{
+              ...styles.editContainer,
+              border: editEnabled
+                ? "0.3vw solid #03a9f4" // Highlights the button in Edit Mode
+                : "0.3vw solid transparent",
+            }}
+          >
+            <IconButton style={styles.editButton} onClick={handleEditMode}>
+              <EditIcon />
+            </IconButton>
+          </div>
+        )}
         <Tabs
           value={selectedTab}
           onChange={handleChange}
@@ -109,15 +142,21 @@ export default function ProfileContainer() {
           className="tabs-container"
           style={styles.tabs}
         >
-          <Tab label="About" />
-          <Tab label="Friends" />
-          <Tab label="Trips" />
+          <Tab label="About" sx={{ fontSize: "1vw" }} />
+          <Tab label="Friends" sx={{ fontSize: "1vw" }} />
+          <Tab label="Trips" sx={{ fontSize: "1vw" }} />
         </Tabs>
-        {selectedTab === 0 && <AboutTab />}
-        {selectedTab === 1 && <FriendsTab />}
-        {selectedTab === 2 && <TripsTab />}
+        {selectedTab === 0 && (
+          <AboutTab
+            description={description}
+            setDescription={setDescription}
+            editMode={editEnabled}
+          />
+        )}
+        {selectedTab === 1 && <FriendsTab editMode={editEnabled} />}
+        {selectedTab === 2 && <TripsTab editMode={editEnabled} />}
       </div>
-      <EditProfilePic
+      <EditProfilePic // Pop up that displays only when profile picture is clicked
         open={editProfilePicOpen}
         onClose={handleEditProfilePicClose}
         anchorEl={profilePicButtonRef.current}
@@ -138,7 +177,6 @@ const styles = {
     height: "75vh",
     marginLeft: "auto",
     marginRight: "auto",
-    border: "0.5vw solid black",
   },
   profileBox: {
     position: "relative",
@@ -214,8 +252,34 @@ const styles = {
     padding: 0,
     position: "relative",
   },
+  tabBox: {
+    position: "relative",
+    width: "40vw",
+    display: "flex",
+    flexDirection: "column",
+    justfityContent: "center",
+  },
   tabs: {
     width: "40vw",
     paddingTop: "1vw",
+  },
+  editContainer: {
+    position: "absolute",
+    width: "2.6vw", // Adjust width to match EditHighlight width
+    height: "2.6vw", // Adjust height to match EditHighlight height
+    top: "1vw",
+    right: "1vw",
+    borderRadius: "18%",
+    cursor: "pointer",
+    zIndex: "999",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  editButton: {
+    width: "2.6vw", // Adjust width to match EditHighlight width
+    height: "2.6vw", // Adjust height to match EditHighlight height
+    borderRadius: "10%",
+    border: "0.15vw solid gray",
+    zIndex: "999",
   },
 };

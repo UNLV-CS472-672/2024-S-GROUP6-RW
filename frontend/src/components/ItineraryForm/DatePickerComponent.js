@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import TextField from '@mui/material/TextField';
-import { Button } from '@mui/material';
+import React, { useState } from "react";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import TextField from "@mui/material/TextField";
+import { Button } from "@mui/material";
 
-const ItineraryDatePickerComponent = ({ onSelectStartDate, onSelectEndDate, onDateSelectionComplete }) => {
+const ItineraryDatePickerComponent = ({
+  onSelectStartDate,
+  onSelectEndDate,
+  onDateSelectionComplete,
+}) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -20,14 +24,13 @@ const ItineraryDatePickerComponent = ({ onSelectStartDate, onSelectEndDate, onDa
   };
 
   //Complete only if start date and end date is selected AND the end date is later or on that date of the start date.
-  const isDateSelectionComplete = startDate && endDate && startDate <= endDate; 
-
+  const isDateSelectionComplete = startDate && endDate && startDate <= endDate;
 
   const handleComplete = () => {
     if (isDateSelectionComplete) {
       onDateSelectionComplete();
     }
-  }
+  };
 
   return (
     <div>
@@ -46,10 +49,14 @@ const ItineraryDatePickerComponent = ({ onSelectStartDate, onSelectEndDate, onDa
           renderInput={(params) => <TextField {...params} />}
         />
         <Button
-          onClick={() => {handleComplete()}}
-          variant='contained'
+          onClick={() => {
+            handleComplete();
+          }}
+          variant="contained"
           disabled={!isDateSelectionComplete}
-        >Start</Button>
+        >
+          Start
+        </Button>
       </LocalizationProvider>
     </div>
   );
