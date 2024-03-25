@@ -9,18 +9,6 @@ const images = [
 		width: "100%",
 		height: "100%",
 	},
-  	{
-		url: "/NewOrleans.jpg",
-		title: "NewOrleans",
-    	width: "100%",
-		height: "100%",
-	},
-	{
-		url: "/Jinhae.jpg",
-		title: "Jinhae, South Korea",
-    	width: "100%",
-		height: "100%",
-	},
 	{
 		url: "/SanSebastian.jpg",
 		title: "San Sebastian, Spain",

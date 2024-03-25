@@ -27,6 +27,7 @@ const Highland = [
  
 ];
 
+// Main banner of Getting Started
 function GettingStartedBanner(props) {
   return(
     <>
@@ -115,7 +116,7 @@ function GettingStartedPage() {
       
         textSection="home-text-section"
         title="RightWay"
-        text="Make memories with friends"
+        text="MAKE MEMORIES WITH FRIENDS"
         text1="From weekend getaways to epic adventures"
 
         buttonText="Getting Started"
@@ -163,8 +164,13 @@ function GettingStartedPage() {
         <img src="/Highland.jpg" alt="" />
 
           <div className="about-text-section">
+            <div>
             <h1>About us</h1>
-            <p> At RightWay, we believe that the journey is just as important as the destination. That's why we've created a platform designed to bring friends together through unforgettable travel experiences, tailored just for you. Whether you're planning a weekend getaway or an adventure of a lifetime, RightWay takes the hassle out of trip planning.</p>
+            </div>
+           <div>
+             <p> At RightWay, we believe that the journey is just as important as the destination. That's why we've created a platform designed to bring friends together through unforgettable travel experiences, tailored just for you. Whether you're planning a weekend getaway or an adventure of a lifetime, RightWay takes the hassle out of trip planning.</p>
+           </div>
+            
           </div>
         </div>
       </div>
