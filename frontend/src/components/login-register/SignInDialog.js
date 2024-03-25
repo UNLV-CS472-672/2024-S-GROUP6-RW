@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import useAuth from '../../auth/useAuth';
-import axios from 'axios';
+// 2024-S-GROUP6-RW\frontend\src\components\login-register\SignInDialog.js
+
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../../auth/AuthContext";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
   Dialog,
@@ -21,11 +23,11 @@ const dialogContainerStyle = {
   margin: "auto",
 };
 
-const SignInDialog = ({ open, onClick, onClose}) => {
+const SignInDialog = ({ open }) => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [Message, SetMessage] = useState("");
-  const { login } = useAuth();
+  const { login, isAuth } = useAuth();
   const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
@@ -35,6 +37,15 @@ const SignInDialog = ({ open, onClick, onClose}) => {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
+
+  const handleclose = () => {
+    console.log("handleclose");
+    navigate("/");
+  };
+
+  useEffect(() => {
+    console.log(`Sign In isAuth: ${isAuth}`);
+  }, [isAuth]);
 
   const handleSubmit = async () => {
     // Check for errors in username, email, and password
@@ -49,30 +60,32 @@ const SignInDialog = ({ open, onClick, onClose}) => {
     // Prepare the data to be sent in the request
     const credentials = { Email, Password };
 
-      try {
-        const response = await axios.post(apiUrl, credentials);
-        login(response.data.token);
-        navigate("/map");
-      } catch (error) {
-          if (error.response) {
-              // The request was made and the server responded with a status code
-              console.log(error.response.data.error);
+    try {
+      const response = await axios.post(apiUrl, credentials);
+      login(response.data.token);
+      // console.log(`respose token: ${response.data.token}`);
+      navigate("/map");
+    } catch (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        console.log(error.response.data.error);
 
-              if (!emailValid){
-                SetMessage("Not a real email");
-              }else if(!fieldsNotEmpty){
-                SetMessage("Cannot have empty fields");
-              }else{
-                SetMessage(error.response.data.error);
-              }
-          } else if (error.request) {
-              // The request was made but no response was received
-              console.log(error.request);
-          } else {
-              // Something happened in setting up the request that triggered an Error
-              console.log('Error', error.message);
-          }
+        if (!emailValid) {
+          SetMessage("Not a real email");
+        } else if (!fieldsNotEmpty) {
+          SetMessage("Cannot have empty fields");
+        } else {
+          SetMessage(error.response.data.error);
+        }
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+        SetMessage("Server Down. Please try again later.");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
       }
+    }
   };
 
   const isValidEmailAddress = (email) => {
@@ -91,17 +104,26 @@ const SignInDialog = ({ open, onClick, onClose}) => {
 
   return (
     <>
-      <Dialog open={open} onClose={onClose} style={dialogContainerStyle}>
-        <p          
-          sx={{ position: "absolute", top: "8px", right: "8px" }}
+      <Dialog open={open} style={dialogContainerStyle}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100px",
+            textAlign: "center",
+            color: "red",
+          }}
           color="inherit"
-          onClick={onClose}
-          aria-label="close">{Message}</p>
+          aria-label="error-message"
+        >
+          {Message}
+        </Box>
 
         <IconButton
           sx={{ position: "absolute", top: "8px", right: "8px" }}
           color="inherit"
-          onClick={onClose}
+          onClick={handleclose}
           aria-label="close"
         >
           <CloseIcon />
@@ -137,6 +159,7 @@ const SignInDialog = ({ open, onClick, onClose}) => {
             id="outlined-basic-password"
             label="Password"
             variant="outlined"
+            type="password"
             fullWidth
             margin="normal"
             value={Password}
