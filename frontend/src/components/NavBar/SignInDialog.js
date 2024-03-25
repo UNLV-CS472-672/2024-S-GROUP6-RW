@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import useAuth from '../../auth/useAuth';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   Button,
@@ -19,10 +21,12 @@ const dialogContainerStyle = {
   margin: "auto",
 };
 
-const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
+const SignInDialog = ({ open, onClick, onClose}) => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
+  const [Message, SetMessage] = useState("");
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -32,10 +36,9 @@ const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Check for errors in username, email, and password
     const emailValid = isValidEmailAddress(Email);
-    const passwordValid = isValidPassword(Password);
 
     // Check if any of the fields are empty
     const fieldsNotEmpty = Email.trim() !== "" && Password.trim() !== "";
@@ -44,44 +47,32 @@ const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
     const apiUrl = "http://localhost:8080/signin";
 
     // Prepare the data to be sent in the request
-    const userData = { Email, Password };
+    const credentials = { Email, Password };
 
-    // Call onSubmit only if there are no errors
-    if (emailValid && passwordValid && fieldsNotEmpty) {
-      // Make the API call using fetch
-      fetch(apiUrl, {
-        method: "POST", // Specify the method
-        headers: {
-          "Content-Type": "application/json", // Specify the content type as JSON
-        },
-        body: JSON.stringify(userData), // Convert the userData object into a JSON string
-      })
-      .then(response => {
-        if (!response.ok) {
-          // If server response is not ok, throw an error with the status
-          throw new Error(`HTTP error! status: ${response.status}`);
-        } else {
-          return response.json(); // Continue to process the response
-        }
-      })
-      .then(data => {
-        if (data.token) {
-          // Use the login function to save the token and update auth state
-          login(data.token);
-          // Redirect to dashboard or show success message here
-        } else {
-          // Handle the case where no token is returned
-          throw new Error('No token received after registration.');
-        }
-      })
-      .catch(error => {
-        console.error("There was a problem with the fetch operation:", error.message);
-        // Here you can show an error message to the user based on `error.message`
-      });
-      onSubmit({ Email, Password });
-    } else {
-      console.log("ERROR");
-    }
+      try {
+        const response = await axios.post(apiUrl, credentials);
+        login(response.data.token);
+        navigate("/map");
+      } catch (error) {
+          if (error.response) {
+              // The request was made and the server responded with a status code
+              console.log(error.response.data.error);
+
+              if (!emailValid){
+                SetMessage("Not a real email");
+              }else if(!fieldsNotEmpty){
+                SetMessage("Cannot have empty fields");
+              }else{
+                SetMessage(error.response.data.error);
+              }
+          } else if (error.request) {
+              // The request was made but no response was received
+              console.log(error.request);
+          } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log('Error', error.message);
+          }
+      }
   };
 
   const isValidEmailAddress = (email) => {
@@ -101,6 +92,12 @@ const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
   return (
     <>
       <Dialog open={open} onClose={onClose} style={dialogContainerStyle}>
+        <p          
+          sx={{ position: "absolute", top: "8px", right: "8px" }}
+          color="inherit"
+          onClick={onClose}
+          aria-label="close">{Message}</p>
+
         <IconButton
           sx={{ position: "absolute", top: "8px", right: "8px" }}
           color="inherit"
