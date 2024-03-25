@@ -29,7 +29,9 @@ type Profile struct {
 }
 
 func (p *Profile) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M) error {
-	*p = Profile{}
+	*p = Profile{
+		Modifications: p.Modifications,
+	}
 
 	var result bson.M
 	err := coll.FindOne(context.TODO(), filter).Decode(&result)

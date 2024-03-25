@@ -29,7 +29,11 @@ type User struct {
 }
 
 func (u *User) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M) error {
-	*u = User{}
+	*u = User{
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Password:  u.Password,
+	}
 
 	var result bson.M
 	err := coll.FindOne(context.TODO(), filter).Decode(&result)

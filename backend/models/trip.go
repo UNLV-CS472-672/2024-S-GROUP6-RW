@@ -32,7 +32,10 @@ type Trip struct {
 }
 
 func (t *Trip) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M) error {
-	*t = Trip{}
+	*t = Trip{
+		Username:      t.Username,
+		Modifications: t.Modifications,
+	}
 
 	var result bson.M
 	err := coll.FindOne(context.TODO(), filter).Decode(&result)
