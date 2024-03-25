@@ -1,9 +1,12 @@
 import React from "react";
 import GettingStartedBanner from "../../components/GettingStarted/GettingStartedBanner.js";
 import BannerBackground from "../../components/GettingStarted/sample.jpg"
+
 import "../../css/GettingStartedBanner.css"
+import { Link } from 'react-router-dom';
 
 function GettingStartedPage() {
+  
   return(
     <>
       <GettingStartedBanner
@@ -14,20 +17,21 @@ function GettingStartedPage() {
         text="Make memories with friends"
         text1="From weekend getaways to epic adventures"
 
-        buttonText="Getting Started"
-        url="/"
-        buttonClass="show"
-        
 
+        buttonText="Getting Started"
+        buttonClass="show"
+        url="/gatheringinfo"
+        
+       
+        
         directions="directions"
         directionsText="dText"
-        
       />
+
     </>
    
   );
- 
-  
+
 }
 
 export default GettingStartedPage;
