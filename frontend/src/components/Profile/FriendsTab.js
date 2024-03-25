@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Avatar, Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-// Import your images
+// Import placeholder image
 import Red from "../../images/avatars/Red.jpg";
 
 export default function FriendsTab() {
@@ -40,8 +40,7 @@ export default function FriendsTab() {
         },
       }}
     >
-      {/* Replace this with actual Friends content from your PDF */}
-      <Grid
+      <Grid // Grid used to display friends in two column format
         container
         justifyContent="left"
         alignItems="start"
@@ -51,40 +50,44 @@ export default function FriendsTab() {
           marginLeft: "1.2vw",
         }}
       >
-        {friendInfo.map((friend) => (
-          <Grid
-            item
-            xs={5.8}
-            style={{ marginRight: "0.6vw", marginBottom: "0.21vw" }}
-          >
-            <Box
-              sx={{
-                width: "100%",
-                height: "3.9vw",
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                border: `0.15vw solid ${theme.palette.text.primary}`,
-              }}
+        {friendInfo.map(
+          (
+            friend // For every friend in friends list generate Grid Item
+          ) => (
+            <Grid
+              item
+              xs={5.8}
+              style={{ marginRight: "0.6vw", marginBottom: "0.21vw" }}
             >
-              <Avatar
-                src={friend.img}
-                alt={""}
-                style={{
-                  width: "3vw",
-                  height: "3vw",
-                  margin: "1vw",
-                  border: "0.1vw solid black",
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "3.9vw",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  border: `0.15vw solid ${theme.palette.text.primary}`,
                 }}
-              />
-              <Typography
-                sx={{ fontSize: "1.5vw", textTransform: "uppercase" }}
               >
-                {friend.username}
-              </Typography>
-            </Box>
-          </Grid>
-        ))}
+                <Avatar // First show friend's profile image
+                  src={friend.img}
+                  alt={""}
+                  style={{
+                    width: "3vw",
+                    height: "3vw",
+                    margin: "1vw",
+                    border: "0.1vw solid black",
+                  }}
+                />
+                <Typography // To the right of image display username
+                  sx={{ fontSize: "1.5vw", textTransform: "uppercase" }}
+                >
+                  {friend.username}
+                </Typography>
+              </Box>
+            </Grid>
+          )
+        )}
       </Grid>
     </div>
   );

@@ -2,19 +2,13 @@ import React, { useState } from "react";
 import { Box, Typography, TextareaAutosize } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-export default function AboutTab({ editMode }) {
+export default function AboutTab({ editMode, description, setDescription }) {
   const theme = useTheme();
-  const [description, setDescription] = useState("I am super awesome.");
-  const [numRows, setNumRows] = useState(3); // Initialize with the minimum number of rows
 
   const handleChange = (event) => {
+    // Set the edited description.\
     const lines = event.target.value.split("\n").length;
     setDescription(event.target.value);
-
-    // Prevent adding more lines than the maximum allowed
-    if (lines <= 8) {
-      setNumRows(lines);
-    }
   };
 
   return (
@@ -22,9 +16,8 @@ export default function AboutTab({ editMode }) {
       {/* Replace this with actual Friends content from your PDF */}
 
       <div style={{ textAlign: "left", marginTop: "1vw", marginLeft: "0.8vw" }}>
-        {editMode ? (
+        {editMode ? ( // Switch between an editable text box and a display text box
           <TextareaAutosize
-            rows={numRows}
             placeholder="Enter description"
             value={description}
             onChange={handleChange}
@@ -43,15 +36,20 @@ export default function AboutTab({ editMode }) {
             maxRows="13"
           />
         ) : (
-          <Typography
+          <Typography // Typography is what is displayer to users
             variant="body1"
             component="div"
             style={{
+              width: "38.5vw",
+              height: "62vh",
               fontSize: "1.5vw",
               lineHeight: "1.5",
               paddingTop: "2px",
               paddingLeft: "2px",
               letterSpacing: "normal",
+              whiteSpace: "pre-line", // Add this line to preserve newline characters
+              wordWrap: "break-word", // Allow long words to wrap onto the next line
+              overflowY: "auto", // Add overflowY to enable vertical scrolling
             }}
           >
             {description}

@@ -24,6 +24,7 @@ export default function ProfileContainer() {
   const [borderColor, setBorderColor] = useState("black");
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [customAvatars, setCustomAvatars] = useState([]);
+  const [description, setDescription] = useState("I am super awesome.");
   const name = "USERNAME"; // Replace with the actual name
 
   const [editEnabled, setEditEnabled] = useState(false);
@@ -66,7 +67,7 @@ export default function ProfileContainer() {
   const uploadBanner = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader(); // User selects a file and is set as the selected banner.
       reader.onload = () => {
         const imgData = reader.result;
         setSelectedBanner({ img: imgData, title: "Custom Picture" });
@@ -125,7 +126,7 @@ export default function ProfileContainer() {
             style={{
               ...styles.editContainer,
               border: editEnabled
-                ? "0.3vw solid #03a9f4"
+                ? "0.3vw solid #03a9f4" // Highlights the button in Edit Mode
                 : "0.3vw solid transparent",
             }}
           >
@@ -145,11 +146,17 @@ export default function ProfileContainer() {
           <Tab label="Friends" sx={{ fontSize: "1vw" }} />
           <Tab label="Trips" sx={{ fontSize: "1vw" }} />
         </Tabs>
-        {selectedTab === 0 && <AboutTab editMode={editEnabled} />}
+        {selectedTab === 0 && (
+          <AboutTab
+            description={description}
+            setDescription={setDescription}
+            editMode={editEnabled}
+          />
+        )}
         {selectedTab === 1 && <FriendsTab editMode={editEnabled} />}
         {selectedTab === 2 && <TripsTab editMode={editEnabled} />}
       </div>
-      <EditProfilePic
+      <EditProfilePic // Pop up that displays only when profile picture is clicked
         open={editProfilePicOpen}
         onClose={handleEditProfilePicClose}
         anchorEl={profilePicButtonRef.current}
