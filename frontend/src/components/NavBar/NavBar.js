@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import {
 	AppBar,
 	Box,
@@ -31,13 +32,14 @@ const props = {
 	userDetails: () => {},
 };
 
-function ResponsiveAppBar({ user, updateUser }) {
+function ResponsiveAppBar({ user }) {
+
+	const navigate = useNavigate();
+
 	// this is mean that the menu is not open for the 3 lines menu
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	// this is mean that the menu is not open
 	const [anchorElUser, setAnchorElUser] = useState(null);
-
-	const [openSignIn, setOpenSignIn] = useState(false);
 
 	// get the current theme
 	const theme = useTheme();
@@ -67,15 +69,6 @@ function ResponsiveAppBar({ user, updateUser }) {
 			</MenuItem>
 		));
 
-	const sendDetails = (username, email, password) => {
-		updateUser({
-			id: 1,
-			username: username,
-			email: email,
-			password: password,
-		});
-		setOpenSignIn(false);
-	};
 
 	return (
 		// AppBar is the component that we use to create the app bar
@@ -205,19 +198,10 @@ function ResponsiveAppBar({ user, updateUser }) {
 				>
 					<Button
 						sx={{ my: 2, color: "white", display: "block" }}
-						onClick={() => setOpenSignIn(true)}
+						onClick={() => navigate('/login')}
 					>
 						Sign In
 					</Button>
-
-					{!user && (
-						<SignInDialog
-							open={openSignIn}
-							onClick={() => setOpenSignIn(true)}
-							onClose={() => setOpenSignIn(false)}
-							onSubmit={sendDetails}
-						/>
-					)}
 				</Box>
 
 				{/* Add user menu */}
