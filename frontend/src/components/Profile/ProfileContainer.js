@@ -6,6 +6,7 @@ import TripsTab from "./TripsTab";
 import EditProfilePic from "./EditProfilePic";
 import NameTag from "./NameTag";
 import EditIcon from "@mui/icons-material/Edit";
+import { useTheme } from "@mui/material/styles";
 
 import defaultPic from "../../images/avatars/Terence.jpg";
 import { ReactComponent as DefaultBorder } from "../../images/borders/Default_Border.svg";
@@ -13,6 +14,7 @@ import { ReactComponent as DefaultBorder } from "../../images/borders/Default_Bo
 export default function ProfileContainer() {
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm")); Will implement later
   const profilePicButtonRef = useRef(null);
+  const theme = useTheme();
 
   const profilePic = { img: defaultPic, title: "default picture" };
   const [selectedTab, setSelectedTab] = useState(0);
@@ -24,13 +26,13 @@ export default function ProfileContainer() {
   const [customAvatars, setCustomAvatars] = useState([]);
   const name = "USERNAME"; // Replace with the actual name
 
-  const [editEnabled, setEditEnabled] = useState("false");
+  const [editEnabled, setEditEnabled] = useState(false);
 
   const handleEditMode = () => {
     if (!editEnabled) {
-      setEditEnabled("true");
+      setEditEnabled(true);
     } else {
-      setEditEnabled("false");
+      setEditEnabled(false);
     }
   };
 
@@ -74,7 +76,12 @@ export default function ProfileContainer() {
   };
 
   return (
-    <Box style={styles.container}>
+    <Box
+      style={{
+        ...styles.container,
+        border: `0.5vw solid ${theme.palette.text.primary}`,
+      }}
+    >
       <Box style={styles.profileBox}>
         <label htmlFor="banner-upload">
           <Box style={styles.bannerBox}>
@@ -113,15 +120,20 @@ export default function ProfileContainer() {
         <NameTag name={name} />
       </Box>
       <div style={styles.tabBox}>
-        <IconButton
-          style={{
-            ...styles.editButton,
-            background: editEnabled ? "#448EE4" : "transparent",
-          }}
-          onClick={handleEditMode}
-        >
-          <EditIcon />
-        </IconButton>
+        {selectedTab === 0 && (
+          <div
+            style={{
+              ...styles.editContainer,
+              border: editEnabled
+                ? "0.3vw solid #03a9f4"
+                : "0.3vw solid transparent",
+            }}
+          >
+            <IconButton style={styles.editButton} onClick={handleEditMode}>
+              <EditIcon />
+            </IconButton>
+          </div>
+        )}
         <Tabs
           value={selectedTab}
           onChange={handleChange}
@@ -129,9 +141,9 @@ export default function ProfileContainer() {
           className="tabs-container"
           style={styles.tabs}
         >
-          <Tab label="About" />
-          <Tab label="Friends" />
-          <Tab label="Trips" />
+          <Tab label="About" sx={{ fontSize: "1vw" }} />
+          <Tab label="Friends" sx={{ fontSize: "1vw" }} />
+          <Tab label="Trips" sx={{ fontSize: "1vw" }} />
         </Tabs>
         {selectedTab === 0 && <AboutTab editMode={editEnabled} />}
         {selectedTab === 1 && <FriendsTab editMode={editEnabled} />}
@@ -158,7 +170,6 @@ const styles = {
     height: "75vh",
     marginLeft: "auto",
     marginRight: "auto",
-    border: "0.5vw solid black",
   },
   profileBox: {
     position: "relative",
@@ -236,18 +247,32 @@ const styles = {
   },
   tabBox: {
     position: "relative",
+    width: "40vw",
+    display: "flex",
+    flexDirection: "column",
+    justfityContent: "center",
   },
   tabs: {
     width: "40vw",
     paddingTop: "1vw",
   },
-  editButton: {
+  editContainer: {
     position: "absolute",
+    width: "2.6vw", // Adjust width to match EditHighlight width
+    height: "2.6vw", // Adjust height to match EditHighlight height
     top: "1vw",
     right: "1vw",
-    border: "0.15vw solid gray",
-    borderRadius: "10%",
+    borderRadius: "18%",
     cursor: "pointer",
+    zIndex: "999",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  editButton: {
+    width: "2.6vw", // Adjust width to match EditHighlight width
+    height: "2.6vw", // Adjust height to match EditHighlight height
+    borderRadius: "10%",
+    border: "0.15vw solid gray",
     zIndex: "999",
   },
 };

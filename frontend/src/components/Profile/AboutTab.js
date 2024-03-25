@@ -1,9 +1,8 @@
-// AboutTab.js
 import React, { useState } from "react";
 import { Box, Typography, TextareaAutosize } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-export default function AboutTab() {
+export default function AboutTab({ editMode }) {
   const theme = useTheme();
   const [description, setDescription] = useState("I am super awesome.");
   const [numRows, setNumRows] = useState(3); // Initialize with the minimum number of rows
@@ -21,17 +20,16 @@ export default function AboutTab() {
   return (
     <div>
       {/* Replace this with actual Friends content from your PDF */}
-      <p>About content goes here.</p>
 
-      <div style={{ textAlign: "left", marginTop: "1rem" }}>
-        {true ? (
+      <div style={{ textAlign: "left", marginTop: "1vw", marginLeft: "0.8vw" }}>
+        {editMode ? (
           <TextareaAutosize
             rows={numRows}
             placeholder="Enter description"
             value={description}
             onChange={handleChange}
             style={{
-              width: "35vw",
+              width: "38.5vw",
               border: "none",
               background: "none",
               resize: "none",
@@ -42,6 +40,7 @@ export default function AboutTab() {
               fontFamily: theme.typography.body1.fontFamily,
               color: theme.palette.text.primary,
             }}
+            maxRows="13"
           />
         ) : (
           <Typography
@@ -52,13 +51,11 @@ export default function AboutTab() {
               lineHeight: "1.5",
               paddingTop: "2px",
               paddingLeft: "2px",
-              fontFamily: theme.typography.body1.fontFamily,
               letterSpacing: "normal",
             }}
-            dangerouslySetInnerHTML={{
-              __html: description.replace(/\n/g, "<br>"),
-            }}
-          />
+          >
+            {description}
+          </Typography>
         )}
       </div>
     </div>
