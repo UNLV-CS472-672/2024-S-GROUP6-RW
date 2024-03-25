@@ -202,6 +202,8 @@ func AcknowledgeFriendRequestHandler(c *gin.Context) {
 		return // Failed to bind data to request. Exit handler
 	}
 
+	ackState := request.AcceptRequest
+
 	// Acquire connection to 'UserDetails' collection on MongoDB
 	UserDetails := db.ConnectToMongoDB("User", "UserDetails")
 
@@ -230,12 +232,12 @@ func AcknowledgeFriendRequestHandler(c *gin.Context) {
 		return // Failed to get request document. Exit handler
 	}
 
-	fmt.Println("Acknowledging friend request.")
-
 	blocked := false // block list not yet implemented; for now assume not blocked
 
 	// Acknowledge the friend request
-	if !blocked && request.AcceptRequest {
+	if !blocked && ackState {
+		fmt.Println("Accepting friend request.")
+
 		// Accepted; Add friends
 		sender.FriendIDs = append(sender.FriendIDs, target.ID)
 		target.FriendIDs = append(target.FriendIDs, sender.ID)
@@ -287,7 +289,9 @@ func AcknowledgeFriendRequestHandler(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return // Failed to delete friend request
 		}
-	} else {
+	} else if !ackState {
+		fmt.Println("Rejecting friend request.")
+
 		// Rejected; Remove request entry from database
 		_, err := FriendRequestDetails.DeleteOne(context.TODO(), bson.M{"_id": request.ID})
 
@@ -295,6 +299,32 @@ func AcknowledgeFriendRequestHandler(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return // Failed to delete friend request
 		}
+
+		// Locate this request in the target user's request ID list
+		found, index := utility.Find(target.FriendRequestIDs[:], request.ID)
+
+		if !found {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find request ID in target's request list."})
+			return // Failed to find request ID in target's request list. Exit handler
+		}
+
+		// Remove this request from the target user's request ID list
+		target.FriendRequestIDs = append(target.FriendRequestIDs[:index], target.FriendRequestIDs[index+1:]...)
+
+		// Update target user entry in database
+		filter := bson.M{"_id": target.ID}
+
+		update := bson.M{"$set": bson.M{
+			"FriendRequestIDs": target.FriendRequestIDs,
+		}}
+
+		_, err = UserDetails.UpdateOne(context.TODO(), filter, update)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return // Failed to update target. Exit handler
+		}
+
 	}
 
 	fmt.Println("Success.")
