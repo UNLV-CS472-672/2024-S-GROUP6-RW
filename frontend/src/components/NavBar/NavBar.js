@@ -239,6 +239,7 @@ function ResponsiveAppBar({ user }) {
           )}
         </Toolbar>
       </Container>
+
     </AppBar>
   );
 }
