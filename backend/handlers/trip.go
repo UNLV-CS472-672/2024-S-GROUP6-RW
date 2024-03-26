@@ -67,7 +67,7 @@ func GetAllTripsHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, tripList)
 }
 
-func GetTripDetailsHandler(c *gin.Context) {
+func GetTripHandler(c *gin.Context) {
 	fmt.Printf("%s | Attempting to get details for a trip.\n", time.Now())
 
 	// Store request data into Trip instance

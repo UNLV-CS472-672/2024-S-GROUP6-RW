@@ -362,3 +362,27 @@ func AcknowledgeFriendRequestHandler(c *gin.Context) {
 	// Return OK status to client
 	c.JSON(http.StatusOK, gin.H{})
 }
+
+func RemoveFriendHandler(c *gin.Context) {
+	fmt.Printf("%s | Attempting to remove a friend.\n", time.Now())
+
+	var request models.FriendRequest
+
+	if !models.BindData(c, &request) {
+		return // Failed to bind data to request
+	}
+
+	database := db.GetMongoDatabase()
+
+	err := business.RemoveFriend(request, database)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	fmt.Println("Success.")
+
+	// Return OK status to client
+	c.JSON(http.StatusOK, gin.H{})
+}
