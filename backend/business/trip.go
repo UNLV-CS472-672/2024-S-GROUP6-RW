@@ -21,14 +21,14 @@ func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	tripOwner, ok := document.(*models.User)
 
 	if !ok {
-		return nil, errors.New("Failed to convert model to User.")
+		return nil, errors.New("failed to convert model to User")
 	}
 
 	// Check that the trip doesn't already exist
 	_, err = database["TripDetails"].FindDocument(bson.M{"TripOwnerID": tripOwner.ID, "TripTitle": trip.TripTitle}, "Trip")
 
 	if err == nil {
-		return nil, errors.New("Trip already exists.")
+		return nil, errors.New("trip already exists")
 	}
 
 	// Create new trip
@@ -50,7 +50,7 @@ func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	insertedTrip, ok := document.(*models.Trip)
 
 	if !ok {
-		return nil, errors.New("Failed to convert model to Trip.")
+		return nil, errors.New("failed to convert model to Trip")
 	}
 
 	// Add new trip ID to owner's trip list
@@ -62,6 +62,10 @@ func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	update := bson.M{"TripIDs": tripOwner.TripIDs}
 
 	_, err = database["UserDetails"].UpdateDocument(filter, update, "User")
+
+	if err != nil {
+		return nil, err
+	}
 
 	return insertedTrip, nil
 }
@@ -77,7 +81,7 @@ func GetAllTrips(user models.User, database db.Database) ([]*models.Trip, error)
 	existingUser, ok := document.(*models.User)
 
 	if !ok {
-		return []*models.Trip{}, errors.New("Failed to convert model to User.")
+		return []*models.Trip{}, errors.New("failed to convert model to User")
 	}
 
 	// Collect trips from user
@@ -94,14 +98,14 @@ func GetAllTrips(user models.User, database db.Database) ([]*models.Trip, error)
 		existingTrip, ok := document.(*models.Trip)
 
 		if !ok {
-			return []*models.Trip{}, errors.New("Failed to convert model to Trip.")
+			return []*models.Trip{}, errors.New("failed to convert model to Trip")
 		}
 
 		// Check that user is a member of the trip
 		found, _ := utility.Find(existingTrip.MemberIDs, existingUser.ID)
 
 		if !found {
-			return []*models.Trip{}, errors.New("Failed to locate user in list.")
+			return []*models.Trip{}, errors.New("failed to locate user in list")
 		}
 
 		tripList = append(tripList, existingTrip)
@@ -121,7 +125,7 @@ func GetTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	existingUser, ok := document.(*models.User)
 
 	if !ok {
-		return nil, errors.New("Failed to convert model to User.")
+		return nil, errors.New("failed to convert model to User")
 	}
 
 	// Acquire trip from database
@@ -134,14 +138,14 @@ func GetTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	existingTrip, ok := document.(*models.Trip)
 
 	if !ok {
-		return nil, errors.New("Failed to convert model to Trip.")
+		return nil, errors.New("failed to convert model to Trip")
 	}
 
 	return existingTrip, nil
 }
 
 func EditTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
-	// TODO: Implement trip edit business logic in terms of new refactoring
+	// TODO: Implement trip edit business logic
 
 	return nil, nil
 }
@@ -157,7 +161,7 @@ func DeleteTrip(trip models.Trip, database db.Database) error {
 	existingUser, ok := document.(*models.User)
 
 	if !ok {
-		return errors.New("Failed to convert document to User.")
+		return errors.New("failed to convert document to User")
 	}
 
 	// Acquire trip from database
@@ -170,7 +174,7 @@ func DeleteTrip(trip models.Trip, database db.Database) error {
 	existingTrip, ok := document.(*models.Trip)
 
 	if !ok {
-		return errors.New("Failed to convert model to Trip.")
+		return errors.New("failed to convert model to Trip")
 	}
 
 	// Remove reference to trip from members of trip
@@ -186,14 +190,14 @@ func DeleteTrip(trip models.Trip, database db.Database) error {
 			existingMember, ok := document.(*models.User)
 
 			if !ok {
-				return errors.New("Failed to convert model to User.")
+				return errors.New("failed to convert model to User")
 			}
 
 			// Discard this trip from the member's trip list
 			found, index := utility.Find(existingMember.TripIDs[:], existingTrip.ID)
 
 			if !found {
-				return errors.New("Failed to locate trip in list.")
+				return errors.New("failed to locate trip in list")
 			}
 
 			existingMember.TripIDs = append(existingMember.TripIDs[:index], existingMember.TripIDs[index+1:]...)
@@ -218,6 +222,10 @@ func DeleteTrip(trip models.Trip, database db.Database) error {
 
 		// Remove activity from database
 		err = database["ActivityDetails"].DeleteDocument(bson.M{"_id": activityID}, "Activity")
+
+		if err != nil {
+			return err
+		}
 	}
 
 	// Remove expenses of this trip from the database
@@ -232,7 +240,7 @@ func DeleteTrip(trip models.Trip, database db.Database) error {
 		existingExpense, ok := document.(*models.Expense)
 
 		if !ok {
-			return errors.New("Failed to convert model to Expense.")
+			return errors.New("failed to convert model to Expense")
 		}
 
 		// Remove invoices of this expense from the database
@@ -247,7 +255,7 @@ func DeleteTrip(trip models.Trip, database db.Database) error {
 			existingInvoice, ok := document.(*models.Invoice)
 
 			if !ok {
-				return errors.New("Failed to convert model to Invoice.")
+				return errors.New("failed to convert model to Invoice")
 			}
 
 			// Remove invoice from payee
@@ -256,19 +264,31 @@ func DeleteTrip(trip models.Trip, database db.Database) error {
 			// Acquire reference to payee
 			document, err = database["UserDetails"].FindDocument(bson.M{"_id": payeeID}, "User")
 
+			if err != nil {
+				return err
+			}
+
 			existingPayee, ok := document.(*models.User)
+
+			if !ok {
+				return errors.New("failed to convert model to User")
+			}
 
 			// Discard this invoice from the payee's invoice list
 			found, index := utility.Find(existingPayee.InvoiceIDs[:], invoiceID)
 
 			if !found {
-				return errors.New("Failed to locate invoice in list.")
+				return errors.New("failed to locate invoice in list")
 			}
 
 			existingPayee.InvoiceIDs = append(existingPayee.InvoiceIDs[:index], existingPayee.InvoiceIDs[index+1:]...)
 
 			// Update payee's document in database
 			_, err = database["UserDetails"].UpdateDocument(bson.M{"_id": payeeID}, bson.M{"InvoiceIDs": existingPayee.InvoiceIDs}, "User")
+
+			if err != nil {
+				return err
+			}
 
 			// Remove invoice from database
 			err = database["InvoiceDetails"].DeleteDocument(bson.M{"_id": invoiceID}, "Invoice")

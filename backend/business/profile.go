@@ -15,7 +15,7 @@ func CreateProfile(user models.User, database db.Database) (*models.Profile, err
 	_, err := database["ProfileDetails"].FindDocument(bson.M{"Username": user.Username}, "Profile")
 
 	if err == nil {
-		return nil, errors.New("Profile already exists.")
+		return nil, errors.New("profile already exists")
 	}
 
 	// Create new profile
@@ -35,7 +35,7 @@ func CreateProfile(user models.User, database db.Database) (*models.Profile, err
 	insertedProfile, ok := insertResult.(*models.Profile)
 
 	if !ok {
-		return nil, errors.New("Failed to convert model to Profile.")
+		return nil, errors.New("failed to convert model to Profile")
 	}
 
 	return insertedProfile, nil

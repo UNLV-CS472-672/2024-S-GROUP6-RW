@@ -16,7 +16,7 @@ func CreateUser(user models.User, database db.Database) (*models.User, error) {
 	_, err := database["UserDetails"].FindDocument(bson.M{"Username": user.Username}, "User")
 
 	if err == nil {
-		return nil, errors.New("User already exists.")
+		return nil, errors.New("user already exists")
 	}
 
 	hashedPasswordBytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
@@ -46,18 +46,22 @@ func CreateUser(user models.User, database db.Database) (*models.User, error) {
 	insertedUser, ok := document.(*models.User)
 
 	if !ok {
-		return nil, errors.New("Failed to convert model to User.")
+		return nil, errors.New("failed to convert model to User")
 	}
 
 	return insertedUser, nil
 }
 
-func GetUser() {
+func GetUser(user models.User, database db.Database) (*models.User, error) {
+	// TODO: Implement get user business logic
 
+	return nil, nil
 }
 
-func EditUser() {
+func EditUser(user models.User, database db.Database) (*models.User, error) {
+	// TODO: Implement edit user business logic
 
+	return nil, nil
 }
 
 func DeleteUser(user models.User, database db.Database) error {
@@ -71,7 +75,7 @@ func DeleteUser(user models.User, database db.Database) error {
 	existingUser, ok := document.(*models.User)
 
 	if !ok {
-		return errors.New("Failed to convert model to User.")
+		return errors.New("failed to convert model to User")
 	}
 
 	// Modify trips the user is a member of
@@ -86,7 +90,7 @@ func DeleteUser(user models.User, database db.Database) error {
 		existingTrip, ok := document.(*models.Trip)
 
 		if !ok {
-			return errors.New("Failed to convert model to Trip.")
+			return errors.New("failed to convert model to Trip")
 		}
 
 		if existingUser.ID == existingTrip.TripOwnerID {
@@ -102,13 +106,17 @@ func DeleteUser(user models.User, database db.Database) error {
 			found, index := utility.Find(existingTrip.MemberIDs[:], existingUser.ID)
 
 			if !found {
-				return errors.New("Failed to locate user in list.")
+				return errors.New("failed to locate user in list")
 			}
 
 			existingTrip.MemberIDs = append(existingTrip.MemberIDs[:index], existingTrip.MemberIDs[index+1:]...)
 
 			// Update trip's document in database
 			_, err = database["TripDetails"].UpdateDocument(bson.M{"_id": tripID}, bson.M{"MemberIDs": existingTrip.MemberIDs}, "Trip")
+
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -124,20 +132,24 @@ func DeleteUser(user models.User, database db.Database) error {
 		existingFriend, ok := document.(*models.User)
 
 		if !ok {
-			return errors.New("Failed to convert model to User.")
+			return errors.New("failed to convert model to User")
 		}
 
 		// Discard this user from other friends list
 		found, index := utility.Find(existingFriend.FriendIDs[:], existingUser.ID)
 
 		if !found {
-			return errors.New("Failed to locate user in list.")
+			return errors.New("failed to locate user in list")
 		}
 
 		existingFriend.FriendIDs = append(existingFriend.FriendIDs[:index], existingFriend.FriendIDs[index+1:]...)
 
 		// Update friend's document in database
 		_, err = database["UserDetails"].UpdateDocument(bson.M{"_id": friendID}, bson.M{"FriendIDs": existingFriend.FriendIDs}, "User")
+
+		if err != nil {
+			return nil
+		}
 	}
 
 	// Remove friend requests involving user
@@ -152,7 +164,7 @@ func DeleteUser(user models.User, database db.Database) error {
 		existingRequest, ok := document.(*models.FriendRequest)
 
 		if !ok {
-			return errors.New("Failed to convert model to FriendRequest.")
+			return errors.New("failed to convert model to FriendRequest")
 		}
 
 		if existingRequest.SenderID == existingUser.ID {
@@ -166,14 +178,14 @@ func DeleteUser(user models.User, database db.Database) error {
 			existingTarget, ok := document.(*models.User)
 
 			if !ok {
-				return errors.New("Failed to convert model to User.")
+				return errors.New("failed to convert model to User")
 			}
 
 			// Discard this request from target's friend request list
 			found, index := utility.Find(existingTarget.FriendRequestIDs[:], requestID)
 
 			if !found {
-				return errors.New("Failed to locate request in list.")
+				return errors.New("failed to locate request in list")
 			}
 
 			existingTarget.FriendRequestIDs = append(existingTarget.FriendRequestIDs[:index], existingTarget.FriendRequestIDs[index+1:]...)
@@ -195,14 +207,14 @@ func DeleteUser(user models.User, database db.Database) error {
 			existingSender, ok := document.(*models.User)
 
 			if !ok {
-				return errors.New("Failed to convert model to User.")
+				return errors.New("failed to convert model to User")
 			}
 
 			// Discard this request from sender's friend request list
 			found, index := utility.Find(existingSender.FriendRequestIDs[:], requestID)
 
 			if !found {
-				return errors.New("Failed to locate request in list.")
+				return errors.New("failed to locate request in list")
 			}
 
 			existingSender.FriendRequestIDs = append(existingSender.FriendRequestIDs[:index], existingSender.FriendRequestIDs[index+1:]...)
@@ -235,7 +247,7 @@ func DeleteUser(user models.User, database db.Database) error {
 		existingInvoice, ok := document.(*models.Invoice)
 
 		if !ok {
-			return errors.New("Failed to convert model to Invoice.")
+			return errors.New("failed to convert model to Invoice")
 		}
 
 		// Remove invoice from parent expense if it hasn't been paid
@@ -250,14 +262,14 @@ func DeleteUser(user models.User, database db.Database) error {
 			existingExpense, ok := document.(*models.Expense)
 
 			if !ok {
-				return errors.New("Failed to convert model to Expense.")
+				return errors.New("failed to convert model to Expense")
 			}
 
 			// Discard this invoice from expense's invoice list
 			found, index := utility.Find(existingExpense.InvoiceIDs[:], invoiceID)
 
 			if !found {
-				return errors.New("Failed to locate invoice in list.")
+				return errors.New("failed to locate invoice in list")
 			}
 
 			existingExpense.InvoiceIDs = append(existingExpense.InvoiceIDs[:index], existingExpense.InvoiceIDs[index+1:]...)
