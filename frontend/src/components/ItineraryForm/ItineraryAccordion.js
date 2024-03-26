@@ -22,20 +22,68 @@ import { DndContext, KeyboardSensor, PointerSensor, TouchSensor, closestCorners,
 const ItineraryAccordion = ({
   key,
   day,
-  activities,
-  onAddActivity,
-  onEditActivity,
-  onRemoveActivity,
+  //activities,
+  // onAddActivity,
+  // onEditActivity,
+  // onRemoveActivity,
 }) => {
   const [isAddDialogOpen, setAddDialogOpen] = useState(false);
   const [newActivity, setNewActivity] = useState("");
-  const [tasks, setTasks] = useState([  //Preset itineraries
-    { id: "1", title: "Explore the city" },
-    { id: "2", title: "Visit a museum" },
-    { id: "3", title: "Dinner at a local restaurant" },
-    { id: "4", title: "City park exploration" },
-    { id: "5", title: "Relax at the beach" },
-    { id: "6", title: "Sunset Cruise" },
+  const [activities, setActivities] = useState([  //Preset itineraries
+  {
+    id: "1", 
+    title: "Explore the city", 
+    location: "City Center", 
+    date: "2024-03-25", 
+    time: "10:00 AM - 4:00 PM",
+    description: "Take a walking tour around the city center to explore landmarks and attractions.",
+    photo: "city.jpg"
+  },
+  {
+    id: "2", 
+    title: "Visit a museum", 
+    location: "Local Museum", 
+    date: "2024-03-26", 
+    time: "1:00 PM - 3:00 PM",
+    description: "Discover the rich history and art of the region at the local museum.",
+    photo: "museum.jpg"
+  },
+  {
+    id: "3",
+    title: "Dinner at a local restaurant",
+    location: "Restaurant XYZ",
+    date: "2024-03-25",
+    time: "19:00",
+    description: "Enjoy a delicious dinner at a popular local restaurant.",
+    photo: "https://example.com/restaurant-photo.jpg",
+  },
+  {
+    id: "4",
+    title: "City park exploration",
+    location: "City Park",
+    date: "2024-03-26",
+    time: "10:00",
+    description: "Explore the beautiful City Park and enjoy nature.",
+    photo: "https://example.com/park-photo.jpg",
+  },
+  {
+    id: "5",
+    title: "Relax at the beach",
+    location: "Beach Resort",
+    date: "2024-03-27",
+    time: "14:00",
+    description: "Spend a relaxing day at the beach and soak up the sun.",
+    photo: "https://example.com/beach-photo.jpg",
+  },
+  {
+    id: "6",
+    title: "Sunset Cruise",
+    location: "Harbor",
+    date: "2024-03-28",
+    time: "17:30",
+    description: "Experience a breathtaking sunset cruise along the coast.",
+    photo: "https://example.com/cruise-photo.jpg",
+  },
   ]);
 
   const handleAddClick = () => {
@@ -48,10 +96,10 @@ const ItineraryAccordion = ({
       const id = (Math.random() * 1000000).toFixed(0);
   
       // Create a new activity object
-      const newTask = { id: id, title: newActivity };
+      const newActivityObj = { id: id, title: newActivity, location: "", date: "", time: "", description: "", photo: "" };
   
-      // Update the tasks state with the new activity added
-      setTasks((prevTasks) => [...prevTasks, newTask]);
+      // Update the activity list state with the new activity added
+      setActivities((prevActivities) => [...prevActivities, newActivityObj]);
   
       // Clear the input field
       setNewActivity("");
@@ -62,18 +110,26 @@ const ItineraryAccordion = ({
     setAddDialogOpen(false);
   };
 
-  const getTaskPos = id => tasks.findIndex(task => task.id === id)
+  const handleDelete = (id) => {
+    // Filter out the activity with the given id
+    const updatedActivities = activities.filter(activity => activity.id !== id);
+    // Update the list of activities
+    setActivities(updatedActivities);
+  };
+
+  /*FOR DRAGGABLE COMPONENTS*/ 
+  const getActivityPos = id => activities.findIndex(activities => activities.id === id)
 
   const handleDragEnd = (event) => {
     const { active, over } = event; //active: element being dragged, over: element being replaced
 
     if (active.id === over.id) return;
 
-    setTasks(tasks => {
-      const originalPos = getTaskPos(active.id);
-      const newPos = getTaskPos(over.id);
+    setActivities(activities => {
+      const originalPos = getActivityPos(active.id);
+      const newPos = getActivityPos(over.id);
 
-      return arrayMove(tasks, originalPos, newPos);
+      return arrayMove(activities, originalPos, newPos);
     })
   };
 
@@ -94,16 +150,16 @@ const ItineraryAccordion = ({
       <AccordionDetails>
         <div>
           <ul>
-            <DndContext  onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+            <DndContext sensors={sensors} onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
               <SortableContext
-                items={tasks}
+                items={activities}
                 strategy={verticalListSortingStrategy}
               >
-                {tasks.map((task) => (
+                {activities.map((activity) => (
                   <Activity
-                    id={task.id}
-                    title={task.title}
-                    key={task.id}
+                    activity={activity}
+                    onDelete={handleDelete}
+                    key={activity.id} // Required for dnd-kit
                     // onEdit={() => onEditActivity(day, index)}
                     // onRemove={() => onRemoveActivity(day, index)}
                   />
