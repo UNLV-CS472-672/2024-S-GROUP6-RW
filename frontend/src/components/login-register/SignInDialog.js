@@ -1,5 +1,9 @@
-import React, { useState } from "react";
-import useAuth from '../../auth/useAuth';
+// 2024-S-GROUP6-RW\frontend\src\components\login-register\SignInDialog.js
+
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../../auth/AuthContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   Button,
@@ -19,10 +23,12 @@ const dialogContainerStyle = {
   margin: "auto",
 };
 
-const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
+const SignInDialog = ({ open }) => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
-  const { login } = useAuth();
+  const [Message, SetMessage] = useState("");
+  const { login, isAuth } = useAuth();
+  const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -32,10 +38,18 @@ const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleclose = () => {
+    console.log("handleclose");
+    navigate("/");
+  };
+
+  useEffect(() => {
+    console.log(`Sign In isAuth: ${isAuth}`);
+  }, [isAuth]);
+
+  const handleSubmit = async () => {
     // Check for errors in username, email, and password
     const emailValid = isValidEmailAddress(Email);
-    const passwordValid = isValidPassword(Password);
 
     // Check if any of the fields are empty
     const fieldsNotEmpty = Email.trim() !== "" && Password.trim() !== "";
@@ -44,43 +58,33 @@ const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
     const apiUrl = "http://localhost:8080/signin";
 
     // Prepare the data to be sent in the request
-    const userData = { Email, Password };
+    const credentials = { Email, Password };
 
-    // Call onSubmit only if there are no errors
-    if (emailValid && passwordValid && fieldsNotEmpty) {
-      // Make the API call using fetch
-      fetch(apiUrl, {
-        method: "POST", // Specify the method
-        headers: {
-          "Content-Type": "application/json", // Specify the content type as JSON
-        },
-        body: JSON.stringify(userData), // Convert the userData object into a JSON string
-      })
-      .then(response => {
-        if (!response.ok) {
-          // If server response is not ok, throw an error with the status
-          throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+      const response = await axios.post(apiUrl, credentials);
+      login(response.data.token);
+      // console.log(`respose token: ${response.data.token}`);
+      navigate("/map");
+    } catch (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        console.log(error.response.data.error);
+
+        if (!emailValid) {
+          SetMessage("Not a real email");
+        } else if (!fieldsNotEmpty) {
+          SetMessage("Cannot have empty fields");
         } else {
-          return response.json(); // Continue to process the response
+          SetMessage(error.response.data.error);
         }
-      })
-      .then(data => {
-        if (data.token) {
-          // Use the login function to save the token and update auth state
-          login(data.token);
-          // Redirect to dashboard or show success message here
-        } else {
-          // Handle the case where no token is returned
-          throw new Error('No token received after registration.');
-        }
-      })
-      .catch(error => {
-        console.error("There was a problem with the fetch operation:", error.message);
-        // Here you can show an error message to the user based on `error.message`
-      });
-      onSubmit({ Email, Password });
-    } else {
-      console.log("ERROR");
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+        SetMessage("Server Down. Please try again later.");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
     }
   };
 
@@ -100,11 +104,26 @@ const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
 
   return (
     <>
-      <Dialog open={open} onClose={onClose} style={dialogContainerStyle}>
+      <Dialog open={open} style={dialogContainerStyle}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100px",
+            textAlign: "center",
+            color: "red",
+          }}
+          color="inherit"
+          aria-label="error-message"
+        >
+          {Message}
+        </Box>
+
         <IconButton
           sx={{ position: "absolute", top: "8px", right: "8px" }}
           color="inherit"
-          onClick={onClose}
+          onClick={handleclose}
           aria-label="close"
         >
           <CloseIcon />
@@ -140,6 +159,7 @@ const SignInDialog = ({ open, onClick, onClose, onSubmit }) => {
             id="outlined-basic-password"
             label="Password"
             variant="outlined"
+            type="password"
             fullWidth
             margin="normal"
             value={Password}
