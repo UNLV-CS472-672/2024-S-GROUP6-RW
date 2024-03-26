@@ -4,17 +4,18 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import {
-  AppBar,
-  Box,
-  Toolbar,
-  IconButton,
-  Typography,
-  Menu,
-  MenuItem,
-  Avatar,
-  Button,
-  Tooltip,
-  useTheme,
+	AppBar,
+	Box,
+	Container,
+	Toolbar,
+	IconButton,
+	Typography,
+	Menu,
+	MenuItem,
+	Avatar,
+	Button,
+	Tooltip,
+	useTheme,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
