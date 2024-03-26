@@ -52,6 +52,7 @@ const ItineraryPage = () => {
     const oneDay = 24 * 60 * 60 * 1000;
     return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
   };
+  
 
   // Function to generate itinerary based on the number of days
   const generateItinerary = (numberOfDays) => {
@@ -123,5 +124,6 @@ const ItineraryPage = () => {
     </div>
   );
 };
+
 
 export default ItineraryPage; // Exporting the ItineraryPage component

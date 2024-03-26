@@ -5,7 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 
-const ItineraryDatePickerComponent = ({ onSelectStartDate, onSelectEndDate, onDateSelectionComplete }) => {
+  const ItineraryDatePickerComponent = ({ onSelectStartDate, onSelectEndDate, onDateSelectionComplete }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
