@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, TextField, Box } from "@mui/material";
-import useAuth from '../../auth/useAuth';
+import { useAuth } from "../../auth/AuthContext";
 
 const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
   const { login } = useAuth();
@@ -70,29 +70,29 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
           "Content-Type": "application/json", // Specify the content type as JSON
         },
         body: JSON.stringify(userData), // Convert the userData object into a JSON string
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.token) {
+            // Use the login function to save the token and update auth state
+            login(data.token);
+            console.log(data.token); //Needs to be deleted after testing
+
+            // Redirect to dashboard or show success message
+          } else {
+            // Handle the case where no token is returned
+            throw new Error("No token received after registration.");
+          }
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.token) {
-                // Use the login function to save the token and update auth state
-                login(data.token);
-                console.log(data.token) //Needs to be deleted after testing
-                
-                // Redirect to dashboard or show success message
-            } else {
-                // Handle the case where no token is returned
-                throw new Error('No token received after registration.');
-            }
-        })
-        .catch(error => {
-            // Handle any errors
-            console.error("There was a problem with the registration:", error);
+        .catch((error) => {
+          // Handle any errors
+          console.error("There was a problem with the registration:", error);
         });
     } else {
-        // Handle validation errors
-        console.log("ERROR: Invalid input.");
+      // Handle validation errors
+      console.log("ERROR: Invalid input.");
     }
-};
+  };
 
   const isValidName = (name) => {
     // Regular expression to validate email address
