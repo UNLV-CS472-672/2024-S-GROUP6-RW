@@ -4,10 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Invoice struct {
@@ -19,11 +17,11 @@ type Invoice struct {
 	Balance         float64            `bson:"Balance,omitempty"`
 }
 
-func (i *Invoice) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M) error {
+func (i *Invoice) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	*i = Invoice{}
 
 	var result bson.M
-	err := coll.FindOne(context.TODO(), filter).Decode(&result)
+	err := coll.Collection.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
 		return errors.New("invoice does not exist")
@@ -52,4 +50,86 @@ func (i *Invoice) GetDocument(c *gin.Context, coll *mongo.Collection, filter bso
 	}
 
 	return nil
+}
+
+func (i *Invoice) GetMockDocument(coll *MockCollection, filter bson.M) error {
+	*i = Invoice{}
+
+	result, err := coll.FindDocument(filter, "Invoice")
+
+	if err != nil {
+		return errors.New("invoice does not exist")
+	}
+
+	if invoiceRes, ok := result.(*Invoice); ok {
+		i = invoiceRes
+		return nil
+	}
+
+	return errors.New("Failed to convert model to Invoice.")
+}
+
+func (i *Invoice) GetKeys() []string {
+	return []string{
+		"ID", "ParentExpenseID", "PayeeID", "Description", "Balance",
+	}
+}
+
+func (i *Invoice) GetValue(key string) (any, error) {
+	switch key {
+	case "ID":
+		return i.ID, nil
+	case "ParentExpenseID":
+		return i.ParentExpenseID, nil
+	case "PayeeID":
+		return i.PayeeID, nil
+	case "Description":
+		return i.Description, nil
+	case "Balance":
+		return i.Balance, nil
+	default:
+		return nil, errors.New("Unknown key: '" + key + "'.")
+	}
+}
+
+func (i *Invoice) SetValue(key string, value any) error {
+	switch key {
+	case "ID":
+		if ID, ok := value.(primitive.ObjectID); ok {
+			i.ID = ID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	case "ParentExpenseID":
+		if ParentExpenseID, ok := value.(primitive.ObjectID); ok {
+			i.ParentExpenseID = ParentExpenseID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	case "PayeeID":
+		if PayeeID, ok := value.(primitive.ObjectID); ok {
+			i.PayeeID = PayeeID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	case "Description":
+		if Description, ok := value.(string); ok {
+			i.Description = Description
+			return nil
+		}
+
+		return errors.New("Failed to convert value to string.")
+	case "Balance":
+		if Balance, ok := value.(float64); ok {
+			i.Balance = Balance
+			return nil
+		}
+
+		return errors.New("Failed to convert value to float64.")
+	default:
+		return errors.New("Unknown key: '" + key + "'.")
+	}
 }

@@ -4,10 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Expense struct {
@@ -21,11 +19,11 @@ type Expense struct {
 	IsPaid           bool                 `bson:"IsPaid,omitempty"`
 }
 
-func (e *Expense) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M) error {
+func (e *Expense) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	*e = Expense{}
 
 	var result bson.M
-	err := coll.FindOne(context.TODO(), filter).Decode(&result)
+	err := coll.Collection.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
 		return errors.New("expense does not exist")
@@ -81,4 +79,105 @@ func (e *Expense) GetDocument(c *gin.Context, coll *mongo.Collection, filter bso
 	}
 
 	return nil
+}
+
+func (e *Expense) GetMockDocument(coll *MockCollection, filter bson.M) error {
+	*e = Expense{}
+
+	result, err := coll.FindDocument(filter, "Expense")
+
+	if err != nil {
+		return errors.New("expense does not exist")
+	}
+
+	if expenseRes, ok := result.(*Expense); ok {
+		e = expenseRes
+		return nil
+	}
+
+	return errors.New("Failed to convert model to Expense.")
+}
+
+func (e *Expense) GetKeys() []string {
+	return []string{
+		"ID", "ParentTripID", "Description", "Amount", "InvoiceIDs", "RemainingBalance",
+		"IsPaid",
+	}
+}
+
+func (e *Expense) GetValue(key string) (any, error) {
+	switch key {
+	case "ID":
+		return e.ID, nil
+	case "ParentTripID":
+		return e.ParentTripID, nil
+	case "Description":
+		return e.Description, nil
+	case "Amount":
+		return e.Amount, nil
+	case "InvoiceIDs":
+		return e.InvoiceIDs, nil
+	case "RemainingBalance":
+		return e.RemainingBalance, nil
+	case "IsPaid":
+		return e.IsPaid, nil
+	default:
+		return nil, errors.New("Unknown key: '" + key + "'.")
+	}
+}
+
+func (e *Expense) SetValue(key string, value any) error {
+	switch key {
+	case "ID":
+		if ID, ok := value.(primitive.ObjectID); ok {
+			e.ID = ID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	case "ParentTripID":
+		if ParentTripID, ok := value.(primitive.ObjectID); ok {
+			e.ParentTripID = ParentTripID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	case "Description":
+		if Description, ok := value.(string); ok {
+			e.Description = Description
+			return nil
+		}
+
+		return errors.New("Failed to convert value to string.")
+	case "Amount":
+		if Amount, ok := value.(float64); ok {
+			e.Amount = Amount
+			return nil
+		}
+
+		return errors.New("Failed to convert value to float64.")
+	case "InvoiceIDs":
+		if idList, ok := value.([]primitive.ObjectID); ok {
+			e.InvoiceIDs = idList
+			return nil
+		}
+
+		return errors.New("Failed to convert value to []ObjectID.")
+	case "RemainingBalance":
+		if RemainingBalance, ok := value.(float64); ok {
+			e.RemainingBalance = RemainingBalance
+			return nil
+		}
+
+		return errors.New("Failed to convert value to float64.")
+	case "IsPaid":
+		if IsPaid, ok := value.(bool); ok {
+			e.IsPaid = IsPaid
+			return nil
+		}
+
+		return errors.New("Failed to convert value to bool.")
+	default:
+		return errors.New("Unknown key: '" + key + "'.")
+	}
 }

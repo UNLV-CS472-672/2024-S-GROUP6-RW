@@ -4,10 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type TripModification struct {
@@ -31,14 +29,14 @@ type Trip struct {
 	Modifications []TripModification
 }
 
-func (t *Trip) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M) error {
+func (t *Trip) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	*t = Trip{
 		Username:      t.Username,
 		Modifications: t.Modifications,
 	}
 
 	var result bson.M
-	err := coll.FindOne(context.TODO(), filter).Decode(&result)
+	err := coll.Collection.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
 		return errors.New("trip does not exist")
@@ -96,4 +94,120 @@ func (t *Trip) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M
 	}
 
 	return nil
+}
+
+func (t *Trip) GetMockDocument(coll *MockCollection, filter bson.M) error {
+	*t = Trip{
+		Username:      t.Username,
+		Modifications: t.Modifications,
+	}
+
+	result, err := coll.FindDocument(filter, "Trip")
+
+	if err != nil {
+		return errors.New("trip does not exist")
+	}
+
+	err = result.SetValue("Username", t.Username)
+
+	if err != nil {
+		return err
+	}
+
+	err = result.SetValue("Modifications", t.Modifications)
+
+	if err != nil {
+		return err
+	}
+
+	if tripRes, ok := result.(*Trip); ok {
+		t = tripRes
+		return nil
+	}
+
+	return errors.New("Failed to convert model to Trip.")
+}
+
+func (t *Trip) GetKeys() []string {
+	return []string{
+		"ID", "TripOwnerID", "TripTitle", "LocationName", "MemberIDs", "ActivityIDs",
+		"ExpenseIDs",
+	}
+}
+
+func (t *Trip) GetValue(key string) (any, error) {
+	switch key {
+	case "ID":
+		return t.ID, nil
+	case "TripOwnerID":
+		return t.TripOwnerID, nil
+	case "TripTitle":
+		return t.TripTitle, nil
+	case "LocationName":
+		return t.LocationName, nil
+	case "MemberIDs":
+		return t.MemberIDs, nil
+	case "ActivityIDs":
+		return t.ActivityIDs, nil
+	case "ExpenseIDs":
+		return t.ExpenseIDs, nil
+	default:
+		return nil, errors.New("Unknown key: '" + key + "'.")
+	}
+}
+
+func (t *Trip) SetValue(key string, value any) error {
+	switch key {
+	case "ID":
+		if ID, ok := value.(primitive.ObjectID); ok {
+			t.ID = ID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	case "TripOwnerID":
+		if TripOwnerID, ok := value.(primitive.ObjectID); ok {
+			t.TripOwnerID = TripOwnerID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	case "TripTitle":
+		if TripTitle, ok := value.(string); ok {
+			t.TripTitle = TripTitle
+			return nil
+		}
+
+		return errors.New("Failed to convert value to string.")
+	case "LocationName":
+		if LocationName, ok := value.(string); ok {
+			t.LocationName = LocationName
+			return nil
+		}
+
+		return errors.New("Failed to convert value to string.")
+	case "MemberIDs":
+		if idList, ok := value.([]primitive.ObjectID); ok {
+			t.MemberIDs = idList
+			return nil
+		}
+
+		return errors.New("Failed to convert value to []ObjectID.")
+	case "ActivityIDs":
+		if idList, ok := value.([]primitive.ObjectID); ok {
+			t.ActivityIDs = idList
+			return nil
+		}
+
+		return errors.New("Failed to convert value to []ObjectID.")
+	case "ExpenseIDs":
+		if idList, ok := value.([]primitive.ObjectID); ok {
+			t.ExpenseIDs = idList
+			return nil
+		}
+
+		return errors.New("Failed to convert value to []ObjectID.")
+	default:
+		return errors.New("Unknown key: '" + key + "'.")
+	}
 }

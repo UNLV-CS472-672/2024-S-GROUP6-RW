@@ -4,10 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Activity struct {
@@ -23,11 +21,11 @@ type Activity struct {
 	Coordinate   string             `bson:"Coordinate,omitempty"`
 }
 
-func (a *Activity) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M) error {
+func (a *Activity) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	*a = Activity{}
 
 	var result bson.M
-	err := coll.FindOne(context.TODO(), filter).Decode(&result)
+	err := coll.Collection.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
 		return errors.New("activity does not exist")
@@ -60,4 +58,114 @@ func (a *Activity) GetDocument(c *gin.Context, coll *mongo.Collection, filter bs
 	}
 
 	return nil
+}
+
+func (a *Activity) GetMockDocument(coll *MockCollection, filter bson.M) error {
+	*a = Activity{}
+
+	result, err := coll.FindDocument(filter, "Activity")
+
+	if err != nil {
+		return errors.New("activity does not exist")
+	}
+
+	if activityRes, ok := result.(*Activity); ok {
+		a = activityRes
+		return nil
+	}
+
+	return errors.New("Failed to convert model to Activity.")
+}
+
+func (a *Activity) GetKeys() []string {
+	return []string{
+		"ID", "ParentTripID", "Description", "Date", "ImageURI", "IsMapBased", "Address",
+		"Coordinate",
+	}
+}
+
+func (a *Activity) GetValue(key string) (any, error) {
+	switch key {
+	case "ID":
+		return a.ID, nil
+	case "ParentTripID":
+		return a.ParentTripID, nil
+	case "Description":
+		return a.Description, nil
+	case "Date":
+		return a.Date, nil
+	case "ImageURI":
+		return a.ImageURI, nil
+	case "IsMapBased":
+		return a.IsMapBased, nil
+	case "Address":
+		return a.Address, nil
+	case "Coordinate":
+		return a.Coordinate, nil
+	default:
+		return nil, errors.New("Unknown key: '" + key + "'.")
+	}
+}
+
+func (a *Activity) SetValue(key string, value any) error {
+	switch key {
+	case "ID":
+		if ID, ok := value.(primitive.ObjectID); ok {
+			a.ID = ID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	case "ParentTripID":
+		if ParentTripID, ok := value.(primitive.ObjectID); ok {
+			a.ParentTripID = ParentTripID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	case "Description":
+		if Description, ok := value.(string); ok {
+			a.Description = Description
+			return nil
+		}
+
+		return errors.New("Failed to convert value to string.")
+	case "Date":
+		if Date, ok := value.(primitive.DateTime); ok {
+			a.Date = Date
+			return nil
+		}
+
+		return errors.New("Failed to convert value to DateTime.")
+	case "ImageURI":
+		if ImageURI, ok := value.(string); ok {
+			a.ImageURI = ImageURI
+			return nil
+		}
+
+		return errors.New("Failed to convert value to string.")
+	case "IsMapBased":
+		if IsMapBased, ok := value.(bool); ok {
+			a.IsMapBased = IsMapBased
+			return nil
+		}
+
+		return errors.New("Failed to convert value to bool.")
+	case "Address":
+		if Address, ok := value.(string); ok {
+			a.Address = Address
+			return nil
+		}
+
+		return errors.New("Failed to convert value to string.")
+	case "Coordinate":
+		if Coordinate, ok := value.(string); ok {
+			a.Coordinate = Coordinate
+			return nil
+		}
+
+		return errors.New("Failed to convert value to string.")
+	default:
+		return errors.New("Unknown key: '" + key + "'.")
+	}
 }
