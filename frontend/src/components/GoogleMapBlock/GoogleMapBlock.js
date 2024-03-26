@@ -1,19 +1,27 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import React, { useState, useCallback, useEffect } from "react";
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 
-function GoogleMapBlock({ width = '400px', height = '400px', lat = 39.50, lng = -98.7129, markerCoordinatesArray, start, destination }) {
+function GoogleMapBlock({
+  width = "400px",
+  height = "400px",
+  lat = 39.5,
+  lng = -98.7129,
+  markerCoordinatesArray,
+  start,
+  destination,
+}) {
   const containerStyle = {
     width: width,
-    height: height
+    height: height,
   };
 
   const center = {
     lat: lat,
-    lng: lng
+    lng: lng,
   };
 
   const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
+    id: "google-map-script",
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
   });
 
@@ -23,52 +31,60 @@ function GoogleMapBlock({ width = '400px', height = '400px', lat = 39.50, lng = 
   const [directionsService, setDirectionsService] = useState(null);
   const [directionsRenderer, setDirectionsRenderer] = useState(null);
 
-  const onLoad = useCallback(function callback(map) {
-    const bounds = new window.google.maps.LatLngBounds();
+  const onLoad = useCallback(
+    function callback(map) {
+      const bounds = new window.google.maps.LatLngBounds();
 
-    if (markerCoordinatesArray && markerCoordinatesArray.length > 0) {
-      const newMarkers = markerCoordinatesArray.map((markerData, index) => {
-        const marker = new window.google.maps.Marker({
-          position: markerData,
-          map: map,
-          title: `Marker ${index + 1}`
+      if (markerCoordinatesArray && markerCoordinatesArray.length > 0) {
+        const newMarkers = markerCoordinatesArray.map((markerData, index) => {
+          const marker = new window.google.maps.Marker({
+            position: markerData,
+            map: map,
+            title: `Marker ${index + 1}`,
+          });
+
+          bounds.extend(markerData);
+
+          const infoWindow = new window.google.maps.InfoWindow({
+            content: `<div>${markerData.message}</div>`,
+          });
+
+          window.google.maps.event.addListener(marker, "click", () => {
+            infoWindows.forEach((iw) => iw.close());
+            infoWindow.open(map, marker);
+          });
+
+          setInfoWindows((prevInfoWindows) => [...prevInfoWindows, infoWindow]);
+
+          return marker;
         });
 
-        bounds.extend(markerData);
+        setMarkers(newMarkers);
+      }
 
-        const infoWindow = new window.google.maps.InfoWindow({
-          content: `<div>${markerData.message}</div>`,
-        });
+      map.fitBounds(bounds);
+      setMap(map);
+      setDirectionsService(new window.google.maps.DirectionsService());
+      setDirectionsRenderer(
+        new window.google.maps.DirectionsRenderer({ map: map })
+      );
+    },
+    [markerCoordinatesArray, infoWindows]
+  );
 
-        window.google.maps.event.addListener(marker, 'click', () => {
-          infoWindows.forEach((iw) => iw.close());
-          infoWindow.open(map, marker);
-        });
-
-        setInfoWindows((prevInfoWindows) => [...prevInfoWindows, infoWindow]);
-
-        return marker;
-      });
-
-      setMarkers(newMarkers);
-    }
-
-    map.fitBounds(bounds);
-    setMap(map);
-    setDirectionsService(new window.google.maps.DirectionsService());
-    setDirectionsRenderer(new window.google.maps.DirectionsRenderer({ map: map }));
-  }, [markerCoordinatesArray, infoWindows]);
-
-  const onUnmount = useCallback(function callback(map) {
-    setMap(null);
-    if (infoWindows) {
-      infoWindows.forEach((iw) => iw.close());
-    }
-    setMarkers([]);
-    setInfoWindows([]);
-    setDirectionsService(null);
-    setDirectionsRenderer(null);
-  }, [infoWindows]);
+  const onUnmount = useCallback(
+    function callback(map) {
+      setMap(null);
+      if (infoWindows) {
+        infoWindows.forEach((iw) => iw.close());
+      }
+      setMarkers([]);
+      setInfoWindows([]);
+      setDirectionsService(null);
+      setDirectionsRenderer(null);
+    },
+    [infoWindows]
+  );
 
   useEffect(() => {
     if (map && markers.length > 0) {
@@ -83,14 +99,14 @@ function GoogleMapBlock({ width = '400px', height = '400px', lat = 39.50, lng = 
       const request = {
         origin: start,
         destination: destination,
-        travelMode: 'DRIVING',
+        travelMode: "DRIVING",
       };
 
       directionsService.route(request, (result, status) => {
-        if (status === 'OK') {
+        if (status === "OK") {
           directionsRenderer.setDirections(result);
         } else {
-          console.error('Directions request failed due to ' + status);
+          console.error("Directions request failed due to " + status);
         }
       });
     }
@@ -112,13 +128,9 @@ function GoogleMapBlock({ width = '400px', height = '400px', lat = 39.50, lng = 
     >
       {/* Child components, such as markers, info windows, etc. */}
     </GoogleMap>
-  ) : <></>;
+  ) : (
+    <></>
+  );
 }
 
 export default React.memo(GoogleMapBlock);
-
-
-
-
-
-
