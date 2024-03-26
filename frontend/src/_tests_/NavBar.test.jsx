@@ -1,26 +1,23 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import { ColorModeContext } from '../components/NavBar/ToggleTheme'; // adjust this import as necessary
+import { render, screen } from '@testing-library/react';
+import { AuthContext } from '../auth/AuthContext'; // adjust this import as necessary
 import NavBar from '../components/NavBar/NavBar'; // adjust this import as necessary
 
 describe('NavBar', () => {
   test('renders NavBar component without crashing', () => {
     render(
-      <ColorModeContext.Provider value="light">
+      <AuthContext.Provider value={{}}>
         <NavBar />
-      </ColorModeContext.Provider>
+      </AuthContext.Provider>
     );
   });
 
-  test('opens the user menu when the user menu button is clicked', () => {
-    const { getByTestId } = render(
-      <ColorModeContext.Provider value="light">
+  test('renders the correct AppBar title', () => {
+    render(
+      <AuthContext.Provider value={{}}>
         <NavBar />
-      </ColorModeContext.Provider>
+      </AuthContext.Provider>
     );
-
-    fireEvent.click(getByTestId('user-menu-button'));
-
-    expect(getByTestId('user-menu')).toBeVisible();
+    expect(screen.getByText('App Title')).toBeInTheDocument(); // replace 'App Title' with your actual AppBar title
   });
 });
