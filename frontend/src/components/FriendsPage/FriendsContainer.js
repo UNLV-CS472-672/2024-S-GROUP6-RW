@@ -4,6 +4,7 @@ import AddRemoveFriends from "../../components/FriendsPage/AddRemoveFriends";
 import FriendList from "../../components/FriendsPage/BoxFriend";
 
 
+//Contains the box for tabs
 function FriendsContainer() {
 	const [value, setValue] = React.useState(0);
 
