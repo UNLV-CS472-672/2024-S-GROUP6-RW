@@ -1,16 +1,6 @@
 import React, { useState } from "react";
 import { SketchPicker } from "react-color";
-import {
-  Popover,
-  Typography,
-  Tabs,
-  Tab,
-  ImageList,
-  ImageListItem,
-  Box,
-  Button,
-} from "@mui/material";
-import Draggable from "react-draggable"; // Import Draggable from react-draggable
+import { Popover, Typography, Tabs, Tab, Box } from "@mui/material";
 import AvatarGrid from "./AvatarGrid";
 import BorderGrid from "./BorderGrid";
 

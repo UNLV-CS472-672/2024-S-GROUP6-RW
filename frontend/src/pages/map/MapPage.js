@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import GoogleMapBlock from "../../components/GoogleMapBlock/GoogleMapBlock";
 import "../../css/MapPage.css";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 function MapPage() {
   const [clickedImage, setClickedImage] = useState(null); 
@@ -73,6 +75,7 @@ function MapPage() {
           <img src="https://via.placeholder.com/150" alt="Popular Image 2" />
           <img src="https://via.placeholder.com/150" alt="Popular Image 3" />
         </div>
+        
         {/* Render map below the clicked image */}
         {clickedImage === "Popular Trips" && isMapVisible && (
           <div className="map-container">
@@ -132,14 +135,7 @@ function MapPage() {
           <img src="https://via.placeholder.com/150" alt="Australia Image 3" />
         </div>
       </div>
-      <div id="Antarctica" className="continent-section">
-        <h2>Antarctica</h2>
-        <div className="image-container">
-          <img src="https://via.placeholder.com/150" alt="Antarctica Image 1" />
-          <img src="https://via.placeholder.com/150" alt="Antarctica Image 2" />
-          <img src="https://via.placeholder.com/150" alt="Antarctica Image 3" />
-        </div>
-      </div>
+
 
       {/*{clickedImage === "Popular Trips" && isMapVisible && ( // Conditionally render the map if isMapVisible is true
           <GoogleMapBlock

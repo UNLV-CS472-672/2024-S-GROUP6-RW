@@ -23,7 +23,7 @@ import { Link } from "react-router-dom";
 import SignInDialog from "./SignInDialog";
 
 // pages that we will use In general
-const pages = ["Expenses", "Itinerary", "Map", "My-Trips"];
+const pages = ["Expenses", "Itinerary", "Map", "My-Trips", "Friends"];
 // settings that we will use for user
 const userPages = ["Profile", "Account", "Dashboard", "Logout"];
 
