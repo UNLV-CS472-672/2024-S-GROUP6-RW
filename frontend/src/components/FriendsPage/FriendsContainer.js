@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Tabs, Tab, Box } from "@mui/material";
 import AddRemoveFriends from "../../components/FriendsPage/AddRemoveFriends";
+import FriendList from "../../components/FriendsPage/BoxFriend";
 
 
 function FriendsContainer() {
@@ -20,8 +21,10 @@ function FriendsContainer() {
 				centered
 			>
                 <Tab label="Add/Remove Friend" />
+				<Tab label="Friend List" />
 			</Tabs>
 			{value === 0 && <AddRemoveFriends />}
+			{value === 0 && <FriendList />}
 		</Box>
 	);
 }
