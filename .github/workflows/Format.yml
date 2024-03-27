@@ -1,7 +1,9 @@
 name: Format Code with Prettier and Go's Formatter
 
 on:
-  pull_request:
+  push:
+    branches:
+      - master
     paths:
       - '**/*.js'
       - '**/*.jsx'
