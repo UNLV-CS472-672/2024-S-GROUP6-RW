@@ -1,5 +1,4 @@
 import React from "react";
-
 import "../../css/GettingStartedBanner.css"
 import "../../css/GettingStarted.css"
 
@@ -11,8 +10,6 @@ import Lottie, {LottieRefCurrentProps} from "lottie-react"
 import Animation_share from "../../components/GettingStarted/Animation_share.json"
 import Animation_car from "../../components/GettingStarted/Animation_car.json"
 import Animation_directions from "../../components/GettingStarted/Animation_directions.json"
-
-import "../../css/GettingStarted.css"
 
 import ImageSlider from "../../components/GettingStarted/ImageSlider.js"
 
@@ -120,7 +117,7 @@ function GettingStartedPage() {
         text1="From weekend getaways to epic adventures"
 
         buttonText="Getting Started"
-        url="/"
+        url="/gatheringinfo"
         buttonClass="show"
       />
 
@@ -177,5 +174,4 @@ function GettingStartedPage() {
     </>
   );
 }
-
 export default GettingStartedPage;
