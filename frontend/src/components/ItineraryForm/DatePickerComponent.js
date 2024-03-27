@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-  const ItineraryDatePickerComponent = ({ onSelectStartDate, onSelectEndDate, onDateSelectionComplete }) => {
+const ItineraryDatePickerComponent = () => {
   const [itinerary, setItinerary] = useState([]); // Itinerary array state
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
