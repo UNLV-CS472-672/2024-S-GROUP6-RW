@@ -1,14 +1,28 @@
 # React Component Structure
 
+## User
+
+### Methods:
+- `OpenGettingStartedPage()`: void
+- `Scroll()`: void
+- `ClickGetStartedButton()`: void
+
 ## GettingStartedPage
 
-### State:
-- `value`: Integer (controls tab selection)
+### Methods:
+- `DisplayContent()`: void
 
-### Handlers:
-- `handleChange(event, newValue)`: Function (updates tab selection)
+## DynamicScrollPage
 
-### Children:
-- Renders IntroductionSection
-- Renders TutorialSection
-- Renders ResourcesSection
+### Methods:
+- `UpdateContentAppearance()`: void
+
+## GetStartedButton
+
+### Methods:
+- `Display()`: void
+
+## ItineraryPage
+
+### Methods:
+- `Redirect()`: void
