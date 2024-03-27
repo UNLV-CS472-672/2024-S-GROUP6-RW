@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import GatheringInfo from "../../components/GatheringInfo/DateSelect";
 import DatePickerComponent from "../../components/ItineraryForm/DatePickerComponent"; 
 import SearchBar from "../../components/GatheringInfo/SearchBar";
 

@@ -7,40 +7,24 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const ItineraryDatePickerComponent = () => {
-  const [itinerary, setItinerary] = useState([]); // Itinerary array state
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [selectedStartDate, setSelectedStartDate] = useState(null); // Selected start date
   const [selectedEndDate, setSelectedEndDate] = useState(null); // Selected end date
   const navigate = useNavigate();
   
+  //For onclick start date
   const handleStartDateChange = (date) => {
     setStartDate(date);
   };
 
+  //For onclick end date
   const handleEndDateChange = (date) => {
     setEndDate(date);
   };
 
   //Complete only if start date and end date is selected AND the end date is later or on that date of the start date.
   const isDateSelectionComplete = startDate && endDate && startDate <= endDate; 
-
-  const handleStartDateSelect = (date) => {
-    if (date instanceof Date) {
-      setSelectedStartDate(date);
-    } else {
-      setSelectedStartDate(new Date(date));
-    }
-  };
-
-  // Event handler for selecting end date
-  const handleEndDateSelect = (date) => {
-    if (date instanceof Date) {
-      setSelectedEndDate(date);
-    } else {
-      setSelectedEndDate(new Date(date));
-    }
-  };
 
   const handleComplete = () => {
     if (isDateSelectionComplete) {
