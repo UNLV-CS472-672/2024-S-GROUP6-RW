@@ -1,86 +1,105 @@
-
-
 .search-bar {
-    margin-bottom: 20px; /* Add space between the search bar and the map container */
-  }
-  
-  .search-bar input[type="text"] {
-    width: 100%; /* Make the input box fill the entire width of its container */
-    padding: 10px; /* Add padding to increase the size of the input box */
-    border-radius: 20px; /* Make the edges more rounded */
-    border: 2px solid #ccc; /* Add a border for visual separation */
-    font-size: 16px; /* Increase font size for better readability */
-    outline: none; /* Remove default outline */
-  }
-  
-  .search-bar input[type="text"]:focus {
-    border-color: #007bff; /* Change border color on focus */
-  }
-  
-  
-  .map-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Take up 80% of the viewport height */
-  }
-  
-  .map-placeholder {
-    width: 80%; /* Set the width of the black box */
-    height: 80%; /* Set the height of the black box */
-    /*max-width: 1000px; /* Set maximum width to prevent the container from becoming too wide */
-    background-color: #000; /* Set the background color to black */
-    border-radius: 5px; /* Add border radius */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Ensure the map doesn't overflow */
-    border: 2px solid #ccc; /* Add border for the map placeholder */
-  }
-
-    /* Adjust map size */
-  .google-map-block {
-    width: 100%;
-    height: 100%;
+  margin-bottom: 20px;
 }
-  
-  .continent-list {
-    position: absolute;
-    top: 0;
-    right: -200px; /* initially hide it */
-    width: 300px; /* make it larger */
-    background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 5px;
-    transition: right 0.3s ease; /* smooth transition */
-    z-index: 1; /* Set a higher z-index to ensure it appears above the map */
-  }
-  
-  .continent-list.visible {
-    right: 0; /* slide in from the right */
-  }
-  
-  .continent-list ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .continent-button {
-    margin-bottom: 20px; /* Add space between continents */
-    cursor: pointer;
-    padding: 5px;
-    border: none;
-    background-color: transparent;
-    font-size: 16px;
-  }
-  
-  .continent-button strong {
-    font-size: 20px; /* Larger font size */
-    font-weight: bold; /* Bold text */
-  }
-  
-  .hotspot-list {
-    list-style-type: none;
-    padding-left: 20px; /* Indent hotspot list */
-  }
-  
+
+.search-bar input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-bar input[type="text"]:focus {
+  border-color: #007bff;
+}
+
+.continent-list-container {
+  display: flex;
+  justify-content: center;
+}
+
+.continent-list {
+  max-width: 95vw;
+  margin: 0 auto;
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center horizontally */
+}
+
+.continent-list ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.continent-button {
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 20px;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+  margin: 10px; /* Add margin between buttons */
+}
+
+.continent-button:hover {
+  background-color: #0056b3;
+}
+
+.continent-button strong {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.continent-section h2 {
+  text-align: left;
+  margin-left: 40px; /* Adjust this value to your preference */
+}
+
+.image-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow images to wrap to the next row */
+  gap: 20px; /* Add some space between images */
+  justify-content: center; /* Center the images horizontally as a group */
+  align-items: flex-start; /* Align images to the left */
+  margin: auto; /* Center the container overall */
+}
+
+
+.image-container img {
+  max-width: 400px; /* Set a maximum width for the images */
+}
+
+.image-wrapper {
+  cursor: pointer;
+  position: relative;
+  width: 400px; /* Set a fixed width for each image wrapper */
+}
+
+.image-name {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.map-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px; /* Add margin to the top */
+}
+
+.google-map-block {
+  width: 100%;
+  height: 100%;
+}

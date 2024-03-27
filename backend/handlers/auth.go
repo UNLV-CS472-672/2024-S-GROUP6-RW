@@ -63,16 +63,17 @@ func SignInHandler(c *gin.Context) {
 		return // Failed to bind data to user. Exit handler
 	}
 
+	userpass := user.Password
 	UserDetails := db.ConnectToMongoDB("User", "UserDetails")
 
 	// Find existing user in database
 	if err := user.GetDocument(c, UserDetails, bson.M{"Email": user.Email}); err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password."})
 		return // Failed to get user document. Exit handler
 	}
 
 	// Validate password by bcrypt hash comparison
-	res := bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(user.Password))
+	res := bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(userpass))
 
 	if res != nil {
 		fmt.Println("Password incorrect.")
