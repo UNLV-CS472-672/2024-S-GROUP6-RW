@@ -1,33 +1,47 @@
 .search-container {
   position: relative;
-  top: 10px;
+  top: 0px;
   left: 400px;
   flex-direction: column;
   align-items: center;
-  width: 35%; /* Adjust if necessary */
-  /*border: 2px solid red;
-  background-color: rgba(255, 0, 0, 0.1);*/
+  width: 35%;
 }
 
 .search-input {
-  width: 100%; /* Make search input take full width of its parent */
+  width: 100%;
   padding: 10px;
   border-radius: 105px;
   border: 2px solid #ccc;
-  box-sizing: border-box; /* Include padding and border in the element's total width */
+  box-sizing: border-box; 
 }
 
 .suggestions {
   position: absolute;
-  top: 100%; /* Position it right below the search input */
-  left: 0;
-  height: 30px;
-  width: 100%; /* Match the parent width exactly */
-  border: 1px solid #ddd;
+  top: 100%; 
+  left: 10px; /* Align it with the left edge of the search input */
+  width: calc(100% - 20px);
+  border: 2px solid #000000;
   border-top: none;
   z-index: 1000;
   background: white;
   list-style: none;
-  padding: 0;
-  margin-top: 0; /* Adjust if necessary */
+  padding: 10px; 
+  margin-top: 0;
+  box-sizing: border-box; /* Ensure border and padding are included in the width */
+  overflow-y: auto; /* Enable scroll if content is too long */
+  min-width: 200px;
+  max-height: 200px;
+
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem;
+  
+  border-radius: 12px;
+  outline: 0px;
 }
+
+.suggestions li:hover {
+  background-color: rgb(212, 212, 212);
+  cursor: pointer;
+}
+
+

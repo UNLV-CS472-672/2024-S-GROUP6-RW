@@ -5,8 +5,8 @@ function SearchBar() {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
-  // Example array of cities. You might fetch this list from an API.
-  const cities = ['New York', 'Los Angeles', 'Chicago', 'Chimom', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose'];
+  // array of cities that will be an API call later
+  const cities = ['Los Angeles, California, USA', 'Chicago, Illinois, USA', 'Chitest', 'Chianothertest', 'Houston, Texas, USA', 'Phoenix, Arizona, USA', 'Philadelphia, Pennsylvania, USA', 'San Antonio, Texas, USA', 'San Diego, California, USA', 'San Jose, California, USA'];
 
   const handleChange = (event) => {
     const value = event.target.value;
@@ -32,8 +32,8 @@ function SearchBar() {
     <div className="search-container">
       <input
         type="text"
-        placeholder="Search here..."
-        className="search-input" // Applying the CSS class
+        placeholder="Enter destination.."
+        className="search-input"
         value={query}
         onChange={handleChange}
       />

@@ -5,7 +5,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs'; // Make sure you've installed dayjs
+import dayjs from 'dayjs'; 
 
 const ItineraryDatePickerComponent = () => {
   const [startDate, setStartDate] = useState(null);
@@ -29,7 +29,6 @@ const ItineraryDatePickerComponent = () => {
 
   const handleComplete = () => {
     if (isDateSelectionComplete) {
-      // Logic to handle complete action
       navigate('/map');
     }
   };
