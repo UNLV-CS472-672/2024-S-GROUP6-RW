@@ -7,7 +7,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Grid, Card, CardActionArea, CardMedia } from "@mui/material";
-import useAuth from '../../auth/useAuth';
+//import useAuth from '../../auth/useAuth';
 import { Redirect } from 'react-router-dom';
 
 const currTrip = [

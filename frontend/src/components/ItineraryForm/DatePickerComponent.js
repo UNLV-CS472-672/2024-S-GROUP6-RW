@@ -5,12 +5,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 
-const ItineraryDatePickerComponent = ({
-  onSelectStartDate,
-  onSelectEndDate,
-  onDateSelectionComplete,
-}) => {
+const ItineraryDatePickerComponent = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [selectedStartDate, setSelectedStartDate] = useState(null); // Selected start date
