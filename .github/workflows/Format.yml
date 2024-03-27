@@ -1,0 +1,43 @@
+name: Format Code with Prettier and Go's Formatter
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**/*.js'
+      - '**/*.jsx'
+      - '**/*.json'
+      - '**/*.css'
+      - '**/*.html'
+      - '**/*.go'
+
+jobs:
+  format:
+    name: Format Code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js and Yarn
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          registry-url: 'https://registry.yarnpkg.com'
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Run Prettier
+        run: npx prettier --write .
+
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.22'
+
+      - name: Format Go code
+        run: gofmt -w .
+
