@@ -98,13 +98,13 @@ func (f *FriendRequest) GetMockDocument(coll *MockCollection, filter bson.M) err
 
 func (f *FriendRequest) GetKeys() []string {
 	return []string{
-		"ID", "SenderID", "TargetID",
+		"_id", "SenderID", "TargetID",
 	}
 }
 
 func (f *FriendRequest) GetValue(key string) (any, error) {
 	switch key {
-	case "ID":
+	case "_id":
 		return f.ID, nil
 	case "SenderID":
 		return f.SenderID, nil
@@ -117,7 +117,7 @@ func (f *FriendRequest) GetValue(key string) (any, error) {
 
 func (f *FriendRequest) SetValue(key string, value any) error {
 	switch key {
-	case "ID":
+	case "_id":
 		if ID, ok := value.(primitive.ObjectID); ok {
 			f.ID = ID
 			return nil

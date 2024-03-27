@@ -15,6 +15,7 @@ type Invoice struct {
 	PayeeID         primitive.ObjectID `bson:"PayeeID,omitempty"`
 	Description     string             `bson:"Description,omitempty"`
 	Balance         float64            `bson:"Balance,omitempty"`
+	IsPaid          bool               `bson:"IsPaid,omitempty"`
 }
 
 func (i *Invoice) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
@@ -28,15 +29,16 @@ func (i *Invoice) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	}
 
 	// Acquire value and validity of Invoice fields from result
-	var idOK, parentExpenseOK, payeeOK, descriptionOK, balanceOK bool
+	var idOK, parentExpenseOK, payeeOK, descriptionOK, balanceOK, isPaidOK bool
 
 	i.ID, idOK = result["_id"].(primitive.ObjectID)
 	i.ParentExpenseID, parentExpenseOK = result["ParentExpenseID"].(primitive.ObjectID)
 	i.PayeeID, payeeOK = result["PayeeID"].(primitive.ObjectID)
 	i.Description, descriptionOK = result["Description"].(string)
 	i.Balance, balanceOK = result["Balance"].(float64)
+	i.IsPaid, isPaidOK = result["IsPaid"].(bool)
 
-	checklist := []bool{idOK, parentExpenseOK, payeeOK, descriptionOK, balanceOK}
+	checklist := []bool{idOK, parentExpenseOK, payeeOK, descriptionOK, balanceOK, isPaidOK}
 
 	// Check if all results are valid
 	valid := true
@@ -71,13 +73,13 @@ func (i *Invoice) GetMockDocument(coll *MockCollection, filter bson.M) error {
 
 func (i *Invoice) GetKeys() []string {
 	return []string{
-		"ID", "ParentExpenseID", "PayeeID", "Description", "Balance",
+		"_id", "ParentExpenseID", "PayeeID", "Description", "Balance", "IsPaid",
 	}
 }
 
 func (i *Invoice) GetValue(key string) (any, error) {
 	switch key {
-	case "ID":
+	case "_id":
 		return i.ID, nil
 	case "ParentExpenseID":
 		return i.ParentExpenseID, nil
@@ -87,6 +89,8 @@ func (i *Invoice) GetValue(key string) (any, error) {
 		return i.Description, nil
 	case "Balance":
 		return i.Balance, nil
+	case "IsPaid":
+		return i.IsPaid, nil
 	default:
 		return nil, errors.New("Unknown key: '" + key + "'.")
 	}
@@ -94,7 +98,7 @@ func (i *Invoice) GetValue(key string) (any, error) {
 
 func (i *Invoice) SetValue(key string, value any) error {
 	switch key {
-	case "ID":
+	case "_id":
 		if ID, ok := value.(primitive.ObjectID); ok {
 			i.ID = ID
 			return nil
@@ -129,6 +133,13 @@ func (i *Invoice) SetValue(key string, value any) error {
 		}
 
 		return errors.New("Failed to convert value to float64.")
+	case "IsPaid":
+		if IsPaid, ok := value.(bool); ok {
+			i.IsPaid = IsPaid
+			return nil
+		}
+
+		return errors.New("Failed to convert value to bool.")
 	default:
 		return errors.New("Unknown key: '" + key + "'.")
 	}

@@ -100,14 +100,14 @@ func (e *Expense) GetMockDocument(coll *MockCollection, filter bson.M) error {
 
 func (e *Expense) GetKeys() []string {
 	return []string{
-		"ID", "ParentTripID", "Description", "Amount", "InvoiceIDs", "RemainingBalance",
+		"_id", "ParentTripID", "Description", "Amount", "InvoiceIDs", "RemainingBalance",
 		"IsPaid",
 	}
 }
 
 func (e *Expense) GetValue(key string) (any, error) {
 	switch key {
-	case "ID":
+	case "_id":
 		return e.ID, nil
 	case "ParentTripID":
 		return e.ParentTripID, nil
@@ -128,7 +128,7 @@ func (e *Expense) GetValue(key string) (any, error) {
 
 func (e *Expense) SetValue(key string, value any) error {
 	switch key {
-	case "ID":
+	case "_id":
 		if ID, ok := value.(primitive.ObjectID); ok {
 			e.ID = ID
 			return nil

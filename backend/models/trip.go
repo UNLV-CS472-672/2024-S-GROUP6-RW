@@ -130,14 +130,14 @@ func (t *Trip) GetMockDocument(coll *MockCollection, filter bson.M) error {
 
 func (t *Trip) GetKeys() []string {
 	return []string{
-		"ID", "TripOwnerID", "TripTitle", "LocationName", "MemberIDs", "ActivityIDs",
+		"_id", "TripOwnerID", "TripTitle", "LocationName", "MemberIDs", "ActivityIDs",
 		"ExpenseIDs",
 	}
 }
 
 func (t *Trip) GetValue(key string) (any, error) {
 	switch key {
-	case "ID":
+	case "_id":
 		return t.ID, nil
 	case "TripOwnerID":
 		return t.TripOwnerID, nil
@@ -158,7 +158,7 @@ func (t *Trip) GetValue(key string) (any, error) {
 
 func (t *Trip) SetValue(key string, value any) error {
 	switch key {
-	case "ID":
+	case "_id":
 		if ID, ok := value.(primitive.ObjectID); ok {
 			t.ID = ID
 			return nil

@@ -90,13 +90,13 @@ func (p *Profile) GetMockDocument(coll *MockCollection, filter bson.M) error {
 
 func (p *Profile) GetKeys() []string {
 	return []string{
-		"ID", "Username", "DisplayName", "Joined", "About",
+		"_id", "Username", "DisplayName", "Joined", "About",
 	}
 }
 
 func (p *Profile) GetValue(key string) (any, error) {
 	switch key {
-	case "ID":
+	case "_id":
 		return p.ID, nil
 	case "Username":
 		return p.Username, nil
@@ -113,7 +113,7 @@ func (p *Profile) GetValue(key string) (any, error) {
 
 func (p *Profile) SetValue(key string, value any) error {
 	switch key {
-	case "ID":
+	case "_id":
 		if ID, ok := value.(primitive.ObjectID); ok {
 			p.ID = ID
 			return nil

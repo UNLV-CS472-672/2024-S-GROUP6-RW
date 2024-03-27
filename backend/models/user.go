@@ -145,14 +145,14 @@ func (u *User) GetMockDocument(coll *MockCollection, filter bson.M) error {
 
 func (u *User) GetKeys() []string {
 	return []string{
-		"ID", "Username", "Email", "PassHash", "TripIDs", "FriendIDs", "FriendRequestIDs",
+		"_id", "Username", "Email", "PassHash", "TripIDs", "FriendIDs", "FriendRequestIDs",
 		"InvoiceIDs", "LastLogin",
 	}
 }
 
 func (u *User) GetValue(key string) (any, error) {
 	switch key {
-	case "ID":
+	case "_id":
 		return u.ID, nil
 	case "Username":
 		return u.Username, nil
@@ -177,7 +177,7 @@ func (u *User) GetValue(key string) (any, error) {
 
 func (u *User) SetValue(key string, value any) error {
 	switch key {
-	case "ID":
+	case "_id":
 		if ID, ok := value.(primitive.ObjectID); ok {
 			u.ID = ID
 			return nil

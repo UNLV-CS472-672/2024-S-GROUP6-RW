@@ -79,14 +79,14 @@ func (a *Activity) GetMockDocument(coll *MockCollection, filter bson.M) error {
 
 func (a *Activity) GetKeys() []string {
 	return []string{
-		"ID", "ParentTripID", "Description", "Date", "ImageURI", "IsMapBased", "Address",
+		"_id", "ParentTripID", "Description", "Date", "ImageURI", "IsMapBased", "Address",
 		"Coordinate",
 	}
 }
 
 func (a *Activity) GetValue(key string) (any, error) {
 	switch key {
-	case "ID":
+	case "_id":
 		return a.ID, nil
 	case "ParentTripID":
 		return a.ParentTripID, nil
@@ -109,7 +109,7 @@ func (a *Activity) GetValue(key string) (any, error) {
 
 func (a *Activity) SetValue(key string, value any) error {
 	switch key {
-	case "ID":
+	case "_id":
 		if ID, ok := value.(primitive.ObjectID); ok {
 			a.ID = ID
 			return nil
