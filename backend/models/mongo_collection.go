@@ -9,12 +9,10 @@ import (
 )
 
 type MongoCollection struct {
-	DatabaseName   string
-	CollectionName string
-	Collection     *mongo.Collection
+	Collection *mongo.Collection
 }
 
-func (mc *MongoCollection) InsertDocument(m Model) (Model, error) {
+func (mc *MongoCollection) InsertDocument(m Model, modelType string) (Model, error) {
 	// Acquire keys for document fields to be stored in collection
 	keys := m.GetKeys()
 
@@ -38,8 +36,14 @@ func (mc *MongoCollection) InsertDocument(m Model) (Model, error) {
 		return nil, err
 	}
 
+	factory, ok := ModelFactories[modelType]
+
+	if !ok {
+		return nil, errors.New("Invalid model type: '" + modelType + "'.")
+	}
+
 	// Acquire document from collection
-	var result Model
+	result := factory()
 
 	if err := result.GetMongoDocument(mc, bson.M{"_id": InsertResult.InsertedID}); err != nil {
 		return nil, err
@@ -50,7 +54,7 @@ func (mc *MongoCollection) InsertDocument(m Model) (Model, error) {
 
 func (mc *MongoCollection) UpdateDocument(filter bson.M, content bson.M, modelType string) (Model, error) {
 	// Attempt to update document in collection
-	UpdateResult, err := mc.Collection.UpdateOne(context.TODO(), filter, content)
+	UpdateResult, err := mc.Collection.UpdateOne(context.TODO(), filter, bson.M{"$set": content})
 
 	if err != nil {
 		return nil, err
