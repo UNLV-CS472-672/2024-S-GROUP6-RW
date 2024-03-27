@@ -2,8 +2,6 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import GoogleMapBlock from "../../components/GoogleMapBlock/GoogleMapBlock";
 import "../../css/MapPage.css";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 function MapPage() {
   const [clickedImage, setClickedImage] = useState(null); 
