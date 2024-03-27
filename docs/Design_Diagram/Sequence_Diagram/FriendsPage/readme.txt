@@ -1,0 +1,1 @@
+# friends page sequence diagrams
