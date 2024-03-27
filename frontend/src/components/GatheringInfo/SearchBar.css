@@ -1,7 +1,33 @@
+.search-container {
+  position: relative;
+  top: 10px;
+  left: 400px;
+  flex-direction: column;
+  align-items: center;
+  width: 35%; /* Adjust if necessary */
+  /*border: 2px solid red;
+  background-color: rgba(255, 0, 0, 0.1);*/
+}
 
 .search-input {
-  width: 35%;
+  width: 100%; /* Make search input take full width of its parent */
   padding: 10px;
   border-radius: 105px;
   border: 2px solid #ccc;
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%; /* Position it right below the search input */
+  left: 0;
+  height: 30px;
+  width: 100%; /* Match the parent width exactly */
+  border: 1px solid #ddd;
+  border-top: none;
+  z-index: 1000;
+  background: white;
+  list-style: none;
+  padding: 0;
+  margin-top: 0; /* Adjust if necessary */
 }
