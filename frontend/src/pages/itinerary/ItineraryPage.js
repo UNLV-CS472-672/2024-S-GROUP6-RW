@@ -52,11 +52,12 @@ const ItineraryPage = () => {
     const oneDay = 24 * 60 * 60 * 1000;
     return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
   };
+  
 
   // Function to generate itinerary based on the number of days
   const generateItinerary = (numberOfDays) => {
     const newItinerary = Array.from({ length: numberOfDays }, (_, index) => ({
-      activities: [],
+      //activities: [],
       day: format(
         new Date(selectedStartDate.getTime() + index * 24 * 60 * 60 * 1000),
         "EEEE, MMMM dd, yyyy"
@@ -66,13 +67,13 @@ const ItineraryPage = () => {
   };
 
   // Event handler for adding an activity to a specific day
-  const handleAddActivity = (dayIndex, newActivity) => {
-    setItinerary((prevItinerary) => {
-      const updatedItinerary = [...prevItinerary];
-      updatedItinerary[dayIndex].activities.push(newActivity);
-      return updatedItinerary;
-    });
-  };
+  // const handleAddActivity = (dayIndex, newActivity) => {
+  //   setItinerary((prevItinerary) => {
+  //     const updatedItinerary = [...prevItinerary];
+  //     updatedItinerary[dayIndex].activities.push(newActivity);
+  //     return updatedItinerary;
+  //   });
+  // };
 
   // Event handler for adding a new day to the itinerary
   const handleAddDay = () => {
@@ -82,7 +83,7 @@ const ItineraryPage = () => {
       return [
         ...prevItinerary,
         {
-          activities: [],
+          //activities: [],
           day: format(newDay, "EEEE, MMMM dd, yyyy"), // Convert newDay to a string representation
         },
       ];
@@ -111,10 +112,10 @@ const ItineraryPage = () => {
             <ItineraryAccordion
               key={index}
               day={day.day}
-              activities={day.activities}
-              onAddActivity={(newActivity) =>
-                handleAddActivity(index, newActivity)
-              }
+              //activities={day.activities}
+              // onAddActivity={(newActivity) =>
+              //   handleAddActivity(index, newActivity)
+              // }
             />
           ))}
           <button onClick={handleAddDay}>Add Another Day</button>
@@ -123,5 +124,6 @@ const ItineraryPage = () => {
     </div>
   );
 };
+
 
 export default ItineraryPage; // Exporting the ItineraryPage component
