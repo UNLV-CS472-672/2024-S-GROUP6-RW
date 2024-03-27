@@ -7,29 +7,28 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+var countLHS uint64 = 0
+var countRHS uint64 = 0
+
 type MockCollection struct {
-	DatabaseName   string
-	CollectionName string
-	Collection     map[primitive.ObjectID]map[string]any
-	countLHS       uint64
-	countRHS       uint64
+	Collection map[primitive.ObjectID]map[string]any
 }
 
 func (mc *MockCollection) NewID() primitive.ObjectID {
 	bytes := [12]byte{}
 
 	for i := 0; i < 8; i++ {
-		bytes[i] = byte(mc.countRHS >> uint64(8*i) & 0xFF)
+		bytes[i] = byte(countRHS >> uint64(8*i) & 0xFF)
 	}
 
 	for i := 8; i < 12; i++ {
-		bytes[i] = byte(mc.countLHS >> uint64(8*i) & 0xFF)
+		bytes[i] = byte(countLHS >> uint64(8*i) & 0xFF)
 	}
 
-	mc.countRHS++
+	countRHS++
 
-	if mc.countRHS == 0 {
-		mc.countLHS++
+	if countRHS == 0 {
+		countLHS++
 	}
 
 	id := primitive.ObjectID(bytes)
@@ -37,14 +36,14 @@ func (mc *MockCollection) NewID() primitive.ObjectID {
 	return id
 }
 
-func (mc *MockCollection) InsertDocument(m Model) (Model, error) {
+func (mc *MockCollection) InsertDocument(m Model, modelType string) (Model, error) {
 	// Acquire keys for document fields to be stored in collection
 	keys := m.GetKeys()
 
 	// Create ID for new document
 	id := mc.NewID()
 
-	err := m.SetValue("ID", id)
+	err := m.SetValue("_id", id)
 
 	if err != nil {
 		return nil, err
@@ -151,7 +150,7 @@ func (mc *MockCollection) DeleteDocument(filter bson.M, modelType string) error 
 	}
 
 	// Acquire the document's ID
-	tmp, err := result.GetValue("ID")
+	tmp, err := result.GetValue("_id")
 
 	if err != nil {
 		return err
