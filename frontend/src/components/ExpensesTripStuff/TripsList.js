@@ -7,7 +7,8 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Grid, Card, CardActionArea, CardMedia } from "@mui/material";
-import SearchBar from "./SearchTrip";
+//import useAuth from '../../auth/useAuth';
+import { Redirect } from "react-router-dom";
 
 const currTrip = [
 	{
@@ -41,16 +42,11 @@ const images = [
 ];
 
 export default function ButtonBaseDemo() {
-	const [searchCurrent, setSearchCurrent] = useState("");
-	const [searchPast, setSearchPast] = useState("");
+	/*const { isAuth } = useAuth();
 
-	const filteredCurrentTrips = currTrip.filter((trip) =>
-		trip.title.toLowerCase().includes(searchCurrent.toLowerCase())
-	);
-
-	const filteredPastTrips = images.filter((trip) =>
-		trip.title.toLowerCase().includes(searchPast.toLowerCase())
-	);
+	if (!isAuth) {
+		return <Redirect to="/login" />;
+  	}*/
 
 	return (
 		<div>
