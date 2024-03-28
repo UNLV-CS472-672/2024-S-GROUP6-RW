@@ -17,7 +17,7 @@ export default function ToggleColorMode({ children }) {
 	const colorMode = React.useMemo(
 		() => ({
 			toggleColorMode: () => {
-				console.log("Toggling color mode");
+				//console.log("Toggling color mode");
 				setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
 			},
 		}),

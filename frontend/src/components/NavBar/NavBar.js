@@ -48,7 +48,7 @@ function ResponsiveAppBar({ user }) {
 	const theme = useTheme();
 	// get the current color mode
 	const colorMode = useContext(ColorModeContext);
-	console.log("Color Mode Context:", colorMode);
+	//console.log("Color Mode Context:", colorMode);
 
 	// handle the open and close of the menu
 	const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
