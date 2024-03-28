@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -14,6 +14,8 @@ const currTrip = [
 	{
 		url: "mchouse.jpg",
 		title: "ur moms house",
+		width: "50%",
+		height: "50%",
 		link: "/expensesform",
 	},
 ];
@@ -22,22 +24,32 @@ const images = [
 	{
 		url: "/test.jpg",
 		title: "Las Vegas",
+		width: "50%",
+		height: "50%",
 	},
 	{
 		url: "/hobbithome.jpg",
 		title: "New Zealand",
+		width: "50%",
+		height: "50%",
 	},
 	{
 		url: "seoul.jpg",
 		title: "South Korea",
+		width: "50%",
+		height: "50%",
 	},
 	{
 		url: "tokyo.jpg",
 		title: "Japan",
+		width: "50%",
+		height: "50%",
 	},
 	{
 		url: "paris.jpg",
 		title: "France",
+		width: "50%",
+		height: "50%",
 	},
 ];
 
@@ -53,20 +65,12 @@ export default function ButtonBaseDemo() {
 			{/*This is for the drop down menu */}
 			<Accordion>
 				<AccordionSummary expandIcon={<ExpandMoreIcon />}>
-					<Box
-						display="flex"
-						justifyContent="space-between"
-						alignItems="center"
-						width="100%"
-					>
-						<h2>Current Trips</h2>
-					</Box>
-					<SearchBar search={searchCurrent} setSearch={setSearchCurrent} />
+					<h2>Current Trips</h2>
 				</AccordionSummary>
 				<AccordionDetails>
 					{/*This is for the grid of images */}
 					<Grid container spacing={5}>
-						{filteredCurrentTrips.map((trip, index) => (
+						{currTrip.map((trip, index) => (
 							<Grid item xs={12} sm={6} md={3} key={index}>
 								<Card component={Link} to={trip.link}>
 									<CardActionArea>
@@ -106,19 +110,11 @@ export default function ButtonBaseDemo() {
 
 			<Accordion>
 				<AccordionSummary expandIcon={<ExpandMoreIcon />}>
-					<Box
-						display="flex"
-						justifyContent="space-between"
-						alignItems="center"
-						width="100%"
-					>
-						<h2>Past Trips</h2>
-					</Box>
-					<SearchBar search={searchPast} setSearch={setSearchPast} />
+					<h2>Past Trips</h2>
 				</AccordionSummary>
 				<AccordionDetails>
 					<Grid container spacing={2}>
-						{filteredPastTrips.map((trip, index) => (
+						{images.map((trip, index) => (
 							<Grid item xs={12} sm={6} md={3} key={index}>
 								<Card component={Link} to={trip.link}>
 									<CardActionArea>
