@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './SearchBar.css';
 import { debounce } from 'lodash'; // Import debounce from lodash
 
@@ -6,59 +6,34 @@ function SearchBar() {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
-  // Debounce function to limit API calls
-  /*const debouncedFetchCities = debounce((cityName) => {
-    if (cityName.length > 0) {
-      // Replace 'https://api.example.com/cities' with your actual API endpoint
-      fetch(`https://api.example.com/cities?search=${cityName}`)
-        .then(response => response.json())
-        .then(data => {
-          // Assume the API returns an array of city names
-          setSuggestions(data);
-        })
-        .catch(error => console.error('Error fetching cities:', error));
-    } else {
-      setSuggestions([]);
-    }
-  }, 300); // 300 ms delay
+  const debouncedFetchCities = useCallback(debounce((cityName) => {
+    if (!cityName) return; // Exit early if cityName is empty
 
- */
+    const url = `https://api.api-ninjas.com/v1/city?name=${cityName}&limit=5`;
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'X-Api-Key': 'oUKbIX8gOqX6mdF1EOZ6fQ==vWsvuUWsuV8ZbfQ5',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(data => {
+      const cityNames = data.map(city => city.name);
+      setSuggestions(cityNames);
+    })
+    .catch(error => console.error('Error:', error));
+  }, 500), []); // Dependencies array is empty, meaning the function is created only once
+
   const handleChange = (event) => {
     const cityName = event.target.value;
     setQuery(cityName);
-  
-    if (cityName.length > 0) {
-      
-      const url = `https://api.api-ninjas.com/v1/city?name=${cityName}`;
-
-      fetch(url, {
-        method: 'GET', // The HTTP method for the request
-        headers: {
-          'X-Api-Key': 'oUKbIX8gOqX6mdF1EOZ6fQ==vWsvuUWsuV8ZbfQ5', // Your API key
-          'Content-Type': 'application/json' // The type of content being sent
-        }
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // Parse the JSON of the response
-      })
-      .then(data => {
-        // Extract just the city names for the suggestions
-        const cityNames = data.map(city => city.name);
-        setSuggestions(cityNames);
-      })      
-      .catch(error => {
-        console.error('Error:', error); // Log any errors
-      });
-
-        
-    } else {
-      setSuggestions([]);
-    }
+    debouncedFetchCities(cityName); // Call the debounced function here
   };
-  
+
   const handleSuggestionClick = (cityName) => {
     setQuery(cityName);
     setSuggestions([]);
