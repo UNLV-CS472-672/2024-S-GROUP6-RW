@@ -67,7 +67,7 @@ const ItineraryDatePickerComponent = () => {
           onClick={handleComplete}
           variant='contained'
           disabled={!isDateSelectionComplete}
-          
+
         >
           Start
         </Button>
