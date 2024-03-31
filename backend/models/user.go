@@ -4,10 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type User struct {
@@ -28,11 +26,15 @@ type User struct {
 	Password  string
 }
 
-func (u *User) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M) error {
-	*u = User{}
+func (u *User) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
+	*u = User{
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Password:  u.Password,
+	}
 
 	var result bson.M
-	err := coll.FindOne(context.TODO(), filter).Decode(&result)
+	err := coll.Collection.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
 		return errors.New("user does not exist")
@@ -100,4 +102,145 @@ func (u *User) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M
 	}
 
 	return nil
+}
+
+func (u *User) GetMockDocument(coll *MockCollection, filter bson.M) error {
+	*u = User{
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Password:  u.Password,
+	}
+
+	result, err := coll.FindDocument(filter, "User")
+
+	if err != nil {
+		return errors.New("user does not exist")
+	}
+
+	err = result.SetValue("FirstName", u.FirstName)
+
+	if err != nil {
+		return err
+	}
+
+	err = result.SetValue("LastName", u.LastName)
+
+	if err != nil {
+		return err
+	}
+
+	err = result.SetValue("Password", u.Password)
+
+	if err != nil {
+		return err
+	}
+
+	if userRes, ok := result.(*User); ok {
+		u = userRes
+		return nil
+	}
+
+	return errors.New("Failed to convert model to User.")
+}
+
+func (u *User) GetKeys() []string {
+	return []string{
+		"_id", "Username", "Email", "PassHash", "TripIDs", "FriendIDs", "FriendRequestIDs",
+		"InvoiceIDs", "LastLogin",
+	}
+}
+
+func (u *User) GetValue(key string) (any, error) {
+	switch key {
+	case "_id":
+		return u.ID, nil
+	case "Username":
+		return u.Username, nil
+	case "Email":
+		return u.Email, nil
+	case "PassHash":
+		return u.PassHash, nil
+	case "TripIDs":
+		return u.TripIDs, nil
+	case "FriendIDs":
+		return u.FriendIDs, nil
+	case "FriendRequestIDs":
+		return u.FriendRequestIDs, nil
+	case "InvoiceIDs":
+		return u.InvoiceIDs, nil
+	case "LastLogin":
+		return u.LastLogin, nil
+	default:
+		return nil, errors.New("Unknown key: '" + key + "'.")
+	}
+}
+
+func (u *User) SetValue(key string, value any) error {
+	switch key {
+	case "_id":
+		if ID, ok := value.(primitive.ObjectID); ok {
+			u.ID = ID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	case "Username":
+		if Username, ok := value.(string); ok {
+			u.Username = Username
+			return nil
+		}
+
+		return errors.New("Failed to convert value to string.")
+	case "Email":
+		if Email, ok := value.(string); ok {
+			u.Email = Email
+			return nil
+		}
+
+		return errors.New("Failed to convert value to string.")
+	case "PassHash":
+		if PassHash, ok := value.(string); ok {
+			u.PassHash = PassHash
+			return nil
+		}
+
+		return errors.New("Failed to convert value to string.")
+	case "TripIDs":
+		if idList, ok := value.([]primitive.ObjectID); ok {
+			u.TripIDs = idList
+			return nil
+		}
+
+		return errors.New("Failed to convert value to []ObjectID.")
+	case "FriendIDs":
+		if idList, ok := value.([]primitive.ObjectID); ok {
+			u.FriendIDs = idList
+			return nil
+		}
+
+		return errors.New("Failed to convert value to []ObjectID.")
+	case "FriendRequestIDs":
+		if idList, ok := value.([]primitive.ObjectID); ok {
+			u.FriendRequestIDs = idList
+			return nil
+		}
+
+		return errors.New("Failed to convert value to []ObjectID.")
+	case "InvoiceIDs":
+		if idList, ok := value.([]primitive.ObjectID); ok {
+			u.InvoiceIDs = idList
+			return nil
+		}
+
+		return errors.New("Failed to convert value to []ObjectID.")
+	case "LastLogin":
+		if LastLogin, ok := value.(primitive.DateTime); ok {
+			u.LastLogin = LastLogin
+			return nil
+		}
+
+		return errors.New("Failed to convert value to DateTime.")
+	default:
+		return errors.New("Unknown key: '" + key + "'.")
+	}
 }
