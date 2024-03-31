@@ -18,7 +18,7 @@ function SearchBar() {
       }
     })
     .then(response => {
-      if (!response.ok) throw new Error('Network response was not ok');
+      if (!response.ok) throw new Error('Error with network response');
       return response.json();
     })
     .then(data => {

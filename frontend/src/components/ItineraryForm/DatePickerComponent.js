@@ -30,7 +30,7 @@ const ItineraryDatePickerComponent = () => {
 
   const handleComplete = () => {
     if (isDateSelectionComplete) {
-      navigate('/map');
+      navigate('/prefselection');
     }
   };
 
