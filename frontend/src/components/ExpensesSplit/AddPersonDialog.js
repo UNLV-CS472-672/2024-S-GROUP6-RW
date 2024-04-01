@@ -53,7 +53,6 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 					style={{ width: "200px" }}
 				>
 					<MenuItem value="equal">Equal</MenuItem>
-					<MenuItem value="percent">Percent</MenuItem>
 					<MenuItem value="specific">Specific</MenuItem>
 				</Select>
 			),
