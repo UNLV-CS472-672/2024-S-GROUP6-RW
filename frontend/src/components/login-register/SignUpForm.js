@@ -1,6 +1,14 @@
-import React, { useState } from "react";
-import { Button, TextField, Box } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+	Button,
+	TextField,
+	Box,
+	InputAdornment,
+	IconButton,
+} from "@mui/material";
 import { useAuth } from "../../auth/AuthContext";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
 	const { login } = useAuth();
@@ -9,6 +17,7 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
 	const [LastName, setLastName] = useState("");
 	const [Email, setEmail] = useState("");
 	const [Password, setPassword] = useState("");
+	const [showPassword, setShowPassword] = useState(false);
 
 	const handleUsernameChange = (event) => {
 		setUsername(event.target.value);
@@ -28,6 +37,10 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
 
 	const handlePasswordChange = (event) => {
 		setPassword(event.target.value);
+	};
+
+	const toggleShowPassword = () => {
+		setShowPassword(!showPassword);
 	};
 
 	const handleSubmit = () => {
@@ -196,7 +209,7 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
 					variant="outlined"
 					fullWidth
 					margin="normal"
-					type="password"
+					type={showPassword ? "text" : "password"}
 					value={Password}
 					onChange={handlePasswordChange}
 					error={!isValidPassword(Password)}
@@ -205,6 +218,15 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
 							? ""
 							: "Password cannot contain spaces"
 					}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<IconButton onClick={toggleShowPassword}>
+									{showPassword ? <VisibilityOff /> : <Visibility />}
+								</IconButton>
+							</InputAdornment>
+						),
+					}}
 				/>
 				<Button onClick={handleSubmit} sx={{ marginRight: 1 }}>
 					Submit
