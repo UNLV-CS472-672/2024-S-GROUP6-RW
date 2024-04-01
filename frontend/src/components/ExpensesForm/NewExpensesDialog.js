@@ -99,6 +99,7 @@ const NewExpenseDialog = ({
 			// Only clear the form if in create mode (no expense prop provided)
 			clearForm();
 		}
+		setError("");
 		setOpen(false);
 	};
 
@@ -119,22 +120,36 @@ const NewExpenseDialog = ({
 		setName("");
 		setAmount("");
 		setPayer("");
-		setDate("");
+		setDate(formatDateForInput(new Date()));
 		setDescription("");
 	};
 
 	// function to handle the add event of the expense
 	const handleAdd = () => {
+		setError("");
 		//data validation
-		if (name === "" || amount === "" || payer === "" || date === "") {
-			setError("All fields are required.");
-			clearForm();
+		if (name === "") {
+			setError("Name is required.");
+			return;
+		}
+
+		if (amount === "") {
+			setError("Amount is required.");
+			return;
+		}
+
+		if (payer === "") {
+			setError("Payer is required.");
+			return;
+		}
+
+		if (date === "") {
+			setError("Date is required.");
 			return;
 		}
 
 		if (parseFloat(amount) <= 0) {
 			setError("Amount must be greater than 0.");
-			clearForm();
 			return;
 		}
 
@@ -235,7 +250,7 @@ const NewExpenseDialog = ({
 					</Tabs>
 
 					{tabValue === 0 && (
-						<>
+						<div style={{ width: "900px", height: "500px" }}>
 							{/* text field for the name */}
 							<TextField
 								autoFocus
@@ -245,6 +260,7 @@ const NewExpenseDialog = ({
 								fullWidth
 								value={name || ""}
 								onChange={(e) => setName(e.target.value)}
+								sx={{ marginBottom: "20px", marginTop: "20px" }}
 							/>
 							{/* text field for the amount */}
 							<TextField
@@ -254,6 +270,7 @@ const NewExpenseDialog = ({
 								fullWidth
 								value={amount || ""}
 								onChange={(e) => setAmount(e.target.value)}
+								sx={{ marginBottom: "20px" }}
 							/>
 							{/* text field for the payer */}
 							<TextField
@@ -263,6 +280,7 @@ const NewExpenseDialog = ({
 								fullWidth
 								value={payer || ""}
 								onChange={(e) => setPayer(e.target.value)}
+								sx={{ marginBottom: "20px" }}
 							/>
 
 							{/* text field for the date */}
@@ -271,9 +289,8 @@ const NewExpenseDialog = ({
 								type="date"
 								fullWidth
 								value={date || formatDateForInput(new Date())}
-								onChange={(e) =>
-									setDate(formatDateForInput(e.target.value))
-								}
+								onChange={(e) => setDate(e.target.value)}
+								sx={{ marginBottom: "20px" }}
 							/>
 
 							{/* text field for the description */}
@@ -292,11 +309,16 @@ const NewExpenseDialog = ({
 								helperText={`${
 									description ? description.split(" ").length : 0
 								}/300`}
+								sx={{ marginBottom: "20px" }}
 							/>
-						</>
+						</div>
 					)}
 
-					{tabValue === 1 && <ExpensesSplit />}
+					{tabValue === 1 && (
+						<div style={{ width: "900px", height: "500px" }}>
+							<ExpensesSplit />
+						</div>
+					)}
 				</DialogContent>
 				{/* buttons for cancel and add */}
 				<DialogActions>
