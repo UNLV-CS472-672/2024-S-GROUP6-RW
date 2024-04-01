@@ -5,14 +5,6 @@ import {
 	DialogContent,
 	DialogActions,
 	Button,
-	Typography,
-	TextField,
-	Select,
-	MenuItem,
-	InputLabel,
-	Box,
-	Tabs,
-	Tab,
 } from "@mui/material";
 
 const DetailDialog = ({ open, onClose, row, isEditing, onEdit }) => {
@@ -20,19 +12,9 @@ const DetailDialog = ({ open, onClose, row, isEditing, onEdit }) => {
 		row ? row : { splitMethod: "equal" }
 	);
 
-	const [tabValue, setTabValue] = useState(0);
-
-	const handleTabChange = (event, newValue) => {
-		setTabValue(newValue);
-	};
-
 	useEffect(() => {
 		setEditedPerson(row ? row : { splitMethod: "equal" });
 	}, [row]);
-
-	const handleChange = (field) => (event) => {
-		setEditedPerson({ ...editedPerson, [field]: event.target.value });
-	};
 
 	return (
 		<Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>

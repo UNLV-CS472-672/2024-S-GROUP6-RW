@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 
 import { DataGrid } from "@mui/x-data-grid";
-import DetailDialog from "./DetailDialog";
 
 const generateRandomPeople = () => {
 	const people = [];
@@ -29,8 +28,6 @@ const generateRandomPeople = () => {
 function AddPersonDialog({ open, onClose, onAdd }) {
 	const [people, setPeople] = useState([]);
 	const [selectedIDs, setSelectedIDs] = useState([]);
-	const [detailDialogOpen, setDetailDialogOpen] = React.useState(false);
-	const [currentRow, setCurrentRow] = React.useState(null);
 
 	useEffect(() => {
 		// Initialize or fetch people when the dialog opens
@@ -61,25 +58,6 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 				</Select>
 			),
 		},
-		/*{
-			field: "detail",
-			headerName: "Detail",
-			sortable: false,
-			width: 100,
-			renderCell: (params) => (
-				<Button
-					variant="contained"
-					color="primary"
-					onClick={(event) => {
-						event.stopPropagation();
-						setCurrentRow(params.row);
-						setDetailDialogOpen(true);
-					}}
-				>
-					Detail
-				</Button>
-			),
-		},*/
 	];
 
 	const handleAddSelected = () => {
@@ -88,14 +66,6 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 			people.find((person) => person.id === id)
 		);
 		onAdd(selectedPeople);
-	};
-
-	const handleEditPerson = (editedPerson) => {
-		setPeople(
-			people.map((person) =>
-				person.id === editedPerson.id ? editedPerson : person
-			)
-		);
 	};
 
 	const handleSplitMethodChange = (event, person) => {
@@ -132,17 +102,6 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 				>
 					Add Selected
 				</Button>
-				{/*<DetailDialog
-					key={currentRow ? currentRow.id : null}
-					open={detailDialogOpen}
-					onClose={() => {
-						setDetailDialogOpen(false);
-						setCurrentRow(null); // Reset the currentRow when closing the dialog
-					}}
-					row={currentRow}
-					isEditing={true}
-					onEdit={handleEditPerson}
-				/>*/}
 			</DialogActions>
 		</Dialog>
 	);

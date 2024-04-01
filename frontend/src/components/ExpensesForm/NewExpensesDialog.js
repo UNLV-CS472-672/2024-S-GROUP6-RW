@@ -17,9 +17,6 @@ import {
 // icons for edit button
 import EditIcon from "@mui/icons-material/Edit";
 
-//add the DetailsDialog component
-import DetailsDialog from "../ExpensesSplit/DetailDialog";
-import AddPersonDialog from "../ExpensesSplit/AddPersonDialog";
 import ExpensesSplit from "../ExpensesSplit/ExpensesSplit";
 
 const dialogContainerStyle = {
@@ -108,11 +105,6 @@ const NewExpenseDialog = ({
 		if (newValue === 1) {
 			setDetailsOpen(true);
 		}
-	};
-
-	const handleDetailsClose = () => {
-		setDetailsOpen(false);
-		setTabValue(0);
 	};
 
 	// function to clear the form fields and error message

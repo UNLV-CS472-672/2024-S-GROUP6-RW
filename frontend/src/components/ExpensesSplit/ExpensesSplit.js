@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 
 import AddPersonDialog from "./AddPersonDialog";
-import AddExpenseDialog from "./AddExpenseDialog";
 import DetailDialog from "./DetailDialog";
 // icons for edit button
 import EditIcon from "@mui/icons-material/Edit";
@@ -67,10 +66,6 @@ function ExpensesSplit() {
 		setOpen(false);
 	};
 
-	const handleAddExpense = (expense) => {
-		// Add logic to add expense
-	};
-
 	const handleDelete = (id) => {
 		setPeople(people.filter((person) => person.id !== id));
 	};
@@ -81,10 +76,6 @@ function ExpensesSplit() {
 				person.id === editedPerson.id ? editedPerson : person
 			)
 		);
-	};
-
-	const handleCalculate = () => {
-		// Add logic to calculate the split
 	};
 
 	return (
