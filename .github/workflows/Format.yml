@@ -1,13 +1,16 @@
-name: Format Front-End Code with Prettier
+name: Format Code with Prettier and Go's Formatter
 
 on:
-  pull_request:
+  push:
+    branches:
+      - master
     paths:
       - '**/*.js'
       - '**/*.jsx'
       - '**/*.json'
       - '**/*.css'
       - '**/*.html'
+      - '**/*.go'
 
 jobs:
   format:
@@ -29,3 +32,12 @@ jobs:
 
       - name: Run Prettier
         run: npx prettier --write .
+
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.22'
+
+      - name: Format Go code
+        run: gofmt -w .
+
