@@ -1,11 +1,3 @@
----
-name: "Feature Request"
-about: "Request a feature"
-title: "feat: "
-labels: "feature-request, not-reviewed"
-assignees: ""
----
-
 # Description
 
 Please include a summary of the changes and the related issue.
