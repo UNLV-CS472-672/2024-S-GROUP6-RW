@@ -3,7 +3,7 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./auth/AuthContext";
 
-// Import your page components
+// Import page components
 import GettingStartedPage from "./pages/getting_started/GettingStartedPage";
 import MapPage from "./pages/map/MapPage";
 import ItineraryPage from "./pages/itinerary/ItineraryPage";
@@ -19,18 +19,37 @@ import AccountPage from "./pages/account/AccountPage";
 
 // import nav components
 import NavBar from "./components/NavBar/NavBar";
-import ToggleColorMode from "./components/NavBar/ToggleTheme";
-
-import SignInDialog from "./components/login-register/SignInDialog";
 
 // import theme and stuff to deal with toggle
-import { useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ExpensesPage from "./pages/expenses/ExpensesPage";
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      'Manrope',
+      'sans-serif',
+    ].join(','),
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        @font-face {
+          font-family: 'Manrope';
+          font-style: normal;
+          font-display: swap;
+          font-weight: 400;
+          src: local('Manrope'), local('Manrope-Regular'), url(https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap) format('woff2');
+        }
+      `,
+    },
+  },
+});
 
 function App() {
-  // Get the current theme
-  const theme = useTheme();
+  
   const [openSignIn, setOpenSignIn] = useState(false);
 
   // Apply the background color to the body element
@@ -39,7 +58,8 @@ function App() {
     document.body.style.backgroundColor = theme.palette.background.default;
   }, [theme.palette.background.default]);
   return (
-
+  <ThemeProvider theme={theme}>
+    <CssBaseline />
     <AuthProvider>
       <div className="App" style={{ color: theme.palette.text.primary }}>
         <NavBar />
@@ -59,6 +79,7 @@ function App() {
         </Routes>
       </div>
     </AuthProvider>
+    </ThemeProvider>
   );
 }
 
