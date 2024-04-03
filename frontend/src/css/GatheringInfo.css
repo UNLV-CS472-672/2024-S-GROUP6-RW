@@ -1,0 +1,52 @@
+.whole-page {
+    display: flex;
+    height: 100vh;
+}
+
+.form-half {
+    flex: 250px; /* Each side takes up equal amount of space */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content vertically */
+    justify-content: center;
+    background-color: antiquewhite;
+}
+
+.other-half {
+    position: relative;
+    flex: 1;
+    background-color: bisque;
+    display: flex;
+    align-items: center; /* Center content vertically */
+    justify-content: center;
+}
+
+.header-1 {
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.header-2 {
+    position: absolute;
+    align-self: flex; /* Align to the start of the flex container */
+    width: 100%; /* Make it full width if needed */
+    text-align: center; /* Keep the text centered */
+    font-size: 30px;
+    margin-top: 40px;
+    top: 0;
+}
+
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Creates 2 columns */
+    grid-gap: 10px; /* Adjust the gap between images */
+    max-width: 400px; /* Or your preferred max width */
+    margin: auto; /* Center the grid horizontally */
+  }
+  
+  .image-item img {
+    width: 100%; /* Makes images fully responsive within their containers */
+    
+    display: block; /* Removes any unwanted space below the images */
+  }
+  

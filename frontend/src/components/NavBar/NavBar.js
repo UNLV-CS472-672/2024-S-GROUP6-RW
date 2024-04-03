@@ -78,7 +78,8 @@ function ResponsiveAppBar({ user }) {
 
   return (
     // AppBar is the component that we use to create the app bar
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: "transparent", boxShadow: "none" }}>
+
       {/* Container and Toolbar allows the Navbar to be responsive*/}
       <Container maxWidth="x1">
         <Toolbar disableGutters>
@@ -95,11 +96,11 @@ function ResponsiveAppBar({ user }) {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: "black",
               textDecoration: "none",
             }}
           >
-            LOGO
+            RightWay
           </Typography>
 
           {/* Add 3 lines menu for the responsive */}
@@ -110,7 +111,7 @@ function ResponsiveAppBar({ user }) {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              color="black"
             >
               <MenuIcon />
             </IconButton>
@@ -150,7 +151,7 @@ function ResponsiveAppBar({ user }) {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: "black",
               textDecoration: "none",
             }}
           >
@@ -172,7 +173,7 @@ function ResponsiveAppBar({ user }) {
               >
                 <Button
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
+                  sx={{ my: 2, color: "black", display: "block" }}
                 >
                   {page}
                 </Button>
@@ -183,7 +184,7 @@ function ResponsiveAppBar({ user }) {
           {/* Add theme color toggle */}
           <IconButton
             onClick={colorMode.toggleColorMode}
-            color="inherit"
+            color="black"
             sx={{ mr: 1 }}
           >
             {theme.palette.mode === "dark" ? (
@@ -204,7 +205,7 @@ function ResponsiveAppBar({ user }) {
               }}
             >
               <Button
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "black", display: "block" }}
                 onClick={() => navigate("/login")}
               >
                 Sign In

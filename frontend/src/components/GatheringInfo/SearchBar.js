@@ -40,8 +40,7 @@ function SearchBar() {
   };
 
   return (
-    <div>
-      <div className="search-container">
+    <div className="search-container">
       <input
         type="text"
         placeholder="Enter destination.."
@@ -49,7 +48,6 @@ function SearchBar() {
         value={query}
         onChange={handleChange}
       />
-      </div>
       {suggestions.length > 0 && (
         <ul className="suggestions">
           {suggestions.map((suggestion, index) => (
