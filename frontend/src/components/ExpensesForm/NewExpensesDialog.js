@@ -26,6 +26,7 @@ const dialogContainerStyle = {
 	},
 };
 
+// AI generate code help to filter the data --------
 const formatDateForInput = (date) => {
 	const d = new Date(date);
 	let month = "" + (d.getMonth() + 1),
@@ -37,6 +38,7 @@ const formatDateForInput = (date) => {
 
 	return [year, month, day].join("-");
 };
+// AI generate code help to filter the data --------
 
 /**
  * NewExpenseDialog component is used to add new expense to the list of expenses.
@@ -112,7 +114,9 @@ const NewExpenseDialog = ({
 		setName("");
 		setAmount("");
 		setPayer("");
+		// AI generate code help to filter the data --------
 		setDate(formatDateForInput(new Date()));
+		// AI generate code help to filter the data --------
 		setDescription("");
 	};
 
@@ -250,7 +254,9 @@ const NewExpenseDialog = ({
 								label="Name"
 								type="text"
 								fullWidth
+								// AI generate code help to filter the data --------
 								value={name || ""}
+								// AI generate code help to filter the data --------
 								onChange={(e) => setName(e.target.value)}
 								sx={{ marginBottom: "20px", marginTop: "20px" }}
 							/>
@@ -260,7 +266,9 @@ const NewExpenseDialog = ({
 								label="Amount"
 								type="number"
 								fullWidth
+								// AI generate code help to filter the data --------
 								value={amount || ""}
+								// AI generate code help to filter the data --------
 								onChange={(e) => setAmount(e.target.value)}
 								sx={{ marginBottom: "20px" }}
 							/>
@@ -270,7 +278,9 @@ const NewExpenseDialog = ({
 								label="Paid by:"
 								type="text"
 								fullWidth
+								// AI generate code help to filter the data --------
 								value={payer || ""}
+								// AI generate code help to filter the data --------
 								onChange={(e) => setPayer(e.target.value)}
 								sx={{ marginBottom: "20px" }}
 							/>
@@ -280,8 +290,10 @@ const NewExpenseDialog = ({
 								margin="dense"
 								type="date"
 								fullWidth
+								// AI generate code help to filter the data --------
 								value={date || formatDateForInput(new Date())}
 								onChange={(e) => setDate(e.target.value)}
+								// AI generate code help to filter the data --------
 								sx={{ marginBottom: "20px" }}
 							/>
 
@@ -298,9 +310,11 @@ const NewExpenseDialog = ({
 										setDescription(e.target.value);
 									}
 								}}
+								// AI generate code help to filter the data --------
 								helperText={`${
 									description ? description.split(" ").length : 0
 								}/300`}
+								// AI generate code help to filter the data --------
 								sx={{ marginBottom: "20px" }}
 							/>
 						</div>

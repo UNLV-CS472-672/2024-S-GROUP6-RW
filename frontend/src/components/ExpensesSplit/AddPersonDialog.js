@@ -68,8 +68,11 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 	};
 
 	const handleSplitMethodChange = (event, person) => {
-		const updatedPeople = people.map((p) =>
-			p.id === person.id ? { ...p, splitMethod: event.target.value } : p
+		const updatedPeople = people.map(
+			(p) =>
+				// AI generate code help to filter the data --------
+				p.id === person.id ? { ...p, splitMethod: event.target.value } : p
+			// AI generate code help to filter the data --------
 		);
 		// Create a new array with the updated people
 		const newPeople = [...updatedPeople];

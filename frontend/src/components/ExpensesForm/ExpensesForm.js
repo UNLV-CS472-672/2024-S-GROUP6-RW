@@ -140,6 +140,7 @@ const ExpenseForm = () => {
 	// Use the useEffect hook to filter the expensesData array based on the search term and search type
 	// and doing this will help to filter the data without the need to refresh the page
 	useEffect(() => {
+		// AI generate code help to filter the data --------
 		setFilteredExpenses(
 			expensesData.filter((expense) => {
 				if (searchType === "payer") {
@@ -153,6 +154,7 @@ const ExpenseForm = () => {
 				}
 				return true;
 			})
+			// AI generate code help to filter the data --------
 		);
 	}, [expensesData, searchTerm, searchType]);
 
@@ -237,6 +239,7 @@ const ExpenseForm = () => {
 				{...expensesData}
 				// set the initial state of the data grid with the expensesData array
 				// and we also set the pagination to show 5 rows per page
+				// AI generate code --------------
 				initialState={{
 					...expensesData.initialState,
 					pagination: { paginationModel: { pageSize: 5 } },
@@ -244,11 +247,13 @@ const ExpenseForm = () => {
 				// set the page size options to show 5, 10, 25, 50, and 100 rows per page
 				pageSizeOptions={[5, 10, 25, 50, 100]}
 				// set the columns of the data grid
+				// AI generate code help to filter the data --------
 				columns={cols.map((col) => ({
 					...col,
 					// we have to do it this way bc the way I set up the NewExpenseDialog component
 					// TODO: Think of better way to redo the NewExpenseDialog component
 					// so that we wont have to do renderCell if we ever want to add more columns
+					// AI generate code help to filter the data --------
 					renderCell: (params) => {
 						if (col.field === "actions") {
 							return (
@@ -274,6 +279,7 @@ const ExpenseForm = () => {
 						// return the value of the cell if it is not the actions column
 						return params.value;
 					},
+					// AI generate code help to filter the data --------
 				}))}
 				// set the rows of the data grid to the filteredExpenses array to display the filtered expenses
 				rows={filteredExpenses.map((expense) => ({
