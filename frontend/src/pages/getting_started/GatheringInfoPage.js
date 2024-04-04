@@ -5,19 +5,27 @@ import DatePickerComponent from "../../components/ItineraryForm/DatePickerCompon
 import SearchBar from "../../components/GatheringInfo/SearchBar";
 
 function GatheringInfoPage() {
+  const [activeScreen, setActiveScreen] = useState('screen1');
+
+  const goToScreen2 = () => setActiveScreen('screen2');
+  const goToScreen1 = () => setActiveScreen('screen1');
+
   return (
     <>
       <div className="whole-page">
-        <div className="form-half">
-          <h3 className="header-1">Plan your trip</h3>
-          <h3> Where would you like to go? </h3>
-          <SearchBar />
-          <h3> Select the dates of your trip </h3>
-          <DatePickerComponent />
-        </div>
-        <div className="other-half">
-          <h3 className="header-2"> Popular Destinations </h3>
-          <div className="App">
+        <div className={`screen ${activeScreen === 'screen1' ? 'slide-in' : 'slide-out'}`}>
+          <div className="form-half">
+            <h1 className="header-1">Let's plan your next trip together</h1>
+            <h3> Where would you like to go? </h3>
+            <SearchBar />
+            <button className="next-button"
+              onClick={goToScreen2}>
+                Next
+            </button>
+          </div>
+          <div className="destination-half">
+            <h3 className="header-2"> Popular Destinations </h3>
+            
             <div className="image-grid">
               <div className="image-item">
                 <img src="seoul.jpg" alt="Description 1" />
@@ -34,8 +42,13 @@ function GatheringInfoPage() {
               <div className="image-item">
                 <img src="Japan.jpg" alt="Description 5" />
               </div>
+            </div>
           </div>
-          </div>
+        </div>
+        <div className={`screen ${activeScreen === 'screen2' ? 'slide-in' : 'slide-out'}`}>
+          <h3> Select the dates of your trip </h3>
+          <DatePickerComponent />
+          <button onClick={goToScreen1}>Go to Screen 1</button>
         </div>
       </div>
     </>

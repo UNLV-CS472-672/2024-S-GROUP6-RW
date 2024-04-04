@@ -1,10 +1,11 @@
 .whole-page {
     display: flex;
+    flex-direction: column;
     height: 100vh;
 }
 
 .form-half {
-    flex: 250px; /* Each side takes up equal amount of space */
+    flex: 1; /* Each side takes up equal amount of space */
     display: flex;
     flex-direction: column;
     align-items: center; /* Center content vertically */
@@ -12,18 +13,21 @@
     background-color: antiquewhite;
 }
 
-.other-half {
+.destination-half {
     position: relative;
     flex: 1;
     background-color: bisque;
     display: flex;
-    align-items: center; /* Center content vertically */
+    align-items: center; 
     justify-content: center;
 }
 
 .header-1 {
     font-size: 30px;
     font-weight: 900;
+    margin-top: 80px;
+    margin-bottom: 0px;
+    top: 0;
 }
 
 .header-2 {
@@ -32,21 +36,64 @@
     width: 100%; /* Make it full width if needed */
     text-align: center; /* Keep the text centered */
     font-size: 30px;
-    margin-top: 40px;
+    margin-top: 30px;
+    margin-bottom: 80px;
     top: 0;
 }
 
-  .image-grid {
+.next-button {
+    position: relative;
+    top: 20px;
+    left: 275px;
+    padding: 10px 20px;
+    background-color: #2a7f75; 
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.image-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Creates 2 columns */
-    grid-gap: 10px; /* Adjust the gap between images */
-    max-width: 400px; /* Or your preferred max width */
+    grid-template-columns: repeat(5, 1fr); /* Creates 2 columns */
+    grid-gap: 25px; /* Adjust the gap between images */
+    max-width:900px; /* Or your preferred max width */
     margin: auto; /* Center the grid horizontally */
+    border-radius: 10px;
+}
+  
+  .image-item {
+    width: 100%; /* Makes images fully responsive within their containers */
+    display: block; /* Removes any unwanted space below the images */
   }
   
-  .image-item img {
-    width: 100%; /* Makes images fully responsive within their containers */
-    
-    display: block; /* Removes any unwanted space below the images */
+  @keyframes slideInFromLeft {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .screen {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+    transform: translateX(100%);
+  }
+
+  .slide-in {
+    transform: translateX(0%);
+  }
+  
+  .slide-out {
+    transform: translateX(-100%);
   }
   
