@@ -30,7 +30,7 @@ const ItineraryDatePickerComponent = () => {
 
   const handleComplete = () => {
     if (isDateSelectionComplete) {
-      navigate('/map');
+      navigate('/prefselection');
     }
   };
 
@@ -67,7 +67,7 @@ const ItineraryDatePickerComponent = () => {
           onClick={handleComplete}
           variant='contained'
           disabled={!isDateSelectionComplete}
-          
+
         >
           Start
         </Button>

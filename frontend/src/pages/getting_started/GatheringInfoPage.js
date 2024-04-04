@@ -28,19 +28,19 @@ function GatheringInfoPage() {
             
             <div className="image-grid">
               <div className="image-item">
-                <img src="seoul.jpg" alt="Description 1" />
+                <img src="seoul.jpg" />
               </div>
               <div className="image-item">
-                <img src="tokyo.jpg" alt="Description 2" />
+                <img src="tokyo.jpg" />
               </div>
               <div className="image-item">
-                <img src="mchouse.jpg" alt="Description 3" />
+                <img src="mchouse.jpg" />
               </div>
               <div className="image-item">
-                <img src="paris.jpg" alt="Description 4" />
+                <img src="paris.jpg" />
               </div>
               <div className="image-item">
-                <img src="Japan.jpg" alt="Description 5" />
+                <img src="Japan.jpg" />
               </div>
             </div>
           </div>

@@ -5,9 +5,10 @@ import { AuthProvider } from "./auth/AuthContext";
 
 // Import page components
 import GettingStartedPage from "./pages/getting_started/GettingStartedPage";
+import GatheringInfoPage from "./pages/getting_started/GatheringInfoPage"
+import PrefSelectionPage from "./pages/getting_started/PrefSelectionsPage";
 import MapPage from "./pages/map/MapPage";
 import ItineraryPage from "./pages/itinerary/ItineraryPage";
-import GatheringInfoPage from "./pages/getting_started/GatheringInfoPage";
 import TripsExpensesPage from "./pages/expenses/TripsExpensesPage";
 import MyTripsPage from "./pages/my_trips/MyTripsPage";
 import LoginPage from "./pages/Auth_Pages/LoginPage";
@@ -54,6 +55,7 @@ function App() {
     document.body.style.backgroundColor = theme.palette.background.default;
   }, [theme.palette.background.default]);
   return (
+
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
@@ -61,6 +63,7 @@ function App() {
           <NavBar />
           <Routes>
             <Route path="/" element={<GettingStartedPage />} />
+            <Route path="/prefselection" element={<PrefSelectionPage />} />
             <Route path="/map" element={<MapPage />} />
             <Route path="/gatheringinfo" element={<GatheringInfoPage />} />
             <Route path="/itinerary" element={<ItineraryPage />} />
@@ -76,6 +79,7 @@ function App() {
         </div>
       </AuthProvider>
     </ThemeProvider>
+
   );
 }
 

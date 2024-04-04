@@ -5,6 +5,7 @@ import "../../css/GettingStarted.css";
 import { useRef } from "react";
 import { useLottie, useLottieInteractivity } from "lottie-react";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
+import { useNavigate } from 'react-router-dom';
 
 // Free Animations from LottieFiles
 import Animation_share from "../../components/GettingStarted/Animation_share.json";
@@ -29,16 +30,7 @@ function GettingStartedBanner(props) {
     <>
       <div className={props.cName}>
         {/*<ImageSlider images={props.sliderImages} />*/}
-        <div className="first-pic">
-          <img src="Japan.jpg" />
-        </div>
-        <div className="second-pic">
-          <img src="mchouse.jpg" />
-        </div>
-        <div className="third-pic">
-          <img src="paris.jpg" />
-        </div>
-
+        
         {/*Displays text on top of images */}
         <div className={props.textSection}>
           <h1>{props.title}</h1>
@@ -112,19 +104,38 @@ const CursorHorizontalSync = ({ animationName }) => {
   return Animation;
 };
 
+
 function GettingStartedPage() {
   const travelRef = useRef < LottieRefCurrentProps > null;
+  const navigate = useNavigate();
+  const handleSubmit = () => {
+    navigate('/gatheringinfo');
+  };
   return (
     <>
-      {/*Shows Title with Image Slider and Getting Started Button */}
+      {/*Shows Title with Image Slider and Getting Started Button 
       <GettingStartedBanner
+        
         cName="banner"
         textSection="home-text-section"
         text="From weekend getaways to epic adventures"
         buttonText="Getting Started"
         url="/gatheringinfo"
         buttonClass="show"
-      />
+      />*/}
+      <div class="diagonal-split">
+        <div class="top-half">
+          <img src="yo.jpg" />
+        </div>
+        <div class="bottom-half">
+          <img src="SanSebastian.jpg" />
+        </div>
+        <h2 className="headerr">From weekend getaways to epic adventures</h2>
+        <button onClick={handleSubmit}
+          className="getStartedButton">
+          Get Started
+        </button>
+      </div>
 
       {/* Directions on how to use the website with animations */}
       <div>
