@@ -5,6 +5,8 @@ import { AuthProvider } from "./auth/AuthContext";
 
 // Import your page components
 import GettingStartedPage from "./pages/getting_started/GettingStartedPage";
+import GatheringInfoPage from "./pages/getting_started/GatheringInfoPage"
+import PrefSelectionPage from "./pages/getting_started/PrefSelectionsPage";
 import MapPage from "./pages/map/MapPage";
 import ItineraryPage from "./pages/itinerary/ItineraryPage";
 import GatheringInfoPage from "./pages/getting_started/GatheringInfoPage"
@@ -45,6 +47,8 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/" element={<GettingStartedPage />} />
+          <Route path="/gatheringinfo" element={<GatheringInfoPage />} />
+          <Route path="/prefselection" element={<PrefSelectionPage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/gatheringinfo" element={<GatheringInfoPage />} />
           <Route path="/itinerary" element={<ItineraryPage />} />

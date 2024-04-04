@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -6,14 +5,17 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs'; 
+import "../../css/DatePicker.css"
 
 const ItineraryDatePickerComponent = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [selectedStartDate, setSelectedStartDate] = useState(null); // Selected start date
-  const [selectedEndDate, setSelectedEndDate] = useState(null); // Selected end date
   const navigate = useNavigate();
-  
+
+  // Generate today's date using dayjs
+  const today = dayjs().startOf('day'); // Removes the time part to start from 00:00 today
+
   //For onclick start date
   const handleStartDateChange = (date) => {
     setStartDate(date);
@@ -24,29 +26,11 @@ const ItineraryDatePickerComponent = () => {
     setEndDate(date);
   };
 
-  //Complete only if start date and end date is selected AND the end date is later or on that date of the start date.
-
   const isDateSelectionComplete = startDate && endDate && startDate <= endDate;
 
   const handleComplete = () => {
     if (isDateSelectionComplete) {
-      //THIS SHOULD BE WHERE THE DATES GET SENT TO DATABASE
-      navigate('/map');
-    }
-  };
-
-
-  // Event handler for completing date selection
-  const handleDateSelectionComplete = () => {
-    if (selectedStartDate && selectedEndDate) {
-      const numberOfDays = calculateNumberOfDays(
-        selectedStartDate,
-        selectedEndDate
-      );
-
-      if (numberOfDays < 0) {
-        alert("Please select a valid date range.");
-      }
+      navigate('/prefselection');
     }
   };
 
@@ -56,15 +40,18 @@ const ItineraryDatePickerComponent = () => {
     return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
   };
 
-  
   return (
-    <div>
+    <div className="itinerary-date-picker-container">
+
       <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+      <div className="date-picker-container">
         <DatePicker
           label="Start Date"
           value={startDate}
           onChange={handleStartDateChange}
           renderInput={(params) => <TextField {...params} />}
+          minDate={today}
         />
 
         <DatePicker
@@ -72,17 +59,19 @@ const ItineraryDatePickerComponent = () => {
           value={endDate}
           onChange={handleEndDateChange}
           renderInput={(params) => <TextField {...params} />}
+          minDate={startDate || today}
         />
-        <Button
+      </div>
+
+        <Button className="start-button"
           onClick={handleComplete}
           variant='contained'
           disabled={!isDateSelectionComplete}
+
         >
           Start
         </Button>
       </LocalizationProvider>
-
- 
     </div>
   );
 };

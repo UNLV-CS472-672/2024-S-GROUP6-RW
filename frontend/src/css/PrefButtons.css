@@ -1,0 +1,61 @@
+.buttonContainer {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 900px;
+
+  }
+  
+  .categoriesContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+  }
+  
+  .notSureAndSubmitContainer {
+    align-self: flex-end; 
+    margin-right: 20px; 
+    margin-top: 10px;
+  }
+  
+  .categoryButton, .submitButton {
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 2px solid rgb(194, 194, 194);
+    border-radius:20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .categoryButton.selected {
+    background-color: rgb(208, 208, 208);
+    color: rgb(0, 0, 0);
+  }
+  
+  .notSureButton {
+    background-color: transparent;
+    border: none;
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+    padding: 10px 20px;
+  }
+  
+  .submitButton {
+    margin-top: 20px;
+  }
+  
+  .notSureButton:hover {
+    color:blueviolet;
+  }
+
+  .categoryButton:hover, .submitButton:hover {
+    background-color: rgb(210, 210, 210);
+    opacity: 0.8;
+
+  }
+  

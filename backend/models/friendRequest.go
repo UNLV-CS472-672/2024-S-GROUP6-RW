@@ -4,10 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type FriendRequest struct {
@@ -22,11 +20,15 @@ type FriendRequest struct {
 	AcceptRequest  bool
 }
 
-func (f *FriendRequest) GetDocument(c *gin.Context, coll *mongo.Collection, filter bson.M) error {
-	*f = FriendRequest{}
+func (f *FriendRequest) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
+	*f = FriendRequest{
+		SenderUsername: f.SenderUsername,
+		TargetUsername: f.TargetUsername,
+		AcceptRequest:  f.AcceptRequest,
+	}
 
 	var result bson.M
-	err := coll.FindOne(context.TODO(), filter).Decode(&result)
+	err := coll.Collection.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
 		return errors.New("friend request does not exist")
@@ -53,4 +55,90 @@ func (f *FriendRequest) GetDocument(c *gin.Context, coll *mongo.Collection, filt
 	}
 
 	return nil
+}
+
+func (f *FriendRequest) GetMockDocument(coll *MockCollection, filter bson.M) error {
+	*f = FriendRequest{
+		SenderUsername: f.SenderUsername,
+		TargetUsername: f.TargetUsername,
+		AcceptRequest:  f.AcceptRequest,
+	}
+
+	result, err := coll.FindDocument(filter, "FriendRequest")
+
+	if err != nil {
+		return errors.New("friend request does not exist")
+	}
+
+	err = result.SetValue("SenderUsername", f.SenderUsername)
+
+	if err != nil {
+		return err
+	}
+
+	err = result.SetValue("TargetUsername", f.TargetUsername)
+
+	if err != nil {
+		return err
+	}
+
+	err = result.SetValue("AcceptRequest", f.AcceptRequest)
+
+	if err != nil {
+		return err
+	}
+
+	if requestRes, ok := result.(*FriendRequest); ok {
+		f = requestRes
+		return nil
+	}
+
+	return errors.New("Failed to convert model to FriendRequest.")
+}
+
+func (f *FriendRequest) GetKeys() []string {
+	return []string{
+		"_id", "SenderID", "TargetID",
+	}
+}
+
+func (f *FriendRequest) GetValue(key string) (any, error) {
+	switch key {
+	case "_id":
+		return f.ID, nil
+	case "SenderID":
+		return f.SenderID, nil
+	case "TargetID":
+		return f.TargetID, nil
+	default:
+		return nil, errors.New("Unknown key: '" + key + "'.")
+	}
+}
+
+func (f *FriendRequest) SetValue(key string, value any) error {
+	switch key {
+	case "_id":
+		if ID, ok := value.(primitive.ObjectID); ok {
+			f.ID = ID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	case "SenderID":
+		if SenderID, ok := value.(primitive.ObjectID); ok {
+			f.SenderID = SenderID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	case "TargetID":
+		if TargetID, ok := value.(primitive.ObjectID); ok {
+			f.TargetID = TargetID
+			return nil
+		}
+
+		return errors.New("Failed to convert value to ObjectID.")
+	default:
+		return errors.New("Unknown key: '" + key + "'.")
+	}
 }
