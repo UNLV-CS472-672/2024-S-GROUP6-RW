@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs'; 
+import "../../css/DatePicker.css"
 
 const ItineraryDatePickerComponent = () => {
   const [startDate, setStartDate] = useState(null);
@@ -29,7 +30,7 @@ const ItineraryDatePickerComponent = () => {
 
   const handleComplete = () => {
     if (isDateSelectionComplete) {
-      navigate('/map');
+      navigate('/prefselection');
     }
   };
 
@@ -40,8 +41,11 @@ const ItineraryDatePickerComponent = () => {
   };
 
   return (
-    <div>
+    <div className="itinerary-date-picker-container">
+
       <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+      <div className="date-picker-container">
         <DatePicker
           label="Start Date"
           value={startDate}
@@ -57,10 +61,13 @@ const ItineraryDatePickerComponent = () => {
           renderInput={(params) => <TextField {...params} />}
           minDate={startDate || today}
         />
-        <Button
+      </div>
+
+        <Button className="start-button"
           onClick={handleComplete}
           variant='contained'
           disabled={!isDateSelectionComplete}
+
         >
           Start
         </Button>
