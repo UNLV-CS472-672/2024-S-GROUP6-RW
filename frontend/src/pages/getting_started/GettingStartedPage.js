@@ -125,7 +125,10 @@ function GettingStartedPage() {
       />*/}
       <div class="diagonal-split">
         <div class="top-half">
-          <img src="yo.jpg" />
+          <div class="text-part">
+            <img src="yo.jpg" />
+            <h2>From weekend getaways</h2>
+          </div>
         </div>
         <div class="bottom-half">
           <img src="SanSebastian.jpg" />

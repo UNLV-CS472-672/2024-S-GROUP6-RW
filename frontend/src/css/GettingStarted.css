@@ -36,11 +36,12 @@
 }
 
 .top-half {
-  clip-path: polygon(0 0, 67% 0, 45% 100%, 0 100%);
+  clip-path: polygon(0 0, 67% 0, 39% 100%, 0 100%);
+  z-index: 1;
 }
 
 .bottom-half {
-  clip-path: polygon(64% 0, 100% 0, 100% 100%, 41% 100%);
+  clip-path: polygon(64% 0, 100% 0, 100% 100%, 33% 100%);
 }
 
 .getStartedButton {
@@ -59,6 +60,28 @@
   z-index: 30;
 }
 
+.start-button {
+  position: relative;
+  margin: auto;
+  padding: 10px 20px;
+  background-color: #2a7f75; 
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width:100px;
+  /* Disabled state */
+  &:disabled {
+    background-color: #b6b6b6;
+    cursor: not-allowed;
+  }
+}
+
+.start-button:hover {
+  background-color: #1b5952; 
+}
+
 .headerr {
   position: relative;
   top: 800px;
@@ -68,6 +91,9 @@
   top: 0;
   z-index: 31;
 }
+
+
+
 .banner {
   background-color: bisque;
   width: 100%;

@@ -1,6 +1,8 @@
 /* Styles for the main container */
 .itinerary-date-picker-container {
     display: flex;
+    margin-top: 150px;
+    margin-bottom: 80px;
     flex-direction: column;
     align-items: center;
     padding:10px;
@@ -8,6 +10,16 @@
     border-radius: 20px;
   }
   
+  .header-3 {
+    position: absolute;
+    align-self: flex; /* Align to the start of the flex container */
+    width: 100%; /* Make it full width if needed */
+    text-align: center; /* Keep the text centered */
+    font-size: 30px;
+    margin-top: 100px;
+    top: 0;
+}
+
   .date-picker-container {
     display: flex;
     justify-content: space-between; 

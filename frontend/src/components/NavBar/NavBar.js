@@ -78,7 +78,8 @@ function ResponsiveAppBar({ user }) {
 
   return (
     // AppBar is the component that we use to create the app bar
-    <AppBar position="fixed" sx={{ backgroundColor: "transparent", boxShadow: "none" }}>
+    <AppBar position="fixed" sx={{ backgroundColor: "rgba(247, 241, 165, 0.5)", boxShadow: "none" }}>
+
 
       {/* Container and Toolbar allows the Navbar to be responsive*/}
       <Container maxWidth="x1">

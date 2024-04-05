@@ -43,6 +43,8 @@ const ItineraryDatePickerComponent = () => {
   return (
     <div className="itinerary-date-picker-container">
 
+      <h2 className="header-3"> Select the dates of your trip </h2>
+
       <LocalizationProvider dateAdapter={AdapterDayjs}>
 
       <div className="date-picker-container">
@@ -63,14 +65,6 @@ const ItineraryDatePickerComponent = () => {
         />
       </div>
 
-        <Button className="start-button"
-          onClick={handleComplete}
-          variant='contained'
-          disabled={!isDateSelectionComplete}
-
-        >
-          Start
-        </Button>
       </LocalizationProvider>
     </div>
   );

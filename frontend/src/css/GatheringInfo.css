@@ -41,11 +41,13 @@
     top: 0;
 }
 
+
 .next-button {
     position: relative;
     top: 20px;
     left: 275px;
     padding: 10px 20px;
+    width: 100px;
     background-color: #2a7f75; 
     color: white;
     border: none;
@@ -54,6 +56,10 @@
     transition: background-color 0.3s ease;
 }
 
+.third-section {
+  position: relative;
+  margin-top: 200px;
+}
 .image-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr); /* Creates 2 columns */

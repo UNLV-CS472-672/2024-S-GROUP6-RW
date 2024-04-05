@@ -3,12 +3,13 @@ import Typography from "@mui/material/Typography";
 import "../../css/GatheringInfo.css";
 import DatePickerComponent from "../../components/ItineraryForm/DatePickerComponent";
 import SearchBar from "../../components/GatheringInfo/SearchBar";
+import PrefButtons from "../../components/PrefSelect/PrefButtons";
 
 function GatheringInfoPage() {
   const [activeScreen, setActiveScreen] = useState('screen1');
 
   const goToScreen2 = () => setActiveScreen('screen2');
-  const goToScreen1 = () => setActiveScreen('screen1');
+  const goToScreen3 = () => setActiveScreen('screen3');
 
   return (
     <>
@@ -46,9 +47,19 @@ function GatheringInfoPage() {
           </div>
         </div>
         <div className={`screen ${activeScreen === 'screen2' ? 'slide-in' : 'slide-out'}`}>
-          <h3> Select the dates of your trip </h3>
           <DatePickerComponent />
-          <button onClick={goToScreen1}>Go to Screen 1</button>
+            <button className="start-button"
+              onClick={goToScreen3}
+              variant='contained'
+              >
+                Next
+            </button>
+
+        </div>
+        <div className={`screen ${activeScreen === 'screen3' ? 'slide-in' : 'slide-out'}`}>
+          <div className="third-section">
+            <PrefButtons/>
+          </div>
         </div>
       </div>
     </>
