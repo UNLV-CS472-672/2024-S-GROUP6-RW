@@ -201,7 +201,7 @@ function ResponsiveAppBar({ user }) {
 						<Box
 							sx={{
 								flexGrow: 0,
-								display: { xs: "none", md: "flex", ml: "auto" },
+								display: { xs: "flex", md: "flex", ml: "auto" },
 							}}
 						>
 							<Button
