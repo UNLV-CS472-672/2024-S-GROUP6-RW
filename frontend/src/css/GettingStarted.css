@@ -27,26 +27,23 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   display: flex;
+  overflow: hidden;
   align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 24px;
 }
 
 .top-half {
   clip-path: polygon(0 0, 67% 0, 39% 100%, 0 100%);
-  z-index: 1;
 }
 
 .bottom-half {
   clip-path: polygon(64% 0, 100% 0, 100% 100%, 33% 100%);
 }
 
+
 .getStartedButton {
   position: relative;
-  top:450px;
+  top:550px;
   color: rgb(0, 0, 0);
   background-color: rgb(247, 241, 165);
   border: 2px solid rgb(247, 241, 165);
@@ -63,6 +60,7 @@
 .start-button {
   position: relative;
   margin: auto;
+  margin-bottom: 600px;
   padding: 10px 20px;
   background-color: #2a7f75; 
   color: white;
@@ -82,14 +80,27 @@
   background-color: #1b5952; 
 }
 
+.first-description {
+  position: relative;
+  left: 100px;
+  top: 100px;
+  color: #ffffff;
+  z-index: 30;
+  width: 400px;
+  font-size: 35px;
+}
+
+
 .headerr {
   position: relative;
-  top: 800px;
-  font-size: 30px;
+  left: 800px;
+  margin-top: 310px;
+  font-size: 35px;
   color:white;
   font-weight: 900;
-  top: 0;
+  
   z-index: 31;
+  width: 300px;
 }
 
 

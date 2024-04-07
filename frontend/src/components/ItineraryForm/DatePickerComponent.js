@@ -40,6 +40,11 @@ const ItineraryDatePickerComponent = () => {
     return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
   };
 
+  const handleIdk = () => {
+    console.log("User is not sure.");
+    navigate('/map');
+  };
+
   return (
     <div className="itinerary-date-picker-container">
 
@@ -66,6 +71,9 @@ const ItineraryDatePickerComponent = () => {
       </div>
 
       </LocalizationProvider>
+      
+      <button onClick={handleIdk} className="idkButton">Not sure yet? Create a poll!</button>
+      
     </div>
   );
 };

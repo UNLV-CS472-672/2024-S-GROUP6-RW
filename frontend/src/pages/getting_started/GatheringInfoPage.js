@@ -58,6 +58,7 @@ function GatheringInfoPage() {
         </div>
         <div className={`screen ${activeScreen === 'screen3' ? 'slide-in' : 'slide-out'}`}>
           <div className="third-section">
+          <h2 className="header-4"> What are your group preferences? </h2>
             <PrefButtons/>
           </div>
         </div>

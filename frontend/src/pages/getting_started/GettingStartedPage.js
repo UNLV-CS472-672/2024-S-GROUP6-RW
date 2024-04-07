@@ -113,31 +113,26 @@ function GettingStartedPage() {
   };
   return (
     <>
-      {/*Shows Title with Image Slider and Getting Started Button 
-      <GettingStartedBanner
-        
-        cName="banner"
-        textSection="home-text-section"
-        text="From weekend getaways to epic adventures"
-        buttonText="Getting Started"
-        url="/gatheringinfo"
-        buttonClass="show"
-      />*/}
+
       <div class="diagonal-split">
         <div class="top-half">
           <div class="text-part">
             <img src="yo.jpg" />
-            <h2>From weekend getaways</h2>
+            
           </div>
         </div>
         <div class="bottom-half">
           <img src="SanSebastian.jpg" />
         </div>
-        <h2 className="headerr">From weekend getaways to epic adventures</h2>
+        
         <button onClick={handleSubmit}
           className="getStartedButton">
           Get Started
         </button>
+        
+        <h2 className = "first-description">From weekend getaways</h2>
+        
+        <h2 className="headerr"> to epic adventures</h2>
       </div>
 
       {/* Directions on how to use the website with animations */}
