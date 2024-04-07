@@ -1,30 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './SearchBar.css';
+import { debounce } from 'lodash'; // Import debounce from lodash
 
 function SearchBar() {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
-  // array of cities that will be an API call later
-  const cities = ['Los Angeles, California, USA', 'Chicago, Illinois, USA', 'Chitest', 'Chianothertest', 'Houston, Texas, USA', 'Phoenix, Arizona, USA', 'Philadelphia, Pennsylvania, USA', 'San Antonio, Texas, USA', 'San Diego, California, USA', 'San Jose, California, USA'];
+  const debouncedFetchCities = useCallback(debounce((cityName) => {
+    if (!cityName) return; // Exit early if cityName is empty
+
+    const url = `https://api.api-ninjas.com/v1/city?name=${cityName}&limit=5`;
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'X-Api-Key': 'oUKbIX8gOqX6mdF1EOZ6fQ==vWsvuUWsuV8ZbfQ5',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Error with network response');
+      return response.json();
+    })
+    .then(data => {
+      const cityNames = data.map(city => city.name);
+      setSuggestions(cityNames);
+    })
+    .catch(error => console.error('Error:', error));
+  }, 500), []); // Dependencies array is empty, meaning the function is created only once
 
   const handleChange = (event) => {
-    const value = event.target.value;
-    setQuery(value);
-
-    // Filter cities based on the input value
-    if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, 'i');
-      setSuggestions(cities.sort().filter(v => regex.test(v)));
-    } else {
-      setSuggestions([]);
-    }
-
-    console.log(`Search query: ${value}`);
+    const cityName = event.target.value;
+    setQuery(cityName);
+    debouncedFetchCities(cityName); // Call the debounced function here
   };
 
-  const handleSuggestionClick = (value) => {
-    setQuery(value);
+  const handleSuggestionClick = (cityName) => {
+    setQuery(cityName);
     setSuggestions([]);
   };
 

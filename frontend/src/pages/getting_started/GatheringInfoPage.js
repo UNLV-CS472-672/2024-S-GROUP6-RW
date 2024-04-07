@@ -3,7 +3,6 @@ import DatePickerComponent from "../../components/ItineraryForm/DatePickerCompon
 import SearchBar from "../../components/GatheringInfo/SearchBar";
 
 function GatheringInfoPage() {
-    
 
     return (
     <>
@@ -12,6 +11,7 @@ function GatheringInfoPage() {
         <SearchBar />
         <h3> Select the dates of your trip </h3>
         <DatePickerComponent />
+      
     </>
   );
 };

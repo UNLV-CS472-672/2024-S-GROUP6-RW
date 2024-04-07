@@ -23,7 +23,7 @@ import {
 	Brightness4 as Brightness4Icon,
 	Brightness7 as Brightness7Icon,
 } from "@mui/icons-material";
-import { ColorModeContext } from "./ToggleTheme";
+import { ColorModeContext } from "../../components/NavBar/ToggleTheme";
 import { Link } from "react-router-dom";
 
 // pages that we will use In general
@@ -200,7 +200,7 @@ function ResponsiveAppBar({ user }) {
 						<Box
 							sx={{
 								flexGrow: 0,
-								display: { xs: "none", md: "flex", ml: "auto" },
+								display: { xs: "flex", md: "flex", ml: "auto" },
 							}}
 						>
 							<Button
