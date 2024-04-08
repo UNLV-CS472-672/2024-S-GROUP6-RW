@@ -41,20 +41,94 @@ func CreateProfile(user models.User, database db.Database) (*models.Profile, err
 	return insertedProfile, nil
 }
 
-func GetProfile(user models.User, database db.Database) (*models.Profile, error) {
-	// TODO: Implement get profile business logic
+func GetProfile(profile models.Profile, database db.Database) (*models.Profile, error) {
+	// Acquire reference to profile
+	document, err := database["ProfileDetails"].FindDocument(bson.M{"Username": profile.Username}, "Profile")
 
-	return nil, nil
+	if err != nil {
+		return nil, err
+	}
+
+	existingProfile, ok := document.(*models.Profile)
+
+	if !ok {
+		return nil, errors.New("failed to convert model to Profile")
+	}
+
+	return existingProfile, nil
 }
 
 func EditProfile(profile models.Profile, database db.Database) (*models.Profile, error) {
 	// TODO: Implement edit profile business logic
+	// Acquire reference to profile
+	document, err := database["ProfileDetails"].FindDocument(bson.M{"Username": profile.Username}, "Profile")
 
-	return nil, nil
+	if err != nil {
+		return nil, err
+	}
+
+	existingProfile, ok := document.(*models.Profile)
+
+	if !ok {
+		return nil, errors.New("failed to convert model to profile")
+	}
+
+	// Collect updates to profile
+	update := bson.M{}
+
+	for _, entry := range profile.Modifications {
+		switch entry.FieldName {
+		case "Username":
+			username, ok := entry.Data.(string)
+
+			if !ok {
+				return nil, errors.New("failed to convert username to string")
+			}
+
+			update["Username"] = username
+		case "DisplayName":
+			displayName, ok := entry.Data.(string)
+
+			if !ok {
+				return nil, errors.New("failed to convert display name to string")
+			}
+
+			update["DisplayName"] = displayName
+		case "About":
+			about, ok := entry.Data.(string)
+
+			if !ok {
+				return nil, errors.New("failed to convert about to string")
+			}
+
+			update["About"] = about
+		default:
+			return nil, errors.New("invalid field provided: " + entry.FieldName)
+		}
+	}
+
+	document, err = database["ProfileDetails"].UpdateDocument(bson.M{"Username": existingProfile.Username}, update, "Profile")
+
+	if err != nil {
+		return nil, err
+	}
+
+	updatedProfile, ok := document.(*models.Profile)
+
+	if !ok {
+		return nil, errors.New("failed to convert model to Profile")
+	}
+
+	return updatedProfile, nil
 }
 
 func DeleteProfile(profile models.Profile, database db.Database) error {
-	// TODO: Implement delete profile business logic
+	// Acquire reference to profile
+	_, err := database["ProfileDetails"].FindDocument(bson.M{"Username": profile.Username}, "Profile")
 
-	return nil
+	if err != nil {
+		return err
+	}
+
+	return database["ProfileDetails"].DeleteDocument(bson.M{"Username": profile.Username}, "Profile")
 }
