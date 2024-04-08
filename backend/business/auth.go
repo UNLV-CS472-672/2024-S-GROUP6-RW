@@ -94,7 +94,7 @@ func SignIn(user models.User, database db.Database) (string, *models.User, error
 	}
 
 	// Update last login time for user
-	filter := bson.M{"_id": user.ID}
+	filter := bson.M{"Email": user.Email}
 
 	update := bson.M{
 		"LastLogin": primitive.NewDateTimeFromTime(time.Now()),
