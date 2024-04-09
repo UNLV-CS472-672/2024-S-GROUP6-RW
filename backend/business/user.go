@@ -53,15 +53,108 @@ func CreateUser(user models.User, database db.Database) (*models.User, error) {
 }
 
 func GetUser(user models.User, database db.Database) (*models.User, error) {
-	// TODO: Implement get user business logic
+	// Acquire reference to user
+	document, err := database["UserDetails"].FindDocument(bson.M{"Username": user.Username}, "User")
 
-	return nil, nil
+	if err != nil {
+		return nil, err
+	}
+
+	existingUser, ok := document.(*models.User)
+
+	if !ok {
+		return nil, errors.New("failed to convert model to User")
+	}
+
+	return existingUser, nil
 }
 
 func EditUser(user models.User, database db.Database) (*models.User, error) {
-	// TODO: Implement edit user business logic
+	// Acquire reference to user
+	document, err := database["UserDetails"].FindDocument(bson.M{"Username": user.Username}, "User")
 
-	return nil, nil
+	if err != nil {
+		return nil, err
+	}
+
+	existingUser, ok := document.(*models.User)
+
+	if !ok {
+		return nil, errors.New("failed to convert model to User")
+	}
+
+	// Collect updates to user
+	update := bson.M{}
+
+	for _, entry := range user.Modifications {
+		switch entry.FieldName {
+		case "Username":
+			username, ok := entry.Data.(string)
+
+			if !ok {
+				return nil, errors.New("failed to convert username to string")
+			}
+
+			update["Username"] = username
+		case "Email":
+			email, ok := entry.Data.(string)
+
+			if !ok {
+				return nil, errors.New("failed to convert email to string")
+			}
+
+			update["Email"] = email
+		case "Password":
+			password, ok := entry.Data.(string)
+
+			if !ok {
+				return nil, errors.New("failed to convert password to string")
+			}
+
+			hashedPasswordBytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+
+			if err != nil {
+				return nil, err
+			}
+
+			update["PassHash"] = string(hashedPasswordBytes)
+		default:
+			return nil, errors.New("invalid field provided: " + entry.FieldName)
+		}
+	}
+
+	document, err = database["UserDetails"].UpdateDocument(bson.M{"Username": existingUser.Username}, update, "User")
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Update associated profile if the username changed
+	if update["Username"] != nil {
+		targetProfile := models.Profile{
+			Username: existingUser.Username,
+			Modifications: []models.Modification{
+				{
+					FieldName: "Username",
+					Data:      update["Username"],
+				},
+			},
+		}
+
+		_, err := EditProfile(targetProfile, database)
+
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	updatedUser, ok := document.(*models.User)
+
+	if !ok {
+		return nil, errors.New("failed to convert model to User")
+	}
+
+	return updatedUser, nil
 }
 
 func DeleteUser(user models.User, database db.Database) error {
@@ -235,7 +328,6 @@ func DeleteUser(user models.User, database db.Database) error {
 		}
 	}
 
-	// Remove invoices assigned to user
 	for _, invoiceID := range existingUser.InvoiceIDs {
 		// Acquire reference to invoice
 		document, err := database["InvoiceDetails"].FindDocument(bson.M{"_id": invoiceID}, "Invoice")
@@ -250,43 +342,40 @@ func DeleteUser(user models.User, database db.Database) error {
 			return errors.New("failed to convert model to Invoice")
 		}
 
-		// Remove invoice from parent expense if it hasn't been paid
-		if !existingInvoice.IsPaid {
-			// Acquire reference to invoice's parent expense
-			document, err = database["ExpenseDetails"].FindDocument(bson.M{"_id": existingInvoice.ParentExpenseID}, "Expense")
+		// Acquire reference to invoice's parent expense
+		document, err = database["ExpenseDetails"].FindDocument(bson.M{"_id": existingInvoice.ParentExpenseID}, "Expense")
 
-			if err != nil {
-				return err
-			}
+		if err != nil {
+			return err
+		}
 
-			existingExpense, ok := document.(*models.Expense)
+		existingExpense, ok := document.(*models.Expense)
 
-			if !ok {
-				return errors.New("failed to convert model to Expense")
-			}
+		if !ok {
+			return errors.New("failed to convert model to Expense")
+		}
 
-			// Discard this invoice from expense's invoice list
-			found, index := utility.Find(existingExpense.InvoiceIDs[:], invoiceID)
+		// Discard this invoice from expense's invoice list
+		found, index := utility.Find(existingExpense.InvoiceIDs[:], invoiceID)
 
-			if !found {
-				return errors.New("failed to locate invoice in list")
-			}
+		if !found {
+			return errors.New("failed to locate invoice in list")
+		}
 
-			existingExpense.InvoiceIDs = append(existingExpense.InvoiceIDs[:index], existingExpense.InvoiceIDs[index+1:]...)
+		existingExpense.InvoiceIDs = append(existingExpense.InvoiceIDs[:index], existingExpense.InvoiceIDs[index+1:]...)
 
-			// Update expense's document in database
-			_, err = database["ExpenseDetails"].UpdateDocument(bson.M{"_id": existingExpense.ID}, bson.M{"InvoiceIDs": existingExpense.InvoiceIDs}, "Expense")
+		// Update expense's document in database
+		_, err = database["ExpenseDetails"].UpdateDocument(bson.M{"_id": existingExpense.ID}, bson.M{"InvoiceIDs": existingExpense.InvoiceIDs}, "Expense")
 
-			if err != nil {
-				return err
-			}
+		if err != nil {
+			return err
+		}
 
-			// Remove invoice from database
-			err = database["InvoiceDetails"].DeleteDocument(bson.M{"_id": invoiceID}, "Invoice")
+		// Remove invoice from database
+		err = database["InvoiceDetails"].DeleteDocument(bson.M{"_id": invoiceID}, "Invoice")
 
-			if err != nil {
-				return err
-			}
+		if err != nil {
+			return err
 		}
 	}
 
