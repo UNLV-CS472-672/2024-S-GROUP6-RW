@@ -80,11 +80,16 @@ function ResponsiveAppBar({ user }) {
 
 	return (
 		// AppBar is the component that we use to create the app bar
-    <AppBar position="fixed" sx={{ backgroundColor: "rgba(250, 235, 217, 0.5)", boxShadow: "none" }}>
+		<AppBar position="fixed" sx={{
+			background: "linear-gradient( rgba(155, 155, 155, 1.0)10%, rgba(0, 0, 0, 0))",
+			boxShadow: "none",
+			fontFamily: "Radley"
+		  }}> 
 			{/* Container and Toolbar allows the Navbar to be responsive*/}
 			<Container maxWidth="x1">
 				<Toolbar disableGutters>
-					<AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+					{/*<AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />*/}
+					{/*<img src="newlogo.jpg" />*/}
 					<Typography
 						variant="h6"
 						noWrap

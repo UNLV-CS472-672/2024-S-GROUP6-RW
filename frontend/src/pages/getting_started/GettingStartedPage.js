@@ -12,17 +12,7 @@ import Animation_share from "../../components/GettingStarted/Animation_share.jso
 import Animation_car from "../../components/GettingStarted/Animation_car.json";
 import Animation_directions from "../../components/GettingStarted/Animation_directions.json";
 
-import ImageSlider from "../../components/GettingStarted/ImageSlider.js";
 
-// Images used
-const Highland = [
-  {
-    url: "/Highland.jpg",
-    title: "Highland_Golf",
-    width: "100%",
-    height: "100%",
-  },
-];
 
 // Main banner of Getting Started
 function GettingStartedBanner(props) {
@@ -111,28 +101,23 @@ function GettingStartedPage() {
   const handleSubmit = () => {
     navigate('/gatheringinfo');
   };
+
   return (
     <>
 
-      <div class="diagonal-split">
-        <div class="top-half">
-          <div class="text-part">
-            <img src="yo.jpg" />
-            
-          </div>
-        </div>
-        <div class="bottom-half">
-          <img src="SanSebastian.jpg" />
-        </div>
+      <div class="first-section">
         
+        <p className = "first-description">Welcome to RightWay</p>
+        <p className="headerr"> Group trips made easy</p>
+
+        <img className="background" 
+        src="thatNEWnew.jpg" />
+
         <button onClick={handleSubmit}
           className="getStartedButton">
           Get Started
         </button>
-        
-        <h2 className = "first-description">From weekend getaways</h2>
-        
-        <h2 className="headerr"> to epic adventures</h2>
+
       </div>
 
       {/* Directions on how to use the website with animations */}

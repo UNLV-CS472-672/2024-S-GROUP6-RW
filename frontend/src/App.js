@@ -37,17 +37,17 @@ import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   typography: {
-    fontFamily: ["Questrial", "sans-serif"].join(","),
+    fontFamily: ["Radley", "serif"].join(","),
   },
   components: {
     MuiCssBaseline: {
       styleOverrides: `
         @font-face {
-          font-family: 'Questrial';
+          font-family: 'Radley';
           font-style: normal;
           font-display: swap;
           font-weight: 400;
-          src: local('Questrial'), local('Questrial-Regular'), url(https://fonts.googleapis.com/css2?family=Questrial&display=swap) format('woff2');
+          src: local('Radley'), local('Radley-Regular'), url(https://fonts.googleapis.com/css2?family=Radley:ital@0;1&display=swap" rel="stylesheet) format('woff2');
         }
       `,
     },
