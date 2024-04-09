@@ -145,9 +145,178 @@ func GetTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 }
 
 func EditTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
-	// TODO: Implement trip edit business logic
+	document, err := database["UserDetails"].FindDocument(bson.M{"Username": trip.Username}, "User")
 
-	return nil, nil
+	if err != nil {
+		return nil, err
+	}
+
+	existingUser, ok := document.(*models.User)
+
+	if !ok {
+		return nil, errors.New("failed to convert model to User")
+	}
+
+	document, err = database["TripDetails"].FindDocument(bson.M{"TripOwnerID": existingUser.ID, "TripTitle": trip.TripTitle}, "Trip")
+
+	if err != nil {
+		return nil, err
+	}
+
+	existingTrip, ok := document.(*models.Trip)
+
+	if !ok {
+		return nil, errors.New("failed to convert model to Trip")
+	}
+
+	// Collect updates to trip
+	update := bson.M{}
+
+	for _, entry := range trip.Modifications {
+		switch entry.FieldName {
+		case "TripOwner":
+			username, ok := entry.Data.(string)
+
+			if !ok {
+				return nil, errors.New("failed to convert username to string")
+			}
+
+			document, err := database["UserDetails"].FindDocument(bson.M{"Username": username}, "User")
+
+			if err != nil {
+				return nil, err
+			}
+
+			existingUser, ok := document.(*models.User)
+
+			if !ok {
+				return nil, errors.New("failed to convert model to User")
+			}
+
+			update["TripOwnerID"] = existingUser.ID
+		case "TripTitle":
+			title, ok := entry.Data.(string)
+
+			if !ok {
+				return nil, errors.New("failed to convert title to string")
+			}
+
+			_, err := database["TripDetails"].FindDocument(bson.M{"TripOwnerID": existingUser.ID, "TripTitle": title}, "Trip")
+
+			if err == nil {
+				return nil, errors.New("trip of the same title already exists")
+			}
+
+			update["TripTitle"] = title
+		case "LocationName":
+			location, ok := entry.Data.(string)
+
+			if !ok {
+				return nil, errors.New("failed to convert location to string")
+			}
+
+			update["LocationName"] = location
+		case "AddMembers":
+			memberList := existingTrip.MemberIDs
+
+			userList, ok := entry.Data.([]string)
+
+			if !ok {
+				return nil, errors.New("failed to convert user list to string array")
+			}
+
+			for _, username := range userList {
+				document, err := database["UserDetails"].FindDocument(bson.M{"Username": username}, "User")
+
+				if err != nil {
+					return nil, err
+				}
+
+				existingUser, ok := document.(*models.User)
+
+				if !ok {
+					return nil, errors.New("failed to convert model to User")
+				}
+
+				found, _ := utility.Find(existingUser.TripIDs[:], existingTrip.ID)
+
+				if found {
+					return nil, errors.New("user has reference to trip")
+				}
+
+				found, _ = utility.Find(memberList[:], existingUser.ID)
+
+				if found {
+					return nil, errors.New("trip has reference to user")
+				}
+
+				memberList = append(memberList, existingUser.ID)
+			}
+
+			update["MemberIDs"] = memberList
+		case "RemoveMembers":
+			memberList := existingTrip.MemberIDs
+
+			userList, ok := entry.Data.([]string)
+
+			if !ok {
+				return nil, errors.New("failed to convert user list to string array")
+			}
+
+			for _, username := range userList {
+				document, err := database["UserDetails"].FindDocument(bson.M{"Username": username}, "User")
+
+				if err != nil {
+					return nil, err
+				}
+
+				existingUser, ok := document.(*models.User)
+
+				if !ok {
+					return nil, errors.New("failed to convert model to User")
+				}
+
+				found, _ := utility.Find(existingUser.TripIDs[:], existingTrip.ID)
+
+				if !found {
+					return nil, errors.New("user does not have reference to trip")
+				}
+
+				found, index := utility.Find(memberList[:], existingUser.ID)
+
+				if !found {
+					return nil, errors.New("trip does not have reference to user")
+				}
+
+				memberList = append(memberList[:index], memberList[index+1:]...)
+			}
+
+			update["MemberIDs"] = memberList
+		case "DateRange":
+			// TODO: parse data field for start and end date values
+			// y, m, d, tz := 0, 0, 0, time.Local
+			// newStart := primitive.NewDateTimeFromTime(time.Date(y, time.Month(m), d, 0, 0, 0, 0, tz))
+			// newEnd   := primitive.NewDateTimeFromTime(time.Date(y, time.Month(m), d, 0, 0, 0, 0, tz))
+
+			// TODO: ensure start date is before end date
+		default:
+			return nil, errors.New("invalid field provided: " + entry.FieldName)
+		}
+	}
+
+	document, err = database["TripDetails"].UpdateDocument(bson.M{"_id": existingTrip.ID}, update, "Trip")
+
+	if err != nil {
+		return nil, err
+	}
+
+	updatedTrip, ok := document.(*models.Trip)
+
+	if !ok {
+		return nil, errors.New("failed to convert model to Trip")
+	}
+
+	return updatedTrip, nil
 }
 
 func DeleteTrip(trip models.Trip, database db.Database) error {
