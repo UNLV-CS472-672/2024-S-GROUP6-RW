@@ -8,6 +8,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+type Modification struct {
+	// Fields to bind from modification request
+	FieldName string      `json:"FieldName"`
+	Data      interface{} `json:"Data"`
+}
+
 type Model interface {
 	GetMongoDocument(coll *MongoCollection, filter bson.M) error
 	GetMockDocument(coll *MockCollection, filter bson.M) error
@@ -75,7 +81,7 @@ var ModelFactories = map[string]ModelFactory{
 		return &Expense{
 			ID:               primitive.ObjectID{},
 			ParentTripID:     primitive.ObjectID{},
-			Description:      "",
+			Title:            "",
 			Amount:           float64(0.0),
 			InvoiceIDs:       make([]primitive.ObjectID, 0),
 			RemainingBalance: float64(0.0),
