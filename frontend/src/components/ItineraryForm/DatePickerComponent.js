@@ -48,7 +48,7 @@ const ItineraryDatePickerComponent = () => {
   return (
     <div className="itinerary-date-picker-container">
 
-      <h2 className="header-3"> Select the dates of your trip </h2>
+      <p className="header-3"> Select the dates of your trip </p>
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
 

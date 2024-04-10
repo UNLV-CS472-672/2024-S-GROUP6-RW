@@ -83,7 +83,7 @@ function ResponsiveAppBar({ user }) {
 		<AppBar position="fixed" sx={{
 			background: "linear-gradient( rgba(155, 155, 155, 1.0)10%, rgba(0, 0, 0, 0))",
 			boxShadow: "none",
-			fontFamily: "Radley"
+			fontFamily: "'Radley', serif",
 		  }}> 
 			{/* Container and Toolbar allows the Navbar to be responsive*/}
 			<Container maxWidth="x1">
@@ -99,9 +99,7 @@ function ResponsiveAppBar({ user }) {
 						sx={{
 							mr: 2,
 							display: { xs: "none", md: "flex" },
-							fontFamily: "monospace",
-							fontWeight: 700,
-							letterSpacing: ".3rem",
+							fontFamily: "'Radley', serif",
 							color: "black",
 							textDecoration: "none",
 						}}
@@ -154,7 +152,7 @@ function ResponsiveAppBar({ user }) {
 							mr: 2,
 							display: { xs: "flex", md: "none" },
 							flexGrow: 1,
-							fontFamily: "monospace",
+							fontFamily: "'Radley', serif",
 							fontWeight: 700,
 							letterSpacing: ".3rem",
 							color: "black",
@@ -179,7 +177,7 @@ function ResponsiveAppBar({ user }) {
 							>
 								<Button
 									onClick={handleCloseNavMenu}
-									sx={{ my: 2, color: "black", display: "block" }}
+									sx={{ textTransform: 'none', my: 2, fontFamily: "Radley", color: "black", display: "block" }}
 								>
 									{page}
 								</Button>
@@ -211,7 +209,7 @@ function ResponsiveAppBar({ user }) {
 							}}
 						>
 							<Button
-								sx={{ my: 2, color: "black", display: "block" }}
+								sx={{ textTransform: 'none', my: 2, fontFamily: "Radley", color: "black", display: "block" }}
 								onClick={() => navigate("/login")}
 							>
 								Sign In

@@ -46,7 +46,9 @@
   padding: 10px 20px; 
   cursor: pointer; 
   margin-top: 30px;
-
+  font-family: 'Radley';
+  letter-spacing: 1px;
+  font-size: 16px;
   transition: background-color 0.3s;
   transform: translateY(100%);
   animation: slideIn 2s forwards;

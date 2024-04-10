@@ -16,8 +16,8 @@ function GatheringInfoPage() {
       <div className="whole-page">
         <div className={`screen ${activeScreen === 'screen1' ? 'slide-in' : 'slide-out'}`}>
           <div className="form-half">
-            <h1 className="header-1">Let's plan your next trip together</h1>
-            <h3> Where would you like to go? </h3>
+            <p className="header-1">Let's plan your next trip together</p>
+            <p className="where"> Where would you like to go? </p>
             <SearchBar />
             <button className="next-button"
               onClick={goToScreen2}>
@@ -43,12 +43,13 @@ function GatheringInfoPage() {
               <div className="image-item">
                 <img src="Japan.jpg" />
               </div>
+
             </div>
           </div>
         </div>
         <div className={`screen ${activeScreen === 'screen2' ? 'slide-in' : 'slide-out'}`}>
           <DatePickerComponent />
-            <button className="start-button"
+            <button className="secondNext-button"
               onClick={goToScreen3}
               variant='contained'
               >
@@ -58,7 +59,7 @@ function GatheringInfoPage() {
         </div>
         <div className={`screen ${activeScreen === 'screen3' ? 'slide-in' : 'slide-out'}`}>
           <div className="third-section">
-          <h2 className="header-4"> What are your group preferences? </h2>
+          <p className="header-4"> What are your group preferences? </p>
             <PrefButtons/>
           </div>
         </div>

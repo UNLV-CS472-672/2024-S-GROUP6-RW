@@ -2,21 +2,21 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background-color: #a3b9c9;
 }
 
 .form-half {
-    flex: 1; /* Each side takes up equal amount of space */
+    margin-top: 50px;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center; /* Center content vertically */
     justify-content: center;
-    background-color: #8A716A;
 }
 
 .destination-half {
     position: relative;
     flex: 1;
-    background-color: #C2B8B2;
     display: flex;
     align-items: center; 
     justify-content: center;
@@ -24,21 +24,26 @@
 
 .header-1 {
     font-size: 30px;
-    font-weight: 900;
+    font-weight: 500;
     margin-top: 80px;
     margin-bottom: 0px;
     top: 0;
 }
 
+.where {
+    font-size: 20px;
+    margin-top: 10px;
+}
 .header-2 {
     position: absolute;
-    align-self: flex; /* Align to the start of the flex container */
-    width: 100%; /* Make it full width if needed */
-    text-align: center; /* Keep the text centered */
+    align-self: flex; 
+    width: 100%; 
+    text-align: center; 
     font-size: 30px;
     margin-top: 30px;
     margin-bottom: 80px;
     top: 0;
+    font-weight: 400;
 }
 
 
@@ -47,19 +52,47 @@
     top: 20px;
     left: 275px;
     padding: 10px 20px;
-    width: 100px;
-    background-color: #57886c; 
+    width: 80px;
+    background-color: #36446C; 
     color: white;
     border: none;
     border-radius: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-family: 'Radley';
 }
 
+.secondNext-button {
+  position: relative;
+  bottom: 75px;
+  left:850px;
+  padding: 10px 20px;
+  width: 80px;
+  background-color: #36446C; 
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Radley';
+}
 .third-section {
   position: relative;
   margin-top: 100px;
 }
+
+.header-4 {
+  position: absolute;
+  align-self: flex; 
+  width: 100%; 
+  text-align: center; 
+  font-size: 30px;
+  margin-top: 30px;
+  top: 0;
+  font-weight: 400;
+}
+
+
 .image-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr); /* Creates 2 columns */
