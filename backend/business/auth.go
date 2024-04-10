@@ -83,18 +83,18 @@ func SignIn(user models.User, database db.Database) (string, *models.User, error
 	existingUser, ok := document.(*models.User)
 
 	if !ok {
-		return "", nil, errors.New("Failed to convert model to User.")
+		return "", nil, errors.New("failed to convert model to User")
 	}
 
 	// Verify login details
 	res := bcrypt.CompareHashAndPassword([]byte(existingUser.PassHash), []byte(user.Password))
 
 	if res != nil {
-		return "", nil, errors.New("Invalid email or password.")
+		return "", nil, errors.New("invalid email or password")
 	}
 
 	// Update last login time for user
-	filter := bson.M{"_id": user.ID}
+	filter := bson.M{"Email": user.Email}
 
 	update := bson.M{
 		"LastLogin": primitive.NewDateTimeFromTime(time.Now()),
@@ -107,6 +107,10 @@ func SignIn(user models.User, database db.Database) (string, *models.User, error
 	}
 
 	updateUser, ok := updateResult.(*models.User)
+
+	if !ok {
+		return "", nil, errors.New("failed to convert model to User")
+	}
 
 	// Generate JWT for user
 	tokenString, err := GenerateJWT(user.Username)
