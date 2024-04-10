@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './SearchBar.css';
-import { debounce } from 'lodash'; // Import debounce from lodash
+import { debounce } from 'lodash'; 
 
 function SearchBar() {
   const [query, setQuery] = useState('');
