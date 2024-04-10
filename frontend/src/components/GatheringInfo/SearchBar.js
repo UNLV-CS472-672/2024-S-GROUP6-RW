@@ -1,8 +1,11 @@
+// 2024-S-GROUP6-RW\frontend\src\components\GatheringInfo\SearchBar.js
+
 import React, { useState, useEffect, useCallback } from 'react';
 import './SearchBar.css';
 import { debounce } from 'lodash'; // Import debounce from lodash
+import { saveToLocal } from '../../utils/LocalStorageManager';
 
-function SearchBar() {
+function SearchBar({ storageKey }) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
@@ -38,6 +41,13 @@ function SearchBar() {
     setQuery(cityName);
     setSuggestions([]);
   };
+
+  useEffect(() => {
+    // Save the query to local storage whenever it changes, if storageKey is provided
+    if (storageKey) {
+      saveToLocal(storageKey, query);
+    }
+  }, [query, storageKey]); // dependency array
 
   return (
     <div className="search-container">
