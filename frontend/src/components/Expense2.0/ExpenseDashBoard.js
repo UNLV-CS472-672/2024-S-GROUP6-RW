@@ -94,7 +94,7 @@ function ExpenseDashBoard() {
 						<Item
 							elevation={3}
 							sx={{
-								height: "640px", // Adjust this value to change the height
+								height: "632px",
 							}}
 						>
 							<Activity

@@ -1,7 +1,6 @@
 import React from "react";
 import { Tabs, Tab, Box } from "@mui/material";
 // import expenses form
-import ExpensesForm from "../../components/ExpensesForm/ExpensesForm";
 import ExpenseDashBoard from "../../components/Expense2.0/ExpenseDashBoard";
 
 function ExpensesPage() {
@@ -12,7 +11,7 @@ function ExpensesPage() {
 	};
 
 	return (
-		<Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+		<Box sx={{ width: "100%", bgcolor: "background.paper", mt: 9 }}>
 			<Tabs
 				value={value}
 				onChange={handleChange}

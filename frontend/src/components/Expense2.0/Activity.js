@@ -83,7 +83,7 @@ const ActivityCategory = ({ category, activities, sudoUser }) => {
 			</AccordionSummary>
 			<AccordionDetails
 				sx={{
-					maxHeight: "620px",
+					maxHeight: "600px",
 					overflow: "auto",
 					"&::-webkit-scrollbar": {
 						display: "none",
@@ -144,7 +144,7 @@ const Activities = ({
 				borderRadius: "16px",
 				color: theme.palette.text.primary,
 				overflow: "hidden",
-				height: "640px",
+				height: "600px",
 			}}
 		>
 			<CardContent sx={{ height: "640px", overflowY: "auto" }}>
