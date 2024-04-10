@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import './SearchBar.css';
-import { debounce } from 'lodash'; // Import debounce from lodash
+
 import { saveToLocal } from '../../utils/LocalStorageManager';
+import { debounce } from 'lodash'; 
+
 
 function SearchBar({ storageKey }) {
   const [query, setQuery] = useState('');

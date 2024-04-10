@@ -43,6 +43,7 @@ const DatePickerComponent = ({ startDateKey, endDateKey }) => {
     return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
   };
 
+
   // Effect to save start date to local storage
   useEffect(() => {
     if (startDate && startDateKey) {
@@ -57,9 +58,16 @@ const DatePickerComponent = ({ startDateKey, endDateKey }) => {
       saveToLocal(endDateKey, endDate);
     }
   }, [endDate, endDateKey]);
+  const handleIdk = () => {
+    console.log("User is not sure.");
+    navigate('/map');
+  };
+
 
   return (
     <div className="itinerary-date-picker-container">
+
+      <p className="header-3"> Select the dates of your trip </p>
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
 
@@ -81,15 +89,10 @@ const DatePickerComponent = ({ startDateKey, endDateKey }) => {
         />
       </div>
 
-        <Button className="start-button"
-          onClick={handleComplete}
-          variant='contained'
-          disabled={!isDateSelectionComplete}
-
-        >
-          Start
-        </Button>
       </LocalizationProvider>
+      
+      <button onClick={handleIdk} className="idkButton">Not sure yet? Create a poll!</button>
+      
     </div>
   );
 };
