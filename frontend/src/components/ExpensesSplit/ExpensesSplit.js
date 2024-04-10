@@ -36,6 +36,7 @@ function ExpensesSplit() {
 			width: 150,
 			renderCell: (params) => (
 				<div>
+					{/*/ ai-gen start (ChatGPT-4.0, 2)*/}
 					<EditIcon
 						color="primary"
 						onClick={() => {
@@ -55,6 +56,7 @@ function ExpensesSplit() {
 						onClick={() => handleDelete(params.row.id)}
 						style={{ cursor: "pointer" }}
 					/>
+					{/*/ ai-gen end */}
 				</div>
 			),
 		},
@@ -79,10 +81,12 @@ function ExpensesSplit() {
 	};
 
 	return (
+		// ai-gen start (ChatGPT-4.0, 1)
 		<Container maxWidth="xl" sx={{ mt: 4 }}>
 			<Paper elevation={3} sx={{ mb: 2 }}>
 				<AppBar position="static" color="inherit" elevation={0}>
 					<Toolbar>
+						{/* ai-gen end */}
 						<Grid container spacing={1}>
 							<Grid item xs={12} sm={6}>
 								<Typography variant="h6" sx={{ flexGrow: 1 }}>

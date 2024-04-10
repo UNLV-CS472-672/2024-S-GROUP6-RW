@@ -68,11 +68,9 @@ function AddPersonDialog({ open, onClose, onAdd }) {
 	};
 
 	const handleSplitMethodChange = (event, person) => {
-		const updatedPeople = people.map(
-			(p) =>
-				// AI generate code help to filter the data --------
-				p.id === person.id ? { ...p, splitMethod: event.target.value } : p
-			// AI generate code help to filter the data --------
+		// ai-gen start (ChatGPT-3.5, 1)
+		const updatedPeople = people.map((p) =>
+			p.id === person.id ? { ...p, splitMethod: event.target.value } : p
 		);
 		// Create a new array with the updated people
 		const newPeople = [...updatedPeople];

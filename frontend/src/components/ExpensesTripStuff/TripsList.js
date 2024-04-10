@@ -71,8 +71,10 @@ export default function ButtonBaseDemo() {
 					{/*This is for the grid of images */}
 					<Grid container spacing={5}>
 						{currTrip.map((trip, index) => (
+							// ai-gen start (ChatGPT-4.0, 1)
 							<Grid item xs={12} sm={6} md={3} key={index}>
 								<Card component={Link} to={trip.link}>
+									{/* ai-gen end */}
 									<CardActionArea>
 										<CardMedia
 											component="img"
@@ -80,6 +82,7 @@ export default function ButtonBaseDemo() {
 											image={trip.url}
 											alt={trip.title}
 										/>
+										{/* ai-gen start (ChatGPT-4.0, 1) */}
 										<Box
 											component="div"
 											sx={{
@@ -96,6 +99,7 @@ export default function ButtonBaseDemo() {
 												opacity: 0.6,
 											}}
 										>
+											{/* ai-gen end */}
 											<Typography variant="h5">
 												{trip.title}
 											</Typography>

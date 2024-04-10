@@ -26,7 +26,7 @@ const dialogContainerStyle = {
 	},
 };
 
-// AI generate code help to filter the data --------
+// ai-gen start (ChatGPT-4.0, 1)
 const formatDateForInput = (date) => {
 	const d = new Date(date);
 	let month = "" + (d.getMonth() + 1),
@@ -38,7 +38,7 @@ const formatDateForInput = (date) => {
 
 	return [year, month, day].join("-");
 };
-// AI generate code help to filter the data --------
+// ai-gen end
 
 /**
  * NewExpenseDialog component is used to add new expense to the list of expenses.
@@ -67,7 +67,6 @@ const NewExpenseDialog = ({
 	);
 	const [payer, setPayer] = useState(expense ? expense.payer : "");
 	// state var for the date
-	// Assuming formatDateForInput is imported or defined in this file
 	const [date, setDate] = useState(
 		expense
 			? formatDateForInput(expense.date)
@@ -114,9 +113,9 @@ const NewExpenseDialog = ({
 		setName("");
 		setAmount("");
 		setPayer("");
-		// AI generate code help to filter the data --------
+		// ai-gen start (ChatGPT-4.0, 0)
 		setDate(formatDateForInput(new Date()));
-		// AI generate code help to filter the data --------
+		// ai-gen end
 		setDescription("");
 	};
 
@@ -152,6 +151,8 @@ const NewExpenseDialog = ({
 		if (error) {
 			clearForm();
 		}
+
+		//console.log(expense);
 
 		// Call the onAddExpense or onEditExpense function with the new expense details
 		if (expense) {
@@ -254,9 +255,9 @@ const NewExpenseDialog = ({
 								label="Name"
 								type="text"
 								fullWidth
-								// AI generate code help to filter the data --------
+								// ai-gen start (ChatGPT-4.0, 0)
 								value={name || ""}
-								// AI generate code help to filter the data --------
+								// ai-gen end
 								onChange={(e) => setName(e.target.value)}
 								sx={{ marginBottom: "20px", marginTop: "20px" }}
 							/>
@@ -266,9 +267,9 @@ const NewExpenseDialog = ({
 								label="Amount"
 								type="number"
 								fullWidth
-								// AI generate code help to filter the data --------
+								// ai-gen start (ChatGPT-4.0, 0)
 								value={amount || ""}
-								// AI generate code help to filter the data --------
+								// ai-gen end
 								onChange={(e) => setAmount(e.target.value)}
 								sx={{ marginBottom: "20px" }}
 							/>
@@ -278,9 +279,9 @@ const NewExpenseDialog = ({
 								label="Paid by:"
 								type="text"
 								fullWidth
-								// AI generate code help to filter the data --------
+								// ai-gen start (ChatGPT-4.0, 0)
 								value={payer || ""}
-								// AI generate code help to filter the data --------
+								// ai-gen end
 								onChange={(e) => setPayer(e.target.value)}
 								sx={{ marginBottom: "20px" }}
 							/>
@@ -290,10 +291,10 @@ const NewExpenseDialog = ({
 								margin="dense"
 								type="date"
 								fullWidth
-								// AI generate code help to filter the data --------
+								// ai-gen start (ChatGPT-4.0, 0)
 								value={date || formatDateForInput(new Date())}
 								onChange={(e) => setDate(e.target.value)}
-								// AI generate code help to filter the data --------
+								// ai-gen end
 								sx={{ marginBottom: "20px" }}
 							/>
 
@@ -310,11 +311,11 @@ const NewExpenseDialog = ({
 										setDescription(e.target.value);
 									}
 								}}
-								// AI generate code help to filter the data --------
+								// ai-gen start (ChatGPT-4.0, 0)
 								helperText={`${
 									description ? description.split(" ").length : 0
 								}/300`}
-								// AI generate code help to filter the data --------
+								// ai-gen end
 								sx={{ marginBottom: "20px" }}
 							/>
 						</div>

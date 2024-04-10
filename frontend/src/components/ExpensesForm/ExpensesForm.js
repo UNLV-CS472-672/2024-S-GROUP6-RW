@@ -137,10 +137,32 @@ const ExpenseForm = () => {
 		setDialogOpen(true);
 	}, []);
 
+	const handleEditExpense = useCallback(
+		(expense) => {
+			// find the index of the expense in the expensesData array
+			const index = expensesData.findIndex((e) => e.id === expense.id);
+
+			// if the expense is found
+			if (index !== -1) {
+				// create a new array with the updated expense
+				const newExpenses = [...expensesData];
+				newExpenses[index] = expense;
+
+				// set the new array as the expensesData
+				setExpensesData(newExpenses);
+
+				// set the dialogExpense to null and close the dialog
+				setDialogExpense(null);
+				setDialogOpen(false);
+			}
+		},
+		[expensesData]
+	);
+
 	// Use the useEffect hook to filter the expensesData array based on the search term and search type
 	// and doing this will help to filter the data without the need to refresh the page
 	useEffect(() => {
-		// AI generate code help to filter the data --------
+		// ai-gen start (ChatGPT-4.0, 2)
 		setFilteredExpenses(
 			expensesData.filter((expense) => {
 				if (searchType === "payer") {
@@ -154,11 +176,12 @@ const ExpenseForm = () => {
 				}
 				return true;
 			})
-			// AI generate code help to filter the data --------
+			// ai-gen end
 		);
 	}, [expensesData, searchTerm, searchType]);
 
 	return (
+		// ai-gen start (ChatGPT-4.0, 2)
 		// Container = used to center the content and set the max-width
 		<Container maxWidth="xl" sx={{ mt: 4 }}>
 			{/* Paper = used to create a surface to display the content */}
@@ -179,6 +202,7 @@ const ExpenseForm = () => {
 				>
 					{/* Toolbar = used to create a container for the content */}
 					<Toolbar>
+						{/* ai-gen end */}
 						{/* Grid = used to create a grid layout for the responsive web/phone */}
 						<Grid container spacing={1}>
 							<Grid item xs={12} sm={6}>
@@ -195,6 +219,7 @@ const ExpenseForm = () => {
 							<Grid item xs={12} sm={2}>
 								{/* Our custom function that used to handle logic */}
 								<NewExpenseDialog
+									onEditExpense={handleEditExpense}
 									onAddExpense={handleAddExpense} // pass the function to the dialog
 									expense={dialogExpense} // pass the expense
 									open={dialogOpen} // pass the open state
@@ -239,7 +264,6 @@ const ExpenseForm = () => {
 				{...expensesData}
 				// set the initial state of the data grid with the expensesData array
 				// and we also set the pagination to show 5 rows per page
-				// AI generate code --------------
 				initialState={{
 					...expensesData.initialState,
 					pagination: { paginationModel: { pageSize: 5 } },
@@ -247,13 +271,12 @@ const ExpenseForm = () => {
 				// set the page size options to show 5, 10, 25, 50, and 100 rows per page
 				pageSizeOptions={[5, 10, 25, 50, 100]}
 				// set the columns of the data grid
-				// AI generate code help to filter the data --------
 				columns={cols.map((col) => ({
 					...col,
 					// we have to do it this way bc the way I set up the NewExpenseDialog component
 					// TODO: Think of better way to redo the NewExpenseDialog component
 					// so that we wont have to do renderCell if we ever want to add more columns
-					// AI generate code help to filter the data --------
+					// ai-gen start (ChatGPT-4.0, 2)
 					renderCell: (params) => {
 						if (col.field === "actions") {
 							return (
@@ -262,6 +285,7 @@ const ExpenseForm = () => {
 								<Box display="flex" flexDirection="row">
 									<NewExpenseDialog
 										onAddExpense={handleAddExpense}
+										onEditExpense={handleEditExpense}
 										expense={dialogExpense}
 										open={dialogOpen}
 										onClose={() => setDialogOpen(false)}
@@ -279,7 +303,7 @@ const ExpenseForm = () => {
 						// return the value of the cell if it is not the actions column
 						return params.value;
 					},
-					// AI generate code help to filter the data --------
+					// ai-gen end
 				}))}
 				// set the rows of the data grid to the filteredExpenses array to display the filtered expenses
 				rows={filteredExpenses.map((expense) => ({
