@@ -26,7 +26,7 @@ const PrefButtons = () => {
 
   const handleSubmit = () => {
     console.log("Selected Categories:", selectedCategories);
-    navigate('/map');
+    navigate('/register');
   };
 
   return (

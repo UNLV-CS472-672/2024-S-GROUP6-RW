@@ -40,8 +40,15 @@ const ItineraryDatePickerComponent = () => {
     return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
   };
 
+  const handleIdk = () => {
+    console.log("User is not sure.");
+    navigate('/map');
+  };
+
   return (
     <div className="itinerary-date-picker-container">
+
+      <p className="header-3"> Select the dates of your trip </p>
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
 
@@ -63,15 +70,10 @@ const ItineraryDatePickerComponent = () => {
         />
       </div>
 
-        <Button className="start-button"
-          onClick={handleComplete}
-          variant='contained'
-          disabled={!isDateSelectionComplete}
-
-        >
-          Start
-        </Button>
       </LocalizationProvider>
+      
+      <button onClick={handleIdk} className="idkButton">Not sure yet? Create a poll!</button>
+      
     </div>
   );
 };

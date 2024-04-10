@@ -5,7 +5,7 @@ import "../../css/GettingStarted.css"
 function GettingStartedBanner(props) {
   return(
     <>
-        <div className={props.cName}>
+        {/*<div className={props.cName}>
             <img src={props.BannerBackground} alt="" />
 
             <div className={props.textSection}>
@@ -23,7 +23,11 @@ function GettingStartedBanner(props) {
           <div className={props.directionText}>
             
           </div>
-        </div>
+  </div> */}
+    <div className="image-item">
+      <img src="plane.jpg" alt="Description 1" />
+     
+    </div>
     </>
   );
 }
