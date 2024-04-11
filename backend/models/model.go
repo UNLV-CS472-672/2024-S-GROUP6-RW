@@ -49,7 +49,7 @@ var ModelFactories = map[string]ModelFactory{
 		return &Trip{
 			ID:           primitive.ObjectID{},
 			TripOwnerID:  primitive.ObjectID{},
-			TripTitle:    "",
+			Title:        "",
 			LocationName: "",
 			MemberIDs:    make([]primitive.ObjectID, 0),
 			ActivityIDs:  make([]primitive.ObjectID, 0),
@@ -70,7 +70,8 @@ var ModelFactories = map[string]ModelFactory{
 			ID:           primitive.ObjectID{},
 			ParentTripID: primitive.ObjectID{},
 			Description:  "",
-			Date:         primitive.DateTime(0),
+			StartDate:    primitive.DateTime(0),
+			EndDate:      primitive.DateTime(0),
 			ImageURI:     "",
 			IsMapBased:   false,
 			Address:      "",
