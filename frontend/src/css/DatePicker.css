@@ -1,17 +1,28 @@
 /* Styles for the main container */
 .itinerary-date-picker-container {
     display: flex;
+    margin-top: 200px;
+    margin-bottom: 80px;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
-    gap: 20px; /* Add some space between elements */
-    background-color: #e1e1bf;
+    padding:10px;
+    gap: 20px; 
     border-radius: 20px;
   }
   
+  .header-3 {
+    position: absolute;
+    align-self: flex; /* Align to the start of the flex container */
+    width: 100%; /* Make it full width if needed */
+    text-align: center; /* Keep the text centered */
+    font-size: 30px;
+    margin-top: 140px;
+    top: 0;
+}
+
   .date-picker-container {
     display: flex;
-    justify-content: space-between; /* Adjust based on your preference */
+    justify-content: space-between; 
     width: 100%;
     max-width: 450px; 
     border-radius: 20px;
@@ -19,26 +30,27 @@
   
   /* Styles for the DatePicker input fields */
   .MuiTextField-root {
-    border-radius: 10px;
-    background-color: #fecccc;
-    flex: 1; /* Make each TextField flex to fill the space */
+    font-family: 'Radley';
+    background-color: white;
+    border-radius: 5px;
+    flex: 1; 
     &:first-child {
-      margin-right: 20px; /* Add some space between the two TextFields */
+      margin-right: 30px; 
     }
   }
 
 
-  /* Styles for the start button */
+  /* Styles for the start button
   .itinerary-date-picker-container .start-button {
     padding: 10px 20px;
-    background-color: #2a7f75; /* MUI primary color */
+    background-color: #2a7f75; 
     color: white;
     border: none;
     border-radius: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   
-    /* Disabled state */
+    /* Disabled state
     &:disabled {
       background-color: #b6b6b6;
       cursor: not-allowed;
@@ -48,4 +60,4 @@
   .itinerary-date-picker-container .start-button:hover {
     background-color: #1b5952; 
   }
-  
+  */

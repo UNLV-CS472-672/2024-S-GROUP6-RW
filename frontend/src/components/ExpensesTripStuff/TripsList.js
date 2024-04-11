@@ -28,7 +28,7 @@ const images = [
 		height: "50%",
 	},
 	{
-		url: "/hobbithome.jpg",
+		url: "hobbithome.jpg",
 		title: "New Zealand",
 		width: "50%",
 		height: "50%",

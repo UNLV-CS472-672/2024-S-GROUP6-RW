@@ -84,7 +84,7 @@ func (mc *MockCollection) UpdateDocument(filter bson.M, content bson.M, modelTyp
 	objectID, ok := tmp.(primitive.ObjectID)
 
 	if !ok {
-		return nil, errors.New("Failed to convert ID to ObjectID.")
+		return nil, errors.New("failed to convert ID to ObjectID")
 	}
 
 	// Update the entry in the collection
@@ -120,7 +120,7 @@ func (mc *MockCollection) FindDocument(filter bson.M, modelType string) (Model, 
 	}
 
 	if !found {
-		return nil, errors.New("Unable to find document.")
+		return nil, errors.New("unable to find document")
 	}
 
 	factory, ok := ModelFactories[modelType]
@@ -159,7 +159,7 @@ func (mc *MockCollection) DeleteDocument(filter bson.M, modelType string) error 
 	objectID, ok := tmp.(primitive.ObjectID)
 
 	if !ok {
-		return errors.New("Failed to convert ID to ObjectID.")
+		return errors.New("failed to convert ID to ObjectID")
 	}
 
 	// Remove document from collection
