@@ -12,22 +12,22 @@ type Trip struct {
 	// Fields for actual Trip document in database
 	ID           primitive.ObjectID   `bson:"_id,omitempty"`
 	TripOwnerID  primitive.ObjectID   `bson:"TripOwnerID,omitempty"`
-	TripTitle    string               `bson:"TripTitle,omitempty"`
+	Title        string               `bson:"Title,omitempty"`
 	LocationName string               `bson:"LocationName,omitempty"`
+	StartDate    primitive.DateTime   `bson:"StartDate,omitempty"`
+	EndDate      primitive.DateTime   `bson:"EndDate,omitempty"`
 	MemberIDs    []primitive.ObjectID `bson:"MemberIDs,omitempty"`
 	ActivityIDs  []primitive.ObjectID `bson:"ActivityIDs,omitempty"`
 	ExpenseIDs   []primitive.ObjectID `bson:"ExpenseIDs,omitempty"`
-	StartDate    primitive.DateTime   `bson:"StartDate,omitempty"`
-	EndDate      primitive.DateTime   `bson:"EndDate,omitempty"`
 
 	// Placeholder fields for trip entry point data
-	Username      string
+	TripOwner     string
 	Modifications []Modification
 }
 
 func (t *Trip) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	*t = Trip{
-		Username:      t.Username,
+		TripOwner:     t.TripOwner,
 		Modifications: t.Modifications,
 	}
 
@@ -39,14 +39,16 @@ func (t *Trip) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	}
 
 	// Acquire value and validity of Trip fields from result
-	var idOK, ownerOK, tripTitleOK, locationNameOK, membersOK, activitiesOK, expensesOK bool
+	var idOK, ownerOK, titleOK, locationNameOK, startDateOK, endDateOK, membersOK, activitiesOK, expensesOK bool
 	var activityList, memberList, expenseList primitive.A
 	var id primitive.ObjectID
 
 	t.ID, idOK = result["_id"].(primitive.ObjectID)
 	t.TripOwnerID, ownerOK = result["TripOwnerID"].(primitive.ObjectID)
-	t.TripTitle, tripTitleOK = result["TripTitle"].(string)
+	t.Title, titleOK = result["Title"].(string)
 	t.LocationName, locationNameOK = result["LocationName"].(string)
+	t.StartDate, startDateOK = result["StartDate"].(primitive.DateTime)
+	t.EndDate, endDateOK = result["EndDate"].(primitive.DateTime)
 	memberList, membersOK = result["MemberIDs"].(primitive.A)
 	activityList, activitiesOK = result["ActivityIDs"].(primitive.A)
 	expenseList, expensesOK = result["ExpenseIDs"].(primitive.A)
@@ -76,7 +78,7 @@ func (t *Trip) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 		}
 	}
 
-	checklist := []bool{idOK, ownerOK, tripTitleOK, locationNameOK, membersOK, activitiesOK, expensesOK}
+	checklist := []bool{idOK, ownerOK, titleOK, locationNameOK, startDateOK, endDateOK, membersOK, activitiesOK, expensesOK}
 
 	// Check if all results are valid
 	valid := true
@@ -92,9 +94,10 @@ func (t *Trip) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	return nil
 }
 
+// TODO: Verify integrity of mock document retrieval
 func (t *Trip) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	*t = Trip{
-		Username:      t.Username,
+		TripOwner:     t.TripOwner,
 		Modifications: t.Modifications,
 	}
 
@@ -104,7 +107,7 @@ func (t *Trip) GetMockDocument(coll *MockCollection, filter bson.M) error {
 		return errors.New("trip does not exist")
 	}
 
-	err = result.SetValue("Username", t.Username)
+	err = result.SetValue("Username", t.TripOwner)
 
 	if err != nil {
 		return err
@@ -126,8 +129,8 @@ func (t *Trip) GetMockDocument(coll *MockCollection, filter bson.M) error {
 
 func (t *Trip) GetKeys() []string {
 	return []string{
-		"_id", "TripOwnerID", "TripTitle", "LocationName", "MemberIDs", "ActivityIDs",
-		"ExpenseIDs",
+		"_id", "TripOwnerID", "Title", "LocationName", "StartDate", "EndDate",
+		"MemberIDs", "ActivityIDs", "ExpenseIDs",
 	}
 }
 
@@ -137,10 +140,14 @@ func (t *Trip) GetValue(key string) (any, error) {
 		return t.ID, nil
 	case "TripOwnerID":
 		return t.TripOwnerID, nil
-	case "TripTitle":
-		return t.TripTitle, nil
+	case "Title":
+		return t.Title, nil
 	case "LocationName":
 		return t.LocationName, nil
+	case "StartDate":
+		return t.StartDate, nil
+	case "EndDate":
+		return t.EndDate, nil
 	case "MemberIDs":
 		return t.MemberIDs, nil
 	case "ActivityIDs":
@@ -168,9 +175,9 @@ func (t *Trip) SetValue(key string, value any) error {
 		}
 
 		return errors.New("failed to convert value to ObjectID")
-	case "TripTitle":
-		if TripTitle, ok := value.(string); ok {
-			t.TripTitle = TripTitle
+	case "Title":
+		if Title, ok := value.(string); ok {
+			t.Title = Title
 			return nil
 		}
 
@@ -182,6 +189,20 @@ func (t *Trip) SetValue(key string, value any) error {
 		}
 
 		return errors.New("failed to convert value to string")
+	case "StartDate":
+		if StartDate, ok := value.(primitive.DateTime); ok {
+			t.StartDate = StartDate
+			return nil
+		}
+
+		return errors.New("failed to convert value to DateTime")
+	case "EndDate":
+		if EndDate, ok := value.(primitive.DateTime); ok {
+			t.EndDate = EndDate
+			return nil
+		}
+
+		return errors.New("failed to convert value to DateTime")
 	case "MemberIDs":
 		if idList, ok := value.([]primitive.ObjectID); ok {
 			t.MemberIDs = idList
