@@ -29,6 +29,8 @@ func GetProfileHandler(c *gin.Context) {
 		return
 	}
 
+	// TODO: select relavent information from the profile to return to client
+
 	fmt.Println("Success.")
 
 	// Return OK status to client
