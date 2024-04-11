@@ -26,19 +26,23 @@ const ItineraryDatePickerComponent = () => {
     setEndDate(date);
   };
 
-  const isDateSelectionComplete = startDate && endDate && startDate <= endDate;
-
-  const handleComplete = () => {
-    if (isDateSelectionComplete) {
-      navigate('/prefselection');
-    }
-  };
-
-  // Function to calculate the number of days between two dates
   const calculateNumberOfDays = (startDate, endDate) => {
     const oneDay = 24 * 60 * 60 * 1000;
     return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
   };
+
+  const isDateSelectionComplete = startDate && endDate && startDate <= endDate;
+
+  const handleComplete = () => {
+    if (isDateSelectionComplete) {
+      localStorage.setItem('startDate', startDate?.toISOString());
+      localStorage.setItem('endDate', endDate?.toISOString());
+      navigate('/prefselection');
+    }
+  };
+
+
+  const triplength = calculateNumberOfDays();
 
   const handleIdk = () => {
     console.log("User is not sure.");
