@@ -19,30 +19,23 @@ const ItineraryDatePickerComponent = () => {
   //For onclick start date
   const handleStartDateChange = (date) => {
     setStartDate(date);
+    localStorage.setItem('startDate', date?.toISOString());
+    console.log(startDate);
   };
 
   //For onclick end date
   const handleEndDateChange = (date) => {
     setEndDate(date);
+    localStorage.setItem('endDate', date?.toISOString());
   };
 
-  const calculateNumberOfDays = (startDate, endDate) => {
-    const oneDay = 24 * 60 * 60 * 1000;
-    return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
-  };
-
-  const isDateSelectionComplete = startDate && endDate && startDate <= endDate;
-
+  
   const handleComplete = () => {
-    if (isDateSelectionComplete) {
-      localStorage.setItem('startDate', startDate?.toISOString());
-      localStorage.setItem('endDate', endDate?.toISOString());
+    if (startDate && endDate && startDate <= endDate) {
       navigate('/prefselection');
     }
   };
 
-
-  const triplength = calculateNumberOfDays();
 
   const handleIdk = () => {
     console.log("User is not sure.");
