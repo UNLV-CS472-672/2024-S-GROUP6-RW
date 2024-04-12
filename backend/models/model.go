@@ -51,6 +51,8 @@ var ModelFactories = map[string]ModelFactory{
 			TripOwnerID:  primitive.ObjectID{},
 			Title:        "",
 			LocationName: "",
+			StartDate:    primitive.DateTime(0),
+			EndDate:      primitive.DateTime(0),
 			MemberIDs:    make([]primitive.ObjectID, 0),
 			ActivityIDs:  make([]primitive.ObjectID, 0),
 			ExpenseIDs:   make([]primitive.ObjectID, 0),
