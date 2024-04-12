@@ -1,9 +1,12 @@
+// // 2024-S-GROUP6-RW\frontend\src\components\PrefSelect\PrefButtons.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../css/PrefButtons.css';
-
+import SignInPopUp from '../GatheringInfo/SignInPopUp';
 
 const PrefButtons = () => {
+  // State to control the visibility of the SignInPopUp
+  const [showSignInPopUp, setShowSignInPopUp] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const categories = ['Beaches', 'Theme Parks', 'Shopping', 'Shows', 'Museums', 'Thrilling', 'Nightlife', 'Nature', 'Art & Culture', 'Tourist Attractions', 'Food'];
   const navigate = useNavigate();
@@ -26,11 +29,13 @@ const PrefButtons = () => {
 
   const handleSubmit = () => {
     console.log("Selected Categories:", selectedCategories);
-    navigate('/register');
-  };
+    console.log("onComplete called");
+    setShowSignInPopUp(true);
+};
 
   return (
     <div className="buttonContainer">
+      <SignInPopUp open={showSignInPopUp} handleClose={() => setShowSignInPopUp(false)} />
       <div className="categoriesContainer">
         {categories.map((category) => (
           <button
@@ -46,6 +51,7 @@ const PrefButtons = () => {
         <button onClick={handleNotSure} className="notSureButton">I'm not sure</button>
       </div>
       <button onClick={handleSubmit} className="submitButton">Submit</button>
+      
     </div>
   );
 };

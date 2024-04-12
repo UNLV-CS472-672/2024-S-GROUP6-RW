@@ -17,6 +17,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { convertLength } from "@mui/material/styles/cssUtils";
+import { saveToLocal } from "../../utils/LocalStorageManager";
+import { gettingStartedCreateTrip } from "../../utils/ApiManager";
 
 const dialogContainerStyle = {
 	backdropFilter: "blur(5px)",
@@ -71,8 +73,18 @@ const SignInDialog = ({ open }) => {
 		try {
 			const response = await axios.post(apiUrl, credentials);
 			login(response.data.token);
-			// console.log(`respose token: ${response.data.token}`);
-			navigate("/map");
+			console.log(`respose token: ${response.data}`);
+			// Store username and email in local storage
+			
+			const { username } = response.data;
+			// console.log(username);
+			saveToLocal('username', username);
+			saveToLocal('email', Email);
+
+			gettingStartedCreateTrip();
+
+			navigate("/my-trips");
+
 		} catch (error) {
 			if (error.response) {
 				// The request was made and the server responded with a status code

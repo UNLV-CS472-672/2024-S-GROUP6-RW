@@ -15,7 +15,17 @@ func main() {
 	fmt.Printf("Current Time: %s\n", time.Now())
 
 	r := gin.Default()
-	r.Use(cors.Default()) // Setup CORS middleware as needed
+	r.Use(cors.New(cors.Config{
+        AllowOrigins:     []string{"http://localhost:3000"}, // Adjust as needed
+        AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+        AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+        ExposeHeaders:    []string{"Content-Length"},
+        AllowCredentials: true,
+        AllowOriginFunc: func(origin string) bool {
+            return origin == "http://localhost:3000" // Adjust as needed
+        },
+        MaxAge: 12 * time.Hour,
+    }))
 
 	// Set up JWT authentication
 	business.JWTSetup()

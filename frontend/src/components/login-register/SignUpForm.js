@@ -9,9 +9,12 @@ import {
 import { useAuth } from "../../auth/AuthContext";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { saveToLocal } from "../../utils/LocalStorageManager";
+import { useNavigate } from 'react-router-dom';
 
 const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
 	const { login } = useAuth();
+	const navigate = useNavigate();
 	const [Username, setUsername] = useState("");
 	const [FirstName, setFirstName] = useState("");
 	const [LastName, setLastName] = useState("");
@@ -89,9 +92,11 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
 					if (data.token) {
 						// Use the login function to save the token and update auth state
 						login(data.token);
-						console.log(data.token); //Needs to be deleted after testing
-
-						// Redirect to dashboard or show success message
+						// console.log(data.token); //Needs to be deleted after testing
+						// Store username and email in local storage
+						saveToLocal('username', Username);
+						saveToLocal('email', Email);
+						navigate('/my-trips');
 					} else {
 						// Handle the case where no token is returned
 						throw new Error("No token received after registration.");

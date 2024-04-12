@@ -3,7 +3,7 @@ package models
 import (
 	"context"
 	"errors"
-
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -35,6 +35,7 @@ func (t *Trip) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	err := coll.Collection.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
+		fmt.Println("trip does not exist")
 		return errors.New("trip does not exist")
 	}
 
@@ -86,6 +87,7 @@ func (t *Trip) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	}
 
 	if !valid {
+		fmt.Println("failed to convert result to trip")
 		return errors.New("failed to convert result to trip")
 	}
 
@@ -101,6 +103,7 @@ func (t *Trip) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	result, err := coll.FindDocument(filter, "Trip")
 
 	if err != nil {
+		fmt.Println("trip does not exist")
 		return errors.New("trip does not exist")
 	}
 
