@@ -1,5 +1,5 @@
 // 2024-S-GROUP6-RW\frontend\src\components\NavBar\NavBar.js
-
+// ref: https://mui.com/material-ui/react-app-bar/
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
@@ -48,7 +48,6 @@ function ResponsiveAppBar({ user }) {
 	const theme = useTheme();
 	// get the current color mode
 	const colorMode = useContext(ColorModeContext);
-	//console.log("Color Mode Context:", colorMode);
 
 	// handle the open and close of the menu
 	const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);

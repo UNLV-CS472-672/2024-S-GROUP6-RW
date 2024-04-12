@@ -1,3 +1,5 @@
+//ref: https://mui.com/material-ui/customization/dark-mode/
+
 import React from "react";
 import { ThemeProvider, createTheme } from "@mui/material";
 
@@ -17,7 +19,6 @@ export default function ToggleColorMode({ children }) {
 	const colorMode = React.useMemo(
 		() => ({
 			toggleColorMode: () => {
-				//console.log("Toggling color mode");
 				setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
 			},
 		}),
