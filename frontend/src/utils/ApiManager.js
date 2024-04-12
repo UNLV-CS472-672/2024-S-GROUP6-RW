@@ -7,6 +7,7 @@ const API_ENDPOINT = 'http://localhost:8080';
 
 export const gettingStartedCreateTrip = async () => {
   // Fetch data from local storage
+  const tripTitle = getFromLocal('tripTitle');
   const locationName = getFromLocal('LocationName');
   const startDate = getFromLocal('startDate');
   const endDate = getFromLocal('endDate');
@@ -15,8 +16,8 @@ export const gettingStartedCreateTrip = async () => {
   // Construct the trip data object
   const tripData = {
     Username: username,
-    Title: "Getting Started Trip",
-    "Location Name": locationName,
+    TripTitle: tripTitle,
+    LocationName: locationName,
     StartDate: startDate,
     EndDate: endDate,
   };
