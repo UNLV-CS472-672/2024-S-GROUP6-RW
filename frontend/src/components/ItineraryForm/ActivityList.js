@@ -1,0 +1,66 @@
+const now = new Date();
+
+export default [
+  {
+    id: 1,
+    title: "Explore the city",
+    location: "City Center",
+    start: new Date(2024, 3, 12, 10, 0, 0),
+    end: new Date(2024, 3, 12, 11, 0, 0),
+    allDay: false,
+    description:
+      "Take a walking tour around the city center to explore landmarks and attractions.",
+    photo: "city.jpg",
+  },
+  {
+    id: 2,
+    title: "Visit a museum",
+    location: "Local Museum",
+    start: new Date(2024, 3, 12, 13, 0, 0),
+    end: new Date(2024, 3, 12, 14, 30, 0),
+    allDay: false,
+    description: "Discover the rich history and art of the region at the local museum.",
+    photo: "museum.jpg",
+  },
+  {
+    id: 3,
+    title: "Dinner at a local restaurant",
+    location: "Restaurant XYZ",
+    start: new Date(2024, 3, 12, 19, 0, 0),
+    end: new Date(2024, 3, 12, 20, 30, 0),
+    allDay: false,
+    description: "Enjoy a delicious dinner at a popular local restaurant.",
+    photo: "https://example.com/restaurant-photo.jpg",
+  },
+  {
+    id: 4,
+    title: "City park exploration",
+    location: "City Park",
+    start: new Date(2024, 3, 12, 21, 0, 0),
+    end: new Date(2024, 3, 12, 22, 30, 0),
+    allDay: false,
+    description: "Explore the beautiful City Park and enjoy nature.",
+    photo: "https://example.com/park-photo.jpg",
+  },
+  {
+    id: 5,
+    title: "Relax at the beach",
+    location: "Beach Resort",
+    start: new Date(2024, 3, 12, 22, 0, 0),
+    end: new Date(2024, 3, 12, 23, 30, 0),
+    allDay: false,
+    description: "Spend a relaxing day at the beach and soak up the sun.",
+    photo: "https://example.com/beach-photo.jpg",
+  },
+  {
+    id: 6,
+    title: "Sunset Cruise",
+    location: "Harbor",
+    start: new Date(2024, 3, 12, 23, 0, 0),
+    end: new Date(2024, 3, 12, 0, 30, 0),
+    allDay: false,
+    description: "Experience a breathtaking sunset cruise along the coast.",
+    photo: "https://example.com/cruise-photo.jpg",
+  },
+  
+];
