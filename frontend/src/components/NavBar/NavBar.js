@@ -39,11 +39,10 @@ function ResponsiveAppBar({ user }) {
   // this is mean that the menu is not open
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  // get the current theme
-  const theme = useTheme();
-  // get the current color mode
-  const colorMode = useContext(ColorModeContext);
-  //console.log("Color Mode Context:", colorMode);
+	// get the current theme
+	const theme = useTheme();
+	// get the current color mode
+	const colorMode = useContext(ColorModeContext);
 
   // handle the open and close of the menu
   const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
