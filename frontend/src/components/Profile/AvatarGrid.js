@@ -11,20 +11,57 @@ export default function AvatarGrid({
 
   const uploadAvatar = (event) => {
     const file = event.target.files[0];
+
     if (file) {
-      if (customAvatars.length === 3) {
-        customAvatars.pop();
+      // Check if the file type is an image
+      if (!file.type.startsWith("image/")) {
+        console.log("Please select an image file.");
+        return;
       }
-      const reader = new FileReader();
-      reader.onload = () => {
-        const imgData = reader.result;
+
+      // Create an image element to load the image
+      const img = new Image();
+      img.onload = function () {
+        // Create a canvas element
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Calculate the new dimensions to fit within 500x500 pixels
+        let newWidth = this.width;
+        let newHeight = this.height;
+        if (newWidth > 500 || newHeight > 500) {
+          const aspectRatio = newWidth / newHeight;
+          if (newWidth > newHeight) {
+            newWidth = 500;
+            newHeight = Math.floor(500 / aspectRatio);
+          } else {
+            newHeight = 500;
+            newWidth = Math.floor(500 * aspectRatio);
+          }
+        }
+
+        // Resize the image
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+        // Get the resized image data
+        const resizedImageData = canvas.toDataURL(file.type);
+        console.log("Image size: " + resizedImageData.length + " bytes");
+
+        // Add the resized image to your custom avatars
+        if (customAvatars.length === 3) {
+          customAvatars.pop();
+        }
         addCustomAvatar([
-          { img: imgData, title: "Custom Picture" },
+          { img: resizedImageData, title: "Custom Picture" },
           ...customAvatars,
         ]);
-        selectAvatar({ img: imgData, title: "Custom Picture" }); // Set the selectedImg to the uploaded image
+        selectAvatar({ img: resizedImageData, title: "Custom Picture" }); // Set the selectedImg to the uploaded image
       };
-      reader.readAsDataURL(file);
+
+      // Load the image
+      img.src = URL.createObjectURL(file);
     }
   };
 
