@@ -22,27 +22,25 @@ const OverviewCard = ({ title, amount, color }) => (
 	</Card>
 );
 
-function Overview() {
-	// Define the data for the cards
+function Overview({ totalSpend, totalOwe, totalGetBack }) {
 	const cards = [
 		{
 			title: "Total spend",
-			amount: (Math.random() * 1000).toFixed(2),
+			amount: totalSpend.toFixed(2),
 			color: "primary.main",
 		},
 		{
 			title: "You owe",
-			amount: (Math.random() * 1000).toFixed(2),
-			color: "primary.main",
+			amount: totalOwe.toFixed(2),
+			color: "secondary.main",
 		},
 		{
 			title: "You get back",
-			amount: (Math.random() * 1000).toFixed(2),
-			color: "primary.main",
+			amount: totalGetBack.toFixed(2),
+			color: "success.main",
 		},
 	];
 
-	// Render the cards inside a grid
 	return (
 		<Box
 			sx={{

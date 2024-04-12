@@ -2,6 +2,7 @@ import React from "react";
 import { Tabs, Tab, Box } from "@mui/material";
 // import expenses form
 import ExpenseDashBoard from "../../components/Expense2.0/ExpenseDashBoard";
+import ExpensesForm from "../../components/ExpensesForm/ExpensesForm";
 
 function ExpensesPage() {
 	const [value, setValue] = React.useState(0);
@@ -19,16 +20,11 @@ function ExpensesPage() {
 				indicatorColor="secondary"
 				centered
 			>
-				{/* This is now not need due to major overhaul of UI 
-				<Tab label="Expenses Form" />
-				*/}
 				<Tab label="Expenses Dashboard" />
+				<Tab label="Expenses Form" />
 			</Tabs>
-			{/* This is now not need due to major overhaul of UI 
-			{value === 0 && <ExpensesForm />}
-			*/}
-
 			{value === 0 && <ExpenseDashBoard />}
+			{value === 1 && <ExpensesForm />}
 		</Box>
 	);
 }

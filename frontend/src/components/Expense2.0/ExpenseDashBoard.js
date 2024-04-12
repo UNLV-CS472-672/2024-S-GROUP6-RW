@@ -4,7 +4,7 @@ import Overview from "./Overview";
 import Activity from "./Activity";
 import History from "./History";
 import AddExpenseForm from "./AddExpense";
-import { generateData } from "./DataGen";
+import { generateData, generateNewId } from "./DataGen";
 import { styled } from "@mui/material/styles";
 
 const sudoUser = "Sudo";
@@ -18,53 +18,140 @@ const Item = styled(Paper)(({ theme }) => ({
 	color: theme.palette.text.secondary,
 }));
 
-function ExpenseDashBoard() {
-	// Initialize state variables for categories and expenses
-	const [categories, setCategories] = useState(Object.entries(Data));
-	const [expenses, setExpenses] = useState(
-		Array.isArray(Data) ? Data : Object.values(Data)
+function deleteActivity(activityId, expenses, categories) {
+	const updatedExpenses = expenses.filter(
+		(activity) => activity.id !== activityId
 	);
 
-	// Function to handle adding a new expense
-	const onAddExpense = (newExpense) => {
-		// Create a new expense item
-		const newExpenseItem = {
-			id: `${Date.now()}-${expenses.length.toString()}`,
-			date: new Date().toDateString(),
-			payer: sudoUser,
-			payee: newExpense.userName,
-			amount: parseFloat(newExpense.amount),
-			type: newExpense.splitMethod === "equal" ? "paid" : "owe",
-			name: newExpense.title,
-			description: newExpense.description,
-			owe: (Math.random() * 1000).toFixed(2),
-			paid: (Math.random() * 1000).toFixed(2),
-			getBack: (Math.random() * 1000).toFixed(2),
-			total: (Math.random() * 1000).toFixed(2),
-			category: newExpense.category,
-		};
+	const updatedCategories = categories
+		.map(([categoryName, activities]) => {
+			const updatedActivities = activities.filter(
+				(activity) => activity.id !== activityId
+			);
+			return [categoryName, updatedActivities];
+		})
+		.filter(([categoryName, activities]) => activities.length > 0);
 
-		// Add the new expense item to the existing expenses
-		setExpenses((prevExpenses) => [...prevExpenses, newExpenseItem]);
+	return { updatedExpenses, updatedCategories };
+}
 
-		// Update the categories
-		const newCategories = [...categories];
-		const categoryIndex = newCategories.findIndex(
-			([categoryName]) => categoryName === newExpense.category
-		);
+function deleteCategory(categoryName, expenses, categories) {
+	const updatedCategories = categories.filter(
+		([category]) => category !== categoryName
+	);
 
-		if (categoryIndex !== -1) {
-			// Update the category with the new expense
-			newCategories[categoryIndex][1].push(newExpenseItem);
-		} else {
-			// Add a new category with the new expense
-			newCategories.push([newExpense.category, [newExpenseItem]]);
-		}
+	// Filter out the expenses associated with the category to be deleted
+	const updatedExpenses = expenses.filter(
+		(expense) => expense.category !== categoryName
+	);
 
-		setCategories(newCategories);
+	return { updatedExpenses, updatedCategories };
+}
 
-		//fix history and cat & expense
+function createExpense(newExpense, expenses, sudoUser) {
+	return {
+		id: `${Date.now()}-${expenses.length.toString()}`,
+		date: new Date().toDateString(),
+		payer: sudoUser,
+		payee: newExpense.userName,
+		amount: parseFloat(newExpense.amount),
+		type: newExpense.splitMethod === "equal" ? "paid" : "owe",
+		name: newExpense.title,
+		description: newExpense.description,
+		owe: (Math.random() * 1000).toFixed(2),
+		paid: (Math.random() * 1000).toFixed(2),
+		getBack: (Math.random() * 1000).toFixed(2),
+		total: (Math.random() * 1000).toFixed(2),
+		category: newExpense.category,
 	};
+}
+
+function updateCategoriesWithNewExpense(newExpenseItem, categories) {
+	const newCategories = [...categories];
+	const categoryIndex = newCategories.findIndex(
+		([categoryName]) => categoryName === newExpenseItem.category
+	);
+
+	if (categoryIndex !== -1) {
+		newCategories[categoryIndex][1].push(newExpenseItem);
+	} else {
+		newCategories.push([newExpenseItem.category, [newExpenseItem]]);
+	}
+
+	return newCategories;
+}
+
+function addExpense(newExpense, expenses, categories, sudoUser) {
+	const newExpenseItem = createExpense(newExpense, expenses, sudoUser);
+	const updatedExpenses = [...expenses, newExpenseItem];
+	const updatedCategories = updateCategoriesWithNewExpense(
+		newExpenseItem,
+		categories
+	);
+
+	return { updatedExpenses, updatedCategories };
+}
+
+function ExpenseDashBoard() {
+	// Flatten the initial data into a single array of expenses
+	const initialExpenses = Object.values(Data).flat();
+
+	// Initialize state variables for categories and expenses
+	const [categories, setCategories] = useState(Object.entries(Data));
+	const [expenses, setExpenses] = useState(initialExpenses);
+
+	const onAddExpense = (newExpense) => {
+		const { updatedExpenses, updatedCategories } = addExpense(
+			newExpense,
+			expenses,
+			categories,
+			sudoUser
+		);
+		setExpenses(updatedExpenses);
+		setCategories(updatedCategories);
+	};
+
+	const handleDeleteActivity = (activityId) => {
+		const { updatedExpenses, updatedCategories } = deleteActivity(
+			activityId,
+			expenses,
+			categories
+		);
+		setExpenses(updatedExpenses);
+		setCategories(updatedCategories);
+
+		//check the activity after delete
+		console.log("After delete act1: ", updatedExpenses);
+		console.log("After delete act2: ", updatedCategories);
+	};
+
+	const handleDeleteCategory = (categoryName) => {
+		const { updatedExpenses, updatedCategories } = deleteCategory(
+			categoryName,
+			expenses,
+			categories
+		);
+		setExpenses(updatedExpenses);
+		setCategories(updatedCategories);
+
+		//check the activity after delete
+		console.log("After delete cat1: ", updatedExpenses);
+		console.log("After delete cat2: ", updatedCategories);
+	};
+
+	const totalSpend = expenses
+		.filter((e) => e.payer === sudoUser)
+		.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
+	const totalOwe = expenses
+		.filter((e) => e.type === "owe")
+		.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
+	const totalGetBack = expenses
+		.filter((e) => e.type === "get back")
+		.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
+
+	console.log("Initial Data:", Data);
+	console.log("Expenses:", expenses);
+	console.log("Calculated Totals:", { totalSpend, totalOwe, totalGetBack });
 
 	// Render the Expense Dashboard
 	return (
@@ -74,7 +161,11 @@ function ExpenseDashBoard() {
 					{/* Overview Component */}
 					<Grid item xs={12} md={7}>
 						<Item elevation={3}>
-							<Overview />
+							<Overview
+								totalSpend={totalSpend}
+								totalOwe={totalOwe}
+								totalGetBack={totalGetBack}
+							/>
 						</Item>
 					</Grid>
 
@@ -102,6 +193,8 @@ function ExpenseDashBoard() {
 								sudoUser={sudoUser}
 								categories={categories}
 								setCategories={setCategories}
+								onDeleteActivity={handleDeleteActivity}
+								onDeleteCategory={handleDeleteCategory}
 							/>
 						</Item>
 					</Grid>

@@ -21,8 +21,11 @@ import {
 	DialogTitle,
 	TextField,
 } from "@mui/material";
+
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const ActivityTabs = ({ value, onChange, labels }) => (
 	<Tabs value={value} onChange={onChange}>
@@ -32,32 +35,58 @@ const ActivityTabs = ({ value, onChange, labels }) => (
 	</Tabs>
 );
 
-const Activity = ({ activity, sudoUser }) => {
+const Activity = ({ activity, sudoUser, onEditActivity, onDeleteActivity }) => {
 	let secondaryText = `$${activity.amount}`;
 	const payerText = activity.payer === sudoUser ? "You" : activity.payer;
 	const payeeText = activity.payee === sudoUser ? "You" : activity.payee;
 
+	let color;
+
 	switch (activity.type) {
 		case "owe":
 			secondaryText += ` - ${payerText} paid ${payeeText}`;
+			//if it is sudo user who paid, then the color is default, else red
+			color = activity.payer === sudoUser ? "default" : "red";
 			break;
 		case "get back":
 			secondaryText += ` - ${payeeText} get back from ${payerText}`;
+			color = "green";
 			break;
 		default:
 			secondaryText += ` - ${payerText} paid ${payeeText}`;
+			color = activity.payer === sudoUser ? "default" : "red";
 	}
 
 	return (
 		<ListItem key={activity.id}>
-			<ListItemText primary={activity.name} secondary={secondaryText} />
+			<ListItemText
+				primary={activity.name}
+				secondary={<Typography color={color}>{secondaryText}</Typography>}
+			/>
+			{/*
+			<Button onClick={() => onEditActivity(activity.id)}>
+				<EditIcon />
+			</Button>
+			<Button onClick={() => onDeleteActivity(activity.id)}>
+				<DeleteIcon />
+			</Button>
+			*/}
 		</ListItem>
 	);
 };
 
-const ActivityCategory = ({ category, activities, sudoUser }) => {
+const ActivityCategory = ({
+	category,
+	activities,
+	sudoUser,
+	onEditCategory,
+	onDeleteCategory,
+	onEditActivity,
+	onDeleteActivity,
+}) => {
 	const [tab, setTab] = useState(0);
-	const labels = ["All", "You Paid", "Other Paid", "You Get Back"];
+	//const labels = ["All", "You Paid", "Other Paid", "You Get Back"];
+	const labels = ["All"];
 
 	const handleTabChange = (event, newValue) => {
 		setTab(newValue);
@@ -80,6 +109,14 @@ const ActivityCategory = ({ category, activities, sudoUser }) => {
 		<Accordion key={category}>
 			<AccordionSummary expandIcon={<ExpandMoreIcon />}>
 				<Typography>{category}</Typography>
+				{/*
+				<Button onClick={() => onEditCategory(category)}>
+					<EditIcon />
+				</Button>
+				<Button onClick={() => onDeleteCategory(category)}>
+					<DeleteIcon />
+				</Button>
+				*/}
 			</AccordionSummary>
 			<AccordionDetails
 				sx={{
@@ -102,6 +139,8 @@ const ActivityCategory = ({ category, activities, sudoUser }) => {
 							activity={activity}
 							labels={labels}
 							sudoUser={sudoUser}
+							onEditActivity={onEditActivity}
+							onDeleteActivity={onDeleteActivity}
 						/>
 					))}
 				</List>
@@ -115,6 +154,10 @@ const Activities = ({
 	sudoUser,
 	categories,
 	setCategories,
+	onEditActivity,
+	onDeleteActivity,
+	onEditCategory,
+	onDeleteCategory,
 }) => {
 	const theme = useTheme();
 	const [open, setOpen] = useState(false);
@@ -147,7 +190,7 @@ const Activities = ({
 				height: "600px",
 			}}
 		>
-			<CardContent sx={{ height: "640px", overflowY: "auto" }}>
+			<CardContent sx={{ height: "680px", overflowY: "auto" }}>
 				<Box
 					display="flex"
 					justifyContent="space-between"
@@ -169,6 +212,10 @@ const Activities = ({
 						category={category}
 						activities={activities}
 						sudoUser={sudoUser}
+						onEditCategory={onEditCategory}
+						onDeleteCategory={onDeleteCategory}
+						onEditActivity={onEditActivity}
+						onDeleteActivity={onDeleteActivity}
 					/>
 				))}
 			</CardContent>

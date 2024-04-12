@@ -13,37 +13,58 @@ import {
 } from "@mui/material";
 import { names } from "./DataGen";
 
-const AddExpenseForm = ({ onAddExpense, categories }) => {
-	const initialExpenseData = {
-		userName: "",
-		title: "",
-		category: "",
-		description: "",
-		splitMethod: "equal",
-		amount: "",
-	};
+const initialExpenseData = {
+	userName: "",
+	title: "",
+	category: "",
+	description: "",
+	splitMethod: "none",
+	amount: "",
+};
 
+function validateFormData(expenseData) {
+	const { userName, title, category, amount } = expenseData;
+
+	//we only check user name if split method is not none
+	if (expenseData.splitMethod !== "none" && !userName.trim())
+		return "User Name is required";
+
+	if (!title.trim()) return "Title is required";
+	if (!category.trim()) return "Category is required";
+	if (!amount.trim()) return "Amount is required";
+	if (isNaN(amount) || parseFloat(amount) <= 0)
+		return "Amount must be a positive number";
+
+	return null;
+}
+
+function handleSplitMethod(expenseData) {
+	if (expenseData.splitMethod === "equal") {
+		expenseData.amount = (parseFloat(expenseData.amount) / 2).toFixed(2);
+	}
+
+	if (expenseData.splitMethod === "none") {
+		expenseData.payee = null;
+	}
+
+	return expenseData;
+}
+
+const AddExpenseForm = ({ onAddExpense, categories }) => {
 	const [expenseData, setExpenseData] = useState(initialExpenseData);
 	const [message, setMessage] = useState("");
 
 	const handleChange = ({ target }) => {
-		setExpenseData({
+		let updatedExpenseData = {
 			...expenseData,
 			[target.name]: target.value,
-		});
-	};
+		};
 
-	const validateFormData = () => {
-		const { userName, title, category, amount } = expenseData;
+		if (target.name === "splitMethod" && target.value === "none") {
+			updatedExpenseData.userName = "";
+		}
 
-		if (!userName.trim()) return "User Name is required";
-		if (!title.trim()) return "Title is required";
-		if (!category.trim()) return "Category is required";
-		if (!amount.trim()) return "Amount is required";
-		if (isNaN(amount) || parseFloat(amount) <= 0)
-			return "Amount must be a positive number";
-
-		return null;
+		setExpenseData(updatedExpenseData);
 	};
 
 	const resetForm = () => {
@@ -53,17 +74,15 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
-		const errorMessage = validateFormData();
+		const errorMessage = validateFormData(expenseData);
 		if (errorMessage) {
 			setMessage(errorMessage);
 			return;
 		}
 
-		if (expenseData.splitMethod === "equal") {
-			expenseData.amount = (parseFloat(expenseData.amount) / 2).toFixed(2);
-		}
+		const updatedExpenseData = handleSplitMethod(expenseData);
 
-		onAddExpense(expenseData);
+		onAddExpense(updatedExpenseData);
 		resetForm();
 	};
 
@@ -86,25 +105,11 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 			{message && <Alert severity="error">{message}</Alert>}
 			<Typography variant="h6">Add Expense</Typography>
 			<Grid container spacing={2}>
-				<Grid item xs={12} sm={6} mt={1}>
-					<FormControl fullWidth>
-						<InputLabel id="userName-label">User Name</InputLabel>
-						<Select
-							labelId="userName-label"
-							id="userName"
-							name="userName"
-							value={userName}
-							onChange={handleChange}
-						>
-							{names.map((person) => (
-								<MenuItem key={person} value={person}>
-									{person}
-								</MenuItem>
-							))}
-						</Select>
-					</FormControl>
+				<Grid item xs={12} sm={6} mt={-1}>
 					<FormControl fullWidth margin="normal">
-						<InputLabel id="split-method-label">Split Method</InputLabel>
+						<InputLabel id="split-method-label" sx={{ color: "black" }}>
+							Split Method
+						</InputLabel>
 						<Select
 							labelId="split-method-label"
 							id="split-method"
@@ -113,12 +118,41 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 							name="splitMethod"
 							onChange={handleChange}
 						>
+							<MenuItem value="none">No Split</MenuItem>
 							<MenuItem value="equal">Split Equally</MenuItem>
 							<MenuItem value="specific">Specific Costs</MenuItem>
 						</Select>
 					</FormControl>
+					<FormControl fullWidth>
+						<InputLabel id="userName-label" sx={{ color: "black" }}>
+							User Name
+						</InputLabel>
+						<Select
+							labelId="userName-label"
+							id="userName"
+							name="userName"
+							value={userName}
+							onChange={handleChange}
+							disabled={splitMethod === "none"}
+							sx={{
+								"&.Mui-disabled": {
+									color: "black",
+									backgroundColor: "#ddd",
+								},
+							}}
+						>
+							{names.map((person) => (
+								<MenuItem key={person} value={person}>
+									{person}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+
 					<FormControl fullWidth margin="normal">
-						<InputLabel id="category-label">Category</InputLabel>
+						<InputLabel id="category-label" sx={{ color: "black" }}>
+							Category
+						</InputLabel>
 						<Select
 							labelId="category-label"
 							id="expense-category"
@@ -145,6 +179,9 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 								name="title"
 								value={title}
 								onChange={handleChange}
+								InputLabelProps={{
+									style: { color: "black" },
+								}}
 							/>
 							<TextField
 								required
@@ -155,6 +192,9 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 								value={amount}
 								onChange={handleChange}
 								type="number"
+								InputLabelProps={{
+									style: { color: "black" },
+								}}
 							/>
 						</Grid>
 					</Grid>
@@ -170,6 +210,9 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 								rows={1}
 								onChange={handleChange}
 								margin="normal"
+								InputLabelProps={{
+									style: { color: "black" },
+								}}
 							/>
 						</Grid>
 					</Grid>

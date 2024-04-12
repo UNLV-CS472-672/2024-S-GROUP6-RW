@@ -18,22 +18,14 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const History = ({ transactions, sudoUser }) => {
-	// Use the theme hook to get the current theme
-	const theme = useTheme();
-	//console.log("his:", transactions);
+function flattenTransactions(transactions) {
+	return transactions && typeof transactions === "object"
+		? Object.values(transactions).flat()
+		: [];
+}
 
-	useEffect(() => {
-		console.log(transactions);
-	}, [transactions]);
-
-	// Check if transactions is defined and is an object before flattening
-	const flatTransactions =
-		transactions && typeof transactions === "object"
-			? Object.values(transactions).flat()
-			: [];
-
-	const monthSections = flatTransactions.reduce((acc, transaction) => {
+function groupTransactionsByMonth(flatTransactions) {
+	return flatTransactions.reduce((acc, transaction) => {
 		if (transaction.date) {
 			const month =
 				transaction.date.split(" ")[1] +
@@ -46,7 +38,9 @@ const History = ({ transactions, sudoUser }) => {
 		}
 		return acc;
 	}, {});
+}
 
+function sortTransactionsByDate(monthSections) {
 	Object.keys(monthSections).forEach((month) => {
 		monthSections[month].sort((a, b) => {
 			const dateA = new Date(a.date);
@@ -54,6 +48,45 @@ const History = ({ transactions, sudoUser }) => {
 			return dateB - dateA;
 		});
 	});
+	return monthSections;
+}
+
+function filterTransactions(flatTransactions, searchTerm, searchField) {
+	return flatTransactions.filter(
+		(transaction) =>
+			transaction[searchField] &&
+			transaction[searchField]
+				.toLowerCase()
+				.includes(searchTerm.toLowerCase())
+	);
+}
+
+function groupFilteredTransactionsByMonth(filteredTransactions) {
+	return filteredTransactions.reduce((groups, transaction) => {
+		const date = new Date(transaction.date);
+		const month = date.toLocaleString("en-US", {
+			month: "long",
+			year: "numeric",
+		});
+
+		if (!groups[month]) {
+			groups[month] = [];
+		}
+
+		groups[month].push(transaction);
+
+		return groups;
+	}, {});
+}
+
+const History = ({ transactions, sudoUser }) => {
+	// Use the theme hook to get the current theme
+	const theme = useTheme();
+	//console.log("his:", transactions);
+
+	const flatTransactions = flattenTransactions(transactions);
+	const monthSections = groupTransactionsByMonth(flatTransactions);
+	const sortedTransactions = sortTransactionsByDate(monthSections);
 
 	// Add a new state variable for the search term
 	const [searchTerm, setSearchTerm] = useState("");
@@ -71,36 +104,13 @@ const History = ({ transactions, sudoUser }) => {
 		}
 	};
 
-	// Filter the transactions based on the search term and field
-	const filteredTransactions = flatTransactions.filter(
-		(transaction) =>
-			transaction[searchField] &&
-			transaction[searchField]
-				.toLowerCase()
-				.includes(searchTerm.toLowerCase())
+	const filteredTransactions = filterTransactions(
+		flatTransactions,
+		searchTerm,
+		searchField
 	);
-
-	//console.log(filteredTransactions);
-
-	// Group the transactions by month
-	const transactionsByMonth = filteredTransactions.reduce(
-		(groups, transaction) => {
-			const date = new Date(transaction.date);
-			const month = date.toLocaleString("en-US", {
-				month: "long",
-				year: "numeric",
-			});
-
-			if (!groups[month]) {
-				groups[month] = [];
-			}
-
-			groups[month].push(transaction);
-
-			return groups;
-		},
-		{}
-	);
+	const transactionsByMonth =
+		groupFilteredTransactionsByMonth(filteredTransactions);
 
 	return (
 		<Card

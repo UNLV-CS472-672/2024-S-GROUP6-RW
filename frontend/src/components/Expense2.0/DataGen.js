@@ -17,6 +17,7 @@ export const categories = [
 	"Utilities",
 	"Entertainment",
 	"Others",
+	"Unknown",
 ].sort();
 
 // Function to generate a random date between two dates
@@ -24,6 +25,10 @@ export function randomDate(start, end) {
 	return new Date(
 		start.getTime() + Math.random() * (end.getTime() - start.getTime())
 	);
+}
+
+export function generateNewId() {
+	return Math.floor(Math.random() * 1000);
 }
 
 // Function to generate initial data
