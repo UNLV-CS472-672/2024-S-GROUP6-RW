@@ -59,10 +59,11 @@ function ResponsiveAppBar({ user }) {
     "Itinerary",
     "Expenses",
     "Map",
-    "Friends",
+    "Friends"
+  ];
+  const dropPages = [
     "Profile",
     "Account",
-    "Dashboard",
     "Logout",
   ];
 
@@ -258,7 +259,7 @@ function ResponsiveAppBar({ user }) {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {renderMenuItems(authPages, handleCloseUserMenu)}
+                {renderMenuItems(dropPages, handleCloseUserMenu)}
               </Menu>
             </Box>
           )}
