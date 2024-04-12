@@ -1,0 +1,84 @@
+.friendcontainer {
+    border: 3px lightskyblue;
+    border-radius: 10px;
+}
+
+
+body{
+    margin-top:20px;
+    background-color: #f4f6f9;
+}
+.card {
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+    background: #fff;
+    border-radius: .1875rem;
+    margin-bottom: 30px;
+    border: 0;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    box-shadow: none;
+}
+.card .header {
+    color: #424242;
+    padding: 20px;
+    position: relative;
+    box-shadow: none;
+}
+.card .header h2 {
+    color: #757575;
+    position: relative;
+}
+.card .header h2:before {
+    background: #6572b8;
+}
+.card .header h2 {
+    font-size: 15px;
+}
+.card .header h2::before {
+    position: absolute;
+    width: 2px;
+    height: 18px;
+    left: -20px;
+    top: 0;
+    content: '';
+}
+.theme-purple .card .header h2 strong {
+    color: #6572b8;
+}
+.card .header h2 small {
+    color: #9e9e9e;
+    line-height: 15px;
+}
+.card .body {
+    color: #424242;
+    font-weight: 400;
+    padding: 20px;
+}
+.new_friend_list {
+    margin-bottom: 0px;
+}
+
+.new_friend_list li .users_name {
+    color: #424242;
+    text-transform: capitalize;
+}
+.new_friend_list li .users_name {
+    margin-top: 5px;
+}
+.new_friend_list li .users_name{
+ margin-bottom: 0px;
+}
+.new_friend_list li .join_date {
+    color: #757575;
+}
+
+a {
+    outline: none !important;
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+}

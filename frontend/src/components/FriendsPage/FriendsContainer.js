@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { Tabs, Tab, Box } from "@mui/material";
 import AddRemoveFriends from "../../components/FriendsPage/AddRemoveFriends";
 import FriendList from "../../components/FriendsPage/BoxFriend";
+import "../../css/FriendsPage.css";
 
 
 //Contains the box for tabs that the user can click on
