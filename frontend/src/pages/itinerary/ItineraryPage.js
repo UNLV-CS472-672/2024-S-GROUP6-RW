@@ -1,91 +1,57 @@
-import React, { useState } from "react";
-import DatePickerComponent from "../../components/ItineraryForm/DatePickerComponent"; // Importing the DatePickerComponent
-import ItineraryAccordion from "../../components/ItineraryForm/ItineraryAccordion"; // Importing the ItineraryAccordion component
-import { format } from "date-fns"; // Importing the format function from date-fns library
-import { useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import ItineraryAccordion from "../../components/ItineraryForm/ItineraryAccordion";
+import { format } from "date-fns";
 
-// Functional component for the ItineraryPage
 const ItineraryPage = () => {
-  // State variables using useState hook
-  const [itinerary, setItinerary] = useState([]); // Itinerary array state
+  const [itinerary, setItinerary] = useState([]);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedEndDate, setSelectedEndDate] = useState(null);
 
   useEffect(() => {
-    // Read the dates from local storage when the component mounts
     const startDateFromStorage = localStorage.getItem('startDate');
-    const endDateFromStorage = localStorage.getItem('endDate');
-
-    if (startDateFromStorage && endDateFromStorage) {
+    if (startDateFromStorage) {
       const start = new Date(startDateFromStorage);
-      const end = new Date(endDateFromStorage);
-      setSelectedStartDate(start);
-      setSelectedEndDate(end);
-
-      const tripLength = calculateNumberOfDays(start, end);
-      generateItinerary(tripLength);
+      if (start.toString() !== "Invalid Date") {
+        setSelectedStartDate(start);
+        generateItinerary(start);
+      } else {
+        console.error("Invalid start date from storage");
+      }
     }
   }, []);
 
+  const generateItinerary = (startDate) => {
+    const endDateFromStorage = localStorage.getItem('endDate');
+    if (endDateFromStorage) {
+      const end = new Date(endDateFromStorage);
+      if (startDate && end.toString() !== "Invalid Date") {
+        const tripLength = calculateNumberOfDays(startDate, end);
+        const newItinerary = Array.from({ length: tripLength }, (_, index) => ({
+          day: format(new Date(startDate.getTime() + index * 86400000), "EEEE, MMMM dd, yyyy")
+        }));
+        setItinerary(newItinerary);
+      }
+    }
+  };
 
-  // Function to calculate the number of days between two dates
   const calculateNumberOfDays = (startDate, endDate) => {
-    const oneDay = 24 * 60 * 60 * 1000;
-    return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
-  };
-  
-
-  // Function to generate itinerary based on the number of days
-  const generateItinerary = (numberOfDays) => {
-    const newItinerary = Array.from({ length: numberOfDays }, (_, index) => ({
-      //activities: [],
-      day: format(
-        new Date(selectedStartDate.getTime() + index * 24 * 60 * 60 * 1000),
-        "EEEE, MMMM dd, yyyy"
-      ),
-    }));
-    setItinerary(newItinerary);
+    return Math.round(Math.abs((startDate - endDate) / 86400000)) + 1;
   };
 
-
-  // Event handler for adding a new day to the itinerary
   const handleAddDay = () => {
-    /*setItinerary((prevItinerary) => {
-      const startDate = selectedStartDate || new Date(); // Use selectedStartDate if available, otherwise use current date
-      const newDay = new Date(startDate.getTime() + prevItinerary.length * 24 * 60 * 60 * 1000);
-      return [
-        ...prevItinerary,
-        {
-          //activities: [],
-          day: format(newDay, "EEEE, MMMM dd, yyyy"), // Convert newDay to a string representation
-        },
-      ];
-    });*/
     setItinerary(prevItinerary => {
-      const newDay = new Date(selectedStartDate.getTime() + prevItinerary.length * 24 * 60 * 60 * 1000);
+      const newDay = new Date(selectedStartDate.getTime() + prevItinerary.length * 86400000);
       return [...prevItinerary, { day: format(newDay, "EEEE, MMMM dd, yyyy") }];
     });
   };
-  
-  // JSX rendering
+
   return (
     <div>
-
-      {/* Render ItineraryAccordion components for each day in the itinerary */}
-      
-        <>
-          {itinerary.map((day, index) => (
-            <ItineraryAccordion
-              key={index}
-              day={day.day}
-            />
-          ))}
-          <button onClick={handleAddDay}>Add Another Day</button>
-        </>
-      )
+      {itinerary.map((day, index) => (
+        <ItineraryAccordion key={index} day={day.day} />
+      ))}
+      <button onClick={handleAddDay}>Add Another Day</button>
     </div>
   );
 };
 
-
-export default ItineraryPage; // Exporting the ItineraryPage component
+export default ItineraryPage;
