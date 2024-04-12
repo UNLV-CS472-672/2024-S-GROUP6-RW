@@ -1,3 +1,5 @@
+// 2024-S-GROUP6-RW\backend\models\trip.go
+
 package models
 
 import (
