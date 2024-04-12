@@ -1,21 +1,27 @@
 // 2024-S-GROUP6-RW\frontend\src\utils\ApiManager.js
 import axios from 'axios';
 import { getToken } from '../auth/authService';
+import { getFromLocal } from "./LocalStorageManager"
 
-const API_ENDPOINT = 'http://localhost:8080/signin';
+const API_ENDPOINT = 'http://localhost:8080';
 
 export const gettingStartedCreateTrip = async () => {
   // Fetch data from local storage
   const locationName = getFromLocal('LocationName');
   const startDate = getFromLocal('startDate');
   const endDate = getFromLocal('endDate');
+  const username = getFromLocal('username');
 
   // Construct the trip data object
   const tripData = {
-    locationName,
-    startDate,
-    endDate,
+    Username: username,
+    Title: "Getting Started Trip",
+    "Location Name": locationName,
+    StartDate: startDate,
+    EndDate: endDate,
   };
+
+  console.log(tripData)
 
   try {
     // Retrieve the token
@@ -31,6 +37,5 @@ export const gettingStartedCreateTrip = async () => {
     return response.data; // Return the response data from the API call
   } catch (error) {
     console.error('Error creating trip:', error);
-    throw error; // Rethrow or handle error as needed
   }
 };
