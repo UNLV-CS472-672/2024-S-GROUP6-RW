@@ -1,37 +1,42 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SearchBar.css';
-import { debounce } from 'lodash'; // Import debounce from lodash
 
 function SearchBar() {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
-  const debouncedFetchCities = useCallback(debounce((cityName) => {
-    if (!cityName) return; // Exit early if cityName is empty
-
-    const url = `https://api.api-ninjas.com/v1/city?name=${cityName}&limit=5`;
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        'X-Api-Key': 'oUKbIX8gOqX6mdF1EOZ6fQ==vWsvuUWsuV8ZbfQ5',
-        'Content-Type': 'application/json'
+  useEffect(() => {
+    const fetchCities = async () => {
+      if (!query) {
+        setSuggestions([]);
+        return;
       }
-    })
-    .then(response => {
-      if (!response.ok) throw new Error('Network response was not ok');
-      return response.json();
-    })
-    .then(data => {
-      const cityNames = data.map(city => city.name);
-      setSuggestions(cityNames);
-    })
-    .catch(error => console.error('Error:', error));
-  }, 500), []); // Dependencies array is empty, meaning the function is created only once
+
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`
+        );
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        const cityNames = data.map((item) => item.display_name);
+        setSuggestions(cityNames);
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle fetch error
+      }
+    };
+
+    const debounceTimeout = setTimeout(fetchCities, 500);
+
+    return () => clearTimeout(debounceTimeout);
+  }, [query]);
 
   const handleChange = (event) => {
-    const cityName = event.target.value;
-    setQuery(cityName);
-    debouncedFetchCities(cityName); // Call the debounced function here
+    setQuery(event.target.value);
   };
 
   const handleSuggestionClick = (cityName) => {
@@ -62,3 +67,4 @@ function SearchBar() {
 }
 
 export default SearchBar;
+
