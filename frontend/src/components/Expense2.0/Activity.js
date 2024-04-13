@@ -27,6 +27,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+// ActivityTabs component -> responsible for displaying the tabs for the activities
 const ActivityTabs = ({ value, onChange, labels }) => (
 	<Tabs value={value} onChange={onChange}>
 		{labels.map((label, index) => (
@@ -35,13 +36,15 @@ const ActivityTabs = ({ value, onChange, labels }) => (
 	</Tabs>
 );
 
+// Activity component -> responsible for displaying the activity
 const Activity = ({ activity, sudoUser, onEditActivity, onDeleteActivity }) => {
-	let secondaryText = `$${activity.amount}`;
+	let secondaryText = `$${activity.amount}`; //set the amount of the activity
 	const payerText = activity.payer === sudoUser ? "You" : activity.payer;
 	const payeeText = activity.payee === sudoUser ? "You" : activity.payee;
 
 	let color;
 
+	//toggle the color of the activity based on the type of the activity
 	switch (activity.type) {
 		case "owe":
 			secondaryText += ` - ${payerText} paid ${payeeText}`;
@@ -75,6 +78,7 @@ const Activity = ({ activity, sudoUser, onEditActivity, onDeleteActivity }) => {
 	);
 };
 
+// ActivityCategory component -> responsible for displaying the activity category
 const ActivityCategory = ({
 	category,
 	activities,
@@ -84,14 +88,17 @@ const ActivityCategory = ({
 	onEditActivity,
 	onDeleteActivity,
 }) => {
+	// set the tab and the label
 	const [tab, setTab] = useState(0);
 	//const labels = ["All", "You Paid", "Other Paid", "You Get Back"];
 	const labels = ["All"];
 
+	//handle the tab change
 	const handleTabChange = (event, newValue) => {
 		setTab(newValue);
 	};
 
+	//filter the activities based on the tab selected -> this is old code, need to comment uncomment line 93 to use this
 	const filteredActivities = activities.filter((activity) => {
 		switch (tab) {
 			case 1:
@@ -118,13 +125,16 @@ const ActivityCategory = ({
 				</Button>
 				*/}
 			</AccordionSummary>
+
 			<AccordionDetails
 				sx={{
+					// ai-gen (ChatGPT-4.0, 1)
 					maxHeight: "600px",
 					overflow: "auto",
 					"&::-webkit-scrollbar": {
 						display: "none",
 					},
+					// ai-gen end
 				}}
 			>
 				<ActivityTabs
@@ -149,6 +159,7 @@ const ActivityCategory = ({
 	);
 };
 
+// Activities component -> responsible for displaying the activities this is the export default
 const Activities = ({
 	activitiesData,
 	sudoUser,
@@ -159,21 +170,29 @@ const Activities = ({
 	onEditCategory,
 	onDeleteCategory,
 }) => {
+	// use the theme
 	const theme = useTheme();
+
+	// set the open and the new category name
 	const [open, setOpen] = useState(false);
 	const [newCategoryName, setNewCategoryName] = useState("");
 
+	// handle the click open
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
 
+	// handle the close
 	const handleClose = () => {
 		setOpen(false);
 	};
 
+	// handle the submit
 	const handleSubmit = (event) => {
-		event.preventDefault();
+		event.preventDefault(); // need to do this to prevent the default behavior of the form
+		// add the new category to the categories
 		const newCategories = [...categories, [newCategoryName, []]];
+		// sort and set the categories
 		newCategories.sort((a, b) => a[0].localeCompare(b[0]));
 		setCategories(newCategories);
 		setNewCategoryName("");
@@ -183,13 +202,16 @@ const Activities = ({
 	return (
 		<Card
 			sx={{
+				// ai-gen (ChatGPT-4.0, 1)
 				background: theme.palette.background.paper,
 				borderRadius: "16px",
 				color: theme.palette.text.primary,
 				overflow: "hidden",
 				height: "600px",
+				// ai-gen end
 			}}
 		>
+			{/*Struct is similar to History.js*/}
 			<CardContent sx={{ height: "680px", overflowY: "auto" }}>
 				<Box
 					display="flex"
@@ -198,6 +220,7 @@ const Activities = ({
 					mb={2}
 				>
 					<Typography variant="h6">Activities</Typography>
+
 					<Button
 						variant="contained"
 						startIcon={<AddIcon />}
@@ -206,6 +229,7 @@ const Activities = ({
 						Add Category
 					</Button>
 				</Box>
+
 				{categories.map(([category, activities]) => (
 					<ActivityCategory
 						key={category}
@@ -219,8 +243,12 @@ const Activities = ({
 					/>
 				))}
 			</CardContent>
+
+			{/*Dialog for adding a new category*/}
 			<Dialog open={open} onClose={handleClose}>
 				<DialogTitle>Add a new category</DialogTitle>
+
+				{/*Use JS normal form isntead of MUI as we only need to ask for category name so no need to be fancy*/}
 				<form onSubmit={handleSubmit}>
 					<DialogContent>
 						<DialogContentText>

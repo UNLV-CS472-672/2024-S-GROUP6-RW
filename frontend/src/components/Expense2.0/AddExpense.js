@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { names } from "./DataGen";
 
+// Initial data for the form or kind hard code this
 const initialExpenseData = {
 	userName: "",
 	title: "",
@@ -22,6 +23,7 @@ const initialExpenseData = {
 	amount: "",
 };
 
+// Function to validate the form data
 function validateFormData(expenseData) {
 	const { userName, title, category, amount } = expenseData;
 
@@ -38,6 +40,7 @@ function validateFormData(expenseData) {
 	return null;
 }
 
+// Function to handle the split method
 function handleSplitMethod(expenseData) {
 	if (expenseData.splitMethod === "equal") {
 		expenseData.amount = (parseFloat(expenseData.amount) / 2).toFixed(2);
@@ -50,16 +53,21 @@ function handleSplitMethod(expenseData) {
 	return expenseData;
 }
 
+// AddExpenseForm component
 const AddExpenseForm = ({ onAddExpense, categories }) => {
+	// State variables for the form data and message
 	const [expenseData, setExpenseData] = useState(initialExpenseData);
 	const [message, setMessage] = useState("");
 
+	// Function to handle the form data change
 	const handleChange = ({ target }) => {
 		let updatedExpenseData = {
+			//this is the updated expense data that will be set to the states
 			...expenseData,
 			[target.name]: target.value,
 		};
 
+		// Clear the user name if split method is none
 		if (target.name === "splitMethod" && target.value === "none") {
 			updatedExpenseData.userName = "";
 		}
@@ -67,30 +75,38 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 		setExpenseData(updatedExpenseData);
 	};
 
+	// Function to reset the form bc im lazy
 	const resetForm = () => {
 		setExpenseData(initialExpenseData);
 	};
 
+	// Function to handle the form submit
 	const handleSubmit = (event) => {
-		event.preventDefault();
+		event.preventDefault(); // prevent the default form submission
 
+		// Validate the form data and set the message if there's an error
 		const errorMessage = validateFormData(expenseData);
 		if (errorMessage) {
 			setMessage(errorMessage);
 			return;
 		}
 
+		// Clear the error message if there's no error and add the expense data to the list
 		const updatedExpenseData = handleSplitMethod(expenseData);
 
+		// Call the onAddExpense function from the parent components to add the expense
+		// and reset the form
 		onAddExpense(updatedExpenseData);
 		resetForm();
 	};
 
+	// we will destructure the expense data to make it easier to use in the form
 	const { userName, title, category, description, splitMethod, amount } =
 		expenseData;
 
 	return (
 		<Box
+			// ai-gen start (ChatGPT-4.0, 1)
 			component="form"
 			sx={{
 				"& .MuiTextField-root": { m: 1, width: "25ch" },
@@ -98,13 +114,16 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 				display: "flex",
 				flexDirection: "column",
 			}}
-			noValidate
+			// ai-gen end
+			noValidate={false} // do extra validation
 			autoComplete="off"
 			onSubmit={handleSubmit}
 		>
+			{/* Display the error message if there's any */}
 			{message && <Alert severity="error">{message}</Alert>}
 
 			<Typography variant="h6">Add Expense</Typography>
+
 			<Grid container spacing={3}>
 				<Grid
 					item
@@ -121,6 +140,7 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 						},
 					}}
 				>
+					{/* Split Method */}
 					<FormControl fullWidth margin="normal">
 						<InputLabel id="split-method-label" sx={{ color: "black" }}>
 							Split Method
@@ -138,6 +158,8 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 							<MenuItem value="specific">Specific Costs</MenuItem>
 						</Select>
 					</FormControl>
+
+					{/* User Name */}
 					<FormControl fullWidth>
 						<InputLabel id="userName-label" sx={{ color: "black" }}>
 							User Name
@@ -150,10 +172,12 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 							onChange={handleChange}
 							disabled={splitMethod === "none"}
 							sx={{
+								// ai-gen start (ChatGPT-4.0, 0)
 								"&.Mui-disabled": {
 									color: "black",
 									backgroundColor: "#ddd",
 								},
+								// ai-gen end
 							}}
 						>
 							{names.map((person) => (
@@ -164,6 +188,7 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 						</Select>
 					</FormControl>
 
+					{/* Category */}
 					<FormControl fullWidth margin="normal">
 						<InputLabel id="category-label" sx={{ color: "black" }}>
 							Category
@@ -183,6 +208,7 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 						</Select>
 					</FormControl>
 				</Grid>
+
 				<Grid
 					item
 					xs={12}
@@ -228,6 +254,7 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 								},
 							}}
 						>
+							{/* Title, Amount, Description */}
 							<TextField
 								required
 								fullWidth

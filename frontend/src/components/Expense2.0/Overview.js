@@ -1,20 +1,23 @@
 import React from "react";
 import { Box, Grid, Card, CardContent, Typography } from "@mui/material";
 
-// This is a reusable card component that takes in title, amount, and color as props
+// Overview card component
+
+// Card component -> responsible for displaying the overview card
 const OverviewCard = ({ title, amount, color }) => (
 	<Card
-		sx={{ minWidth: 220, background: color, borderRadius: "16px", margin: 1 }}
+		sx={{ minWidth: 200, background: color, borderRadius: "15px", margin: 1 }}
 	>
 		<CardContent>
 			<Typography
 				sx={{ fontSize: 14, color: "text.secondary" }}
-				gutterBottom
+				gutterBottom // adds space at the bottom of the text
 			>
 				{title}
 			</Typography>
+
 			<Typography
-				variant="h5"
+				variant="h4" // use this to change the boldness of the text of the $$
 				component="div"
 				sx={{ color: "text.primary" }}
 			>
@@ -25,6 +28,7 @@ const OverviewCard = ({ title, amount, color }) => (
 );
 
 function Overview({ totalSpend, totalOwe, totalGetBack }) {
+	// this will take the data that pass in the expense dash board and update the overview card
 	const cards = [
 		{
 			title: "Total spend",
@@ -53,6 +57,7 @@ function Overview({ totalSpend, totalOwe, totalGetBack }) {
 				marginLeft: -1,
 			}}
 		>
+			{/* If scalling is not work, adjust the xs, sm, md, lg as this responsible for scalling */}
 			<Grid container spacing={{ xs: 1, sm: 2, md: 2, lg: 3 }}>
 				{cards.map((card, index) => (
 					<Grid item xs={12} sm={6} md={6} lg={4} key={index}>
