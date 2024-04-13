@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import NavigationIcon from '@mui/icons-material/Navigation';
-import Fab from '@mui/material/Fab';
 
 // dialog components as well as text field and button
 import {
@@ -12,10 +10,14 @@ import {
 	Alert,
 	TextField,
 	Button,
+	Tab,
+	Tabs,
 } from "@mui/material";
 
 // icons for edit button
 import EditIcon from "@mui/icons-material/Edit";
+
+import ExpensesSplit from "../ExpensesSplit/ExpensesSplit";
 
 const dialogContainerStyle = {
 	backdropFilter: "blur(5px)",
@@ -23,6 +25,20 @@ const dialogContainerStyle = {
 		borderRadius: "10px",
 	},
 };
+
+// ai-gen start (ChatGPT-4.0, 1)
+const formatDateForInput = (date) => {
+	const d = new Date(date);
+	let month = "" + (d.getMonth() + 1),
+		day = "" + d.getDate(),
+		year = d.getFullYear();
+
+	if (month.length < 2) month = "0" + month;
+	if (day.length < 2) day = "0" + day;
+
+	return [year, month, day].join("-");
+};
+// ai-gen end
 
 /**
  * NewExpenseDialog component is used to add new expense to the list of expenses.
@@ -45,45 +61,90 @@ const NewExpenseDialog = ({
 	// state variables to manage the dialog open and close
 	const [open, setOpen] = useState(false);
 	// state variables to manage the form fields
-	const [test, setTest] = useState(expense ? expense.test : "");
-	const [amount, setAmount] = useState(expense ? expense.amount : "");
+	const [name, setName] = useState(expense ? expense.name : "");
+	const [amount, setAmount] = useState(
+		expense ? expense.amount.toString() : ""
+	);
 	const [payer, setPayer] = useState(expense ? expense.payer : "");
 	// state var for the date
-	const [date, setDate] = useState(expense ? expense.date : "");
+	const [date, setDate] = useState(
+		expense
+			? formatDateForInput(expense.date)
+			: formatDateForInput(new Date())
+	);
+
+	// state var for the description
+	const [description, setDescription] = useState(
+		expense ? expense.description : ""
+	);
 	// state variable to manage the error message
 	const [error, setError] = useState("");
+	const [tabValue, setTabValue] = useState(0);
+	const [detailsOpen, setDetailsOpen] = useState(false);
 
 	// function to handle the open event of the dialog
 	const handleClickOpen = () => {
+		if (!expense) {
+			// Also clear the form when opening in create mode
+			clearForm();
+		}
 		setOpen(true);
 	};
 
 	// function to handle the close event of the dialog
 	const handleClose = () => {
-		clearForm();
+		if (!expense) {
+			// Only clear the form if in create mode (no expense prop provided)
+			clearForm();
+		}
+		setError("");
 		setOpen(false);
+	};
+
+	const handleTabChange = (event, newValue) => {
+		setTabValue(newValue);
+		if (newValue === 1) {
+			setDetailsOpen(true);
+		}
 	};
 
 	// function to clear the form fields and error message
 	const clearForm = () => {
-		setTest("");
+		setName("");
 		setAmount("");
 		setPayer("");
-		setDate("");
+		// ai-gen start (ChatGPT-4.0, 0)
+		setDate(formatDateForInput(new Date()));
+		// ai-gen end
+		setDescription("");
 	};
 
 	// function to handle the add event of the expense
 	const handleAdd = () => {
+		setError("");
 		//data validation
-		if (test === "" || amount === "" || payer === "" || date === "") {
-			setError("All fields are required.");
-			clearForm();
+		if (name === "") {
+			setError("Name is required.");
+			return;
+		}
+
+		if (amount === "") {
+			setError("Amount is required.");
+			return;
+		}
+
+		if (payer === "") {
+			setError("Payer is required.");
+			return;
+		}
+
+		if (date === "") {
+			setError("Date is required.");
 			return;
 		}
 
 		if (parseFloat(amount) <= 0) {
 			setError("Amount must be greater than 0.");
-			clearForm();
 			return;
 		}
 
@@ -91,22 +152,26 @@ const NewExpenseDialog = ({
 			clearForm();
 		}
 
+		//console.log(expense);
+
 		// Call the onAddExpense or onEditExpense function with the new expense details
 		if (expense) {
 			onEditExpense({
 				id: expense.id,
-				test,
+				name,
 				amount,
 				payer,
 				date,
+				description,
 			});
 		} else {
 			onAddExpense({
 				id: Math.floor(Math.random() * 1000),
-				test,
+				name,
 				amount,
 				payer,
 				date,
+				description,
 			});
 		}
 
@@ -116,11 +181,22 @@ const NewExpenseDialog = ({
 
 	// Update state variables when expense prop changes
 	useEffect(() => {
-		setTest(expense ? expense.test : "");
-		setAmount(expense ? expense.amount : "");
-		setPayer(expense ? expense.payer : "");
-		setDate(expense ? expense.date : "");
-	}, [expense]); //the [expense] array is the dependency array
+		//if it is add new expense, then clear the form
+		if (newData) {
+			clearForm();
+		} else {
+			//console.log("Expense:", expense);
+			setName(expense ? expense.name : "");
+			setAmount(expense ? expense.amount.toString() : "");
+			setPayer(expense ? expense.payer : "");
+			setDate(
+				expense
+					? formatDateForInput(expense.date)
+					: formatDateForInput(new Date())
+			);
+			setDescription(expense ? expense.description : "");
+		}
+	}, [expense, newData]); //the [expense] array is the dependency array
 	// it means that the useEffect will run when the expense changes
 	// and it will update the name, amount and payer state variables
 
@@ -134,7 +210,7 @@ const NewExpenseDialog = ({
 				<Button
 					color="primary"
 					variant="outlined"
-					sx={{ mr: 1 }}
+					sx={{ mr: 1, mt: 1 }}
 					onClick={handleClickOpen}
 				>
 					New expense
@@ -147,7 +223,12 @@ const NewExpenseDialog = ({
 				</Button>
 			)}
 
-			<Dialog open={open} onClose={handleClose} style={dialogContainerStyle}>
+			<Dialog
+				open={open}
+				onClose={handleClose}
+				style={dialogContainerStyle}
+				maxWidth="xl"
+			>
 				<DialogTitle>
 					{newData ? "Add a new expense" : "Edit expense"}
 				</DialogTitle>
@@ -160,43 +241,91 @@ const NewExpenseDialog = ({
 					{/* show the error message if there is any data validation fail */}
 					{error && <Alert severity="error">{error}</Alert>}
 
-					{/* text field for the name */}
-					<TextField
-						autoFocus
-						margin="dense"
-						label="description"
-						type="text"
-						fullWidth
-						value={test}
-						onChange={(e) => setTest(e.target.value)}
-					/>
-					{/* text field for the amount */}
-					<TextField
-						margin="dense"
-						label="0.00"
-						type="number"
-						fullWidth
-						value={amount}
-						onChange={(e) => setAmount(e.target.value)}
-					/>
-					{/* text field for the payer */}
-					<TextField
-						margin="dense"
-						label="paid by:"
-						type="text"
-						fullWidth
-						value={payer}
-						onChange={(e) => setPayer(e.target.value)}
-					/>
+					<Tabs value={tabValue} onChange={handleTabChange}>
+						<Tab label="Overview" />
+						<Tab label="Expense Split" />
+					</Tabs>
 
-					{/* text field for the date */}
-					<TextField
-						margin="dense"
-						type="date"
-						fullWidth
-						value={date}
-						onChange={(e) => setDate(e.target.value)}
-					/>
+					{tabValue === 0 && (
+						<div style={{ width: "900px", height: "500px" }}>
+							{/* text field for the name */}
+							<TextField
+								autoFocus
+								margin="dense"
+								label="Name"
+								type="text"
+								fullWidth
+								// ai-gen start (ChatGPT-4.0, 0)
+								value={name || ""}
+								// ai-gen end
+								onChange={(e) => setName(e.target.value)}
+								sx={{ marginBottom: "20px", marginTop: "20px" }}
+							/>
+							{/* text field for the amount */}
+							<TextField
+								margin="dense"
+								label="Amount"
+								type="number"
+								fullWidth
+								// ai-gen start (ChatGPT-4.0, 0)
+								value={amount || ""}
+								// ai-gen end
+								onChange={(e) => setAmount(e.target.value)}
+								sx={{ marginBottom: "20px" }}
+							/>
+							{/* text field for the payer */}
+							<TextField
+								margin="dense"
+								label="Paid by:"
+								type="text"
+								fullWidth
+								// ai-gen start (ChatGPT-4.0, 0)
+								value={payer || ""}
+								// ai-gen end
+								onChange={(e) => setPayer(e.target.value)}
+								sx={{ marginBottom: "20px" }}
+							/>
+
+							{/* text field for the date */}
+							<TextField
+								margin="dense"
+								type="date"
+								fullWidth
+								// ai-gen start (ChatGPT-4.0, 0)
+								value={date || formatDateForInput(new Date())}
+								onChange={(e) => setDate(e.target.value)}
+								// ai-gen end
+								sx={{ marginBottom: "20px" }}
+							/>
+
+							{/* text field for the description */}
+							<TextField
+								margin="dense"
+								label="Description"
+								type="text"
+								fullWidth
+								value={description}
+								onChange={(e) => {
+									const words = e.target.value.split(" ");
+									if (words.length <= 300) {
+										setDescription(e.target.value);
+									}
+								}}
+								// ai-gen start (ChatGPT-4.0, 0)
+								helperText={`${
+									description ? description.split(" ").length : 0
+								}/300`}
+								// ai-gen end
+								sx={{ marginBottom: "20px" }}
+							/>
+						</div>
+					)}
+
+					{tabValue === 1 && (
+						<div style={{ width: "900px", height: "500px" }}>
+							<ExpensesSplit />
+						</div>
+					)}
 				</DialogContent>
 				{/* buttons for cancel and add */}
 				<DialogActions>

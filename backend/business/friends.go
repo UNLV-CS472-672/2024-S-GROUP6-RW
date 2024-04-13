@@ -29,7 +29,7 @@ func AcknowledgeFriendRequest(request models.FriendRequest, database db.Database
 	return nil
 }
 
-func RemoveFriend(user1 models.User, user2 models.User, database db.Database) error {
+func RemoveFriend(request models.FriendRequest, database db.Database) error {
 	// TODO: Implement remove friend business logic
 
 	return nil
