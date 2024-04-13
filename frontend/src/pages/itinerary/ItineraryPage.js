@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
-import ItineraryAccordion from "../../components/ItineraryForm/ItineraryAccordion";
-import { format } from "date-fns";
+import ItineraryAccordion from "../../components/ItineraryForm/ItineraryAccordion"; // Importing the ItineraryAccordion component
+import { format } from "date-fns"; // Importing the format function from date-fns library
+import { getFromLocal } from "../../utils/LocalStorageManager";
 
+ 
 const ItineraryPage = () => {
+
   const [itinerary, setItinerary] = useState([]);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
 
   useEffect(() => {
-    const startDateFromStorage = localStorage.getItem('startDate');
-    if (startDateFromStorage) {
-      const start = new Date(startDateFromStorage);
+    //const startDateFromStorage = localStorage.getItem('startDate');
+    const startDate = getFromLocal('startDate');
+
+    if (startDate) {
+      const start = new Date(startDate);
       if (start.toString() !== "Invalid Date") {
         setSelectedStartDate(start);
         generateItinerary(start);
@@ -20,9 +25,11 @@ const ItineraryPage = () => {
   }, []);
 
   const generateItinerary = (startDate) => {
-    const endDateFromStorage = localStorage.getItem('endDate');
-    if (endDateFromStorage) {
-      const end = new Date(endDateFromStorage);
+    //const endDateFromStorage = localStorage.getItem('endDate');
+    const endDate = getFromLocal('endDate');
+
+    if (endDate) {
+      const end = new Date(endDate);
       if (startDate && end.toString() !== "Invalid Date") {
         const tripLength = calculateNumberOfDays(startDate, end);
         const newItinerary = Array.from({ length: tripLength }, (_, index) => ({
@@ -37,19 +44,22 @@ const ItineraryPage = () => {
     return Math.round(Math.abs((startDate - endDate) / 86400000)) + 1;
   };
 
+/*
   const handleAddDay = () => {
     setItinerary(prevItinerary => {
-      const newDay = new Date(selectedStartDate.getTime() + prevItinerary.length * 86400000);
+      const newDay = new Date(startDate.getTime() + prevItinerary.length * 86400000);
       return [...prevItinerary, { day: format(newDay, "EEEE, MMMM dd, yyyy") }];
     });
-  };
+  }; */
 
   return (
     <div>
+
       {itinerary.map((day, index) => (
         <ItineraryAccordion key={index} day={day.day} />
       ))}
-      <button onClick={handleAddDay}>Add Another Day</button>
+      {/*<button onClick={handleAddDay}>Add Another Day</button>*/}
+
     </div>
   );
 };

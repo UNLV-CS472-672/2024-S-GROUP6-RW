@@ -1,11 +1,4 @@
 .activity {
-    border-radius: 5px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    width: 35%; /*Size of the activity block*/
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    margin-top: -5px;
     touch-action: none;
 }
