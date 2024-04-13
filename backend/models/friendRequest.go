@@ -89,11 +89,11 @@ func (f *FriendRequest) GetMockDocument(coll *MockCollection, filter bson.M) err
 	}
 
 	if requestRes, ok := result.(*FriendRequest); ok {
-		f = requestRes
+		*f = *requestRes
 		return nil
 	}
 
-	return errors.New("Failed to convert model to FriendRequest.")
+	return errors.New("failed to convert model to FriendRequest")
 }
 
 func (f *FriendRequest) GetKeys() []string {
@@ -123,21 +123,21 @@ func (f *FriendRequest) SetValue(key string, value any) error {
 			return nil
 		}
 
-		return errors.New("Failed to convert value to ObjectID.")
+		return errors.New("failed to convert value to ObjectID")
 	case "SenderID":
 		if SenderID, ok := value.(primitive.ObjectID); ok {
 			f.SenderID = SenderID
 			return nil
 		}
 
-		return errors.New("Failed to convert value to ObjectID.")
+		return errors.New("failed to convert value to ObjectID")
 	case "TargetID":
 		if TargetID, ok := value.(primitive.ObjectID); ok {
 			f.TargetID = TargetID
 			return nil
 		}
 
-		return errors.New("Failed to convert value to ObjectID.")
+		return errors.New("failed to convert value to ObjectID")
 	default:
 		return errors.New("Unknown key: '" + key + "'.")
 	}

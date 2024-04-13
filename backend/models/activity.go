@@ -19,6 +19,9 @@ type Activity struct {
 	LocationName string             `bson:"LocationName,omitempty"`
 	Address      string             `bson:"Address,omitempty"`
 	Coordinate   string             `bson:"Coordinate,omitempty"`
+
+	// Placeholder fields for activity entry point data
+	Modifications []Modification
 }
 
 func (a *Activity) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
@@ -70,11 +73,11 @@ func (a *Activity) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	}
 
 	if activityRes, ok := result.(*Activity); ok {
-		a = activityRes
+		*a = *activityRes
 		return nil
 	}
 
-	return errors.New("Failed to convert model to Activity.")
+	return errors.New("failed to convert model to Activity")
 }
 
 func (a *Activity) GetKeys() []string {
@@ -115,56 +118,56 @@ func (a *Activity) SetValue(key string, value any) error {
 			return nil
 		}
 
-		return errors.New("Failed to convert value to ObjectID.")
+		return errors.New("failed to convert value to ObjectID")
 	case "ParentTripID":
 		if ParentTripID, ok := value.(primitive.ObjectID); ok {
 			a.ParentTripID = ParentTripID
 			return nil
 		}
 
-		return errors.New("Failed to convert value to ObjectID.")
+		return errors.New("failed to convert value to ObjectID")
 	case "Description":
 		if Description, ok := value.(string); ok {
 			a.Description = Description
 			return nil
 		}
 
-		return errors.New("Failed to convert value to string.")
+		return errors.New("failed to convert value to string")
 	case "Date":
 		if Date, ok := value.(primitive.DateTime); ok {
 			a.Date = Date
 			return nil
 		}
 
-		return errors.New("Failed to convert value to DateTime.")
+		return errors.New("failed to convert value to DateTime")
 	case "ImageURI":
 		if ImageURI, ok := value.(string); ok {
 			a.ImageURI = ImageURI
 			return nil
 		}
 
-		return errors.New("Failed to convert value to string.")
+		return errors.New("failed to convert value to string")
 	case "IsMapBased":
 		if IsMapBased, ok := value.(bool); ok {
 			a.IsMapBased = IsMapBased
 			return nil
 		}
 
-		return errors.New("Failed to convert value to bool.")
+		return errors.New("failed to convert value to bool")
 	case "Address":
 		if Address, ok := value.(string); ok {
 			a.Address = Address
 			return nil
 		}
 
-		return errors.New("Failed to convert value to string.")
+		return errors.New("failed to convert value to string")
 	case "Coordinate":
 		if Coordinate, ok := value.(string); ok {
 			a.Coordinate = Coordinate
 			return nil
 		}
 
-		return errors.New("Failed to convert value to string.")
+		return errors.New("failed to convert value to string")
 	default:
 		return errors.New("Unknown key: '" + key + "'.")
 	}

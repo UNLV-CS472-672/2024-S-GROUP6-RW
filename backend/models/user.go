@@ -21,9 +21,10 @@ type User struct {
 	LastLogin        primitive.DateTime   `bson:"LastLogin,omitempty"`
 
 	// Placeholder fields for user entry point data
-	FirstName string
-	LastName  string
-	Password  string
+	FirstName     string
+	LastName      string
+	Password      string
+	Modifications []Modification
 }
 
 func (u *User) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
@@ -136,11 +137,11 @@ func (u *User) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	}
 
 	if userRes, ok := result.(*User); ok {
-		u = userRes
+		*u = *userRes
 		return nil
 	}
 
-	return errors.New("Failed to convert model to User.")
+	return errors.New("failed to convert model to User")
 }
 
 func (u *User) GetKeys() []string {
@@ -183,63 +184,63 @@ func (u *User) SetValue(key string, value any) error {
 			return nil
 		}
 
-		return errors.New("Failed to convert value to ObjectID.")
+		return errors.New("failed to convert value to ObjectID")
 	case "Username":
 		if Username, ok := value.(string); ok {
 			u.Username = Username
 			return nil
 		}
 
-		return errors.New("Failed to convert value to string.")
+		return errors.New("failed to convert value to string")
 	case "Email":
 		if Email, ok := value.(string); ok {
 			u.Email = Email
 			return nil
 		}
 
-		return errors.New("Failed to convert value to string.")
+		return errors.New("failed to convert value to string")
 	case "PassHash":
 		if PassHash, ok := value.(string); ok {
 			u.PassHash = PassHash
 			return nil
 		}
 
-		return errors.New("Failed to convert value to string.")
+		return errors.New("failed to convert value to string")
 	case "TripIDs":
 		if idList, ok := value.([]primitive.ObjectID); ok {
 			u.TripIDs = idList
 			return nil
 		}
 
-		return errors.New("Failed to convert value to []ObjectID.")
+		return errors.New("failed to convert value to []ObjectID")
 	case "FriendIDs":
 		if idList, ok := value.([]primitive.ObjectID); ok {
 			u.FriendIDs = idList
 			return nil
 		}
 
-		return errors.New("Failed to convert value to []ObjectID.")
+		return errors.New("failed to convert value to []ObjectID")
 	case "FriendRequestIDs":
 		if idList, ok := value.([]primitive.ObjectID); ok {
 			u.FriendRequestIDs = idList
 			return nil
 		}
 
-		return errors.New("Failed to convert value to []ObjectID.")
+		return errors.New("failed to convert value to []ObjectID")
 	case "InvoiceIDs":
 		if idList, ok := value.([]primitive.ObjectID); ok {
 			u.InvoiceIDs = idList
 			return nil
 		}
 
-		return errors.New("Failed to convert value to []ObjectID.")
+		return errors.New("failed to convert value to []ObjectID")
 	case "LastLogin":
 		if LastLogin, ok := value.(primitive.DateTime); ok {
 			u.LastLogin = LastLogin
 			return nil
 		}
 
-		return errors.New("Failed to convert value to DateTime.")
+		return errors.New("failed to convert value to DateTime")
 	default:
 		return errors.New("Unknown key: '" + key + "'.")
 	}

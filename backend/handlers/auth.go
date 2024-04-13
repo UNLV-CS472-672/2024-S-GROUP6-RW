@@ -48,7 +48,7 @@ func SignInHandler(c *gin.Context) {
 
 	database := db.GetMongoDatabase()
 
-	tokenString, _, err := business.SignIn(user, database)
+	tokenString, existingUser, err := business.SignIn(user, database)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -57,6 +57,9 @@ func SignInHandler(c *gin.Context) {
 
 	fmt.Println("Success.")
 
+	//Testing
+	fmt.Println(existingUser.Username)
+
 	// Return OK status to client
-	c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	c.JSON(http.StatusOK, gin.H{"token": tokenString, "username": existingUser.Username})
 }
