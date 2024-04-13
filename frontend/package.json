@@ -11,6 +11,7 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.15.14",
+    "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.14",
     "@mui/x-data-grid": "^6.19.4",
     "@mui/x-date-pickers": "^7.0.0",

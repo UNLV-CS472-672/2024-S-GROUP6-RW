@@ -5,7 +5,7 @@ function TripsExpensesPage() {
 	return (
 		<div>
 			<h2>Your Trips</h2>
-            <TripsList />
+			<TripsList />
 		</div>
 	);
 }

@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+// 2024-S-GROUP6-RW\frontend\src\components\ItineraryForm\DatePickerComponent.js
+
+import React, { useState,useEffect } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -7,8 +9,9 @@ import { Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs'; 
 import "../../css/DatePicker.css"
+import { saveToLocal } from '../../utils/LocalStorageManager';
 
-const ItineraryDatePickerComponent = () => {
+const DatePickerComponent = ({ startDateKey, endDateKey }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const navigate = useNavigate();
@@ -40,10 +43,26 @@ const ItineraryDatePickerComponent = () => {
     return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
   };
 
+
+  // Effect to save start date to local storage
+  useEffect(() => {
+    if (startDate && startDateKey) {
+      saveToLocal(startDateKey, startDate);
+      console.log(startDate)
+    }
+  }, [startDate, startDateKey]);
+
+  // Effect to save end date to local storage
+  useEffect(() => {
+    if (endDate && endDateKey) {
+      saveToLocal(endDateKey, endDate);
+    }
+  }, [endDate, endDateKey]);
   const handleIdk = () => {
     console.log("User is not sure.");
     navigate('/map');
   };
+
 
   return (
     <div className="itinerary-date-picker-container">
@@ -78,4 +97,4 @@ const ItineraryDatePickerComponent = () => {
   );
 };
 
-export default ItineraryDatePickerComponent;
+export default DatePickerComponent;
