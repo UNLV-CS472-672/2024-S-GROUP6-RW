@@ -21,10 +21,14 @@ function ExpensesPage() {
 				centered
 			>
 				<Tab label="Expenses Dashboard" />
+				{/*
 				<Tab label="Expenses Form" />
+				*/}
 			</Tabs>
 			{value === 0 && <ExpenseDashBoard />}
+			{/*
 			{value === 1 && <ExpensesForm />}
+			*/}
 		</Box>
 	);
 }
