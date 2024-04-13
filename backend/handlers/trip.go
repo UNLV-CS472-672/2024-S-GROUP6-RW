@@ -21,8 +21,11 @@ func CreateTripHandler(c *gin.Context) {
 
 	// Bind JSON body to Trip
 	if !models.BindData(c, &trip) {
+		fmt.Println("Binding Failed for Create Trips")
 		return // Failed to bind data. Exit handler
 	}
+
+	fmt.Println(trip)
 
 	database := db.GetMongoDatabase()
 

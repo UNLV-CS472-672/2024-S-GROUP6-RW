@@ -9,9 +9,13 @@ import {
 import { useAuth } from "../../auth/AuthContext";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { saveToLocal, getFromLocal } from "../../utils/LocalStorageManager";
+import { useNavigate } from 'react-router-dom';
+import { gettingStartedCreateTrip } from "../../utils/ApiManager";
 
 const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
 	const { login } = useAuth();
+	const navigate = useNavigate();
 	const [Username, setUsername] = useState("");
 	const [FirstName, setFirstName] = useState("");
 	const [LastName, setLastName] = useState("");
@@ -89,9 +93,19 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
 					if (data.token) {
 						// Use the login function to save the token and update auth state
 						login(data.token);
-						console.log(data.token); //Needs to be deleted after testing
+						// console.log(data.token); //Needs to be deleted after testing
+						// Store username and email in local storage
+						saveToLocal('username', Username);
+						saveToLocal('email', Email);
+						
+						const tripTitle = getFromLocal('tripTitle');
+						console.log(`Register Sign in tripTitle: ${tripTitle}`);
+						if (tripTitle == "Getting Started Trip"){
+							saveToLocal("Getting Started Trip!", "tripTitle");
+							gettingStartedCreateTrip();
+						}
 
-						// Redirect to dashboard or show success message
+						navigate('/my-trips');
 					} else {
 						// Handle the case where no token is returned
 						throw new Error("No token received after registration.");
