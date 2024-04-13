@@ -13,8 +13,9 @@ import {
 	Box,
 	useTheme,
 	TextField,
-	ToggleButton,
-	ToggleButtonGroup,
+	FormControl,
+	Select,
+	MenuItem,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -121,7 +122,17 @@ const History = ({ transactions, sudoUser }) => {
 				overflow: "hidden",
 			}}
 		>
-			<CardContent sx={{ maxHeight: "400px", overflowY: "auto" }}>
+			<CardContent
+				sx={{
+					maxHeight: {
+						xs: "auto",
+						sm: "auto",
+						md: "360px",
+						lg: "400px",
+					},
+					overflowY: "auto",
+				}}
+			>
 				<Box
 					display="flex"
 					justifyContent="space-between"
@@ -131,8 +142,8 @@ const History = ({ transactions, sudoUser }) => {
 					<Typography variant="h6" align="left">
 						History
 					</Typography>
-					<Box display="flex" justifyContent="space-between" width="100%">
-						<Box width={200} marginLeft="auto" marginRight={2}>
+					<Box display="flex" width="100%" justifyContent={"right"}>
+						<Box width={150} marginRight={2} marginLeft={2}>
 							<TextField
 								fullWidth
 								variant="outlined"
@@ -142,19 +153,17 @@ const History = ({ transactions, sudoUser }) => {
 							/>
 						</Box>
 
-						<ToggleButtonGroup
-							value={searchField}
-							exclusive
-							onChange={handleSearchFieldChange}
-							aria-label="search field"
-						>
-							<ToggleButton value="payer" aria-label="search in payer">
-								Payer
-							</ToggleButton>
-							<ToggleButton value="payee" aria-label="search in payee">
-								Payee
-							</ToggleButton>
-						</ToggleButtonGroup>
+						<FormControl>
+							<Select
+								labelId="search-field-label"
+								id="search-field"
+								value={searchField}
+								onChange={handleSearchFieldChange}
+							>
+								<MenuItem value="payer">Payer</MenuItem>
+								<MenuItem value="payee">Payee</MenuItem>
+							</Select>
+						</FormControl>
 					</Box>
 				</Box>
 				<Paper

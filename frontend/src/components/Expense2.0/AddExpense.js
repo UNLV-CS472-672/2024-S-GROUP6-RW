@@ -103,9 +103,24 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 			onSubmit={handleSubmit}
 		>
 			{message && <Alert severity="error">{message}</Alert>}
+
 			<Typography variant="h6">Add Expense</Typography>
-			<Grid container spacing={2}>
-				<Grid item xs={12} sm={6} mt={-1}>
+			<Grid container spacing={3}>
+				<Grid
+					item
+					xs={12}
+					sm={12}
+					mt={5}
+					lg={5}
+					sx={{
+						marginTop: {
+							xs: "-10px",
+							sm: "-20px",
+							md: "5px",
+							lg: "-5px",
+						},
+					}}
+				>
 					<FormControl fullWidth margin="normal">
 						<InputLabel id="split-method-label" sx={{ color: "black" }}>
 							Split Method
@@ -168,9 +183,51 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 						</Select>
 					</FormControl>
 				</Grid>
-				<Grid item xs={12} sm={6}>
-					<Grid container spacing={1}>
-						<Grid item xs={12} md={6}>
+				<Grid
+					item
+					xs={12}
+					sm={12}
+					mt={5}
+					lg={5}
+					sx={{
+						marginTop: {
+							xs: "-10px",
+							sm: "-120px",
+							md: "-20px",
+							lg: "0px",
+						},
+
+						marginLeft: {
+							xs: "0px",
+							sm: "20px",
+							md: "-60px",
+							lg: "5px",
+						},
+					}}
+				>
+					<Grid container spacing={3}>
+						<Grid
+							item
+							xs={12}
+							sm={12}
+							md={5}
+							lg={5}
+							sx={{
+								marginTop: {
+									xs: "-10px",
+									sm: "100px",
+									md: "5px",
+									lg: "0px",
+								},
+
+								marginLeft: {
+									xs: "-20px",
+									sm: "-20px",
+									md: "50px",
+									lg: "0px",
+								},
+							}}
+						>
 							<TextField
 								required
 								fullWidth
@@ -196,10 +253,6 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 									style: { color: "black" },
 								}}
 							/>
-						</Grid>
-					</Grid>
-					<Grid container>
-						<Grid item xs={6}>
 							<TextField
 								fullWidth
 								id="expense-description"

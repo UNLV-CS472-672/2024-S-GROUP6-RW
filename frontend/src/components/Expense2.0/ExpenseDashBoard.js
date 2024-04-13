@@ -121,8 +121,8 @@ function ExpenseDashBoard() {
 		setCategories(updatedCategories);
 
 		//check the activity after delete
-		console.log("After delete act1: ", updatedExpenses);
-		console.log("After delete act2: ", updatedCategories);
+		//console.log("After delete act1: ", updatedExpenses);
+		//console.log("After delete act2: ", updatedCategories);
 	};
 
 	const handleDeleteCategory = (categoryName) => {
@@ -135,8 +135,8 @@ function ExpenseDashBoard() {
 		setCategories(updatedCategories);
 
 		//check the activity after delete
-		console.log("After delete cat1: ", updatedExpenses);
-		console.log("After delete cat2: ", updatedCategories);
+		//console.log("After delete cat1: ", updatedExpenses);
+		//console.log("After delete cat2: ", updatedCategories);
 	};
 
 	const totalSpend = expenses
@@ -149,9 +149,9 @@ function ExpenseDashBoard() {
 		.filter((e) => e.type === "get back")
 		.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
 
-	console.log("Initial Data:", Data);
-	console.log("Expenses:", expenses);
-	console.log("Calculated Totals:", { totalSpend, totalOwe, totalGetBack });
+	//console.log("Initial Data:", Data);
+	//console.log("Expenses:", expenses);
+	//console.log("Calculated Totals:", { totalSpend, totalOwe, totalGetBack });
 
 	// Render the Expense Dashboard
 	return (
@@ -159,7 +159,7 @@ function ExpenseDashBoard() {
 			<Container maxWidth="xl">
 				<Grid container spacing={3}>
 					{/* Overview Component */}
-					<Grid item xs={12} md={7}>
+					<Grid item xs={12} sm={12} md={7} lg={8}>
 						<Item elevation={3}>
 							<Overview
 								totalSpend={totalSpend}
@@ -170,7 +170,7 @@ function ExpenseDashBoard() {
 					</Grid>
 
 					{/* Add Expense Form Component */}
-					<Grid item xs={12} md={5}>
+					<Grid item xs={12} sm={12} md={5} lg={4}>
 						<Item elevation={3}>
 							<AddExpenseForm
 								onAddExpense={onAddExpense}
@@ -181,7 +181,21 @@ function ExpenseDashBoard() {
 					</Grid>
 
 					{/* Activity Component */}
-					<Grid item xs={12} md={7} mt={-25}>
+					<Grid
+						item
+						xs={12}
+						sm={12}
+						md={7}
+						lg={8}
+						sx={{
+							mt: {
+								xs: 0,
+								sm: 0,
+								md: -35,
+								lg: -25,
+							},
+						}}
+					>
 						<Item
 							elevation={3}
 							sx={{
@@ -200,8 +214,18 @@ function ExpenseDashBoard() {
 					</Grid>
 
 					{/* History Component */}
-					<Grid item xs={12} md={5}>
-						<Item elevation={3}>
+					<Grid item xs={12} sm={12} md={5} lg={4}>
+						<Item
+							elevation={3}
+							sx={{
+								height: {
+									xs: "auto",
+									sm: "auto",
+									md: "395px",
+									lg: "435px",
+								},
+							}}
+						>
 							<History transactions={expenses} sudoUser={sudoUser} />
 						</Item>
 					</Grid>
