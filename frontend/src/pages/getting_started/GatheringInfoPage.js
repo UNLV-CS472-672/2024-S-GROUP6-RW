@@ -1,3 +1,5 @@
+// 2024-S-GROUP6-RW\frontend\src\pages\getting_started\GatheringInfoPage.js
+
 import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import "../../css/GatheringInfo.css";
@@ -7,7 +9,10 @@ import PrefButtons from "../../components/PrefSelect/PrefButtons";
 
 function GatheringInfoPage() {
   const [activeScreen, setActiveScreen] = useState('screen1');
-
+  // the keys for local storage
+  const searchStorageKey = 'LocationName';
+  const startDateStorageKey = 'startDate';
+  const endDateStorageKey = 'endDate';
   const goToScreen2 = () => setActiveScreen('screen2');
   const goToScreen3 = () => setActiveScreen('screen3');
 
@@ -18,7 +23,7 @@ function GatheringInfoPage() {
           <div className="form-half">
             <p className="header-1">Let's plan your next trip together</p>
             <p className="where"> Where would you like to go? </p>
-            <SearchBar />
+            <SearchBar storageKey={searchStorageKey} />
             <button className="next-button"
               onClick={goToScreen2}>
                 Next
@@ -48,7 +53,10 @@ function GatheringInfoPage() {
           </div>
         </div>
         <div className={`screen ${activeScreen === 'screen2' ? 'slide-in' : 'slide-out'}`}>
-          <DatePickerComponent />
+          <DatePickerComponent 
+            startDateKey={startDateStorageKey} 
+            endDateKey={endDateStorageKey} 
+        />
             <button className="secondNext-button"
               onClick={goToScreen3}
               variant='contained'
@@ -64,6 +72,7 @@ function GatheringInfoPage() {
           </div>
         </div>
       </div>
+
     </>
   );
 }
