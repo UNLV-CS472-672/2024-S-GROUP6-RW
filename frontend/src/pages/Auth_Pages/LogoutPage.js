@@ -1,16 +1,15 @@
 import React, { useEffect } from "react";
 import { useAuth } from "./../../auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function LogoutPage() {
+  const navigate = useNavigate();
   const { logout, isAuth } = useAuth();
 
   useEffect(() => {
     logout();
+    navigate("/")
   }, [logout]);
-
-  useEffect(() => {
-    console.log(`Logout isAuth: ${isAuth}`);
-  }, [isAuth]);
 
   return (
     <div
@@ -23,7 +22,7 @@ function LogoutPage() {
       }}
     >
       <h2 style={{ fontSize: "2rem" }}>
-        You Have Been Successfully Logged Out!
+        
       </h2>
     </div>
   );

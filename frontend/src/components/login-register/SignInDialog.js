@@ -17,7 +17,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { convertLength } from "@mui/material/styles/cssUtils";
-import { saveToLocal } from "../../utils/LocalStorageManager";
+import { saveToLocal, getFromLocal } from "../../utils/LocalStorageManager";
 import { gettingStartedCreateTrip } from "../../utils/ApiManager";
 
 const dialogContainerStyle = {
@@ -81,7 +81,14 @@ const SignInDialog = ({ open }) => {
 			saveToLocal('username', username);
 			saveToLocal('email', Email);
 
-			gettingStartedCreateTrip();
+			
+			const tripTitle = getFromLocal('tripTitle');
+			console.log(`login Sign in tripTitle: ${tripTitle}`);
+			if (tripTitle == "Getting Started Trip"){
+				saveToLocal("tripTitle","Getting Started Trip!");
+				gettingStartedCreateTrip();
+			}
+				
 
 			navigate("/my-trips");
 

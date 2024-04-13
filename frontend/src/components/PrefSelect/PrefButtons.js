@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../css/PrefButtons.css';
 import SignInPopUp from '../GatheringInfo/SignInPopUp';
+import { saveToLocal } from '../../utils/LocalStorageManager';
 
 const PrefButtons = () => {
   // State to control the visibility of the SignInPopUp
@@ -29,7 +30,11 @@ const PrefButtons = () => {
 
   const handleSubmit = () => {
     console.log("Selected Categories:", selectedCategories);
-    console.log("onComplete called");
+    
+    // When the user has finished through the gathering info pages we saved the trip title as they're getting started trip
+    // This will also allow us to decide whether we need to do an API call when logging in or registering for saving trip data
+    saveToLocal("tripTitle","Getting Started Trip");
+
     setShowSignInPopUp(true);
 };
 
