@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ActivityList from "../../components/ItineraryForm/ActivityList";
 import { Calendar, Views, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
@@ -32,8 +31,7 @@ import { deepOrange, orange, red } from "@mui/material/colors";
 
 const localizer = momentLocalizer(moment);
 
-const EditView = ({ onClickCloseButton }) => {
-  const [userActivities, setUserActivities] = useState(ActivityList);
+const EditView = ({ day, userActivities, onUpdatedActivities, onClickCloseButton }) => {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showCreateEventDialog, setShowCreateEventDialog] = useState(false);
   const [startTime, setStartTime] = useState(null);
@@ -47,6 +45,8 @@ const EditView = ({ onClickCloseButton }) => {
   const [createEndTime, setCreateEndTime] = useState(null);
   const [createLocation, setCreateLocation] = useState("");
   const [createDescription, setCreateDescription] = useState("");
+
+  const dayObj = new Date(day); //Convert day string to date object
 
   const handleEditButtonClick = (event, e) => {
     setSelectedActivity(event);
@@ -78,50 +78,20 @@ const EditView = ({ onClickCloseButton }) => {
           end: endTime ? new Date(endTime) : selectedActivity.end,
           title: title || selectedActivity.title,
         };
-        // const newActivityList = [...ActivityList];
-        // newActivityList[index] = updatedEvents;
-        setUserActivities(updatedEvents);
+        updatedEvents.sort((actObjx, actObjy) => {return actObjx.start - actObjy.start}); //Sort them depending on the activites start time
+        onUpdatedActivities(updatedEvents); //Pass the updated activity back to the parent
       }
       setShowEditDialog(false);
       setSelectedActivity(null);
     }
-    // if (selectedActivity) {
-    //   const currentActivityIndex = ActivityList.findIndex( (item) => item.id === selectedActivity.id );
-    //   if (currentActivityIndex !== -1) {
-    //     const updatedActivities = [...ActivityList];
-    //   }
-    // }
   };
-  // const handleSave = () => {
-  //   if (selectedActivity) {
-  //     const index = ActivityList.findIndex((item) => item.id === selectedActivity.id);
-  //     if (index !== -1) {
-  //       const updatedEvents = [...ActivityList];
-  //       // Extract year, month, and day from the original start and end dates
-  //       const year = selectedActivity.start.getFullYear();
-  //       const month = selectedActivity.start.getMonth();
-  //       const day = selectedActivity.start.getDate();
-  //       // Create new date objects with the same year, month, day, and updated time
-  //       const newStartTime = new Date(year, month, day, startTime.getHours(), startTime.getMinutes());
-  //       const newEndTime = new Date(year, month, day, endTime.getHours(), endTime.getMinutes());
-  //       updatedEvents[index] = {
-  //         ...selectedActivity,
-  //         start: newStartTime,
-  //         end: newEndTime,
-  //       };
-  //       setUserActivities(updatedEvents);
-  //     }
-  //     setShowEditDialog(false);
-  //     setSelectedActivity(null);
-  //   }
-  // };
 
   const handleDelete = () => {
     if (selectedActivity) {
       const updatedUserActivities = userActivities.filter(
         (item) => item.id !== selectedActivity.id
       );
-      setUserActivities(updatedUserActivities);
+      onUpdatedActivities(updatedUserActivities); //Pass new array to the parent.
       setShowEditDialog(false);
       setSelectedActivity(null);
     }
@@ -137,8 +107,12 @@ const EditView = ({ onClickCloseButton }) => {
         description: createDescription || "",
         location: createLocation || "",
       };
-      setUserActivities([...userActivities, newEvent]);
+      const updatedActivity = [...userActivities, newEvent];
+      updatedActivity.sort((actObjx, actObjy) => {return actObjx.start - actObjy.start}); //Sort them depending on the activites start time
+      onUpdatedActivities(updatedActivity); //Pass to the parent component.
       setShowCreateEventDialog(false); //Close the create event dialog
+
+      //Reset states
       setCreateTitle("");
       setCreateStartTime(null);
       setCreateEndTime(null);
@@ -161,7 +135,7 @@ const EditView = ({ onClickCloseButton }) => {
           selectable={true} // Allow selecting time slots
           step={15} // Time slot interval in minutes
           timeslots={4} // Number of time slots per hour
-          defaultDate={new Date()} // Display current date
+          defaultDate={dayObj} // Display chosen day of the itinerary
           localizer={localizer}
           components={{
             event: (props) => (
@@ -171,7 +145,6 @@ const EditView = ({ onClickCloseButton }) => {
               />
             ),
           }}
-          //   onSelectSlot={handleSelectSlot} // Handle slot selection
         />
         <Dialog
           className="edit-dialog"
@@ -243,12 +216,12 @@ const EditView = ({ onClickCloseButton }) => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
                   label="Start Time"
-                  value={createStartTime}
+                  defaultValue={dayjs(dayObj)}
                   onChange={(newStartTime) => setCreateStartTime(newStartTime)}
                 />
                 <DateTimePicker
                   label="End Time"
-                  value={createEndTime}
+                  defaultValue={dayjs(dayObj)}
                   onChange={(newEndTime) => setCreateEndTime(newEndTime)}
                 />
               </LocalizationProvider>

@@ -19,51 +19,23 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import IconButton from "@mui/material/IconButton";
-import SwapVertIcon from '@mui/icons-material/SwapVert';
+import EditIcon from '@mui/icons-material/Edit';
 
 const ItineraryAccordion = ({
   key,
   day,
   events,
-  onClickEditButton
-  // onAddActivity,
-  // onEditActivity,
-  // onRemoveActivity,
+  onClickEditButton,
 }) => {
-  const [isAddDialogOpen, setAddDialogOpen] = useState(false);
-  const [newActivity, setNewActivity] = useState("");
 
-  const handleAddClick = () => {
-    setAddDialogOpen(true);
-  };
+  const dayObj = new Date(day); // Date object to store the specific day of the itinerary
 
-  // const handleConfirmAdd = () => {
-  //   if (newActivity) {
-  //     // Generate a unique ID for the new activity
-  //     const id = (Math.random() * 1000000).toFixed(0);
-  
-  //     // Create a new activity object
-  //     const newActivityObj = { id: id, title: newActivity, location: "", date: "", time: "", description: "", photo: "" };
-  
-  //     // Update the activity list state with the new activity added
-  //     setActivities((prevActivities) => [...prevActivities, newActivityObj]);
-  
-  //     // Clear the input field
-  //     setNewActivity("");
-  //   }
-  // };
-
-  const handleCancelAdd = () => {
-    setAddDialogOpen(false);
-  };
-
-  /*Delete Function BUT I will implement this later*/
-  // const handleDelete = (id) => {
-  //   // Filter out the activity with the given id
-  //   const updatedActivities = activities.filter(activity => activity.id !== id);
-  //   // Update the list of activities
-  //   setActivities(updatedActivities);
-  // };
+  //Filters only the itinerary on the specific day
+  const filteredActivities = events.filter((item) => {
+    return (item.start.getDate() === dayObj.getDate() 
+         && item.start.getMonth() === dayObj.getMonth()
+         && item.start.getYear() === dayObj.getYear());
+  });
 
   return (
     <Accordion>
@@ -72,7 +44,7 @@ const ItineraryAccordion = ({
       </AccordionSummary>
       <AccordionDetails>
         <Timeline>
-          {events.map((event, index) => (
+          {filteredActivities.map((event, index) => (
             <TimelineItem key={event.id}>
               <TimelineOppositeContent>
                 {event.start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
@@ -94,41 +66,9 @@ const ItineraryAccordion = ({
         <IconButton
           aria-label="close"
           onClick={onClickEditButton}
-          sx={{
-            color: (theme) => theme.palette.grey[500],
-          }}
         >
-          <SwapVertIcon /> 
+          <EditIcon sx={{color: "black", fontSize: 25}} /> 
         </IconButton>
-        <Button onClick={handleAddClick}>Add Activity</Button>
-
-        {/* Add Activity Dialog */}
-        <Dialog open={isAddDialogOpen} onClose={handleCancelAdd}>
-          <DialogTitle>Add New Activity</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Enter the details for the new activity:
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="activity"
-              label="Activity"
-              type="text"
-              fullWidth
-              value={newActivity}
-              onChange={(e) => setNewActivity(e.target.value)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancelAdd} color="primary">
-              Cancel
-            </Button>
-            <Button color="primary"> {/* Add Add Functionality */}
-              Add
-            </Button>
-          </DialogActions>
-        </Dialog>
       </AccordionDetails>
     </Accordion>
   );
