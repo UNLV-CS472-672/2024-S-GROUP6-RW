@@ -10,10 +10,13 @@ const ItineraryPage = () => {
   const [currentCity] = useState("N/A"); // Current city, set to "Your City"
   const [itinerary, setItinerary] = useState([]); // Itinerary array state
   const [selectedStartDate, setSelectedStartDate] = useState(null); // Selected start date
+  const [selectedItinDay, setSelectedItinDay] = useState(null); // Maintains which itinerary clicked the edit button
   const [showEditScreen, setShowEditScreen] = useState(false);
+  const [userActivities, setUserActivities] = useState([]);
 
-  const handleShowEditScreen = () => {
+  const handleShowEditScreen = (day) => {
     setShowEditScreen(true); // Show Edit View when button is clicked
+    setSelectedItinDay(day);
   };
 
   const handleCloseEditScreen = () => {
@@ -36,15 +39,14 @@ const ItineraryPage = () => {
       const newDay = new Date(
         startDate.getTime() + prevItinerary.length * 24 * 60 * 60 * 1000
       );
-      return [
-        ...prevItinerary,
-        {
-          //activities: [],
-          day: format(newDay, "EEEE, MMMM dd, yyyy"), // Convert newDay to a string representation
-        },
-      ];
+      return [...prevItinerary, newDay.toDateString()];
     });
   };
+  //day: format(newDay, "EEEE, MMMM dd, yyyy"), // Convert newDay to a string representation
+
+  const handleUpdateActivities = (updatedActivities) => {
+    setUserActivities(updatedActivities);
+  }
 
   // JSX rendering
   return (
@@ -52,6 +54,9 @@ const ItineraryPage = () => {
       <div>
         {showEditScreen ? (
           <EditView 
+            day={selectedItinDay}
+            userActivities={userActivities}
+            onUpdatedActivities={handleUpdateActivities}
             onClickCloseButton={handleCloseEditScreen}
           />
         ) : (
@@ -61,12 +66,12 @@ const ItineraryPage = () => {
             {itinerary.map((day, index) => (
               <ItineraryAccordion
                 key={index}
-                day={day.day}
-                events={ActivityList}
-                onClickEditButton={handleShowEditScreen}
+                day={day}
+                events={userActivities}
+                onClickEditButton={() => handleShowEditScreen(day)}
               />
             ))}
-            <button onClick={handleAddDay}>Add Another Day</button>
+            <button onClick={handleAddDay}>Add Day</button>
           </>
         )}
       </div>
