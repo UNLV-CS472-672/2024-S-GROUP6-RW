@@ -3,10 +3,21 @@ import { Box, Typography } from "@mui/material";
 export default function NameTag({ name, textGradient }) {
 
   console.log(textGradient);
+  
+  const handleWidth = () => {
+    if (name.length > 13) {
+      return "4vw";
+    } else if (name.length > 11) {
+      return "4.5vw";
+    } else {
+      return "5vw";
+    }
+    
+  }
 
   return (
     <Box style={{...styles.nameTag, backgroundImage: `${textGradient}`}}>
-      <Typography style={styles.text} variant="h2">
+      <Typography style={{...styles.text, fontSize: handleWidth(), lineHeight: handleWidth()}} variant="h2">
         {name}
       </Typography>
     </Box>
@@ -26,9 +37,7 @@ const styles = {
   },
 
   text: {
-    fontSize: "5vw",
     fontWeight: "400",
-    lineHeight: "5vw",
     fontFamily: 'Radley',
     color: "black",
   },

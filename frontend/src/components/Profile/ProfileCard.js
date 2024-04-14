@@ -162,7 +162,7 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
             </IconButton>
           </div>
           {/* Display the fraction n/m */}
-          {editEnabled && (<p style={styles.charCounter}>{`${currentCount}/${maxCharLimit}`}</p>)}
+          {editEnabled && (<p style={{...styles.charCounter, color: textColor}}>{`${currentCount}/${maxCharLimit}`}</p>)}
         </>)}
         <Tabs
           value={selectedTab}
