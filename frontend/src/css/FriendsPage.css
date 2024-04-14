@@ -8,6 +8,21 @@ body{
     margin-top:20px;
     background-color: #f4f6f9;
 }
+
+.input {
+    display: inline-block;
+    border-radius: 12px;
+    padding: 8px 16px;
+}
+
+.button {
+    border-radius: 12px;
+    background-color: black;
+    color: white;
+    padding: 15px 32px;
+    display: inline-block;
+}
+
 .card {
     -moz-transition: all 0.5s;
     -o-transition: all 0.5s;

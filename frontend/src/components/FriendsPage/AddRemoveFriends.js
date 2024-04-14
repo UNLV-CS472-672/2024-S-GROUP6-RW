@@ -26,20 +26,20 @@ function AddRemoveFriends() {
     //Showing a textbox to add a person as a friend which shows in a list. You can also remove someone with a button next to the person's name
     return (
         <>
-        <input  //shows a textbox for user to enetr a person's name
+        <input class="input" //shows a textbox for user to enetr a person's name
             type="text"
             value={newFriendName}
             onChange={(e) => setNewFriendName(e.target.value)}
             placeholder="Enter friend's name:"
         />
-        <button  //Button that will add the friend name to a list 
+        <button class="button" //Button that will add the friend name to a list 
             onClick={addFriend}>Add Friend</button>
         <ul>
             {friends.map((friend) => (
                 <li //Lists out all names in the friends list
                     key={friend.id}>
                         {friend.name}
-                        <button   //button to click to remover a friend's name off of the list
+                        <button class="button"  //button to click to remover a friend's name off of the list
                             onClick={() => removeFriend(friend.id)}>Remove</button>
                 </li>
             ))}
