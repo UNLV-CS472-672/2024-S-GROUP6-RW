@@ -44,13 +44,13 @@ const ItineraryPage = () => {
     return Math.round(Math.abs((startDate - endDate) / 86400000)) + 1;
   };
 
-/*
+
   const handleAddDay = () => {
     setItinerary(prevItinerary => {
-      const newDay = new Date(startDate.getTime() + prevItinerary.length * 86400000);
+      const newDay = new Date(selectedStartDate.getTime() + prevItinerary.length * 86400000);
       return [...prevItinerary, { day: format(newDay, "EEEE, MMMM dd, yyyy") }];
     });
-  }; */
+  }; 
 
   return (
     <div>
@@ -58,7 +58,7 @@ const ItineraryPage = () => {
       {itinerary.map((day, index) => (
         <ItineraryAccordion key={index} day={day.day} />
       ))}
-      {/*<button onClick={handleAddDay}>Add Another Day</button>*/}
+      <button onClick={handleAddDay}>Add Another Day</button>
 
     </div>
   );
