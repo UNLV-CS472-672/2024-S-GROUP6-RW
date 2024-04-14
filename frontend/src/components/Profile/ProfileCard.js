@@ -26,7 +26,7 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
   const [selectedImg, setSelectedImg] = useState(profilePic);
   const [SelectedBorder, setSelectedBorder] = useState(DefaultBorder);
   const [borderColor, setBorderColor] = useState("black");
-  const [selectedBackdrop, setSelectedBackdrop] = useState({img: defaultBackdrop, title: "default backdrop", textColor: "black"});
+  const [selectedBackdrop, setSelectedBackdrop] = useState({img: defaultBackdrop, title: "Grass", textColor: "black"});
   const [textColor, setTextColor] = useState("black");
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [displayBanner, setDisplayBanner] = useState(false);
@@ -34,7 +34,7 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
   const [description, setDescription] = useState("“Twenty years from now you will be more disappointed by the things you didn’t do than by the ones you did do. So throw off the bowlines. Sail away from the safe harbor. Catch the trade winds in your sails. Explore. Dream. Discover.”\n― Mark Twain");
   const [paletteEnabled, setPaletteEnabled] = useState(false);
   const [editEnabled, setEditEnabled] = useState(false);
-
+  const [textGradient, setTextGradient] = useState("linear-gradient(#57B000, #A1DF50)");
   const [currentCount, setCurrentCount] = useState(description.length);
   const maxCharLimit = 300;
 
@@ -78,6 +78,20 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
   const setNewBackdrop = (backdrop) => {
     setSelectedBackdrop(backdrop);
     setTextColor(backdrop.textColor);
+    if (backdrop.title === "Grass") {
+      setTextGradient("linear-gradient(#57B000, #A1DF50)");
+    } else if (backdrop.title === "Ocean") {
+      setTextGradient("linear-gradient(#00B0DC, lightblue)");
+    } else if (backdrop.title === "Valley") {
+      setTextGradient("linear-gradient(#9D92DF, #FFE5B4)");
+    } else if (backdrop.title === "City") {
+      setTextGradient("linear-gradient(#9300FF, #C8ADFD)");
+    } else if (backdrop.title === "Desert") {
+      setTextGradient("linear-gradient(#ED8438, #EDBB97)");
+    } else if (backdrop.title === "Space") {
+      setTextGradient("linear-gradient(#A0A0A0, white)");
+    }
+    
   }
 
   const uploadBanner = (event) => {
@@ -165,7 +179,7 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
             <img src={selectedImg.img} style={styles.image} alt="Profile" />
           </button>
         </Box>
-        <NameTag name={name} />
+        <NameTag name={name} textGradient={textGradient} />
       </Box>
       <div style={styles.tabBox}>
       <div

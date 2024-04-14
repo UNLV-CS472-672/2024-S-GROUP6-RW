@@ -1,9 +1,11 @@
 import { Box, Typography } from "@mui/material";
 
-export default function NameTag({ name, backdrop }) {
+export default function NameTag({ name, textGradient }) {
+
+  console.log(textGradient);
 
   return (
-    <Box style={styles.nameTag}>
+    <Box style={{...styles.nameTag, backgroundImage: `${textGradient}`}}>
       <Typography style={styles.text} variant="h2">
         {name}
       </Typography>
