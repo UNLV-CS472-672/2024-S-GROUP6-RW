@@ -5,12 +5,15 @@ export default function NameTag({ name, textGradient }) {
   console.log(textGradient);
   
   const handleWidth = () => {
-    if (name.length > 13) {
-      return "4vw";
-    } else if (name.length > 11) {
+    if (name.length > 12) {
+      return "3vw";
+    }
+    else if (name.length > 10) {
+      return "3.5vw";
+    } else if (name.length > 9) {
+      return "3.9vw";
+    } else if (name.length > 6) {
       return "4.5vw";
-    } else {
-      return "5vw";
     }
     
   }

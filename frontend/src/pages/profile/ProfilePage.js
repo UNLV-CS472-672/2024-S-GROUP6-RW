@@ -49,7 +49,7 @@ function ProfilePage() {
       {(isAuth && {/*foundUser*/}) ? (
         <>
           <h2>Profile Page</h2>
-          <ProfileCard name={username.toUpperCase()} enableEdit={enableEdit} userData={userData}/>
+          <ProfileCard name={"MMMMMMMMMM"} enableEdit={enableEdit} userData={userData}/>
         </>
       ) : (
         <h2>ERROR 404</h2>
