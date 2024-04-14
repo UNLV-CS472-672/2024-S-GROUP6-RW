@@ -12,14 +12,15 @@ export default function BorderGrid({ backdrops, selectedBackdrop }) {
       <Grid
         container
         xs={12}
-        justifyContent="left"
+        justifyContent="center"
         style={styles.backdropGrid}
       >
         {backdrops.map((backdrop, index) => (
           <Grid
             item
             xs={6}
-            justifyContent="left"
+            display="flex"
+            justifyContent="center"
             key={index}
           >
             <Box
@@ -40,8 +41,9 @@ const styles = {
     width: "100%",
   },
   backdrop: {
-    width: "13.5vw",
-    height: "6.75vw",
+    width: "13vw",
+    height: "6.5vw",
+    margin: "0.2vw",
     cursor: "pointer",
     backgroundSize: "cover",
   },

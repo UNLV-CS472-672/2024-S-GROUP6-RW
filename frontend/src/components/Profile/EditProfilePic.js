@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CompactPicker } from "react-color";
-import { Popover, Typography, Tabs, Tab, Box } from "@mui/material";
+import { Popover, Typography, Tabs, Tab, Box, Button, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { styled } from '@mui/material/styles';
 import AvatarGrid from "./AvatarGrid";
 import BorderGrid from "./BorderGrid";
 import BackdropGrid from "./BackdropGrid";
@@ -8,6 +9,7 @@ import BackdropGrid from "./BackdropGrid";
 // Import your images
 import Beagle from "../../images/avatars/beagle.jpg";
 import Bear from "../../images/avatars/bear.jpg";
+import Tiger from "../../images/avatars/tiger.jpg";
 import Camel from "../../images/avatars/camel.jpg";
 import Dolphin from "../../images/avatars/dolphin.jpg";
 import Eagle from "../../images/avatars/eagle.jpg";
@@ -47,6 +49,9 @@ export default function EditProfilePic({
   anchorEl,
   selectedImg,
   selectedBorder,
+  selectedBanner,
+  displayBanner,
+  setDisplayBanner,
   selectedBackdrop,
   setBorderColor,
   addCustomAvatar,
@@ -56,27 +61,24 @@ export default function EditProfilePic({
   const [chromePickerOpen, setChromePickerOpen] = useState(false);
   const [color, setColor] = React.useState("black");
 
-  const handleChange = (event, newValue) => {
-    if (newValue === 1) {
-      setChromePickerOpen(true);
-    } else {
-      setChromePickerOpen(false);
-    }
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
 
-    setSelectedTab(newValue);
-  };
-
-  // Update borderColor state when color changes
-  const handleColorChange = (updatedColor) => {
-    setColor(updatedColor.hex); // Update color state
-    setBorderColor(updatedColor.hex); // Update borderColor state
-  };
-
-  // Array of image paths
+    // Array of image paths
   // Array of image objects with required properties
   const pictures = [
     { img: Beagle, title: "Beagle" },
     { img: Bear, title: "Bear" },
+    { img: Tiger, title: "Tiger" },
     { img: Camel, title: "Camel" },
     { img: Dolphin, title: "Dolphin" },
     { img: Eagle, title: "Eagle" },
@@ -97,15 +99,94 @@ export default function EditProfilePic({
   ];
 
   const backdrops = [
-    { img: Valley, title: "Valley", textColor: "black" },
     { img: Grass, title: "Grass", textColor: "black" },
     { img: Ocean, title: "Ocean", textColor: "black" },
-    { img: City, title: "City", textColor: "#EDEBFF" },
+    { img: Valley, title: "Valley", textColor: "black" },
+    { img: City, title: "City", textColor: "white" },
     { img: Desert, title: "Desert", textColor: "black" },
     { img: Space, title: "Space", textColor: "white" },
   ]
   // Calculate the width of the Popover based on whether the Border tab is selected
   //const popoverWidth = selectedTab === 1 ? "36vw" : "22vw";
+
+  const handleChange = (event, newValue) => {
+    if (newValue === 1) {
+      setChromePickerOpen(true);
+    } else {
+      setChromePickerOpen(false);
+    }
+
+    setSelectedTab(newValue);
+  };
+
+  // Update borderColor state when color changes
+  const handleColorChange = (updatedColor) => {
+    setColor(updatedColor.hex); // Update color state
+    setBorderColor(updatedColor.hex); // Update borderColor state
+  };
+
+    // Update borderColor state when color changes
+    const handleDisplayBanner = (event) => {
+      const isChecked = event.target.checked;
+      if (isChecked) {
+        setDisplayBanner(false);
+      } else {
+        setDisplayBanner(true);
+      }
+  
+    };
+
+  const uploadBanner = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      // Check if the file type is an image
+      if (!file.type.startsWith("image/")) {
+        console.log("Please select an image file.");
+        return;
+      }
+
+      // Create an image element to load the image
+      const img = new Image();
+      img.onload = function () {
+        // Create a canvas element
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Calculate the new dimensions to fit within 500x500 pixels
+        let newWidth = this.width;
+        let newHeight = this.height;
+        if (newWidth > 800 || newHeight > 200) {
+          const aspectRatio = newWidth / newHeight;
+          if (newWidth > newHeight) {
+            newWidth = 800;
+            newHeight = Math.floor(800 / aspectRatio);
+          } else {
+            newHeight = 200;
+            newWidth = Math.floor(200 * aspectRatio);
+          }
+        }
+
+        // Resize the image
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+        // Get the resized image data
+        var resizedImageData = canvas.toDataURL(file.type);
+        // Convert Data URL to Blob
+        const resizedImageBlob = new Blob([resizedImageData], {
+          type: file.type,
+        });
+        console.log("Banner size: " + resizedImageBlob.size + " bytes");
+
+        selectedBanner({ img: resizedImageData, title: "Custom Picture" });
+      };
+
+      // Load the image
+      img.src = URL.createObjectURL(file);
+    }
+  };
 
   return (
     <Popover
@@ -137,10 +218,16 @@ export default function EditProfilePic({
             onChange={handleChange}
             centered
             style={styles.tabs}
-            indicatorColor="black"
+            TabIndicatorProps={{
+              style: {
+                backgroundColor: "black",
+              }
+            }}
+            variant="fullWidth"
           >
             <Tab label="Picture" style={styles.tab} />
             <Tab label="Border"  style={styles.tab} />
+            <Tab label="Banner"  style={styles.tab} />
             <Tab label="Backdrop"  style={styles.tab} />
           </Tabs>
           {/* Content for the tabs */}
@@ -166,6 +253,35 @@ export default function EditProfilePic({
             </>
           )}
           {selectedTab === 2 && (
+              <div style={styles.bannerBox}>
+                  <Button
+                    component="label"
+                    role={undefined}
+                    variant="contained"
+                    tabIndex={-1}
+                    style={{backgroundColor: "black", fontFamily: "Radley"}}
+                  >Upload Banner...
+                  <VisuallyHiddenInput type="file" onChange={uploadBanner}/>
+                  </Button>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Checkbox defaultChecked={!displayBanner} onChange={handleDisplayBanner}
+                        sx={{ '&.Mui-checked': {
+                            color: "black",
+                          },}}/>
+                        }
+                      style={{fontFamily: "Radley"}}
+                      label={
+                        <Typography
+                          style={{fontFamily: "Radley"}}>
+                          Make Banner Transparent
+                        </Typography>} />
+                  </FormGroup>
+                  
+              </div>
+          )}
+          {selectedTab === 3 && (
               <BackdropGrid backdrops={backdrops} selectedBackdrop={selectedBackdrop} />
           )}
         </Box>
@@ -183,7 +299,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    width: "30vw",
+    width: "32vw",
     height: "30vw",
   },
   tabBox: {
@@ -193,8 +309,10 @@ const styles = {
   },
   tabs: {
     alignItems: "center",
-    width: "100%",
+    width: "95%",
     height: "3vw",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
   tab: { 
     height: "100%",
@@ -204,6 +322,7 @@ const styles = {
     fontFamily: "Radley",
     minWidth: "6vw",
     minHeight: "2vw",
+    color: "black",
   },
   colorPickers: {
     display: "flex",
@@ -211,5 +330,14 @@ const styles = {
     width: "100%",
     alignItems: "center",
     margin: "0.2vw 0vw",
+  },
+  bannerBox: {
+    width: "100%",
+    height: "80%",
+    display: "flex",
+    position: "relative",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   }
 }

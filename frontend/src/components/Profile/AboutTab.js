@@ -1,75 +1,81 @@
 import React, { useState } from "react";
-import { Box, Typography, TextareaAutosize } from "@mui/material";
+import { TextInput, View } from "react-native";
+import { Typography } from "@mui/material";
 
-export default function AboutTab({ editMode, description, setDescription, textColor }) {
+export default function AboutTab({ editMode, description, setDescription, textColor, maxCharLimit, currentCount }) {
 
-  const handleChange = (event) => {
-    // Set the edited description.\
-    const lines = event.target.value.split("\n").length;
-    setDescription(event.target.value);
-  };
+    // Handle input changes
+    const handleChange = (newText) => {
+        // Update description and current count if within character limit
+        if (newText.length <= maxCharLimit) {
+            setDescription(newText);
+            currentCount(newText.length);
+        }
+    };
 
-  return (
-    <div>
-      {/* Replace this with actual Friends content from your PDF */}
-
-      <div style={styles.aboutBox}>
-        {editMode ? ( // Switch between an editable text box and a display text box
-          <TextareaAutosize
-            placeholder="Enter description"
-            value={description}
-            onChange={handleChange}
-            style={{...styles.editText, color: textColor}}
-          />
-        ) : (
-          <Typography // Typography is what is displayer to users
-            variant="body1"
-            component="div"
-            style={{...styles.setText, color: textColor}}
-          >
-            {description}
-          </Typography>
-        )}
-      </div>
-    </div>
-  );
+    return (
+        <View style={styles.aboutBox}>
+            {editMode ? (
+                // Use TextInput for editable mode
+                <TextInput
+                    placeholder="Enter description"
+                    value={description}
+                    onChangeText={handleChange}
+                    style={{...styles.editText, color: textColor}}
+                    multiline // Allow multiline input
+                    maxLength={maxCharLimit} // Enforce max character limit at input level
+                />
+            ) : (
+                // Display text as Typography when not in edit mode
+                <Typography
+                    variant="body1"
+                    component="div"
+                    style={{...styles.setText, color: textColor}}
+                >
+                    {description}
+                </Typography>
+            )}
+        </View>
+    );
 }
 
 const styles = {
-  aboutBox: {
-    textAlign: "left",
-    marginTop: "1vw",
-    marginLeft: "0.8vw",
-    maxHeight: "22vw",
-    overflowY: "auto", // Add overflowY to enable vertical scrolling
-    scrollbarWidth: "none", // Hide scrollbar for Firefox
-    "&::-webkit-scrollbar": {
-      display: "none", // Hide scrollbar for webkit browsers (Chrome, Safari)
+    aboutBox: {
+        textAlign: "left",
+        marginTop: "1vw",
+        marginLeft: "0.8vw",
+        maxHeight: "22vw",
+        overflowY: "auto",
+        scrollbarWidth: "none",
+        "&::-webkit-scrollbar": {
+            display: "none",
+        },
     },
-  },
-  editText: {
-    width: "37.5vw",
-    border: "none",
-    background: "none",
-    resize: "none",
-    outline: "none",
-    boxShadow: "none",
-    marginTop: "-0.1em",
-    marginLeft: "-0.1em",
-    marginBottom: "-0.6vw",
-    fontSize: "1.5vw",
-    letterSpacing: "normal",
-    lineHeight: "1.5",
-    fontFamily: "Radley",
-  },
-  setText: {
-    width: "37.5vw",
-    fontSize: "1.5vw",
-    lineHeight: "1.5",
-    letterSpacing: "normal",
-    fontFamily: "Radley",
-    whiteSpace: "pre-line", // Add this line to preserve newline characters
-    wordWrap: "break-word", // Allow long words to wrap onto the next line
-    overflowY: "auto", // Add overflowY to enable vertical scrolling
-  },
-}
+    editText: {
+        width: "37vw",
+        height: "22vw",
+        border: "none",
+        background: "none",
+        resize: "none",
+        outline: "none",
+        boxShadow: "none",
+        marginLeft: "0.2em",
+        marginBottom: "-0.6vw",
+        fontSize: "1.5vw",
+        letterSpacing: "normal",
+        lineHeight: "1.5",
+        fontFamily: "Radley",
+        wordWrap: "break-word",
+    },
+    setText: {
+        width: "37vw",
+        fontSize: "1.5vw",
+        lineHeight: "1.5",
+        marginLeft: "0.2em",
+        letterSpacing: "normal",
+        fontFamily: "Radley",
+        whiteSpace: "pre-line", // Preserve newline characters
+        wordWrap: "break-word",
+        overflowY: "auto",
+    },
+};

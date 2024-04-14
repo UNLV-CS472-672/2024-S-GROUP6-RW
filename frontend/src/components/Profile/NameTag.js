@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-export default function NameTag({ name }) {
+export default function NameTag({ name, backdrop }) {
 
   return (
     <Box style={styles.nameTag}>

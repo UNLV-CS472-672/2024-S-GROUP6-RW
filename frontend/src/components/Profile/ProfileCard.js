@@ -13,7 +13,7 @@ import { useAuth } from "../../auth/AuthContext";
 
 import defaultPic from "../../images/avatars/beagle.jpg";
 import { ReactComponent as DefaultBorder } from "../../images/borders/Default_Border.svg";
-import defaultBackdrop from "../../images/backdrops/valley.jpg";
+import defaultBackdrop from "../../images/backdrops/grass.jpg";
 
 export default function ProfileContainer({ name, enableEdit, userData }) {
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm")); Will implement later
@@ -29,10 +29,14 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
   const [selectedBackdrop, setSelectedBackdrop] = useState({img: defaultBackdrop, title: "default backdrop", textColor: "black"});
   const [textColor, setTextColor] = useState("black");
   const [selectedBanner, setSelectedBanner] = useState(null);
+  const [displayBanner, setDisplayBanner] = useState(false);
   const [customAvatars, setCustomAvatars] = useState([]);
-  const [description, setDescription] = useState("I am super awesome.");
+  const [description, setDescription] = useState("“Twenty years from now you will be more disappointed by the things you didn’t do than by the ones you did do. So throw off the bowlines. Sail away from the safe harbor. Catch the trade winds in your sails. Explore. Dream. Discover.”\n― Mark Twain");
   const [paletteEnabled, setPaletteEnabled] = useState(false);
   const [editEnabled, setEditEnabled] = useState(false);
+
+  const [currentCount, setCurrentCount] = useState(description.length);
+  const maxCharLimit = 300;
 
   const handleEditMode = () => {
     if (!editEnabled) {
@@ -138,8 +142,7 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
       }}
     >
       <Box style={styles.profileBox}>
-        <label htmlFor="banner-upload">
-          <Box style={styles.bannerBox}>
+          {displayBanner && (<Box style={styles.bannerBox}>
             {selectedBanner && (
               <img
                 src={selectedBanner.img}
@@ -147,16 +150,7 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
                 alt="Banner"
               />
             )}
-          </Box>
-        </label>
-        <input
-          type="file"
-          id="banner-upload"
-          accept="image/*"
-          style={styles.input}
-          onChange={uploadBanner}
-        />
-
+          </Box>)}
         <Box style={styles.avatarBox}>
           <SelectedBorder
             style={styles.border}
@@ -186,7 +180,7 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
               <PaletteIcon style={{...styles.paletteIcon, color: textColor}}/>
             </IconButton>
           </div>
-        {selectedTab === 0 && (
+        {selectedTab === 0 && (<>
           <div
             style={{
               ...styles.editContainer,
@@ -199,7 +193,9 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
               <EditIcon style={{...styles.editIcon, color: textColor}}/>
             </IconButton>
           </div>
-        )}
+          {/* Display the fraction n/m */}
+          {editEnabled && (<p style={styles.charCounter}>{`${currentCount}/${maxCharLimit}`}</p>)}
+        </>)}
         <Tabs
           value={selectedTab}
           onChange={handleChange}
@@ -222,6 +218,8 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
             setDescription={setDescription}
             editMode={editEnabled}
             textColor={textColor}
+            currentCount={setCurrentCount}
+            maxCharLimit={maxCharLimit}
           />
         )}
         {selectedTab === 1 && <FriendsTab textColor={textColor} />}
@@ -233,6 +231,9 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
         anchorEl={paletteButtonRef.current}
         selectedImg={(image) => setNewPicture(image)}
         selectedBorder={(border) => setNewBorder(border)}
+        selectedBanner={(banner) => setSelectedBanner(banner)}
+        displayBanner={displayBanner}
+        setDisplayBanner={setDisplayBanner}
         selectedBackdrop={(backdrop) => setNewBackdrop(backdrop)}
         setBorderColor={setBorderColor}
         addCustomAvatar={(avatar) => setNewCustomAvatars(avatar)}
@@ -260,10 +261,9 @@ const styles = {
   bannerBox: {
     width: "100%",
     height: "10vw",
-    backgroundColor: "lightgray",
+    backgroundColor: "white",
     marginBottom: "10px",
     position: "relative",
-    cursor: "pointer",
   },
   input: {
     display: "none",
@@ -289,6 +289,7 @@ const styles = {
     right: "0",
     position: "absolute",
     transform: "translate(0, 0) scale(1.32)",
+    filter: "drop-shadow(0.1vw 0.1vw black)",
   },
   button: {
     width: "auto",
@@ -410,4 +411,9 @@ const styles = {
     width: "1.5vw",
     height: "1.5vw",
   },
+  charCounter: {
+    position: "absolute",
+    top: "3.3vw",
+    left: "1vw",
+  }
 };
