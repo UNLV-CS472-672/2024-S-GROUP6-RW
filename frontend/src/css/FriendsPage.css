@@ -66,6 +66,10 @@ body{
     color: #424242;
     text-transform: capitalize;
 }
+.new_friend_list li .avatar {
+    width: 5rem;
+    height: 5 rem;
+}
 .new_friend_list li .users_name {
     margin-top: 5px;
 }
