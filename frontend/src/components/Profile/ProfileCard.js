@@ -35,6 +35,7 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
   const [paletteEnabled, setPaletteEnabled] = useState(false);
   const [editEnabled, setEditEnabled] = useState(false);
   const [textGradient, setTextGradient] = useState("linear-gradient(#57B000, #A1DF50)");
+  const [behindTextBlur, setBehindTextBlur] = useState("rgba(255, 255, 255, 0.4)");
   const [currentCount, setCurrentCount] = useState(description.length);
   const maxCharLimit = 300;
 
@@ -92,59 +93,12 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
       setTextGradient("linear-gradient(#A0A0A0, white)");
     }
     
-  }
-
-  const uploadBanner = (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-      // Check if the file type is an image
-      if (!file.type.startsWith("image/")) {
-        console.log("Please select an image file.");
-        return;
-      }
-
-      // Create an image element to load the image
-      const img = new Image();
-      img.onload = function () {
-        // Create a canvas element
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-
-        // Calculate the new dimensions to fit within 500x500 pixels
-        let newWidth = this.width;
-        let newHeight = this.height;
-        if (newWidth > 800 || newHeight > 200) {
-          const aspectRatio = newWidth / newHeight;
-          if (newWidth > newHeight) {
-            newWidth = 800;
-            newHeight = Math.floor(800 / aspectRatio);
-          } else {
-            newHeight = 200;
-            newWidth = Math.floor(200 * aspectRatio);
-          }
-        }
-
-        // Resize the image
-        canvas.width = newWidth;
-        canvas.height = newHeight;
-        ctx.drawImage(img, 0, 0, newWidth, newHeight);
-
-        // Get the resized image data
-        var resizedImageData = canvas.toDataURL(file.type);
-        // Convert Data URL to Blob
-        const resizedImageBlob = new Blob([resizedImageData], {
-          type: file.type,
-        });
-        console.log("Banner size: " + resizedImageBlob.size + " bytes");
-
-        setSelectedBanner({ img: resizedImageData, title: "Custom Picture" });
-      };
-
-      // Load the image
-      img.src = URL.createObjectURL(file);
+    if (backdrop.textColor === "white") {
+      setBehindTextBlur("rgba(0, 0, 0, 0.4)");
+    } else {
+      setBehindTextBlur("rgba(255, 255, 255, 0.4)");
     }
-  };
+  }
 
   return (
     <Box
@@ -236,7 +190,7 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
             maxCharLimit={maxCharLimit}
           />
         )}
-        {selectedTab === 1 && <FriendsTab textColor={textColor} />}
+        {selectedTab === 1 && <FriendsTab textColor={textColor} behindTextBlur={behindTextBlur} />}
         {selectedTab === 2 && <TripsTab  />}
       </div>
       <EditProfilePic // Pop up that displays only when profile picture is clicked

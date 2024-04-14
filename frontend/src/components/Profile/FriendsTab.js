@@ -5,7 +5,7 @@ import { useTheme } from "@mui/material/styles";
 // Import placeholder image
 import Red from "../../images/avatars/beagle.jpg";
 
-export default function FriendsTab({ textColor }) {
+export default function FriendsTab({ textColor, behindTextBlur }) {
 
   // Mock friends list until we implement handlers to get data from backend
   const friendInfo = [
@@ -26,6 +26,7 @@ export default function FriendsTab({ textColor }) {
     { img: Red, username: "Friend 15" },
     { img: Red, username: "Friend 16" },
   ];
+  console.log(textColor);
 
   return (
     <div
@@ -66,6 +67,7 @@ export default function FriendsTab({ textColor }) {
                   flexDirection: "row",
                   alignItems: "center",
                   border: `0.15vw solid ${textColor}`,
+                  background: `${behindTextBlur}`,
                 }}
               >
                 <Avatar // First show friend's profile image
