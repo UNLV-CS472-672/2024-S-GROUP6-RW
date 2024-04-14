@@ -5,17 +5,19 @@ import AboutTab from "./AboutTab";
 import TripsTab from "./TripsTab";
 import EditProfilePic from "./EditProfilePic";
 import NameTag from "./NameTag";
+import PaletteIcon from "@mui/icons-material/Palette";
 import EditIcon from "@mui/icons-material/Edit";
 import { useTheme } from "@mui/material/styles";
 
 import { useAuth } from "../../auth/AuthContext";
 
-import defaultPic from "../../images/avatars/Terence.jpg";
+import defaultPic from "../../images/avatars/beagle.jpg";
 import { ReactComponent as DefaultBorder } from "../../images/borders/Default_Border.svg";
+import defaultBackdrop from "../../images/backdrops/valley.jpg";
 
-export default function ProfileContainer() {
+export default function ProfileContainer({ name, enableEdit, userData }) {
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm")); Will implement later
-  const profilePicButtonRef = useRef(null);
+  const paletteButtonRef = useRef(null);
   const theme = useTheme();
 
   const profilePic = { img: defaultPic, title: "default picture" };
@@ -24,11 +26,12 @@ export default function ProfileContainer() {
   const [selectedImg, setSelectedImg] = useState(profilePic);
   const [SelectedBorder, setSelectedBorder] = useState(DefaultBorder);
   const [borderColor, setBorderColor] = useState("black");
+  const [selectedBackdrop, setSelectedBackdrop] = useState({img: defaultBackdrop, title: "default backdrop", textColor: "black"});
+  const [textColor, setTextColor] = useState("black");
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [customAvatars, setCustomAvatars] = useState([]);
   const [description, setDescription] = useState("I am super awesome.");
-  const name = "USERNAME"; // Replace with the actual name
-
+  const [paletteEnabled, setPaletteEnabled] = useState(false);
   const [editEnabled, setEditEnabled] = useState(false);
 
   const handleEditMode = () => {
@@ -44,10 +47,12 @@ export default function ProfileContainer() {
   };
 
   const handleEditProfilePicOpen = () => {
+    setPaletteEnabled(true);
     setEditProfilePicOpen(true);
   };
 
   const handleEditProfilePicClose = () => {
+    setPaletteEnabled(false);
     setEditProfilePicOpen(false);
   };
 
@@ -65,6 +70,11 @@ export default function ProfileContainer() {
     }
     setCustomAvatars(avatars);
   };
+
+  const setNewBackdrop = (backdrop) => {
+    setSelectedBackdrop(backdrop);
+    setTextColor(backdrop.textColor);
+  }
 
   const uploadBanner = (event) => {
     const file = event.target.files[0];
@@ -122,7 +132,9 @@ export default function ProfileContainer() {
     <Box
       style={{
         ...styles.container,
-        border: `0.5vw solid ${theme.palette.text.primary}`,
+        border: "0.4vw solid black",
+        backgroundImage: `url(${selectedBackdrop.img})`,
+        backgroundSize: "cover",
       }}
     >
       <Box style={styles.profileBox}>
@@ -155,7 +167,6 @@ export default function ProfileContainer() {
           <button
             style={styles.button}
             onClick={handleEditProfilePicOpen}
-            ref={profilePicButtonRef}
           >
             <img src={selectedImg.img} style={styles.image} alt="Profile" />
           </button>
@@ -163,6 +174,18 @@ export default function ProfileContainer() {
         <NameTag name={name} />
       </Box>
       <div style={styles.tabBox}>
+      <div
+            style={{
+              ...styles.paletteContainer,
+              border: paletteEnabled
+                ? "0.3vw solid #03a9f4" // Highlights the button in Edit Mode
+                : "0.3vw solid transparent",
+            }}
+          >
+            <IconButton style={{...styles.paletteButton, border: `0.15vw solid ${textColor}`}} onClick={handleEditProfilePicOpen} ref={paletteButtonRef}>
+              <PaletteIcon style={{...styles.paletteIcon, color: textColor}}/>
+            </IconButton>
+          </div>
         {selectedTab === 0 && (
           <div
             style={{
@@ -172,8 +195,8 @@ export default function ProfileContainer() {
                 : "0.3vw solid transparent",
             }}
           >
-            <IconButton style={styles.editButton} onClick={handleEditMode}>
-              <EditIcon />
+            <IconButton style={{...styles.editButton, border: `0.15vw solid ${textColor}`}} onClick={handleEditMode}>
+              <EditIcon style={{...styles.editIcon, color: textColor}}/>
             </IconButton>
           </div>
         )}
@@ -183,27 +206,34 @@ export default function ProfileContainer() {
           centered={true}
           className="tabs-container"
           style={styles.tabs}
+          TabIndicatorProps={{
+            style: {
+              backgroundColor: `${textColor}`,
+            }
+          }}
         >
-          <Tab label="About" sx={{ fontSize: "1vw" }} />
-          <Tab label="Friends" sx={{ fontSize: "1vw" }} />
-          <Tab label="Trips" sx={{ fontSize: "1vw" }} />
+          <Tab label="About" style={{...styles.tab, color: textColor}} />
+          <Tab label="Friends" style={{...styles.tab, color: textColor}} />
+          <Tab label="Trips" style={{...styles.tab, color: textColor}} />
         </Tabs>
         {selectedTab === 0 && (
           <AboutTab
             description={description}
             setDescription={setDescription}
             editMode={editEnabled}
+            textColor={textColor}
           />
         )}
-        {selectedTab === 1 && <FriendsTab editMode={editEnabled} />}
-        {selectedTab === 2 && <TripsTab editMode={editEnabled} />}
+        {selectedTab === 1 && <FriendsTab textColor={textColor} />}
+        {selectedTab === 2 && <TripsTab  />}
       </div>
       <EditProfilePic // Pop up that displays only when profile picture is clicked
         open={editProfilePicOpen}
         onClose={handleEditProfilePicClose}
-        anchorEl={profilePicButtonRef.current}
+        anchorEl={paletteButtonRef.current}
         selectedImg={(image) => setNewPicture(image)}
         selectedBorder={(border) => setNewBorder(border)}
+        selectedBackdrop={(backdrop) => setNewBackdrop(backdrop)}
         setBorderColor={setBorderColor}
         addCustomAvatar={(avatar) => setNewCustomAvatars(avatar)}
         currentCustomAvatars={customAvatars}
@@ -215,16 +245,20 @@ export default function ProfileContainer() {
 const styles = {
   container: {
     display: "flex",
+    flexDirection: "row",
+    position: "relative",
     width: "80vw",
-    height: "75vh",
+    height: "40vw",
     marginLeft: "auto",
     marginRight: "auto",
+    borderRight: "0.4vw solid black",
   },
   profileBox: {
+    width: "50%",
     position: "relative",
   },
   bannerBox: {
-    width: "40vw",
+    width: "100%",
     height: "10vw",
     backgroundColor: "lightgray",
     marginBottom: "10px",
@@ -233,12 +267,12 @@ const styles = {
   },
   input: {
     display: "none",
-    width: "40vw",
+    width: "100%",
     height: "10vw",
   },
   avatarBox: {
-    width: "18vw",
-    height: "18vw",
+    width: "21vw",
+    height: "21vw",
     backgroundColor: "lightgray",
     marginBottom: "10px",
     position: "absolute",
@@ -296,19 +330,34 @@ const styles = {
   },
   tabBox: {
     position: "relative",
-    width: "40vw",
+    width: "50%",
     display: "flex",
     flexDirection: "column",
     justfityContent: "center",
   },
   tabs: {
-    width: "40vw",
-    paddingTop: "1vw",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    height: "5vw",
   },
-  editContainer: {
+  tab: { 
+    width: "2vw",
+    height: "100%",
+    padding: "1vw 0vw",
+    fontSize: "1.2vw", 
+    fontWeight: "500",
+    fontFamily: "Radley",
+    minWidth: "10vw",
+    minHeight: "2vw",
+    color: "black",
+  },
+
+  paletteContainer: {
     position: "absolute",
-    width: "2.6vw", // Adjust width to match EditHighlight width
-    height: "2.6vw", // Adjust height to match EditHighlight height
+    width: "3vw", // Adjust width to match EditHighlight width
+    height: "3vw", // Adjust height to match EditHighlight height
     top: "1vw",
     right: "1vw",
     borderRadius: "18%",
@@ -317,11 +366,48 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
   },
-  editButton: {
-    width: "2.6vw", // Adjust width to match EditHighlight width
-    height: "2.6vw", // Adjust height to match EditHighlight height
+
+  paletteButton: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    top: "0",
+    right: "0",
+    top: "0",
+    top: "0",
     borderRadius: "10%",
-    border: "0.15vw solid gray",
     zIndex: "999",
+  },
+  paletteIcon: {
+    width: "1.5vw",
+    height: "1.5vw",
+  },
+  
+  editContainer: {
+    position: "absolute",
+    width: "3vw", // Adjust width to match EditHighlight width
+    height: "3vw", // Adjust height to match EditHighlight height
+    top: "1vw",
+    left: "1vw",
+    borderRadius: "18%",
+    cursor: "pointer",
+    zIndex: "999",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  editButton: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    top: "0",
+    right: "0",
+    top: "0",
+    top: "0",
+    borderRadius: "10%",
+    zIndex: "999",
+  },
+  editIcon: {
+    width: "1.5vw",
+    height: "1.5vw",
   },
 };

@@ -1,70 +1,58 @@
 import React, { useState, useEffect } from "react";
-import ProfileContainer from "../../components/Profile/ProfileContainer";
+import ProfileCard from "../../components/Profile/ProfileCard";
 import { useAuth } from "../../auth/AuthContext";
-import { useLocation, useNavigate } from "react-router-dom";
-// import { getToken } from "../../auth/authService";
+import { useLocation } from "react-router-dom";
+import { getFromLocal } from "../../utils/LocalStorageManager";
+import { getProfile } from "../../utils/ApiManager";
 
 function ProfilePage() {
   const { isAuth } = useAuth();
-  // const token = getToken();
-  const [username, setUsername] = useState(null);
+  const [enableEdit, setEnableEdit ] = useState(false);
+  const [userData, setUserData ] = useState(null);
+  const username = getFromLocal("username");
   const location = useLocation();
-  const navigate = useNavigate();
+  const [foundUser, setFoundUser ] = useState(true);
 
-  // useEffect(() => {
-  //   if (isAuth && location) {
-  //     let tmp = location.pathname.split("/").slice(-1)[0];
-  //     console.log(tmp);
+//   useEffect(() => {
+//     const fetchUserData = async () => {
+//         try {
+//             if (isAuth && location) {
+//                 let tmp = location.pathname.split("/").slice(-1)[0];
 
-  //     if (tmp !== "profile") {
-  //       navigate("/profile/axelauda");
-  //     } else {
-  //       navigate("/profile/bruh");
-  //     }
-  //   }
-  // }, [location]);
+//                 // Determine if this is the user's profile
+//                 if (tmp === username) {
+//                     console.log("This is the user's profile.");
+//                     setEnableEdit(true);
+//                 } else {
+//                     console.log("This is not the user's profile.");
+//                     setEnableEdit(false);
+//                 }
 
-  // useEffect(() => {
-  //   if (token) {
-  //     const [header, payload, signature] = token.split("."); // Split the JWT token into its components
+//                 // Fetch user data
+//                 const data = await getProfile(tmp);
+//                 setUserData(data); // Set the fetched user data in state
+//                 if (data == null) {
+//                   console.log("User does not exist, display nothing.");
+//                   setFoundUser(false);
+//                 }
+//                 console.log("User Data: ", data);
+//             }
+//         } catch (error) {
+//             console.error('Error fetching user data:', error);
+//         }
+//     };
 
-  //     // Decode the payload using base64 decoding
-  //     const decodedPayload = JSON.parse(atob(payload));
-
-  //     if (decodedPayload && decodedPayload.username) {
-  //       setUsername(decodedPayload.username);
-  //     }
-  //   }
-  // }, [token]);
-
-  // const handleLogUsername = () => {
-  //   const [header, payload, signature] = token.split("."); // Split the JWT token into its components
-
-  //   // Decode the payload using base64 decoding
-  //   const decodedPayload = JSON.parse(atob(payload));
-  //   console.log(decodedPayload);
-
-  //   if (decodedPayload && decodedPayload.username) {
-  //     setUsername(decodedPayload.username);
-  //   }
-
-  //   if (username) {
-  //     console.log("Decoded username:", username);
-  //   } else {
-  //     console.log("Username not available.");
-  //   }
-  // };
-
+//     fetchUserData();
+// }, [isAuth, location, username]);
   return (
     <>
-      {isAuth ? (
+      {(isAuth && {/*foundUser*/}) ? (
         <>
           <h2>Profile Page</h2>
-          <ProfileContainer />
-          {/* <button onClick={handleLogUsername}>Log Decoded Username</button> */}
+          <ProfileCard name={username.toUpperCase()} enableEdit={enableEdit} userData={userData}/>
         </>
       ) : (
-        <h2>Please log in first.</h2>
+        <h2>ERROR 404</h2>
       )}
     </>
   );

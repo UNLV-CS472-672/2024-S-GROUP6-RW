@@ -74,20 +74,14 @@ export default function AvatarGrid({
       container
       xs={12}
       justifyContent="left"
-      style={{ display: "flex", width: "20vw" }}
+      style={styles.avatarGrid}
     >
       <Grid item xs={3} justifyContent="left">
         <label htmlFor="avatar-upload">
           <Avatar
             src={plus.img}
             alt={plus.title}
-            style={{
-              width: "3vw",
-              height: "3vw",
-              margin: "1vw",
-              cursor: "pointer",
-              border: "0.1vw solid black",
-            }}
+            style={styles.avatar}
           />
         </label>
         <input
@@ -104,13 +98,7 @@ export default function AvatarGrid({
           <Avatar
             src={avatar.img}
             alt={avatar.title}
-            style={{
-              width: "3vw",
-              height: "3vw",
-              margin: "1vw",
-              cursor: "pointer",
-              border: "0.1vw solid black",
-            }}
+            style={styles.avatar}
             onClick={() => selectAvatar(avatar)}
           />
         </Grid>
@@ -120,17 +108,25 @@ export default function AvatarGrid({
           <Avatar
             src={avatar.img}
             alt={avatar.title}
-            style={{
-              width: "3vw",
-              height: "3vw",
-              margin: "1vw",
-              cursor: "pointer",
-              border: "0.1vw solid black",
-            }}
+            style={styles.avatar}
             onClick={() => selectAvatar(avatar)}
           />
         </Grid>
       ))}
     </Grid>
   );
+}
+
+const styles = {
+  avatarGrid: {
+    display: "flex",
+    width: "100%",
+  },
+  avatar: {
+    width: "5vw",
+    height: "5vw",
+    margin: "1vw",
+    cursor: "pointer",
+    border: "0.1vw solid black",
+  },
 }

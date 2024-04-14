@@ -3,10 +3,9 @@ import { Grid, Avatar, Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 // Import placeholder image
-import Red from "../../images/avatars/Red.jpg";
+import Red from "../../images/avatars/beagle.jpg";
 
-export default function FriendsTab() {
-  const theme = useTheme();
+export default function FriendsTab({ textColor }) {
 
   // Mock friends list until we implement handlers to get data from backend
   const friendInfo = [
@@ -32,7 +31,7 @@ export default function FriendsTab() {
     <div
       style={{
         marginTop: "1vw",
-        height: "63vh",
+        maxHeight: "24.5vw",
         overflowY: "auto", // Add overflowY to enable vertical scrolling
         scrollbarWidth: "none", // Hide scrollbar for Firefox
         "&::-webkit-scrollbar": {
@@ -66,7 +65,7 @@ export default function FriendsTab() {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  border: `0.15vw solid ${theme.palette.text.primary}`,
+                  border: `0.15vw solid ${textColor}`,
                 }}
               >
                 <Avatar // First show friend's profile image
@@ -76,11 +75,11 @@ export default function FriendsTab() {
                     width: "3vw",
                     height: "3vw",
                     margin: "1vw",
-                    border: "0.1vw solid black",
+                    border: `0.1vw solid ${textColor}`,
                   }}
                 />
                 <Typography // To the right of image display username
-                  sx={{ fontSize: "1.5vw", textTransform: "uppercase" }}
+                  sx={{ fontSize: "1.5vw", textTransform: "uppercase", color: textColor }}
                 >
                   {friend.username}
                 </Typography>

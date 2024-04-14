@@ -40,3 +40,27 @@ export const gettingStartedCreateTrip = async () => {
     console.error('Error creating trip:', error);
   }
 };
+
+export const getProfile = async ( username ) => {
+
+  const userData = {
+    Username: username,
+  };
+  console.log(userData);
+
+  try {
+    // Retrieve the token
+    const token = getToken();
+    // Make the API call
+    const response = await axios.post(`${API_ENDPOINT}/get_profile`, userData, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    console.log("Response: " + response.data);
+    return response.data; // Return the response data from the API call
+  } catch (error) {
+    console.error('Error getting profile:', error);
+  }
+};
