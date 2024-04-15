@@ -1,12 +1,10 @@
-.friendcontainer {
-    border: 3px lightskyblue;
-    border-radius: 10px;
-}
-
-
 body{
     margin-top:20px;
     background-color: #f4f6f9;
+}
+
+.container {
+    background-color: blanchedalmond;
 }
 
 .input {
@@ -28,7 +26,6 @@ body{
     -o-transition: all 0.5s;
     -webkit-transition: all 0.5s;
     transition: all 0.5s;
-    background: #fff;
     border-radius: .1875rem;
     margin-bottom: 30px;
     border: 0;

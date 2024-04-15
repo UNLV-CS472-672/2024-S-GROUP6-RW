@@ -14,7 +14,7 @@ function FriendsContainer() {
 	};
 
 	return (
-		<Box //Sets Background color of box area
+		<Box class="container" //Sets Background color of box area
 			sx={{ width: "100%", bgcolor: "background.paper" }}>
 			<Tabs //Sets the names and style for each tab name
 				value={value}
