@@ -85,10 +85,9 @@ const pastTrip = [
   },
 ];
 
-
+// From MUI Menu documentation
 const StyledMenu = styled((props) => (
   <Menu
-    
     elevation={0}
     anchorOrigin={{
       vertical: 'bottom',
@@ -138,28 +137,28 @@ const ColorButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export default function CustomizedMenus() {
-   {/* Handles the open/close of modal */}
-   const [openModal, setOpen] = useState(false);
-   const [selectedImage, setSelectedImage] = useState(null);
- 
-   const handleOpenModal = (image) => {
-     setSelectedImage(image);
-     setOpen(true);
-   };
- 
-   const handleCloseModal = () => {
-     setOpen(false);
-   };
- 
-   const Modal = styled(BaseModal)`
-     position: center;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-   `;
+export default function TripDropDown() {
+  {/* Handles the event open/close of a modal */}
+  const [openModal, setOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
+  const handleOpenModal = (image) => {
+    setSelectedImage(image);
+    setOpen(true);
+  };
 
+  const handleCloseModal = () => {
+    setOpen(false);
+  };
+
+  const Modal = styled(BaseModal)`
+    position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `;
+
+  {/* Event handlers for the Menu - from MUI Menu documentation */}
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -212,17 +211,15 @@ export default function CustomizedMenus() {
           Past
         </MenuItem>
       </StyledMenu>
-        
 
        {/* New Trip Button */}
-       <Button
+      <Button
         variant="contained"
         disableElevation
         component={Link}
         to="/gatheringinfo"
         style={{ marginLeft: '10px' }}
         startIcon={<AddIcon />}
-        
       >
         New Trip
       </Button>
@@ -270,40 +267,40 @@ export default function CustomizedMenus() {
             </AccordionDetails>
           </Accordion>
 
-           {/* Modal for upcoming trips */}
-            <Modal 
-              open={openModal} 
-              onClose={handleCloseModal}
-            >
-              {/* Asked ChatGPT to center the modal and blur the background*/}
-              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backdropFilter: 'blur(5px)' }}>
-                <Box sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: 400,
-                  bgcolor: 'background.paper',
-                  boxShadow: 24,
-                  p: 4,
-                }}>
-                  
-                  {/*Displays image and itinerary when image is clicked */}
-                  <img
-                   src={selectedImage && selectedImage.url} 
-                   alt={selectedImage && selectedImage.title} 
-                   style={{ width: '100%', height: 'auto' }} 
-                  />
-                  
-                  <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
-                      {selectedImage && selectedImage.itinerary}
-                    </Typography>
+          {/* Modal for upcoming trips */}
+          <Modal 
+            open={openModal} 
+            onClose={handleCloseModal}
+          >
+            {/* Asked ChatGPT to center the modal and blur the background*/}
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backdropFilter: 'blur(5px)' }}>
+              <Box sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 400,
+                bgcolor: 'background.paper',
+                boxShadow: 24,
+                p: 4,
+              }}>
+                
+                {/*Displays image and itinerary when image is clicked */}
+                <img
+                  src={selectedImage && selectedImage.url} 
+                  alt={selectedImage && selectedImage.title} 
+                  style={{ width: '100%', height: 'auto' }} 
+                />
+                
+                <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
+                  {selectedImage && selectedImage.itinerary}
+                </Typography>
 
-                  <Button onClick={handleCloseModal}> Close </Button>
-                </Box>
-              </div>
+                <Button onClick={handleCloseModal}> Close </Button>
+              </Box>
+            </div>
 
-            </Modal>
+          </Modal>
         </div>
       }
 
@@ -312,7 +309,7 @@ export default function CustomizedMenus() {
         <div>
           <h3>Past</h3>
           {/*Past trips*/}
-            <Accordion sx={{ backgroundColor: "#afd2e9" }}>  
+          <Accordion sx={{ backgroundColor: "#afd2e9" }}>  
             <AccordionDetails sx={{ backgroundColor: "#afd2e9" }}>
               {/*This is for the grid of images */}
               
@@ -347,39 +344,40 @@ export default function CustomizedMenus() {
             </AccordionDetails>
           </Accordion>
 
-           {/* Modal for Past trips */}
-            <Modal 
-              open={openModal} 
-              onClose={handleCloseModal}
-            > 
-              {/* Asked ChatGPT to center the modal and blur the background*/}
-              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backdropFilter: 'blur(5px)' }}>
-                <Box sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: 400,
-                  bgcolor: 'background.paper',
-                  boxShadow: 24,
-                  p: 4,
-                }}>
+          {/* Modal for Past trips */}
+          <Modal 
+            open={openModal} 
+            onClose={handleCloseModal}
+          > 
+            {/* Asked ChatGPT to center the modal and blur the background*/}
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backdropFilter: 'blur(5px)' }}>
+              <Box sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 400,
+                bgcolor: 'background.paper',
+                boxShadow: 24,
+                p: 4,
+              }}>
                 
-                  <img 
-                    src={selectedImage && selectedImage.url} 
-                    alt={selectedImage && selectedImage.title} 
-                    style={{ width: '100%', height: 'auto' }} 
-                  />
+                {/*Displays the image and itinerary */}
+                <img 
+                  src={selectedImage && selectedImage.url} 
+                  alt={selectedImage && selectedImage.title} 
+                  style={{ width: '100%', height: 'auto' }} 
+                />
                   
-                  <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
-                    {selectedImage && selectedImage.itinerary}
-                  </Typography>
+                <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
+                  {selectedImage && selectedImage.itinerary}
+                </Typography>
 
-                  <Button onClick={handleCloseModal}> Close </Button>
-                </Box>
-              </div>
+                <Button onClick={handleCloseModal}> Close </Button>
+              </Box>
+            </div>
 
-            </Modal>
+          </Modal>
         </div>
       }
     </div>
