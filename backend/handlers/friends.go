@@ -22,7 +22,7 @@ func AddFriendHandler(c *gin.Context) {
 
 	database := db.GetMongoDatabase()
 
-	err := business.AddFriend(request, database)
+	_, err := business.AddFriend(request, database)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
