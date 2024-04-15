@@ -50,7 +50,7 @@ export default function AvatarGrid({
         console.log("Image size: " + resizedImageData.length + " bytes");
 
         // Add the resized image to your custom avatars
-        if (customAvatars.length === 3) {
+        if (customAvatars.length === 1) {
           customAvatars.pop();
         }
         addCustomAvatar([
