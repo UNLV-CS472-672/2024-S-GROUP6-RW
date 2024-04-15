@@ -85,6 +85,19 @@ const pastTrip = [
   },
 ];
 
+// Style for the modal
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+}
+
+
 // From MUI Menu documentation
 const StyledMenu = styled((props) => (
   <Menu
@@ -274,16 +287,7 @@ export default function TripDropDown() {
           >
             {/* Asked ChatGPT to center the modal and blur the background*/}
             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backdropFilter: 'blur(5px)' }}>
-              <Box sx={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: 400,
-                bgcolor: 'background.paper',
-                boxShadow: 24,
-                p: 4,
-              }}>
+              <Box sx={ modalStyle }>
                 
                 {/*Displays image and itinerary when image is clicked */}
                 <img
@@ -351,16 +355,7 @@ export default function TripDropDown() {
           > 
             {/* Asked ChatGPT to center the modal and blur the background*/}
             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backdropFilter: 'blur(5px)' }}>
-              <Box sx={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: 400,
-                bgcolor: 'background.paper',
-                boxShadow: 24,
-                p: 4,
-              }}>
+              <Box sx={ modalStyle }>
                 
                 {/*Displays the image and itinerary */}
                 <img 
