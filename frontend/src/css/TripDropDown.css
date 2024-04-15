@@ -1,0 +1,9 @@
+.drop-down-container {
+	display: flex;
+	height: 100vh;
+	background-color: #DCDDE2;
+}
+
+.text-container .MuiTypography-root {
+text-decoration: none;
+}
