@@ -1,15 +1,15 @@
 // 2024-S-GROUP6-RW\frontend\src\components\ItineraryForm\DatePickerComponent.js
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
-import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs'; 
-import "../../css/DatePicker.css"
-import { saveToLocal } from '../../utils/LocalStorageManager';
+import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
+import "../../css/DatePicker.css";
+import { saveToLocal } from "../../utils/LocalStorageManager";
 
 const DatePickerComponent = ({ startDateKey, endDateKey }) => {
   const [startDate, setStartDate] = useState(null);
@@ -17,7 +17,7 @@ const DatePickerComponent = ({ startDateKey, endDateKey }) => {
   const navigate = useNavigate();
 
   // Generate today's date using dayjs
-  const today = dayjs().startOf('day'); // Removes the time part to start from 00:00 today
+  const today = dayjs().startOf("day"); // Removes the time part to start from 00:00 today
 
   //For onclick start date
   const handleStartDateChange = (date) => {
@@ -33,7 +33,7 @@ const DatePickerComponent = ({ startDateKey, endDateKey }) => {
 
   const handleComplete = () => {
     if (isDateSelectionComplete) {
-      navigate('/prefselection');
+      navigate("/prefselection");
     }
   };
 
@@ -43,12 +43,11 @@ const DatePickerComponent = ({ startDateKey, endDateKey }) => {
     return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
   };
 
-
   // Effect to save start date to local storage
   useEffect(() => {
     if (startDate && startDateKey) {
       saveToLocal(startDateKey, startDate);
-      console.log(startDate)
+      console.log(startDate);
     }
   }, [startDate, startDateKey]);
 
@@ -60,39 +59,36 @@ const DatePickerComponent = ({ startDateKey, endDateKey }) => {
   }, [endDate, endDateKey]);
   const handleIdk = () => {
     console.log("User is not sure.");
-    navigate('/map');
+    navigate("/poll");
   };
-
 
   return (
     <div className="itinerary-date-picker-container">
-
       <p className="header-3"> Select the dates of your trip </p>
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <div className="date-picker-container">
+          <DatePicker
+            label="Start Date"
+            value={startDate}
+            onChange={handleStartDateChange}
+            renderInput={(params) => <TextField {...params} />}
+            minDate={today}
+          />
 
-      <div className="date-picker-container">
-        <DatePicker
-          label="Start Date"
-          value={startDate}
-          onChange={handleStartDateChange}
-          renderInput={(params) => <TextField {...params} />}
-          minDate={today}
-        />
-
-        <DatePicker
-          label="End Date"
-          value={endDate}
-          onChange={handleEndDateChange}
-          renderInput={(params) => <TextField {...params} />}
-          minDate={startDate || today}
-        />
-      </div>
-
+          <DatePicker
+            label="End Date"
+            value={endDate}
+            onChange={handleEndDateChange}
+            renderInput={(params) => <TextField {...params} />}
+            minDate={startDate || today}
+          />
+        </div>
       </LocalizationProvider>
-      
-      <button onClick={handleIdk} className="idkButton">Not sure yet? Create a poll!</button>
-      
+
+      <button onClick={handleIdk} className="idkButton">
+        Not sure yet? Create a poll!
+      </button>
     </div>
   );
 };
