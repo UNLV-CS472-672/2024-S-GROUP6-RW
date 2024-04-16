@@ -20,6 +20,8 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import IconButton from "@mui/material/IconButton";
 import EditIcon from '@mui/icons-material/Edit';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import "../../css/ItineraryAccordion.css"
 
 const ItineraryAccordion = ({
   key,
@@ -38,39 +40,41 @@ const ItineraryAccordion = ({
   });
 
   return (
-    <Accordion>
-      <AccordionSummary>
-        <Typography>{day}</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Timeline>
-          {filteredActivities.map((event, index) => (
-            <TimelineItem key={event.id}>
-              <TimelineOppositeContent>
-                {event.start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
-              </TimelineOppositeContent>
-              <TimelineSeparator>
-                <TimelineDot />
-                {index !== events.length - 1 && <TimelineConnector />}
-              </TimelineSeparator>
-              <TimelineContent>
-                <Activity
-                  activity={event}
-                  //onDelete={handleDelete}
-                  key={event.id}
-                />
-              </TimelineContent>
-            </TimelineItem>
-          ))}
-        </Timeline>
-        <IconButton
-          aria-label="close"
-          onClick={onClickEditButton}
-        >
-          <EditIcon sx={{color: "black", fontSize: 25}} /> 
-        </IconButton>
-      </AccordionDetails>
-    </Accordion>
+    <div className="itin-accordion">
+      <Accordion defaultExpanded sx={{width: '80%'}}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>{day}</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Timeline>
+            {filteredActivities.map((event, index) => (
+              <TimelineItem key={event.id}>
+                <TimelineOppositeContent>
+                  {event.start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+                </TimelineOppositeContent>
+                <TimelineSeparator>
+                  <TimelineDot />
+                  {index !== events.length - 1 && <TimelineConnector />}
+                </TimelineSeparator>
+                <TimelineContent>
+                  <Activity
+                    activity={event}
+                    //onDelete={handleDelete}
+                    key={event.id}
+                  />
+                </TimelineContent>
+              </TimelineItem>
+            ))}
+          </Timeline>
+          <IconButton
+            aria-label="close"
+            onClick={onClickEditButton}
+          >
+            <EditIcon sx={{color: "black", fontSize: 25}} /> 
+          </IconButton>
+        </AccordionDetails>
+      </Accordion>
+    </div>
   );
 };
 
