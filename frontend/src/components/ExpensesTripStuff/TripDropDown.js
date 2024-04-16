@@ -81,7 +81,7 @@ const pastTrip = [
     height: "50%",
     location: "Paris, France",
     date: "Aug 2-8, 2023",
-    itinerary: "Itinerary: \n Visit Eiffel Tower and Louvre \n Breizh Cafe\n Nice, France \n ",
+    itinerary: "Itinerary: \n Visit Eiffel Tower and Louvre \n Breizh Cafe \n Nice, France \n ",
   },
 ];
 
@@ -236,10 +236,10 @@ export default function TripDropDown() {
       >
         New Trip
       </Button>
-
-
+      
       {/* Conditional rendering based on selected option */}
-      {selectedOption === 'upcoming' && 
+      {/* Displays current trips when going to page and anytime current is selected*/}
+      {selectedOption !== 'past' && 
         <div>
           <h3> Upcoming</h3>
          
