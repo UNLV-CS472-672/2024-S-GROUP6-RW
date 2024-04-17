@@ -19,6 +19,8 @@ type Expense struct {
 	IsPaid           bool                 `bson:"IsPaid,omitempty"`
 
 	// Placeholder fields for user entry point data
+	TripTitle     string
+	TripOwner     string
 	Modifications []Modification
 }
 
@@ -84,6 +86,7 @@ func (e *Expense) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	return nil
 }
 
+// TODO: Verify integrity of mock document retrieval
 func (e *Expense) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	*e = Expense{}
 
