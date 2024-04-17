@@ -1,11 +1,17 @@
+import { css } from '@emotion/react';
+import React, { useState } from 'react';
+import '../../css/PopUp.css'
+import '../../css/closeButton.css'
+import StarRatings from 'react-star-ratings';
+
 const locations = [
   { 
     lat: 36.1173, 
     lng: -115.1761, //las vegas
     popularLocations: [
-      { name: 'Location 1', image: 'https://media-cdn.tripadvisor.com/media/photo-m/1280/2a/34/2d/28/caption.jpg' },
-      { name: 'Location 2', image: 'https://a.cdn-hotels.com/gdcs/production37/d1139/a8a147d0-c31d-11e8-825c-0242ac110006.jpg?impolicy=fcrop&w=800&h=533&q=medium' },
-      { name: 'Location 3', image: 'https://assets.editorial.aetnd.com/uploads/2009/12/gettyimages-108009569.jpg' }
+      { name: 'Las Vegas Welcome Sign',description:"The Welcome to Fabulous Las Vegas sign is a Las Vegas landmark.", rating: 5, image: 'https://media-cdn.tripadvisor.com/media/photo-m/1280/2a/34/2d/28/caption.jpg' },
+      { name: 'MGM Park',description: "Park MGM Las Vegas is in the heart of all there is to do on the Las Vegas Strip. ",rating: 3, image: 'https://ik.imgkit.net/3vlqs5axxjf/external/ik-seo/https://www.cfmedia.vfmleonardo.com/imageRepo/7/0/143/431/660/Park_MGM_-_Hero_2_Cropped_O/Park-MGM-Exterior.jpg?tr=w-780%2Ch-437%2Cfo-auto  ' },
+      { name: 'Sphere', description:"Sphere is a music and entertainment arena",rating: 4, image: 'https://www.rollingstone.com/wp-content/uploads/2023/06/MSG-Sphere1_credit-MSG-Sphere.jpg?w=1581&h=1028&crop=1' }
     ]
   },
   { 
@@ -95,17 +101,26 @@ const locations = [
 ]
  
   
-const handleClickImage = (popularLocation) => {
-  // Perform an action when an image is clicked
-  console.log(`You clicked the image of ${popularLocation.name}`);
-};
-
 const ActComponent = ({ lat, lng }) => {
   const location = locations.find(location => location.lat === lat && location.lng === lng);
+  const [popupLocation, setPopupLocation] = useState(null);
+
+  const handleClickImage = (popularLocation) => {
+    setPopupLocation(popularLocation);
+  };
+  function handleClose() {
+    setPopupLocation(null);
+  }
+  
+
+  const handleAddToList = () => {
+    // Add the location to your list
+    console.log(`Added ${popupLocation.name} to the list`);
+    setPopupLocation(null); // Close the popup
+  };
 
   return (
-    <div>
-      {/* Your Google Map Block */}
+    <div className="map-container">
       {location && (
         <div className="side-menu">
           <h2>Popular</h2>
@@ -116,11 +131,27 @@ const ActComponent = ({ lat, lng }) => {
                 <img 
                   src={popularLocation.image} 
                   alt={popularLocation.name} 
-                  onClick={() => handleClickImage(popularLocation)} // Add click event to the image
+                  onClick={() => handleClickImage(popularLocation)}
+                />
+                <StarRatings
+                  rating={popularLocation.rating}
+                  starRatedColor="gold"
+                  numberOfStars={5}
+                  name='rating'
+                  starDimension="20px" // Set the size of the stars
                 />
               </li>
             ))}
           </ul>
+        </div>
+      )}
+      {popupLocation && (
+        <div className="popup">
+          <button className="close-button" onClick={handleClose}>X</button>
+          <img src={popupLocation.image} alt={popupLocation.name} />
+          <h2>{popupLocation.name}</h2>
+          <p>{popupLocation.description}</p>
+          <button onClick={handleAddToList}>Add to List</button>
         </div>
       )}
     </div>

@@ -1,0 +1,12 @@
+.close-button {
+    position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #9c544e; /* Red background */
+  color: white; /* White text */
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 10px; /* Add some padding */
+  border-radius: 50%; /* Make it round */
+  }
