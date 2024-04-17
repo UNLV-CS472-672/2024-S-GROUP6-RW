@@ -18,7 +18,7 @@ type Invoice struct {
 	IsPaid          bool               `bson:"IsPaid,omitempty"`
 
 	// Placeholder fields for invoice entry point data
-	Username      string
+	PayeeUsername string
 	ExpenseTitle  string
 	TripTitle     string
 	TripOwner     string
@@ -61,6 +61,7 @@ func (i *Invoice) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	return nil
 }
 
+// TODO: Verify integrity of mock document retrieval
 func (i *Invoice) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	*i = Invoice{}
 

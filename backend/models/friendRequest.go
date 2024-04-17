@@ -57,6 +57,7 @@ func (f *FriendRequest) GetMongoDocument(coll *MongoCollection, filter bson.M) e
 	return nil
 }
 
+// TODO: Verify integrity of mock document retrieval
 func (f *FriendRequest) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	*f = FriendRequest{
 		SenderUsername: f.SenderUsername,
