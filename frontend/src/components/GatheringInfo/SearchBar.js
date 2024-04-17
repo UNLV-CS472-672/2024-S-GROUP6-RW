@@ -41,9 +41,25 @@ function SearchBar() {
     setQuery(event.target.value);
   };
 
-  const handleSuggestionClick = (cityName) => {
-    setQuery(cityName);
-    setSuggestions([]); // Clear suggestions
+  const handleSuggestionClick = async (cityName) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cityName)}&limit=1`
+      );
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      const { lat, lon } = data[0];
+  
+      // Redirect to the map page with the selected location's coordinates however this will no longer allow people to sit at the previous page
+      window.location.href = `http://localhost:3000/map?lat=${lat}&lng=${lon}`;
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle fetch error
+    }
   };
 
   return (
