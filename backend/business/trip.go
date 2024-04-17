@@ -5,7 +5,7 @@ import (
 	"backend/models"
 	"backend/utility"
 	"errors"
-
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -21,6 +21,7 @@ func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	tripOwner, ok := document.(*models.User)
 
 	if !ok {
+		fmt.Println("failed to convert model to User")
 		return nil, errors.New("failed to convert model to User")
 	}
 
@@ -28,6 +29,7 @@ func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	_, err = database["TripDetails"].FindDocument(bson.M{"TripOwnerID": tripOwner.ID, "Title": trip.Title}, "Trip")
 
 	if err == nil {
+		fmt.Println("trip already exists")
 		return nil, errors.New("trip already exists")
 	}
 
@@ -52,6 +54,7 @@ func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	insertedTrip, ok := document.(*models.Trip)
 
 	if !ok {
+		fmt.Println("failed to convert model to Trip")
 		return nil, errors.New("failed to convert model to Trip")
 	}
 

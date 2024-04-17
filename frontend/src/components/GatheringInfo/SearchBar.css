@@ -1,18 +1,19 @@
 .search-container {
-  position: relative;
-  top: 0px;
-  left: 400px;
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 35%;
+  width: 50%;
+  margin: 0 auto;
+  position: relative; /* Add this line */
 }
 
 .search-input {
   width: 100%;
+  height: 50px;
   padding: 10px;
-  border-radius: 105px;
+  border-radius: 20px;
   border: 2px solid #ccc;
   box-sizing: border-box; 
+  font-family: 'Radley';
 }
 
 .suggestions {

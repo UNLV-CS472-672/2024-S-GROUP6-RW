@@ -1,31 +1,49 @@
-import React, { useState } from 'react';
+// 2024-S-GROUP6-RW\frontend\src\components\GatheringInfo\SearchBar.js
+
+import React, { useState, useEffect } from 'react';
 import './SearchBar.css';
 
 function SearchBar() {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
-  // array of cities that will be an API call later
-  const cities = ['Los Angeles, California, USA', 'Chicago, Illinois, USA', 'Chitest', 'Chianothertest', 'Houston, Texas, USA', 'Phoenix, Arizona, USA', 'Philadelphia, Pennsylvania, USA', 'San Antonio, Texas, USA', 'San Diego, California, USA', 'San Jose, California, USA'];
+  useEffect(() => {
+    const fetchCities = async () => {
+      if (!query) {
+        setSuggestions([]);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`
+        );
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        const cityNames = data.map((item) => item.display_name);
+        setSuggestions(cityNames);
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle fetch error
+      }
+    };
+
+    const debounceTimeout = setTimeout(fetchCities, 500);
+
+    return () => clearTimeout(debounceTimeout);
+  }, [query]);
 
   const handleChange = (event) => {
-    const value = event.target.value;
-    setQuery(value);
-
-    // Filter cities based on the input value
-    if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, 'i');
-      setSuggestions(cities.sort().filter(v => regex.test(v)));
-    } else {
-      setSuggestions([]);
-    }
-
-    console.log(`Search query: ${value}`);
+    setQuery(event.target.value);
   };
 
-  const handleSuggestionClick = (value) => {
-    setQuery(value);
-    setSuggestions([]);
+  const handleSuggestionClick = (cityName) => {
+    setQuery(cityName);
+    setSuggestions([]); // Clear suggestions
   };
 
   return (
@@ -51,3 +69,4 @@ function SearchBar() {
 }
 
 export default SearchBar;
+
