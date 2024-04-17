@@ -53,6 +53,8 @@ func GetAllActivitiesHandler(c *gin.Context) {
 		return
 	}
 
+	// TODO: select relavent information from the activities to return to client
+
 	fmt.Println("Success.")
 
 	// Return OK status to client
@@ -76,6 +78,8 @@ func GetActivityHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	// TODO: select relavent information from the activity to return to client
 
 	fmt.Println("Success.")
 
