@@ -32,6 +32,8 @@ import { deepOrange, orange, red } from "@mui/material/colors";
 const localizer = momentLocalizer(moment);
 
 const EditView = ({ day, userActivities, onUpdatedActivities, onClickCloseButton }) => {
+  const dayObj = new Date(day); //Convert day string to date object
+
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showCreateEventDialog, setShowCreateEventDialog] = useState(false);
   const [startTime, setStartTime] = useState(null);
@@ -41,12 +43,10 @@ const EditView = ({ day, userActivities, onUpdatedActivities, onClickCloseButton
 
   //State Variables for New Event (Create Event)
   const [createTitle, setCreateTitle] = useState("");
-  const [createStartTime, setCreateStartTime] = useState(null);
-  const [createEndTime, setCreateEndTime] = useState(null);
+  const [createStartTime, setCreateStartTime] = useState(dayjs(dayObj));
+  const [createEndTime, setCreateEndTime] = useState(dayjs(dayObj));
   const [createLocation, setCreateLocation] = useState("");
   const [createDescription, setCreateDescription] = useState("");
-
-  const dayObj = new Date(day); //Convert day string to date object
 
   const handleEditButtonClick = (event, e) => {
     setSelectedActivity(event);
@@ -216,12 +216,12 @@ const EditView = ({ day, userActivities, onUpdatedActivities, onClickCloseButton
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
                   label="Start Time"
-                  defaultValue={dayjs(dayObj)}
+                  value={createStartTime}
                   onChange={(newStartTime) => setCreateStartTime(newStartTime)}
                 />
                 <DateTimePicker
                   label="End Time"
-                  defaultValue={dayjs(dayObj)}
+                  value={createEndTime}
                   onChange={(newEndTime) => setCreateEndTime(newEndTime)}
                 />
               </LocalizationProvider>
