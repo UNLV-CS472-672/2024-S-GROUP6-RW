@@ -26,7 +26,9 @@ func (mc *MongoCollection) InsertDocument(m Model, modelType string) (Model, err
 			return nil, err
 		}
 
-		content[key] = value
+		if key != "_id" {
+			content[key] = value
+		}
 	}
 
 	// Attempt to insert document into collection
@@ -54,10 +56,10 @@ func (mc *MongoCollection) InsertDocument(m Model, modelType string) (Model, err
 
 func (mc *MongoCollection) UpdateDocument(filter bson.M, content bson.M, modelType string) (Model, error) {
 	// Attempt to update document in collection
-	UpdateResult, err := mc.Collection.UpdateOne(context.TODO(), filter, bson.M{"$set": content})
+	UpdateResult := mc.Collection.FindOneAndUpdate(context.TODO(), filter, bson.M{"$set": content})
 
-	if err != nil {
-		return nil, err
+	if UpdateResult.Err() != nil {
+		return nil, UpdateResult.Err()
 	}
 
 	factory, ok := ModelFactories[modelType]
@@ -67,9 +69,17 @@ func (mc *MongoCollection) UpdateDocument(filter bson.M, content bson.M, modelTy
 	}
 
 	// Acquire document from collection
+	var document bson.M
+
+	err := UpdateResult.Decode(&document)
+
+	if err != nil {
+		return nil, err
+	}
+
 	result := factory()
 
-	if err := result.GetMongoDocument(mc, bson.M{"_id": UpdateResult.UpsertedID}); err != nil {
+	if err := result.GetMongoDocument(mc, bson.M{"_id": document["_id"]}); err != nil {
 		return nil, err
 	}
 

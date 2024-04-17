@@ -12,11 +12,16 @@ type Expense struct {
 	// Fields for actual Expense document in database
 	ID               primitive.ObjectID   `bson:"_id,omitempty"`
 	ParentTripID     primitive.ObjectID   `bson:"ParentTripID,omitempty"`
-	Description      string               `bson:"Description,omitempty"`
+	Title            string               `bson:"Title,omitempty"`
 	Amount           float64              `bson:"Amount,omitempty"`
 	InvoiceIDs       []primitive.ObjectID `bson:"InvoiceIDs,omitempty"`
 	RemainingBalance float64              `bson:"RemainingBalance,omitempty"`
 	IsPaid           bool                 `bson:"IsPaid,omitempty"`
+
+	// Placeholder fields for user entry point data
+	TripTitle     string
+	TripOwner     string
+	Modifications []Modification
 }
 
 func (e *Expense) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
@@ -36,7 +41,7 @@ func (e *Expense) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 
 	e.ID, idOK = result["_id"].(primitive.ObjectID)
 	e.ParentTripID, parentTripOK = result["ParentTripID"].(primitive.ObjectID)
-	e.Description, descriptionOK = result["Description"].(string)
+	e.Title, descriptionOK = result["Title"].(string)
 	e.Amount, amountOK = result["Amount"].(float64)
 	invoiceList, invoicesOK = result["InvoiceIDs"].(primitive.A)
 	e.RemainingBalance, remainingBalanceOK = result["RemainingBalance"].(float64)
@@ -81,6 +86,7 @@ func (e *Expense) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	return nil
 }
 
+// TODO: Verify integrity of mock document retrieval
 func (e *Expense) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	*e = Expense{}
 
@@ -91,16 +97,16 @@ func (e *Expense) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	}
 
 	if expenseRes, ok := result.(*Expense); ok {
-		e = expenseRes
+		*e = *expenseRes
 		return nil
 	}
 
-	return errors.New("Failed to convert model to Expense.")
+	return errors.New("failed to convert model to Expense")
 }
 
 func (e *Expense) GetKeys() []string {
 	return []string{
-		"_id", "ParentTripID", "Description", "Amount", "InvoiceIDs", "RemainingBalance",
+		"_id", "ParentTripID", "Title", "Amount", "InvoiceIDs", "RemainingBalance",
 		"IsPaid",
 	}
 }
@@ -111,8 +117,8 @@ func (e *Expense) GetValue(key string) (any, error) {
 		return e.ID, nil
 	case "ParentTripID":
 		return e.ParentTripID, nil
-	case "Description":
-		return e.Description, nil
+	case "Title":
+		return e.Title, nil
 	case "Amount":
 		return e.Amount, nil
 	case "InvoiceIDs":
@@ -134,49 +140,49 @@ func (e *Expense) SetValue(key string, value any) error {
 			return nil
 		}
 
-		return errors.New("Failed to convert value to ObjectID.")
+		return errors.New("failed to convert value to ObjectID")
 	case "ParentTripID":
 		if ParentTripID, ok := value.(primitive.ObjectID); ok {
 			e.ParentTripID = ParentTripID
 			return nil
 		}
 
-		return errors.New("Failed to convert value to ObjectID.")
-	case "Description":
-		if Description, ok := value.(string); ok {
-			e.Description = Description
+		return errors.New("failed to convert value to ObjectID")
+	case "Title":
+		if Title, ok := value.(string); ok {
+			e.Title = Title
 			return nil
 		}
 
-		return errors.New("Failed to convert value to string.")
+		return errors.New("failed to convert value to string")
 	case "Amount":
 		if Amount, ok := value.(float64); ok {
 			e.Amount = Amount
 			return nil
 		}
 
-		return errors.New("Failed to convert value to float64.")
+		return errors.New("failed to convert value to float64")
 	case "InvoiceIDs":
 		if idList, ok := value.([]primitive.ObjectID); ok {
 			e.InvoiceIDs = idList
 			return nil
 		}
 
-		return errors.New("Failed to convert value to []ObjectID.")
+		return errors.New("failed to convert value to []ObjectID")
 	case "RemainingBalance":
 		if RemainingBalance, ok := value.(float64); ok {
 			e.RemainingBalance = RemainingBalance
 			return nil
 		}
 
-		return errors.New("Failed to convert value to float64.")
+		return errors.New("failed to convert value to float64")
 	case "IsPaid":
 		if IsPaid, ok := value.(bool); ok {
 			e.IsPaid = IsPaid
 			return nil
 		}
 
-		return errors.New("Failed to convert value to bool.")
+		return errors.New("failed to convert value to bool")
 	default:
 		return errors.New("Unknown key: '" + key + "'.")
 	}

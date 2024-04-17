@@ -16,6 +16,13 @@ type Invoice struct {
 	Description     string             `bson:"Description,omitempty"`
 	Balance         float64            `bson:"Balance,omitempty"`
 	IsPaid          bool               `bson:"IsPaid,omitempty"`
+
+	// Placeholder fields for invoice entry point data
+	PayeeUsername string
+	ExpenseTitle  string
+	TripTitle     string
+	TripOwner     string
+	Modifications []Modification
 }
 
 func (i *Invoice) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
@@ -54,6 +61,7 @@ func (i *Invoice) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	return nil
 }
 
+// TODO: Verify integrity of mock document retrieval
 func (i *Invoice) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	*i = Invoice{}
 
@@ -64,11 +72,11 @@ func (i *Invoice) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	}
 
 	if invoiceRes, ok := result.(*Invoice); ok {
-		i = invoiceRes
+		*i = *invoiceRes
 		return nil
 	}
 
-	return errors.New("Failed to convert model to Invoice.")
+	return errors.New("failed to convert model to Invoice")
 }
 
 func (i *Invoice) GetKeys() []string {
@@ -104,42 +112,42 @@ func (i *Invoice) SetValue(key string, value any) error {
 			return nil
 		}
 
-		return errors.New("Failed to convert value to ObjectID.")
+		return errors.New("failed to convert value to ObjectID")
 	case "ParentExpenseID":
 		if ParentExpenseID, ok := value.(primitive.ObjectID); ok {
 			i.ParentExpenseID = ParentExpenseID
 			return nil
 		}
 
-		return errors.New("Failed to convert value to ObjectID.")
+		return errors.New("failed to convert value to ObjectID")
 	case "PayeeID":
 		if PayeeID, ok := value.(primitive.ObjectID); ok {
 			i.PayeeID = PayeeID
 			return nil
 		}
 
-		return errors.New("Failed to convert value to ObjectID.")
+		return errors.New("failed to convert value to ObjectID")
 	case "Description":
 		if Description, ok := value.(string); ok {
 			i.Description = Description
 			return nil
 		}
 
-		return errors.New("Failed to convert value to string.")
+		return errors.New("failed to convert value to string")
 	case "Balance":
 		if Balance, ok := value.(float64); ok {
 			i.Balance = Balance
 			return nil
 		}
 
-		return errors.New("Failed to convert value to float64.")
+		return errors.New("failed to convert value to float64")
 	case "IsPaid":
 		if IsPaid, ok := value.(bool); ok {
 			i.IsPaid = IsPaid
 			return nil
 		}
 
-		return errors.New("Failed to convert value to bool.")
+		return errors.New("failed to convert value to bool")
 	default:
 		return errors.New("Unknown key: '" + key + "'.")
 	}

@@ -8,12 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type ProfileModification struct {
-	// Fields to bind from profile modification request
-	FieldName string      `json:"FieldName"`
-	Date      interface{} `json:"Data"`
-}
-
 type Profile struct {
 	// Fields for actual Profile document in database
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
@@ -22,8 +16,8 @@ type Profile struct {
 	Joined      primitive.DateTime `bson:"Joined,omitempty"`
 	About       string             `bson:"About,omitempty"`
 
-	// Placeholder fields for HTTP request body information not stored to Profile database
-	Modifications []ProfileModification
+	// Placeholder fields for profile entry point data
+	Modifications []Modification
 }
 
 func (p *Profile) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
@@ -63,6 +57,7 @@ func (p *Profile) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	return nil
 }
 
+// TODO: Verify integrity of mock document retrieval
 func (p *Profile) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	*p = Profile{
 		Modifications: p.Modifications,
@@ -81,11 +76,11 @@ func (p *Profile) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	}
 
 	if profileRes, ok := result.(*Profile); ok {
-		p = profileRes
+		*p = *profileRes
 		return nil
 	}
 
-	return errors.New("Failed to convert model to Profile.")
+	return errors.New("failed to convert model to Profile")
 }
 
 func (p *Profile) GetKeys() []string {
@@ -119,35 +114,35 @@ func (p *Profile) SetValue(key string, value any) error {
 			return nil
 		}
 
-		return errors.New("Failed to convert value to ObjectID.")
+		return errors.New("failed to convert value to ObjectID")
 	case "Username":
 		if Username, ok := value.(string); ok {
 			p.Username = Username
 			return nil
 		}
 
-		return errors.New("Failed to convert value to string.")
+		return errors.New("failed to convert value to string")
 	case "DisplayName":
 		if DisplayName, ok := value.(string); ok {
 			p.DisplayName = DisplayName
 			return nil
 		}
 
-		return errors.New("Failed to convert value to string.")
+		return errors.New("failed to convert value to string")
 	case "Joined":
 		if Joined, ok := value.(primitive.DateTime); ok {
 			p.Joined = Joined
 			return nil
 		}
 
-		return errors.New("Failed to convert value to DateTime.")
+		return errors.New("failed to convert value to DateTime")
 	case "About":
 		if About, ok := value.(string); ok {
 			p.About = About
 			return nil
 		}
 
-		return errors.New("Failed to convert value to string.")
+		return errors.New("failed to convert value to string")
 	default:
 		return errors.New("Unknown key: '" + key + "'.")
 	}

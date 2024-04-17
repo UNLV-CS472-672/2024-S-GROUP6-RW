@@ -96,7 +96,7 @@ export default function TripsTab() {
     <div
       style={{
         marginTop: "1vw",
-        height: "63vh",
+        maxHeight: "31vw",
         overflowY: "auto", // Add overflowY to enable vertical scrolling
         scrollbarWidth: "none", // Hide scrollbar for Firefox
         "&::-webkit-scrollbar": {

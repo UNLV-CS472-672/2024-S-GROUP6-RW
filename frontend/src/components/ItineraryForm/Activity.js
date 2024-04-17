@@ -47,8 +47,8 @@ const Activity = ({ activity }) => {
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
-    backgroundColor:
-      theme.palette.mode === "dark" ? "#424242" : "#f0f0f0", // Adjust background color based on theme
+    // backgroundColor:
+    //   theme.palette.mode === "dark" ? "#424242" : "#f0f0f0", // Adjust background color based on theme
   };
 
   return (
@@ -107,14 +107,6 @@ const Activity = ({ activity }) => {
           </DialogContentText>
         </div>
       </Dialog>
-      <IconButton
-        size="small"
-        style={{ marginRight: 8, cursor: "grab" }} // Change cursor style for the handle
-        {...attributes}
-        {...listeners}
-      >
-        <DragIndicatorIcon />
-      </IconButton>
     </div>
   );
 };
