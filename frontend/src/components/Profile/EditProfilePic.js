@@ -1,19 +1,22 @@
 import React, { useState } from "react";
-import { SketchPicker } from "react-color";
-import { Popover, Typography, Tabs, Tab, Box } from "@mui/material";
+import { CompactPicker } from "react-color";
+import { Popover, Typography, Tabs, Tab, Box, Button, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { styled } from '@mui/material/styles';
 import AvatarGrid from "./AvatarGrid";
 import BorderGrid from "./BorderGrid";
+import BackdropGrid from "./BackdropGrid";
 
 // Import your images
-import Red from "../../images/avatars/Red.jpg";
-import Blues from "../../images/avatars/Blues.jpg";
-import Chuck from "../../images/avatars/Chuck.jpg";
-import Bomb from "../../images/avatars/Bomb.jpg";
-import Matilda from "../../images/avatars/Matilda.jpg";
-import Hal from "../../images/avatars/Hal.jpg";
-import Terence from "../../images/avatars/Terence.jpg";
-import Bubbles from "../../images/avatars/Bubbles.jpg";
-import Stella from "../../images/avatars/Stella.jpg";
+import Beagle from "../../images/avatars/beagle.jpg";
+import Bear from "../../images/avatars/bear.jpg";
+import Tiger from "../../images/avatars/tiger.jpg";
+import Camel from "../../images/avatars/camel.jpg";
+import Dolphin from "../../images/avatars/dolphin.jpg";
+import Eagle from "../../images/avatars/eagle.jpg";
+import Fox from "../../images/avatars/fox.jpg";
+import Iguana from "../../images/avatars/iguana.jpg";
+import Panda from "../../images/avatars/panda.jpg";
+import Red_Panda from "../../images/avatars/red_panda.jpg";
 
 import { ReactComponent as Default_Border } from "../../images/borders/Default_Border.svg";
 import { ReactComponent as Star_Border } from "../../images/borders/Star_Border.svg";
@@ -32,12 +35,24 @@ import Bone_Preview from "../../images/border_previews/Bone_Preview.png";
 import Wave_Preview from "../../images/border_previews/Wave_Preview.png";
 import Helix_Preview from "../../images/border_previews/Helix_Preview.png";
 
+// Import your images
+import Valley from "../../images/backdrops/valley.jpg";
+import Grass from "../../images/backdrops/grass.jpg";
+import Ocean from "../../images/backdrops/ocean.jpg";
+import City from "../../images/backdrops/city.jpg";
+import Desert from "../../images/backdrops/desert.jpg";
+import Space from "../../images/backdrops/space.jpg";
+
 export default function EditProfilePic({
   open,
   onClose,
   anchorEl,
   selectedImg,
   selectedBorder,
+  selectedBanner,
+  displayBanner,
+  setDisplayBanner,
+  selectedBackdrop,
   setBorderColor,
   addCustomAvatar,
   currentCustomAvatars,
@@ -45,6 +60,54 @@ export default function EditProfilePic({
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [chromePickerOpen, setChromePickerOpen] = useState(false);
   const [color, setColor] = React.useState("black");
+
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
+
+    // Array of image paths
+  // Array of image objects with required properties
+  const pictures = [
+    { img: Beagle, title: "Beagle" },
+    { img: Bear, title: "Bear" },
+    { img: Tiger, title: "Tiger" },
+    { img: Camel, title: "Camel" },
+    { img: Dolphin, title: "Dolphin" },
+    { img: Eagle, title: "Eagle" },
+    { img: Fox, title: "Fox" },
+    { img: Iguana, title: "Iguana" },
+    { img: Panda, title: "Panda" },
+    { img: Red_Panda, title: "Red_Panda" },
+  ];
+  const borders = [
+    { border: Default_Border, preview: Default_Preview },
+    { border: Star_Border, preview: Star_Preview },
+    { border: Spike_Border, preview: Spike_Preview },
+    { border: Flower_Border, preview: Flower_Preview },
+    { border: Hole_Border, preview: Hole_Preview },
+    { border: Bone_Border, preview: Bone_Preview },
+    { border: Wave_Border, preview: Wave_Preview },
+    { border: Helix_Border, preview: Helix_Preview },
+  ];
+
+  const backdrops = [
+    { img: Grass, title: "Grass", textColor: "black" },
+    { img: Ocean, title: "Ocean", textColor: "black" },
+    { img: Valley, title: "Valley", textColor: "black" },
+    { img: City, title: "City", textColor: "white" },
+    { img: Desert, title: "Desert", textColor: "black" },
+    { img: Space, title: "Space", textColor: "white" },
+  ]
+  // Calculate the width of the Popover based on whether the Border tab is selected
+  //const popoverWidth = selectedTab === 1 ? "36vw" : "22vw";
 
   const handleChange = (event, newValue) => {
     if (newValue === 1) {
@@ -62,31 +125,68 @@ export default function EditProfilePic({
     setBorderColor(updatedColor.hex); // Update borderColor state
   };
 
-  // Array of image paths
-  // Array of image objects with required properties
-  const pictures = [
-    { img: Red, title: "Red" },
-    { img: Blues, title: "Blues" },
-    { img: Chuck, title: "Chuck" },
-    { img: Bomb, title: "Bomb" },
-    { img: Matilda, title: "Matilda" },
-    { img: Hal, title: "Hal" },
-    { img: Terence, title: "Terence" },
-    { img: Bubbles, title: "Bubbles" },
-    { img: Stella, title: "Stella" },
-  ];
-  const borders = [
-    { border: Default_Border, preview: Default_Preview },
-    { border: Star_Border, preview: Star_Preview },
-    { border: Spike_Border, preview: Spike_Preview },
-    { border: Flower_Border, preview: Flower_Preview },
-    { border: Hole_Border, preview: Hole_Preview },
-    { border: Bone_Border, preview: Bone_Preview },
-    { border: Wave_Border, preview: Wave_Preview },
-    { border: Helix_Border, preview: Helix_Preview },
-  ];
-  // Calculate the width of the Popover based on whether the Border tab is selected
-  const popoverWidth = selectedTab === 1 ? "36vw" : "22vw";
+    // Update borderColor state when color changes
+    const handleDisplayBanner = (event) => {
+      const isChecked = event.target.checked;
+      if (isChecked) {
+        setDisplayBanner(false);
+      } else {
+        setDisplayBanner(true);
+      }
+  
+    };
+
+  const uploadBanner = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      // Check if the file type is an image
+      if (!file.type.startsWith("image/")) {
+        console.log("Please select an image file.");
+        return;
+      }
+
+      // Create an image element to load the image
+      const img = new Image();
+      img.onload = function () {
+        // Create a canvas element
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Calculate the new dimensions to fit within 500x500 pixels
+        let newWidth = this.width;
+        let newHeight = this.height;
+        if (newWidth > 800 || newHeight > 200) {
+          const aspectRatio = newWidth / newHeight;
+          if (newWidth > newHeight) {
+            newWidth = 800;
+            newHeight = Math.floor(800 / aspectRatio);
+          } else {
+            newHeight = 200;
+            newWidth = Math.floor(200 * aspectRatio);
+          }
+        }
+
+        // Resize the image
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+        // Get the resized image data
+        var resizedImageData = canvas.toDataURL(file.type);
+        // Convert Data URL to Blob
+        const resizedImageBlob = new Blob([resizedImageData], {
+          type: file.type,
+        });
+        console.log("Banner size: " + resizedImageBlob.size + " bytes");
+
+        selectedBanner({ img: resizedImageData, title: "Custom Picture" });
+      };
+
+      // Load the image
+      img.src = URL.createObjectURL(file);
+    }
+  };
 
   return (
     <Popover
@@ -94,77 +194,150 @@ export default function EditProfilePic({
       onClose={onClose}
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: "center",
+        vertical: "bottom",
         horizontal: "right",
       }}
       transformOrigin={{
-        vertical: "center",
-        horizontal: "left",
+        vertical: "top",
+        horizontal: "right",
       }}
-      style={{
-        marginLeft: "3vw",
-      }}
-      PaperProps={{
-        style: {
-          width: popoverWidth,
-        },
-      }}
+      sx={styles.popover}
     >
       {/* Make the popover draggable */}
-      <div style={{ postion: "relative" }}>
-        <div
-          style={{
-            position: "absolute",
-            right: "0.20vw",
-            top: "0.15vw",
-          }}
+      <div style={styles.popoverContainer}>
+        <Typography
+          align="center"
+          variant="h6"
+          style={{ marginTop: "1vw", fontSize: "2vw", fontFamily: "Radley" }}
         >
+          Customize
+        </Typography>
+        <Box style={styles.tabBox}>
+          <Tabs
+            value={selectedTab}
+            onChange={handleChange}
+            centered
+            style={styles.tabs}
+            TabIndicatorProps={{
+              style: {
+                backgroundColor: "black",
+              }
+            }}
+            variant="fullWidth"
+          >
+            <Tab label="Picture" style={styles.tab} />
+            <Tab label="Border"  style={styles.tab} />
+            <Tab label="Banner"  style={styles.tab} />
+            <Tab label="Backdrop"  style={styles.tab} />
+          </Tabs>
+          {/* Content for the tabs */}
+          {selectedTab === 0 && (
+              <AvatarGrid
+                avatars={pictures}
+                selectedImg={selectedImg}
+                addCustomAvatar={(avatar) => addCustomAvatar(avatar)}
+                customAvatars={currentCustomAvatars}
+              />
+          )}
+          {selectedTab === 1 && (
+              <BorderGrid borders={borders} selectedBorder={selectedBorder} />
+          )}
           {chromePickerOpen && (
-            <SketchPicker
-              width="13vw"
-              disableAlpha={true}
+            <>
+            <div style={styles.colorPickers}>
+              <CompactPicker
               color={color}
               onChange={handleColorChange}
             />
+            </div>
+            </>
           )}
-        </div>
-        <div style={{ width: "22vw" }}>
-          <Typography
-            align="center"
-            variant="h6"
-            style={{ marginTop: "1vw", fontSize: "2vw" }}
-          >
-            Edit Profile Picture
-          </Typography>
-          <Box style={{ width: "20vw", height: "28vh", padding: "0.75vw" }}>
-            <Tabs
-              value={selectedTab}
-              onChange={handleChange}
-              centered
-              sx={{ width: "20vw" }}
-            >
-              <Tab label="Picture" sx={{ fontSize: "1vw" }} />
-              <Tab label="Border" sx={{ fontSize: "1vw" }} />
-            </Tabs>
-            {/* Content for the tabs */}
-            {selectedTab === 0 && (
-              <div style={{ maxHeight: "10vw", overflowY: "auto" }}>
-                <AvatarGrid
-                  avatars={pictures}
-                  selectedImg={selectedImg}
-                  addCustomAvatar={(avatar) => addCustomAvatar(avatar)}
-                  customAvatars={currentCustomAvatars}
-                />
+          {selectedTab === 2 && (
+              <div style={styles.bannerBox}>
+                  <Button
+                    component="label"
+                    role={undefined}
+                    variant="contained"
+                    tabIndex={-1}
+                    style={{backgroundColor: "black", fontFamily: "Radley"}}
+                  >Upload Banner...
+                  <VisuallyHiddenInput type="file" onChange={uploadBanner}/>
+                  </Button>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Checkbox defaultChecked={!displayBanner} onChange={handleDisplayBanner}
+                        sx={{ '&.Mui-checked': {
+                            color: "black",
+                          },}}/>
+                        }
+                      style={{fontFamily: "Radley"}}
+                      label={
+                        <Typography
+                          style={{fontFamily: "Radley"}}>
+                          Make Banner Transparent
+                        </Typography>} />
+                  </FormGroup>
+                  
               </div>
-            )}
-            {selectedTab === 1 && (
-              <div style={{ maxHeight: "10vw", overflowY: "auto" }}>
-                <BorderGrid borders={borders} selectedBorder={selectedBorder} />
-              </div>
-            )}
-          </Box>
+          )}
+          {selectedTab === 3 && (
+              <BackdropGrid backdrops={backdrops} selectedBackdrop={selectedBackdrop} />
+          )}
+        </Box>
         </div>
-      </div>
     </Popover>
   );
+}
+
+const styles = {
+  popover: {
+     postion: "relative",
+  },
+  popoverContainer: {
+    postion: "relative",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "32vw",
+    height: "30vw",
+  },
+  tabBox: {
+    width: "95%",
+    height: "100%",
+    padding: "0.75vw",
+  },
+  tabs: {
+    alignItems: "center",
+    width: "95%",
+    height: "3vw",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  tab: { 
+    height: "100%",
+    padding: "1vw 0vw",
+    fontSize: "1vw", 
+    fontWeight: "500",
+    fontFamily: "Radley",
+    minWidth: "6vw",
+    minHeight: "2vw",
+    color: "black",
+  },
+  colorPickers: {
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    alignItems: "center",
+    margin: "0.2vw 0vw",
+  },
+  bannerBox: {
+    width: "100%",
+    height: "80%",
+    display: "flex",
+    position: "relative",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  }
 }

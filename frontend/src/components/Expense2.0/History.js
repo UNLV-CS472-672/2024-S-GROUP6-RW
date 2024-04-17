@@ -13,27 +13,25 @@ import {
 	Box,
 	useTheme,
 	TextField,
-	ToggleButton,
-	ToggleButtonGroup,
+	FormControl,
+	Select,
+	MenuItem,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const History = ({ transactions, sudoUser }) => {
-	// Use the theme hook to get the current theme
-	const theme = useTheme();
-	//console.log("his:", transactions);
+// Function to flatten the transactions object
+// ai-gen start (chatGPT 4.0, 1)
+function flattenTransactions(transactions) {
+	return transactions && typeof transactions === "object" // Check if transactions is an object bc it can be null
+		? Object.values(transactions).flat()
+		: [];
+}
+// ai-gen end
 
-	useEffect(() => {
-		console.log(transactions);
-	}, [transactions]);
-
-	// Check if transactions is defined and is an object before flattening
-	const flatTransactions =
-		transactions && typeof transactions === "object"
-			? Object.values(transactions).flat()
-			: [];
-
-	const monthSections = flatTransactions.reduce((acc, transaction) => {
+// Function to group transactions by month and year
+function groupTransactionsByMonth(flatTransactions) {
+	// acc = accumulator (initial value is an empty object) and transaction is the current value in the array
+	return flatTransactions.reduce((acc, transaction) => {
 		if (transaction.date) {
 			const month =
 				transaction.date.split(" ")[1] +
@@ -46,7 +44,10 @@ const History = ({ transactions, sudoUser }) => {
 		}
 		return acc;
 	}, {});
+}
 
+// Function to sort transactions by date in descending order
+function sortTransactionsByDate(monthSections) {
 	Object.keys(monthSections).forEach((month) => {
 		monthSections[month].sort((a, b) => {
 			const dateA = new Date(a.date);
@@ -54,6 +55,47 @@ const History = ({ transactions, sudoUser }) => {
 			return dateB - dateA;
 		});
 	});
+	return monthSections;
+}
+
+// Function to filter transactions based on the search term and field
+function filterTransactions(flatTransactions, searchTerm, searchField) {
+	return flatTransactions.filter(
+		(transaction) =>
+			// Check if the search field is payer or payee and if the search term is included in the field
+			transaction[searchField] &&
+			transaction[searchField]
+				.toLowerCase()
+				.includes(searchTerm.toLowerCase())
+	);
+}
+
+// Function to group filtered transactions by month and year after filtering
+function groupFilteredTransactionsByMonth(filteredTransactions) {
+	return filteredTransactions.reduce((groups, transaction) => {
+		const date = new Date(transaction.date);
+		// we are using en-US locale but this can be change
+		const month = date.toLocaleString("en-US", {
+			month: "long",
+			year: "numeric",
+		});
+
+		// If the month doesn't exist in the groups object, create an empty array
+		if (!groups[month]) {
+			groups[month] = [];
+		}
+
+		groups[month].push(transaction);
+
+		return groups;
+	}, {}); // initial value is an empty object
+}
+
+// History component
+const History = ({ transactions, sudoUser }) => {
+	// Use the theme hook to get the current theme
+	const theme = useTheme();
+	//console.log("his:", transactions);
 
 	// Add a new state variable for the search term
 	const [searchTerm, setSearchTerm] = useState("");
@@ -71,47 +113,42 @@ const History = ({ transactions, sudoUser }) => {
 		}
 	};
 
+	// Flatten the transactions object
+	const flatTransactions = flattenTransactions(transactions);
+
 	// Filter the transactions based on the search term and field
-	const filteredTransactions = flatTransactions.filter(
-		(transaction) =>
-			transaction[searchField] &&
-			transaction[searchField]
-				.toLowerCase()
-				.includes(searchTerm.toLowerCase())
+	const filteredTransactions = filterTransactions(
+		flatTransactions,
+		searchTerm,
+		searchField
 	);
 
-	//console.log(filteredTransactions);
-
-	// Group the transactions by month
-	const transactionsByMonth = filteredTransactions.reduce(
-		(groups, transaction) => {
-			const date = new Date(transaction.date);
-			const month = date.toLocaleString("en-US", {
-				month: "long",
-				year: "numeric",
-			});
-
-			if (!groups[month]) {
-				groups[month] = [];
-			}
-
-			groups[month].push(transaction);
-
-			return groups;
-		},
-		{}
-	);
+	// Group the filtered transactions by month and year
+	const transactionsByMonth =
+		groupFilteredTransactionsByMonth(filteredTransactions);
 
 	return (
 		<Card
 			sx={{
+				//ai-gen (ChatGPT-4.0, 1)
 				background: theme.palette.background.paper,
 				borderRadius: "16px",
 				color: theme.palette.text.primary,
 				overflow: "hidden",
+				// ai-gen end
 			}}
 		>
-			<CardContent sx={{ maxHeight: "400px", overflowY: "auto" }}>
+			<CardContent
+				sx={{
+					maxHeight: {
+						xs: "auto",
+						sm: "auto",
+						md: "360px",
+						lg: "400px",
+					},
+					overflowY: "auto",
+				}}
+			>
 				<Box
 					display="flex"
 					justifyContent="space-between"
@@ -121,8 +158,10 @@ const History = ({ transactions, sudoUser }) => {
 					<Typography variant="h6" align="left">
 						History
 					</Typography>
-					<Box display="flex" justifyContent="space-between" width="100%">
-						<Box width={200} marginLeft="auto" marginRight={2}>
+
+					<Box display="flex" width="100%" justifyContent={"right"}>
+						<Box width={150} marginRight={2} marginLeft={2}>
+							{/* Search bar */}
 							<TextField
 								fullWidth
 								variant="outlined"
@@ -132,21 +171,29 @@ const History = ({ transactions, sudoUser }) => {
 							/>
 						</Box>
 
-						<ToggleButtonGroup
-							value={searchField}
-							exclusive
-							onChange={handleSearchFieldChange}
-							aria-label="search field"
-						>
-							<ToggleButton value="payer" aria-label="search in payer">
-								Payer
-							</ToggleButton>
-							<ToggleButton value="payee" aria-label="search in payee">
-								Payee
-							</ToggleButton>
-						</ToggleButtonGroup>
+						{/* Dropdown to select search field */}
+						<FormControl>
+							<Select
+								labelId="search-field-label"
+								id="search-field"
+								value={searchField}
+								onChange={handleSearchFieldChange}
+							>
+								<MenuItem value="payer">Payer</MenuItem>
+								<MenuItem value="payee">Payee</MenuItem>
+							</Select>
+						</FormControl>
 					</Box>
 				</Box>
+				{/*This will be the list of transactions by month and year
+				Paper -> will be the container for the list of transactions
+				Accordion -> will be the container for each month and year
+				AccordionDetails -> will be the list of transactions for each month and year
+				List -> will be the list of transactions
+				ListItem -> will be each transaction
+				ListItemText -> will be the text for each transaction
+				*/}
+				{/* ai-gen start (chatGPT 4, 2)*/}
 				<Paper
 					elevation={3}
 					sx={{
@@ -157,6 +204,7 @@ const History = ({ transactions, sudoUser }) => {
 						},
 					}}
 				>
+					{/* ai-gen end */}
 					{Object.keys(transactionsByMonth)
 						.sort((a, b) => new Date(b) - new Date(a))
 						.map((month) => (
@@ -166,19 +214,23 @@ const History = ({ transactions, sudoUser }) => {
 								</AccordionSummary>
 								<AccordionDetails
 									sx={{
+										//ai-gen (ChatGPT-4.0, 1)
 										maxHeight: "200px",
 										overflow: "auto",
 										"&::-webkit-scrollbar": {
 											display: "none",
+											// ai-gen end
 										},
 									}}
 								>
 									<List>
 										{transactionsByMonth[month].map(
 											(transaction, index) => (
+												// ai-gen start (ChatGPT-4.0, 1)
 												<ListItem
 													key={`${transaction.id}-${transaction.amount}-${transaction.date}-${index}`}
 												>
+													{/* ai-gen end */}
 													<ListItemText
 														primary={
 															transaction.payer === sudoUser

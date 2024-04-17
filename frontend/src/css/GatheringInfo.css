@@ -91,21 +91,6 @@
   top: 0;
   font-weight: 400;
 }
-
-
-.image-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr); /* Creates 2 columns */
-    grid-gap: 25px; /* Adjust the gap between images */
-    max-width:900px; /* Or your preferred max width */
-    margin: auto; /* Center the grid horizontally */
-    border-radius: 10px;
-}
-  
-  .image-item {
-    width: 100%; /* Makes images fully responsive within their containers */
-    display: block; /* Removes any unwanted space below the images */
-  }
   
   @keyframes slideInFromLeft {
     from {
@@ -136,3 +121,45 @@
     transform: translateX(-100%);
   }
   
+  .image-wrapper {
+    position: relative;
+  }
+  
+  .image-container {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center; 
+  }
+  
+  .image-container img {
+    width: 200px; 
+    height: 150px; 
+    border-radius: 10px; 
+    margin: 5px; 
+  }
+  
+  .image-message {
+  position: center;
+  color: black;
+  padding: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;  
+  text-decoration: none; /* Remove underline */
+}
+
+a:link{
+  text-decoration: none;
+}
+
+a:visited{
+  text-decoration: none;
+}
+
+a:hover{
+  text-decoration: none;
+}
+
+a:active{
+  text-decoration: none;
+}

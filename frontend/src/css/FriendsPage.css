@@ -1,0 +1,69 @@
+body {
+    margin-top: 20px;
+    background-color: #f4f6f9;
+}
+
+.container {
+    background-color: blanchedalmond;
+}
+
+.card {
+    transition: all 0.5s;
+    border-radius: .1875rem;
+    margin-bottom: 30px;
+    border: 0;
+    display: block;
+    width: 100%;
+    box-shadow: none;
+}
+
+.card .header {
+    padding: 20px;
+    box-shadow: none;
+}
+
+.card .header h2 {
+    font-size: 15px;
+    position: relative;
+}
+
+.card .header h2::before {
+    position: absolute;
+    width: 2px;
+    height: 18px;
+    left: -20px;
+    top: 0;
+    content: '';
+    background: #6572b8;
+}
+
+.card .body {
+    padding: 20px;
+}
+
+.new_friend_list {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 10px;
+}
+
+.new_friend_list .friend-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.new_friend_list .avatar {
+    width: 100px;
+    height: 100px;
+}
+
+.new_friend_list .users_name {
+    margin-top: 5px;
+    text-transform: capitalize;
+    color: #424242;
+}
+
+.new_friend_list .join_date {
+    color: #757575;
+}
