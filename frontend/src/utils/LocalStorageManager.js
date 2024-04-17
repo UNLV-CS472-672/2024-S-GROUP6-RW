@@ -6,7 +6,18 @@ export const saveToLocal = (key, data) => {
 
 export const getFromLocal = (key) => {
     const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : null;
+    if (data !== null) {
+        try {
+            return JSON.parse(data);
+        } catch (e) {
+            console.error("Parsing error in getFromLocal:", e);
+            return null;  
+        }
+    } else {
+        console.log(`No item found with key: ${key}`);
+        return null;  
+    }
+    
 };
 
 export const removeFromLocal = (key) => {
