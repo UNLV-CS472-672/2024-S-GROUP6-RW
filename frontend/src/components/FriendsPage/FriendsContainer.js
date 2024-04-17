@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { Tabs, Tab, Box } from "@mui/material";
 import AddRemoveFriends from "../../components/FriendsPage/AddRemoveFriends";
 import FriendList from "../../components/FriendsPage/BoxFriend";
+import "../../css/FriendsPage.css";
 
 
 //Contains the box for tabs that the user can click on
@@ -13,7 +14,7 @@ function FriendsContainer() {
 	};
 
 	return (
-		<Box //Sets Background color of box area
+		<Box class="container" //Sets Background color of box area
 			sx={{ width: "100%", bgcolor: "background.paper" }}>
 			<Tabs //Sets the names and style for each tab name
 				value={value}
