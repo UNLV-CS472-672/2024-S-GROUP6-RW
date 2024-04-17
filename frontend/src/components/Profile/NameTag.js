@@ -1,13 +1,26 @@
 import { Box, Typography } from "@mui/material";
 
-export default function NameTag({ name }) {
-  const getWidth = () => {
-    return name.length * 2.8 + "vw";
-  };
+export default function NameTag({ name, textGradient }) {
+
+  console.log(textGradient);
+  
+  const handleWidth = () => {
+    if (name.length > 12) {
+      return "3vw";
+    }
+    else if (name.length > 10) {
+      return "3.5vw";
+    } else if (name.length > 9) {
+      return "3.9vw";
+    } else if (name.length > 6) {
+      return "4.5vw";
+    }
+    
+  }
 
   return (
-    <Box style={{ ...styles.nameTag, width: getWidth() }}>
-      <Typography style={styles.text} variant="h2">
+    <Box style={{...styles.nameTag, backgroundImage: `${textGradient}`}}>
+      <Typography style={{...styles.text, fontSize: handleWidth(), lineHeight: handleWidth()}} variant="h2">
         {name}
       </Typography>
     </Box>
@@ -16,20 +29,19 @@ export default function NameTag({ name }) {
 
 const styles = {
   nameTag: {
-    height: "4.5vw",
     position: "absolute",
     color: "inherit",
-    top: "80%",
+    top: "78%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    backgroundColor: "rgba(128, 128, 128, 1)",
-    padding: "0.25vw 0.5vw",
-    borderRadius: "0.5vw",
-    border: "0.3vw solid black",
+    backgroundImage: "linear-gradient(#D3D3D3, white)",
+    padding: "0vw 0.75vw",
+    border: "0.35vw solid black",
   },
 
   text: {
-    fontSize: "3.9vw",
+    fontWeight: "400",
+    fontFamily: 'Radley',
     color: "black",
   },
 };

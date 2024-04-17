@@ -8,6 +8,8 @@ import NameTag from "./NameTag";
 import EditIcon from "@mui/icons-material/Edit";
 import { useTheme } from "@mui/material/styles";
 
+import { useAuth } from "../../auth/AuthContext";
+
 import defaultPic from "../../images/avatars/Terence.jpg";
 import { ReactComponent as DefaultBorder } from "../../images/borders/Default_Border.svg";
 
@@ -66,13 +68,53 @@ export default function ProfileContainer() {
 
   const uploadBanner = (event) => {
     const file = event.target.files[0];
+
     if (file) {
-      const reader = new FileReader(); // User selects a file and is set as the selected banner.
-      reader.onload = () => {
-        const imgData = reader.result;
-        setSelectedBanner({ img: imgData, title: "Custom Picture" });
+      // Check if the file type is an image
+      if (!file.type.startsWith("image/")) {
+        console.log("Please select an image file.");
+        return;
+      }
+
+      // Create an image element to load the image
+      const img = new Image();
+      img.onload = function () {
+        // Create a canvas element
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Calculate the new dimensions to fit within 500x500 pixels
+        let newWidth = this.width;
+        let newHeight = this.height;
+        if (newWidth > 800 || newHeight > 200) {
+          const aspectRatio = newWidth / newHeight;
+          if (newWidth > newHeight) {
+            newWidth = 800;
+            newHeight = Math.floor(800 / aspectRatio);
+          } else {
+            newHeight = 200;
+            newWidth = Math.floor(200 * aspectRatio);
+          }
+        }
+
+        // Resize the image
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+        // Get the resized image data
+        var resizedImageData = canvas.toDataURL(file.type);
+        // Convert Data URL to Blob
+        const resizedImageBlob = new Blob([resizedImageData], {
+          type: file.type,
+        });
+        console.log("Banner size: " + resizedImageBlob.size + " bytes");
+
+        setSelectedBanner({ img: resizedImageData, title: "Custom Picture" });
       };
-      reader.readAsDataURL(file);
+
+      // Load the image
+      img.src = URL.createObjectURL(file);
     }
   };
 
