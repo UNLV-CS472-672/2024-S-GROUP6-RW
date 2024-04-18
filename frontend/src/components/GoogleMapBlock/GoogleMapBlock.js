@@ -1,5 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import ActComponent from '../../components/Activities/Activities';
+import '../../css/MapPageTemp.css'; // Import the CSS file
+
 
 function GoogleMapBlock({
   width = "400px",
@@ -128,6 +131,7 @@ function GoogleMapBlock({
     >
       {/* Child components, such as markers, info windows, etc. */}
     </GoogleMap>
+    
   ) : (
     <></>
   );
