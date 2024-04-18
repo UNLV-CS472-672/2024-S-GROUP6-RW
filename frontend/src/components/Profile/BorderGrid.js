@@ -17,7 +17,7 @@ export default function BorderGrid({ borders, selectedBorder }) {
         container
         xs={12}
         justifyContent="left"
-        style={{ display: "flex", width: "20vw" }}
+        style={styles.borderGrid}
       >
         {borders.map((border, index) => (
           <Grid
@@ -25,18 +25,11 @@ export default function BorderGrid({ borders, selectedBorder }) {
             xs={3}
             justifyContent="left"
             key={index}
-            style={{ width: "50vw" }}
           >
             <Avatar
               src={border.preview}
               alt={border.title}
-              style={{
-                width: "3vw",
-                height: "3vw",
-                margin: "1vw",
-                cursor: "pointer",
-                border: "0.1vw solid black",
-              }}
+              style={styles.border}
               onClick={() => selectBorder(border.border)}
             />
           </Grid>
@@ -44,4 +37,18 @@ export default function BorderGrid({ borders, selectedBorder }) {
       </Grid>
     </Box>
   );
+}
+
+const styles = {
+  borderGrid: {
+    display: "flex",
+    width: "100%",
+  },
+  border: {
+    width: "5vw",
+    height: "5vw",
+    margin: "1vw",
+    cursor: "pointer",
+    border: "0.1vw solid black",
+  },
 }

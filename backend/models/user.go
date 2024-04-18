@@ -105,6 +105,7 @@ func (u *User) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	return nil
 }
 
+// TODO: Verify integrity of mock document retrieval
 func (u *User) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	*u = User{
 		FirstName: u.FirstName,

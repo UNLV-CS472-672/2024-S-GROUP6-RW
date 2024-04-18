@@ -92,7 +92,7 @@ function AppContent() {
         <Route path="/my-trips" element={<MyTripsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/:username" element={<ProfilePage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/poll" element={<PollPage />} />

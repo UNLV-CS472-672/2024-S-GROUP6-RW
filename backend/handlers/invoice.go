@@ -38,20 +38,22 @@ func CreateInvoiceHandler(c *gin.Context) {
 func GetAllInvoicesHandler(c *gin.Context) {
 	fmt.Printf("%s | Attempting to get all invoices.\n", time.Now())
 
-	var trip models.Trip
+	var expense models.Expense
 
-	if !models.BindData(c, &trip) {
+	if !models.BindData(c, &expense) {
 		return // Failed to bind data to trip
 	}
 
 	database := db.GetMongoDatabase()
 
-	invoiceList, err := business.GetAllInvoices(trip, database)
+	invoiceList, err := business.GetAllInvoices(expense, database)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	// TODO: select relavent information from the invoices to return to client
 
 	fmt.Println("Success.")
 
@@ -76,6 +78,8 @@ func GetInvoiceHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	// TODO: select relavent information from the invoice to return to client
 
 	fmt.Println("Success.")
 

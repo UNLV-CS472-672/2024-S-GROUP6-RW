@@ -29,6 +29,8 @@ func GetUserHandler(c *gin.Context) {
 		return
 	}
 
+	// TODO: select relavent information from the user to return to client
+
 	fmt.Println("Success.")
 
 	// Return OK status to client
