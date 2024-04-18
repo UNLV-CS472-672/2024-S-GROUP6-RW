@@ -12,7 +12,7 @@ import (
 
 func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	// Acquire user from database
-	document, err := database["UserDetails"].FindDocument(bson.M{"Username": trip.Username}, "User")
+	document, err := database["UserDetails"].FindDocument(bson.M{"Username": trip.TripOwner}, "User")
 
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	}
 
 	// Check that the trip doesn't already exist
-	_, err = database["TripDetails"].FindDocument(bson.M{"TripOwnerID": tripOwner.ID, "TripTitle": trip.TripTitle}, "Trip")
+	_, err = database["TripDetails"].FindDocument(bson.M{"TripOwnerID": tripOwner.ID, "Title": trip.Title}, "Trip")
 
 	if err == nil {
 		fmt.Println("trip already exists")
@@ -36,8 +36,10 @@ func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	// Create new trip
 	newTrip := &models.Trip{
 		TripOwnerID:  tripOwner.ID,
-		TripTitle:    trip.TripTitle,
+		Title:        trip.Title,
 		LocationName: trip.LocationName,
+		StartDate:    trip.StartDate,
+		EndDate:      trip.EndDate,
 		MemberIDs:    []primitive.ObjectID{tripOwner.ID},
 		ActivityIDs:  make([]primitive.ObjectID, 0),
 		ExpenseIDs:   make([]primitive.ObjectID, 0),
@@ -119,7 +121,7 @@ func GetAllTrips(user models.User, database db.Database) ([]*models.Trip, error)
 
 func GetTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	// Acquire user from database
-	document, err := database["UserDetails"].FindDocument(bson.M{"Username": trip.Username}, "User")
+	document, err := database["UserDetails"].FindDocument(bson.M{"Username": trip.TripOwner}, "User")
 
 	if err != nil {
 		return nil, err
@@ -132,7 +134,7 @@ func GetTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	}
 
 	// Acquire trip from database
-	document, err = database["TripDetails"].FindDocument(bson.M{"TripOwnerID": existingUser.ID, "TripTitle": trip.TripTitle}, "Trip")
+	document, err = database["TripDetails"].FindDocument(bson.M{"TripOwnerID": existingUser.ID, "Title": trip.Title}, "Trip")
 
 	if err != nil {
 		return nil, err
@@ -148,28 +150,10 @@ func GetTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 }
 
 func EditTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
-	document, err := database["UserDetails"].FindDocument(bson.M{"Username": trip.Username}, "User")
+	existingTrip, err := GetTrip(trip, database)
 
 	if err != nil {
 		return nil, err
-	}
-
-	existingUser, ok := document.(*models.User)
-
-	if !ok {
-		return nil, errors.New("failed to convert model to User")
-	}
-
-	document, err = database["TripDetails"].FindDocument(bson.M{"TripOwnerID": existingUser.ID, "TripTitle": trip.TripTitle}, "Trip")
-
-	if err != nil {
-		return nil, err
-	}
-
-	existingTrip, ok := document.(*models.Trip)
-
-	if !ok {
-		return nil, errors.New("failed to convert model to Trip")
 	}
 
 	// Collect updates to trip
@@ -177,13 +161,14 @@ func EditTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 
 	for _, entry := range trip.Modifications {
 		switch entry.FieldName {
-		case "TripOwner":
+		case "TripOwnerUsername":
 			username, ok := entry.Data.(string)
 
 			if !ok {
 				return nil, errors.New("failed to convert username to string")
 			}
 
+			// Acquire reference to owner
 			document, err := database["UserDetails"].FindDocument(bson.M{"Username": username}, "User")
 
 			if err != nil {
@@ -197,20 +182,14 @@ func EditTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 			}
 
 			update["TripOwnerID"] = existingUser.ID
-		case "TripTitle":
+		case "Title":
 			title, ok := entry.Data.(string)
 
 			if !ok {
 				return nil, errors.New("failed to convert title to string")
 			}
 
-			_, err := database["TripDetails"].FindDocument(bson.M{"TripOwnerID": existingUser.ID, "TripTitle": title}, "Trip")
-
-			if err == nil {
-				return nil, errors.New("trip of the same title already exists")
-			}
-
-			update["TripTitle"] = title
+			update["Title"] = title
 		case "LocationName":
 			location, ok := entry.Data.(string)
 
@@ -300,14 +279,14 @@ func EditTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 			// y, m, d, tz := 0, 0, 0, time.Local
 			// newStart := primitive.NewDateTimeFromTime(time.Date(y, time.Month(m), d, 0, 0, 0, 0, tz))
 			// newEnd   := primitive.NewDateTimeFromTime(time.Date(y, time.Month(m), d, 0, 0, 0, 0, tz))
-
-			// TODO: ensure start date is before end date
 		default:
 			return nil, errors.New("invalid field provided: " + entry.FieldName)
 		}
 	}
 
-	document, err = database["TripDetails"].UpdateDocument(bson.M{"_id": existingTrip.ID}, update, "Trip")
+	// TODO: verify that edits to trip are valid before attempting to modify existing trip
+
+	document, err := database["TripDetails"].UpdateDocument(bson.M{"_id": existingTrip.ID}, update, "Trip")
 
 	if err != nil {
 		return nil, err
@@ -323,35 +302,15 @@ func EditTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 }
 
 func DeleteTrip(trip models.Trip, database db.Database) error {
-	// Acquire trip owner from database
-	document, err := database["UserDetails"].FindDocument(bson.M{"Username": trip.Username}, "User")
+	existingTrip, err := GetTrip(trip, database)
 
 	if err != nil {
 		return err
-	}
-
-	existingUser, ok := document.(*models.User)
-
-	if !ok {
-		return errors.New("failed to convert document to User")
-	}
-
-	// Acquire trip from database
-	document, err = database["TripDetails"].FindDocument(bson.M{"TripOwnerID": existingUser.ID, "TripTitle": trip.TripTitle}, "Trip")
-
-	if err != nil {
-		return err
-	}
-
-	existingTrip, ok := document.(*models.Trip)
-
-	if !ok {
-		return errors.New("failed to convert model to Trip")
 	}
 
 	// Remove reference to trip from members of trip
 	for _, memberID := range existingTrip.MemberIDs {
-		if existingUser.ID != memberID {
+		if existingTrip.TripOwnerID != memberID {
 			// Acquire reference to member
 			document, err := database["UserDetails"].FindDocument(bson.M{"_id": memberID}, "User")
 
@@ -478,5 +437,5 @@ func DeleteTrip(trip models.Trip, database db.Database) error {
 		}
 	}
 
-	return nil
+	return database["TripDetails"].DeleteDocument(bson.M{"_id": existingTrip.ID}, "Trip")
 }

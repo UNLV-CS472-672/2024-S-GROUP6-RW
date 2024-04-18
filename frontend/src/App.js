@@ -17,12 +17,13 @@ import LogoutPage from "./pages/Auth_Pages/LogoutPage";
 import FriendsPage from "./pages/friends/FriendsPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import AccountPage from "./pages/account/AccountPage";
+import PollPage from "./pages/getting_started/PollPage";
 
 // import nav components
 import NavBar from "./components/NavBar/NavBar";
 
 import ToggleColorMode, {
-	ColorModeContext,
+  ColorModeContext,
 } from "./components/NavBar/ToggleTheme";
 
 import SignInDialog from "./components/login-register/SignInDialog";
@@ -55,50 +56,49 @@ const theme = createTheme({
 });
 
 function App() {
-
-	return (
+  return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-		  <AuthProvider>
-			  <ToggleColorMode>
-				  <AppContent />
-			  </ToggleColorMode>
-		  </AuthProvider>
+      <AuthProvider>
+        <ToggleColorMode>
+          <AppContent />
+        </ToggleColorMode>
+      </AuthProvider>
     </ThemeProvider>
-	);
+  );
 }
 
 function AppContent() {
-	const colorMode = useContext(ColorModeContext);
-	const theme = useTheme();
-	const [openSignIn, setOpenSignIn] = useState(false);
+  const colorMode = useContext(ColorModeContext);
+  const theme = useTheme();
+  const [openSignIn, setOpenSignIn] = useState(false);
 
-
-	// Apply the background color to the body element
-	useEffect(() => {
-		// Apply the background color to the body element
-		document.body.style.backgroundColor = theme.palette.background.default;
-	}, [theme.palette.background.default]);
-	return (
-			<div className="App" style={{ color: theme.palette.text.primary }}>
-				<NavBar />
-				<Routes>
-          <Route path="/" element={<GettingStartedPage />} />
-          <Route path="/prefselection" element={<PrefSelectionPage />} />
-          <Route path="/map" element={<MapPage />} />
-          <Route path="/gatheringinfo" element={<GatheringInfoPage />} />
-          <Route path="/itinerary" element={<ItineraryPage />} />
-          <Route path="/expenses" element={<ExpensesPage />} />
-          <Route path="/expensesform" element={<ExpensesPage />} />
-          <Route path="/my-trips" element={<MyTripsPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/friends" element={<FriendsPage />} />
-          <Route path="/logout" element={<LogoutPage />} />
-        </Routes>
-			</div>
-	); 
+  // Apply the background color to the body element
+  useEffect(() => {
+    // Apply the background color to the body element
+    document.body.style.backgroundColor = theme.palette.background.default;
+  }, [theme.palette.background.default]);
+  return (
+    <div className="App" style={{ color: theme.palette.text.primary }}>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<GettingStartedPage />} />
+        <Route path="/prefselection" element={<PrefSelectionPage />} />
+        <Route path="/map" element={<MapPage />} />
+        <Route path="/gatheringinfo" element={<GatheringInfoPage />} />
+        <Route path="/itinerary" element={<ItineraryPage />} />
+        <Route path="/expenses" element={<ExpensesPage />} />
+        <Route path="/expensesform" element={<ExpensesPage />} />
+        <Route path="/my-trips" element={<MyTripsPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/profile/:username" element={<ProfilePage />} />
+        <Route path="/friends" element={<FriendsPage />} />
+        <Route path="/logout" element={<LogoutPage />} />
+        <Route path="/poll" element={<PollPage />} />
+      </Routes>
+    </div>
+  );
 }
 
 export default App;

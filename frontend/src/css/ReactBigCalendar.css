@@ -1,0 +1,14 @@
+.rbc-header {
+    font-size: x-large;
+}
+
+/* For the Whole Tool Bar */
+.rbc-toolbar {
+    padding: 10px;
+}
+
+/*For Date label on calendar*/
+.rbc-toolbar-label { 
+    font-size: 35px;
+    font-weight: 500;
+}

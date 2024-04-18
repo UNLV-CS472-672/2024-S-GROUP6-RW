@@ -57,6 +57,7 @@ func (p *Profile) GetMongoDocument(coll *MongoCollection, filter bson.M) error {
 	return nil
 }
 
+// TODO: Verify integrity of mock document retrieval
 func (p *Profile) GetMockDocument(coll *MockCollection, filter bson.M) error {
 	*p = Profile{
 		Modifications: p.Modifications,

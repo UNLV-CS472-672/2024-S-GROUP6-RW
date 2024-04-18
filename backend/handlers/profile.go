@@ -20,6 +20,7 @@ func GetProfileHandler(c *gin.Context) {
 		return // Failed to bind data to user. Exit handler
 	}
 
+
 	database := db.GetMongoDatabase()
 
 	profileResult, err := business.GetProfile(profile, database)
@@ -28,6 +29,8 @@ func GetProfileHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	// TODO: select relavent information from the profile to return to client
 
 	fmt.Println("Success.")
 
