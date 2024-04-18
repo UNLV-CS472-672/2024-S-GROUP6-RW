@@ -6,16 +6,16 @@ export const saveToLocal = (key, data) => {
 
 export const getFromLocal = (key) => {
     const data = localStorage.getItem(key);
-    if (data !== null) {
+    if (data !== null) { //checks if data has been assigned a value yet
         try {
             return JSON.parse(data);
-        } catch (e) {
+        } catch (e) { 
             console.error("Parsing error in getFromLocal:", e);
-            return null;  
+            return null;  //return null to prevent undefined value
         }
     } else {
         console.log(`No item found with key: ${key}`);
-        return null;  
+        return null;  //return null to prevent undefined value
     }
     
 };
