@@ -114,8 +114,8 @@ const EditView = ({ day, userActivities, onUpdatedActivities, onClickCloseButton
 
       //Reset states
       setCreateTitle("");
-      setCreateStartTime(null);
-      setCreateEndTime(null);
+      setCreateStartTime(dayjs(dayObj));
+      setCreateEndTime(dayjs(dayObj));
       setCreateLocation("");
       setCreateDescription("");
     } else {
