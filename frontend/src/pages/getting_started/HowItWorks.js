@@ -6,6 +6,7 @@ import { useLottie, useLottieInteractivity } from "lottie-react";
 import Animation_share from "../../components/GettingStarted/Animation_share.json";
 import Animation_car from "../../components/GettingStarted/Animation_car.json";
 import Animation_directions from "../../components/GettingStarted/Animation_directions.json";
+import Animation_calendar from "../../components/GettingStarted/Animation_calendar.json";
 
 // Syncs animation with scroll/cursor (vertical)
 const CursorVerticalSync = ({ animationName }) => {
@@ -89,14 +90,14 @@ function HowItWorks() {
               Choose your dates
             </h1>
             <div className="Animation_1">
-            <CursorVerticalSync animationName={Animation_share} />
+            <CursorVerticalSync animationName={Animation_calendar} />
             </div>
         </div>
 
         {/* Step 3: Get ready for your trip */}
         <div className="animation-container-2">
           <h1>
-            Personalize your experience
+            Personalize your group experience
           </h1>
           <div className="Animation_1">
           <CursorVerticalSync animationName={Animation_share} />
@@ -112,8 +113,6 @@ function HowItWorks() {
             Ready to roll? Summon your crew
           </h1>
         </div>
-
-
       </div>
     </div>
   )
