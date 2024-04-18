@@ -8,6 +8,8 @@ import Animation_car from "../../components/GettingStarted/Animation_car.json";
 import Animation_directions from "../../components/GettingStarted/Animation_directions.json";
 import Animation_calendar from "../../components/GettingStarted/Animation_calendar.json";
 
+import "../../css/HowItWorks.css"
+
 // Syncs animation with scroll/cursor (vertical)
 const CursorVerticalSync = ({ animationName }) => {
   const style = {
@@ -67,8 +69,8 @@ const CursorHorizontalSync = ({ animationName }) => {
 
 function HowItWorks() {
   return (
-    <div>
-			<h1> 
+    <div className='howitworks-container'>
+			<h1 > 
 				HOW IT WORKS
 			</h1>
 
@@ -79,16 +81,16 @@ function HowItWorks() {
           <div className="Animation_1">
             <CursorVerticalSync animationName={Animation_directions} />
           </div>
-          <h1>
+          <p>
             Start your adventure by entering your desired destination
-          </h1>
+          </p>
         </div>
 
         {/* Step 2: Share with friends */}
         <div className="animation-container-2">
-            <h1>
+            <p>
               Choose your dates
-            </h1>
+            </p>
             <div className="Animation_1">
             <CursorVerticalSync animationName={Animation_calendar} />
             </div>
@@ -96,9 +98,9 @@ function HowItWorks() {
 
         {/* Step 3: Get ready for your trip */}
         <div className="animation-container-2">
-          <h1>
+          <p>
             Personalize your group experience
-          </h1>
+          </p>
           <div className="Animation_1">
           <CursorVerticalSync animationName={Animation_share} />
           </div>
@@ -109,9 +111,9 @@ function HowItWorks() {
           <div className="Animation_1">
             <CursorHorizontalSync animationName={Animation_car} />
           </div>
-          <h1>
+          <p>
             Ready to roll? Summon your crew
-          </h1>
+          </p>
         </div>
       </div>
     </div>
