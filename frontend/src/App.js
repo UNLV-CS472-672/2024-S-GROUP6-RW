@@ -24,7 +24,7 @@ import HowItWorks from "./pages/getting_started/HowItWorks";
 import NavBar from "./components/NavBar/NavBar";
 
 import ToggleColorMode, {
-	ColorModeContext,
+  ColorModeContext,
 } from "./components/NavBar/ToggleTheme";
 
 import SignInDialog from "./components/login-register/SignInDialog";
@@ -57,17 +57,16 @@ const theme = createTheme({
 });
 
 function App() {
-
-	return (
+  return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-		  <AuthProvider>
-			  <ToggleColorMode>
-				  <AppContent />
-			  </ToggleColorMode>
-		  </AuthProvider>
+      <AuthProvider>
+        <ToggleColorMode>
+          <AppContent />
+        </ToggleColorMode>
+      </AuthProvider>
     </ThemeProvider>
-	);
+  );
 }
 
 function AppContent() {

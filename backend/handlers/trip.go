@@ -62,7 +62,7 @@ func GetAllTripsHandler(c *gin.Context) {
 		return
 	}
 
-	// TODO: Replace ID content in each trip textual data from respective documents
+	// TODO: select relavent information from the trips to return to client
 
 	fmt.Println("Success.")
 
@@ -89,6 +89,8 @@ func GetTripHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	// TODO: select relavent information from the trip to return to client
 
 	fmt.Println("Success.")
 

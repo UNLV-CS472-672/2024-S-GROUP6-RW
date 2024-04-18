@@ -32,6 +32,8 @@
     "react-datepicker": "^6.6.0",
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.6",
+    "react-native": "^0.73.6",
+    "react-native-web": "^0.19.10",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.22.0",
     "react-scripts": "^5.0.1",

@@ -5,7 +5,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TextField from "@mui/material/TextField";
-import { Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs'; 
 import "../../css/DatePicker.css"
@@ -22,26 +21,23 @@ const DatePickerComponent = ({ startDateKey, endDateKey }) => {
   //For onclick start date
   const handleStartDateChange = (date) => {
     setStartDate(date);
+    localStorage.setItem('startDate', date?.toISOString());
+    console.log(startDate);
   };
 
   //For onclick end date
   const handleEndDateChange = (date) => {
     setEndDate(date);
+    localStorage.setItem('endDate', date?.toISOString());
   };
 
-  const isDateSelectionComplete = startDate && endDate && startDate <= endDate;
-
+  
   const handleComplete = () => {
-    if (isDateSelectionComplete) {
+    if (startDate && endDate && startDate <= endDate) {
       navigate('/prefselection');
     }
   };
 
-  // Function to calculate the number of days between two dates
-  const calculateNumberOfDays = (startDate, endDate) => {
-    const oneDay = 24 * 60 * 60 * 1000;
-    return Math.round(Math.abs((startDate - endDate) / oneDay)) + 1;
-  };
 
 
   // Effect to save start date to local storage

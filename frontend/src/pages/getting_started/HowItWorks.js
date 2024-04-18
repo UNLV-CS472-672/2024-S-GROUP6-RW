@@ -79,28 +79,41 @@ function HowItWorks() {
             <CursorVerticalSync animationName={Animation_directions} />
           </div>
           <h1>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Start your adventure by entering your desired destination
           </h1>
         </div>
 
         {/* Step 2: Share with friends */}
         <div className="animation-container-2">
-            <h1>nec dui nunc mattis enim ut</h1>
+            <h1>
+              Choose your dates
+            </h1>
             <div className="Animation_1">
             <CursorVerticalSync animationName={Animation_share} />
             </div>
         </div>
 
         {/* Step 3: Get ready for your trip */}
+        <div className="animation-container-2">
+          <h1>
+            Personalize your experience
+          </h1>
+          <div className="Animation_1">
+          <CursorVerticalSync animationName={Animation_share} />
+          </div>
+        </div>
+
+        {/* Step 4: Share with friends */}
         <div className="animation-container">
           <div className="Animation_1">
             <CursorHorizontalSync animationName={Animation_car} />
           </div>
           <h1>
-            mattis pellentesque id nibh tortor id aliquet lectus proin nibh
+            Ready to roll? Summon your crew
           </h1>
         </div>
+
+
       </div>
     </div>
   )
