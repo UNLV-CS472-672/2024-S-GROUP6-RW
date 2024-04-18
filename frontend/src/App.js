@@ -70,38 +70,39 @@ function App() {
 }
 
 function AppContent() {
-	const colorMode = useContext(ColorModeContext);
-	const theme = useTheme();
-	const [openSignIn, setOpenSignIn] = useState(false);
+  const colorMode = useContext(ColorModeContext);
+  const theme = useTheme();
+  const [openSignIn, setOpenSignIn] = useState(false);
 
 
-	// Apply the background color to the body element
-	useEffect(() => {
-		// Apply the background color to the body element
-		document.body.style.backgroundColor = theme.palette.background.default;
-	}, [theme.palette.background.default]);
-	return (
-			<div className="App" style={{ color: theme.palette.text.primary }}>
-				<NavBar />
-				<Routes>
-          <Route path="/" element={<GettingStartedPage />} />
-          <Route path="/prefselection" element={<PrefSelectionPage />} />
-          <Route path="/map" element={<MapPage />} />
-          <Route path="/gatheringinfo" element={<GatheringInfoPage />} />
-          <Route path="/itinerary" element={<ItineraryPage />} />
-          <Route path="/expenses" element={<ExpensesPage />} />
-          <Route path="/expensesform" element={<ExpensesPage />} />
-          <Route path="/my-trips" element={<MyTripsPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/friends" element={<FriendsPage />} />
-          <Route path="/logout" element={<LogoutPage />} />
-          <Route path="/about-us" element={<AboutUs/>} />
-          <Route path="/how-it-works" element={<HowItWorks />} />
-        </Routes>
-			</div>
-	); 
+  // Apply the background color to the body element
+  useEffect(() => {
+    // Apply the background color to the body element
+    document.body.style.backgroundColor = theme.palette.background.default;
+  }, [theme.palette.background.default]);
+  return (
+    <div className="App" style={{ color: theme.palette.text.primary }}>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<GettingStartedPage />} />
+        <Route path="/prefselection" element={<PrefSelectionPage />} />
+        <Route path="/map" element={<MapPage />} />
+        <Route path="/gatheringinfo" element={<GatheringInfoPage />} />
+        <Route path="/itinerary" element={<ItineraryPage />} />
+        <Route path="/expenses" element={<ExpensesPage />} />
+        <Route path="/expensesform" element={<ExpensesPage />} />
+        <Route path="/my-trips" element={<MyTripsPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/profile/:username" element={<ProfilePage />} />
+        <Route path="/friends" element={<FriendsPage />} />
+        <Route path="/logout" element={<LogoutPage />} />
+        <Route path="/about-us" element={<AboutUs/>} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
+      </Routes>
+    </div>
+  );
+
 }
 
 export default App;
