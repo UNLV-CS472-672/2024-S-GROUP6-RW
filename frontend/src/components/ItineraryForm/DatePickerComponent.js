@@ -21,14 +21,16 @@ const DatePickerComponent = ({ startDateKey, endDateKey }) => {
   //For onclick start date
   const handleStartDateChange = (date) => {
     setStartDate(date);
-    localStorage.setItem('startDate', date?.toISOString());
+    //localStorage.setItem('startDate', date?.toISOString());
+    saveToLocal('startDate', date?.toISOString());
     console.log(startDate);
   };
 
   //For onclick end date
   const handleEndDateChange = (date) => {
     setEndDate(date);
-    localStorage.setItem('endDate', date?.toISOString());
+    //localStorage.setItem('endDate', date?.toISOString());
+    saveToLocal('endDate', date?.toISOString());
   };
 
   
