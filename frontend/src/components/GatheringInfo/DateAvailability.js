@@ -45,7 +45,10 @@ const DateAvailability = () => {
     const end = moment(endDate).endOf("day").toDate(); // Set the end of the day
 
     // Ensure start and end dates are valid
-    if (moment(start).isBefore(moment()) || moment(end).isBefore(moment())) {
+    if (
+      moment(start).isBefore(moment().startOf("day")) ||
+      moment(end).isBefore(moment().startOf("day"))
+    ) {
       return;
     }
 
@@ -247,9 +250,10 @@ const DateAvailability = () => {
         <input
           type="date"
           value={endDate}
-          min={startDate || moment().format("YYYY-MM-DD")}
+          min={startDate ? startDate : moment().format("YYYY-MM-DD")}
           onChange={(e) => setEndDate(e.target.value)}
         />
+
         <input
           type="text"
           value={name}
