@@ -27,11 +27,11 @@ import { deepPurple } from '@mui/material/colors'
 const currTrip = [
   {
     url: "mchouse.jpg",
-    title: "ur moms house",
+    Title: "ur moms house",
     width: "50%",
     height: "50%",
-    location: "ur house",
-    date: "June 10-12, 2024",
+    LocationName: "ur house",
+    StartDate: "June 10-12, 2024",
     itinerary: "Itinerary: \n Explore the city \n Visit the musuem",
   },
 ];
@@ -40,47 +40,47 @@ const currTrip = [
 const pastTrip = [
   {
     url: "/test.jpg",
-    title: "Las Vegas",
+    Title: "Las Vegas",
     width: "50%",
     height: "50%",
-    location: "Las Vegas, Nevada",
-    date: "Dec 30, 2023 - Jan 2, 2024 ",
+    LocationName: "Las Vegas, Nevada",
+    StartDate: "Dec 30, 2023 - Jan 2, 2024 ",
     itinerary: "Itinerary: \n Visit Fremont Street \n Go to Mob Musuem \n Drive Through Red Rock Canyon",
   },
   {
     url: "hobbithome.jpg",
-    title: "New Zealand",
+    Title: "New Zealand",
     width: "50%",
     height: "50%",
-    location: "Matamata, New Zealand",
-    date: "Nov 2 - 12 2023",
+    LocationName: "Matamata, New Zealand",
+    StartDate: "Nov 2 - 12 2023",
     itinerary: "Itinerary: \n Walk through Hobbinton Movie Set \n Waitomo Caves \n  Nelson - Greymouth \n Fox Glacier - Wanaka",
   },
   {
     url: "seoul.jpg",
-    title: "South Korea",
+    Title: "South Korea",
     width: "50%",
     height: "50%",
-    location: "Seoul, South Korea",
-    date: "Oct 14 - 29, 2023",
+    LocationName: "Seoul, South Korea",
+    StartDate: "Oct 14 - 29, 2023",
     itinerary: "Itinerary: \n Seoul \n Busan \n Jeju Island ",
   },
   {
     url: "tokyo.jpg",
-    title: "Japan",
+    Title: "Japan",
     width: "50%",
     height: "50%",
-    location: "Tokyo, Japan",
-    date: "Sep 29- Oct 13, 2023",
+    LocationName: "Tokyo, Japan",
+    StartDate: "Sep 29- Oct 13, 2023",
     itinerary: "Itinerary: \n Fushimi Inari-taisha Shrine \n Dotombori District \n Osaka\nDay trip to Mount Fuji \n",
   },
   {
     url: "paris.jpg",
-    title: "France",
+    Title: "France",
     width: "50%",
     height: "50%",
-    location: "Paris, France",
-    date: "Aug 2-8, 2023",
+    LocationName: "Paris, France",
+    StartDate: "Aug 2-8, 2023",
     itinerary: "Itinerary: \n Visit Eiffel Tower and Louvre \n Breizh Cafe \n Nice, France \n ",
   },
 ];
@@ -258,16 +258,16 @@ export default function TripDropDown() {
                             component="img"
                             height="180"
                             image={trip.url}
-                            alt={trip.title}
+                            alt={trip.Title}
                           />
                           {/* Display location and date of the trip underneath the photo*/}
                           <div className='text-container'>
                             <Typography variant="subtitle2" style={{ padding: '8px' }}>
-                              {trip.location}
+                              {trip.LocationName}
                             </Typography>
 
                             <Typography variant="subtitle2" style={{ padding: '8px' }}>
-                              {trip.date}
+                              {trip.StartDate}
                             </Typography>
                           </div>
 
@@ -292,7 +292,7 @@ export default function TripDropDown() {
                 {/*Displays image and itinerary when image is clicked */}
                 <img
                   src={selectedImage && selectedImage.url} 
-                  alt={selectedImage && selectedImage.title} 
+                  alt={selectedImage && selectedImage.Title} 
                   style={{ width: '100%', height: 'auto' }} 
                 />
                 
@@ -327,16 +327,16 @@ export default function TripDropDown() {
                             component="img"
                             height="180"
                             image={trip.url}
-                            alt={trip.title}
+                            alt={trip.Title}
                           />
 
                            {/* Display location and date of the trip underneath the photo*/}
                           <div className='text-container'>
                            <Typography variant="subtitle2" style={{ padding: '8px' }}>
-                             {trip.location}
+                             {trip.LocationName}
                             </Typography>
                             <Typography variant="subtitle2" style={{ padding: '8px' }}>
-                              {trip.date}
+                              {trip.StartDate}
                             </Typography>
                           </div>
                         </div>
@@ -360,7 +360,7 @@ export default function TripDropDown() {
                 {/*Displays the image and itinerary */}
                 <img 
                   src={selectedImage && selectedImage.url} 
-                  alt={selectedImage && selectedImage.title} 
+                  alt={selectedImage && selectedImage.Title} 
                   style={{ width: '100%', height: 'auto' }} 
                 />
                   
