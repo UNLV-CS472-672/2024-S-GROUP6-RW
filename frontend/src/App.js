@@ -17,6 +17,7 @@ import LogoutPage from "./pages/Auth_Pages/LogoutPage";
 import FriendsPage from "./pages/friends/FriendsPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import AccountPage from "./pages/account/AccountPage";
+import PollPage from "./pages/getting_started/PollPage";
 
 // import nav components
 import NavBar from "./components/NavBar/NavBar";
@@ -94,6 +95,7 @@ function AppContent() {
         <Route path="/profile/:username" element={<ProfilePage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/logout" element={<LogoutPage />} />
+        <Route path="/poll" element={<PollPage />} />
       </Routes>
     </div>
   );
