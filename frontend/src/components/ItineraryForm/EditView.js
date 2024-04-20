@@ -63,6 +63,10 @@ const EditView = ({ day, userActivities, onUpdatedActivities, onClickCloseButton
 
   const handleCreateEventDialogClose = () => {
     setShowCreateEventDialog(false);
+    //Reset States
+    setCreateTitle("");
+    setCreateLocation("");
+    setCreateDescription("");
   }
 
   const handleSave = () => {
