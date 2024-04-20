@@ -194,14 +194,17 @@ const EditView = ({
           </div>
           {selectedActivity && (
             <div>
-              <FormControl variant="standard">
-                <InputLabel>Title</InputLabel>
-                <Input
-                  label="Enter Title"
-                  defaultValue={selectedActivity.title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </FormControl>
+              <div className="activity-titleform-div">
+                <FormControl variant="standard">
+                  <InputLabel>Title</InputLabel>
+                  <Input
+                    className="activity-title-input"
+                    label="Enter Title"
+                    defaultValue={selectedActivity.title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </FormControl>
+              </div>
               {/* Other event details */}
               <div className="start-end-timepicker">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -240,7 +243,7 @@ const EditView = ({
               variant="standard"
             >
               <TextField
-                className="activity-title-textfield"
+                className="activity-title-input"
                 label="Title"
                 variant="standard"
                 value={createTitle}
