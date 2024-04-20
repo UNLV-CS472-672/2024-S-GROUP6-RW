@@ -1,14 +1,71 @@
-.rbc-header {
-    font-size: x-large;
+.calendar-div {
+  display: flex;
+  justify-content: center;
+}
+
+/*Change height to 90vh*/
+.big-calendar {
+  height: 80vh;
+  width: 95vw;
+  /* font-family: Arial, Helvetica, sans-serif; */
 }
 
 /* For the Whole Tool Bar */
 .rbc-toolbar {
-    padding: 10px;
+  padding: 10px;
 }
 
 /*For Date label on calendar*/
-.rbc-toolbar-label { 
-    font-size: 35px;
+.rbc-toolbar-label {
+  font-size: 35px;
+  font-weight: 700;
+}
+
+/*For Today, Back, Next Button*/
+/* .rbc-btn-group {
+    visibility: hidden;
+} */
+
+/*Week View */
+
+/*Header of dates*/
+.rbc-header {
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rbc-time-header-cell {
+  height: 36px;
+}
+
+/*Today's label*/
+.rbc-header.rbc-today {
+  background-color: #17405d;
+  color: white;
+}
+
+.rbc-time-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: 500;
+}
+
+.rbc-label {
+    font-size: 15x;
+}
+
+/*Start time to end time label*/
+.rbc-event-label {
+    display: none !important;
+}
+
+.rbc-event-content {
+    /* background-color: aquamarine !important; */
+}
+
+.rbc-events-container {
+    width: 100% !important;
 }
