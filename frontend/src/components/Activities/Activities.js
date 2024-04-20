@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import '../../css/PopUp.css'
 import '../../css/closeButton.css'
 import StarRatings from 'react-star-ratings';
+import axios from 'axios';
 
 const locations = [
   { 
@@ -113,6 +114,23 @@ const locations = [
     ]
   }
 ]
+
+const apiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
+const lat = 36.1173;
+const lng = -115.1761;
+const radius = 5000; // 5km
+const type = 'restaurant';
+
+async function getNearbyPlaces(lat, lng, radius, type, apiKey) {
+  const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&key=${apiKey}`;
+
+  try {
+    const response = await axios.get(url);
+    return response.data.results;
+  } catch (error) {
+    console.error(error);
+  }
+}
  
   
 const ActComponent = ({ lat, lng }) => {
