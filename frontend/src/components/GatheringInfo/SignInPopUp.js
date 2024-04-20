@@ -1,19 +1,21 @@
 // 2024-S-GROUP6-RW\frontend\src\pages\getting_started\SignInPopUp.js
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
+import SignInDialog from "./../login-register/SignInDialog";
 
 const SignInPopUp = ({ open, handleClose }) => {
+  const [showSignInDialog, setShowSignInDialog] = useState(false);
   const navigate = useNavigate();
 
   const handleSignIn = () => {
     handleClose(); // Close the modal
-    navigate('/login'); // Navigate to the sign-in page
+    setShowSignInDialog(true); // Open the SignInDialog
   };
 
   const handleContinue = () => {
@@ -22,6 +24,7 @@ const SignInPopUp = ({ open, handleClose }) => {
   };
 
   return (
+    <>
     <Dialog
       open={open}
       onClose={handleClose}
@@ -40,6 +43,9 @@ const SignInPopUp = ({ open, handleClose }) => {
         </Button>
       </DialogActions>
     </Dialog>
+    {/* SignInDialog is conditional on showSignInDialog */}
+    <SignInDialog open={showSignInDialog} fromGettingStartedPage={true} />
+    </>
   );
 };
 
