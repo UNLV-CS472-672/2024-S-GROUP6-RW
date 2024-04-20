@@ -62,8 +62,9 @@
     display: none !important;
 }
 
+/* Allows ... truncating to work on calendar */
 .rbc-event-content {
-    /* background-color: aquamarine !important; */
+  white-space: normal !important;
 }
 
 .rbc-events-container {
