@@ -1,7 +1,7 @@
 .big-calendar {
-    height: 85vh;
-    width: 90vw;
-    /* font-family: Arial, Helvetica, sans-serif; */
+  height: 85vh;
+  width: 90vw;
+  /* font-family: Arial, Helvetica, sans-serif; */
 }
 
 /*For Today, Back, Next Button*/
@@ -22,9 +22,26 @@
 } */
 
 .activity-title-editbtn {
-    display: flex;
-    gap: 30px;
+  display: flex;
+  gap: 30px;
 }
 
-/*Edit Dialog*/
+/*Create Event Dialog*/
+.activity-title-div {
+  padding-bottom: 25px;
+}
+.activity-title-textfield {
+  width: 260px;
+}
 
+.start-end-timepicker {
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.description-inputbase {
+  /* background-color: aqua; */
+  width: 260px;
+}
+/*Edit Dialog*/

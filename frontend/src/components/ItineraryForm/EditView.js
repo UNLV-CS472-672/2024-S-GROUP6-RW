@@ -21,6 +21,7 @@ import {
   InputBase,
   FormControl,
   Typography,
+  TextField,
 } from "@mui/material";
 
 import dayjs from "dayjs";
@@ -208,10 +209,11 @@ const EditView = ({ day, userActivities, onUpdatedActivities, onClickCloseButton
         >
           <DialogTitle>Create Event</DialogTitle>
           <DialogContent className="create-event-dialog-content">
-            <FormControl variant="standard">
-              <InputLabel>Activity Title</InputLabel>
-              <Input label="Enter Title" value={createTitle} onChange={(e) => setCreateTitle(e.target.value)} />
-            </FormControl>
+            <div className="activity-title-div">
+              <FormControl className="activity-title-formcontrol" variant="standard">
+                <TextField className="activity-title-textfield" label="Title" variant="standard" value={createTitle} onChange={(e) => setCreateTitle(e.target.value)}></TextField>
+              </FormControl>
+            </div>
             <div className="start-end-timepicker">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
@@ -231,7 +233,7 @@ const EditView = ({ day, userActivities, onUpdatedActivities, onClickCloseButton
             </div>
             <div className="description-input">
               <NotesSharpIcon style={{ marginBottom: -6 , paddingRight: 5 }}/>
-              <InputBase placeholder="Description" value={createDescription} onChange={(e) => setCreateDescription(e.target.value)} multiline/>
+              <InputBase className="description-inputbase" placeholder="Description" value={createDescription} onChange={(e) => setCreateDescription(e.target.value)} multiline/>
             </div>
           </DialogContent>
           <DialogActions>
