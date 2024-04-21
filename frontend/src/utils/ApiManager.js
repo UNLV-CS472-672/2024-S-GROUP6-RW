@@ -65,6 +65,33 @@ export const getProfile = async ( username ) => {
   }
 };
 
+export const saveProfile = async ( about ) => {
+
+  // Fetch the username from local storage
+  const username = getFromLocal('username');
+
+  const userData = {
+    Username: username,
+    About: about,
+  };
+  console.log(userData);
+
+  try {
+    // Retrieve the token
+    const token = getToken();
+    // Make the API call
+    const response = await axios.post(`${API_ENDPOINT}/edit_profile`, userData, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    return response.data; // Return the response data from the API call
+  } catch (error) {
+    console.error('Error getting profile:', error);
+  }
+};
+
 export const getAllTrips = async () => {
   try {
     // Fetch the username from local storage

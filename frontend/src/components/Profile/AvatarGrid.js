@@ -5,7 +5,6 @@ export default function AvatarGrid({
   avatars,
   selectedImg,
   addCustomAvatar,
-  customAvatars,
 }) {
   const plus = { img: add_picture, title: "Add Picture" };
 
@@ -50,14 +49,14 @@ export default function AvatarGrid({
         console.log("Image size: " + resizedImageData.length + " bytes");
 
         // Add the resized image to your custom avatars
-        if (customAvatars.length === 1) {
-          customAvatars.pop();
+        if (avatars[0].id === 0) {
+          avatars.shift();
         }
         addCustomAvatar([
-          { img: resizedImageData, title: "Custom Picture" },
-          ...customAvatars,
+          { img: resizedImageData, title: "Custom Picture", id: 0 },
+          ...avatars,
         ]);
-        selectAvatar({ img: resizedImageData, title: "Custom Picture" }); // Set the selectedImg to the uploaded image
+        selectAvatar({ img: resizedImageData, title: "Custom Picture", id: 0 }); // Set the selectedImg to the uploaded image
       };
 
       // Load the image
@@ -92,17 +91,6 @@ export default function AvatarGrid({
           onChange={uploadAvatar}
         />
       </Grid>
-
-      {customAvatars.map((avatar, index) => (
-        <Grid item xs={3} justifyContent="left" key={index}>
-          <Avatar
-            src={avatar.img}
-            alt={avatar.title}
-            style={styles.avatar}
-            onClick={() => selectAvatar(avatar)}
-          />
-        </Grid>
-      ))}
       {avatars.map((avatar, index) => (
         <Grid item xs={3} justifyContent="left" key={index}>
           <Avatar
