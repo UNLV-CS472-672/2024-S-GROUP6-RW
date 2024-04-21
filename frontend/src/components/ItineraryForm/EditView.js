@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Calendar, Views, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import moment from "moment";
 import "../../css/EditView.css";
 import "../../css/ReactBigCalendar.css";
@@ -30,6 +32,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { deepOrange, orange, red } from "@mui/material/colors";
+
+const DnDCalendar = withDragAndDrop(Calendar)
 
 const localizer = momentLocalizer(moment);
 
@@ -111,7 +115,7 @@ const EditView = ({
   };
 
   const handleCreateEvent = () => {
-    if (createStartTime && createEndTime) {
+    if (createStartTime && createEndTime && createStartTime.isBefore(createEndTime)) {
       const newEvent = {
         id: userActivities.length + 1,
         title: createTitle || "No Title",
@@ -138,6 +142,28 @@ const EditView = ({
     }
   };
 
+  // Calendar Events Customization Functions
+  const moveEvent = useCallback(
+    ({ event, start, end, isAllDay: dropToAllDaySlot = false}) => {
+      const { allDay } = event;
+      if (!allDay && dropToAllDaySlot) {
+        event.allDay = true;
+      }
+
+      const index = userActivities.findIndex((item) => item.id === event.id);
+      if (index !== -1) {
+        const updatedActivities = [...userActivities];
+        updatedActivities[index] = {
+          ...updatedActivities[index],
+          start,
+          end,
+        };
+        onUpdatedActivities(updatedActivities);
+      }
+    },
+    [userActivities, onUpdatedActivities]
+  );
+
   return (
     <>
       <br></br>
@@ -149,7 +175,7 @@ const EditView = ({
       </div>
       <div className="calendar-div">
         {/* Adjust height as needed */}
-        <Calendar
+        <DnDCalendar
           className="big-calendar"
           events={userActivities}
           defaultView={Views.DAY} // Display day view by default
@@ -160,6 +186,9 @@ const EditView = ({
           defaultDate={dayObj} // Display chosen day of the itinerary
           localizer={localizer}
           onSelectEvent={handleEditButtonClick}
+          draggableAccessor={ (event) => true}
+          resizable={false}
+          onEventDrop={moveEvent}
           components={{
             event: CustomEventComponent
           }}
