@@ -2,3 +2,17 @@
     margin-top: -5px;
     touch-action: none;
 }
+
+.activity-title-btn-container {
+    width: 50%;
+}
+
+.activity-title-btn-container .MuiTypography-root {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    font-size: 15px;
+    color: black;
+} 
