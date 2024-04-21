@@ -62,6 +62,7 @@ export const getProfile = async ( username ) => {
     return response.data; // Return the response data from the API call
   } catch (error) {
     console.error('Error getting profile:', error);
+    return null;
   }
 };
 

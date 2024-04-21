@@ -53,13 +53,13 @@ function ProfilePage() {
 
         // Fetch user data
         const data = await getProfile(tmp); // Getting profile data from the API
-        setUsername(data.Username); // Setting the username from the fetched data
 
-        console.log("User Data: ", data);
         if (data === null) {
           console.log("User does not exist, display nothing.");
           setFoundUser(false); // Setting foundUser to false if the user doesn't exist
         } else {
+          setUsername(data.Username); // Setting the username from the fetched data
+          console.log("User Data: ", data);
           setFoundUser(true); // Setting foundUser to true if the user exists
           parseData(data); // Parsing the fetched data
         }
@@ -117,7 +117,7 @@ function ProfilePage() {
               />
             </>
           ) : (
-            <h2>ERROR 404</h2>
+            <h2 style={{fontSize: "5vw"}}>ERROR 404</h2>
           )}
         </>
       )}
