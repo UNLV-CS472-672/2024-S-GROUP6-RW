@@ -106,8 +106,13 @@ function GettingStartedPage() {
     <>
 
       <div class="first-section">
-        
-        <p className = "first-description">Welcome to RightWay</p>
+        <div className="testbg">
+        <p className = "first-description">
+          Plan your trip </p>
+
+        <p className="rw-line"> the RightWay</p>
+        </div>
+
         <p className="headerr"> Group trips made easy</p>
 
         <img className="background" 
