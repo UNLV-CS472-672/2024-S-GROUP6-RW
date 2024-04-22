@@ -21,11 +21,14 @@ import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import IconButton from "@mui/material/IconButton";
 import EditIcon from '@mui/icons-material/Edit';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import TodayIcon from '@mui/icons-material/Today';
 import "../../css/ItineraryAccordion.css"
 
 const ItineraryAccordion = ({
   key,
   day,
+  dayNum,
   events,
   onClickEditButton,
 }) => {
@@ -41,9 +44,19 @@ const ItineraryAccordion = ({
 
   return (
     <div className="itin-accordion">
-      <Accordion defaultExpanded sx={{width: '80%'}}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>{day}</Typography>
+      <Accordion sx={{width: '80%'}}>
+        <AccordionSummary 
+          expandIcon={<ExpandMoreIcon />}
+          sx={{
+            flexDirection: 'row-reverse',
+          }}
+        >
+        <div className="accordion-contents-div">
+          <Typography>Day {dayNum}: {dayObj.toLocaleString('default', {month: 'short', day:'2-digit', year: 'numeric'})}</Typography>
+          <button className="calendar-view-btn" onClick={onClickEditButton}>
+            <TodayIcon sx={{color: "black", fontSize: 22, marginTop: '2px'}} /> 
+          </button>
+        </div>
         </AccordionSummary>
         <AccordionDetails>
           <Timeline>
@@ -66,12 +79,6 @@ const ItineraryAccordion = ({
               </TimelineItem>
             ))}
           </Timeline>
-          <IconButton
-            aria-label="close"
-            onClick={onClickEditButton}
-          >
-            <EditIcon sx={{color: "black", fontSize: 25}} /> 
-          </IconButton>
         </AccordionDetails>
       </Accordion>
     </div>

@@ -1,0 +1,18 @@
+
+.itinerary-title.MuiTypography-root {
+    font-family: 'Radley';
+    font-size: 35px;
+    font-weight: 500;
+    padding: 15px;
+}
+
+.add-day-btn {
+    border: 1px solid black;
+    border-radius: 8px;
+    background-color: transparent;
+}
+
+.add-day-btn:hover {
+    background-color: #F2F1EF;
+    cursor: pointer;
+}
