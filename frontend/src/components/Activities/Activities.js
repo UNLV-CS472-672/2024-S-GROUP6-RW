@@ -1,5 +1,5 @@
-import { css } from '@emotion/react';
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import '../../css/PopUp.css'
 import '../../css/closeButton.css'
 import StarRatings from 'react-star-ratings';
@@ -121,35 +121,47 @@ const lng = -115.1761;
 const radius = 5000; // 5km
 const type = 'restaurant';
 
-async function getNearbyPlaces(lat, lng, radius, type, apiKey) {
-  const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&key=${apiKey}`;
+async function getNearbyPlaces(lat, lng, radius, type) {
+  const url = `http://localhost:5000/nearbyPlaces?location=${lat},${lng}&radius=${radius}&type=${type}`;
 
   try {
     const response = await axios.get(url);
+    console.log('Response data:', response.data);
     return response.data.results;
   } catch (error) {
+    console.error("this is error")
     console.error(error);
   }
 }
+
+getNearbyPlaces(lat, lng, radius, type)
+  .then(places => console.log(places))
+  .catch(error => console.error(error));
  
   
-const ActComponent = ({ lat, lng }) => {
-  const location = locations.find(location => location.lat === lat && location.lng === lng);
-  const [popupLocation, setPopupLocation] = useState(null);
-
-  const handleClickImage = (popularLocation) => {
-    setPopupLocation(popularLocation);
-  };
-  function handleClose() {
-    setPopupLocation(null);
-  }
+  const ActComponent = ({ lat, lng }) => {
+    const location = locations.find(location => location.lat === lat && location.lng === lng);
+    const [popupLocation, setPopupLocation] = useState(null);
+    const [nearbyPlaces, setNearbyPlaces] = useState([]);
   
-
-  const handleAddToList = () => {
-    // Add the location to your list
-    console.log(`Added ${popupLocation.name} to the list`);
-    setPopupLocation(null); // Close the popup
-  };
+    useEffect(() => {
+      getNearbyPlaces(lat, lng, radius, type)
+        .then(places => setNearbyPlaces(places))
+        .catch(error => console.error(error));
+    }, [lat, lng]);
+  
+    const handleClickImage = (popularLocation) => {
+      setPopupLocation(popularLocation);
+    };
+  
+    function handleClose() {
+      setPopupLocation(null);
+    }
+  
+    const handleAddToList = () => {
+      console.log(`Added ${popupLocation.name} to the list`);
+      setPopupLocation(null); // Close the popup
+    }
 
   return (
     <div className="map-container">
