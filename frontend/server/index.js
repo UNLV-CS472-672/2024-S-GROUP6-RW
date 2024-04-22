@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 app.use(cors());
@@ -8,9 +9,13 @@ app.use(cors());
 app.get('/nearbyPlaces', async (req, res) => {
     console.log('Received request for /nearbyPlaces'); // Log when a request is received
   
-    const { lat, lng, radius, type } = req.query;
-    const apiKey = AIzaSyCOhJAyiZTOhX4qQDYicsGHDXWxbsZyZKs;
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&key=AIzaSyCOhJAyiZTOhX4qQDYicsGHDXWxbsZyZKs`;
+    const { location, radius, type } = req.query;
+    const [lat, lng] = location.split(',');
+  
+    console.log('Request parameters:', { lat, lng, radius, type }); // Log the request parameters
+  
+    const apiKey = 'AIzaSyCOhJAyiZTOhX4qQDYicsGHDXWxbsZyZKs';
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&key=${apiKey}`;
   
     try {
       const response = await axios.get(url);

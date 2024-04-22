@@ -129,7 +129,6 @@ async function getNearbyPlaces(lat, lng, radius, type) {
     console.log('Response data:', response.data);
     return response.data.results;
   } catch (error) {
-    console.error("this is error")
     console.error(error);
   }
 }
