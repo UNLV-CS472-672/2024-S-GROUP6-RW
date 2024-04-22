@@ -1,4 +1,9 @@
-/* DateAvailability.css */
+/**
+ * ChatGPT was used in order to assist in writing the CSS for the DateAvailability component.
+ * ChatGPT was also used in order to document this file, as I feel ChatGPT was able to
+ * make good decisions regarding the styling of pages/components.
+ * (ChatGPT-3.5, 1)
+ */
 
 /* Style for the date picker */
 .custom-datepicker {
@@ -6,4 +11,10 @@
   padding: 8px;
   font-size: 16px;
   width: 200px; /* Adjust width as needed */
+}
+
+ul {
+  list-style: none; /* Remove bullet points */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
 }
