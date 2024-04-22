@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -22,6 +22,10 @@ import UpdateIcon from '@mui/icons-material/Update';
 import RestoreIcon from '@mui/icons-material/Restore';
 
 import { deepPurple } from '@mui/material/colors'
+
+// To fetch trip information from backend
+import { getAllTrips } from '../../utils/ApiManager';
+import { getFromLocal } from '../../utils/LocalStorageManager';
 
 // Upcoming trip 
 const currTrip = [
@@ -149,6 +153,14 @@ const ColorButton = styled(Button)(({ theme }) => ({
     backgroundColor: deepPurple[700],
   },
 }));
+
+// Convert the ISO time to Month DD, year format
+// Example: 2024-04-19T07:00:00Z to April 19, 2024
+function convertDate(dateString) {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', options);
+}
 
 export default function TripDropDown() {
   {/* Handles the event open/close of a modal */}
