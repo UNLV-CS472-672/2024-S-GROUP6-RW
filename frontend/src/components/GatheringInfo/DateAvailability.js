@@ -4,6 +4,7 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
+import "../../css/PollPage.css";
 
 const localizer = momentLocalizer(moment);
 
@@ -287,7 +288,7 @@ const DateAvailability = () => {
           </ul>
         </div>
       )}
-      <h2>Potential Travel Dates:</h2>
+      <p className="pot-header">Potential Travel Dates:</p>
       <ul>
         {potentialTravelDates.map((date, index) => (
           <li key={index}>{date}</li>
