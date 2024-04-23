@@ -260,9 +260,7 @@ const CustomEventComponent = ({ event, onEditButtonClick }) => {
         className="activity-edit-btn"
         variant="contained"
         onClick={handleEditClick}
-        sx={{
-          bgcolor: deepOrange[500],
-        }}
+        sx={{ color: 'rgba(54, 68, 108, 1)' }}
       >
         Edit
       </Button>
