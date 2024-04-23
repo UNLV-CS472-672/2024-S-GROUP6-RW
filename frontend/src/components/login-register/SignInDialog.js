@@ -18,7 +18,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { convertLength } from "@mui/material/styles/cssUtils";
 import { saveToLocal, getFromLocal } from "../../utils/LocalStorageManager";
-import { gettingStartedCreateTrip } from "../../utils/ApiManager";
+import { CreateTrip, getAllTrips } from "../../utils/ApiManager";
 
 const dialogContainerStyle = {
 	backdropFilter: "blur(5px)",
@@ -28,7 +28,7 @@ const dialogContainerStyle = {
 	margin: "auto",
 };
 
-const SignInDialog = ({ open }) => {
+const SignInDialog = ({ open, fromGettingStartedPage  }) => {
 	const [Email, setEmail] = useState("");
 	const [Password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
@@ -82,13 +82,12 @@ const SignInDialog = ({ open }) => {
 			saveToLocal('email', Email);
 
 			
-			const tripTitle = getFromLocal('tripTitle');
-			console.log(`login Sign in tripTitle: ${tripTitle}`);
-			if (tripTitle == "Getting Started Trip"){
-				saveToLocal("tripTitle","Getting Started Trip!");
-				gettingStartedCreateTrip();
+			if (fromGettingStartedPage) {
+				CreateTrip();
 			}
-				
+			
+			console.log(getAllTrips());
+
 
 			navigate("/my-trips");
 

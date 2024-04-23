@@ -62,7 +62,7 @@ function GatheringInfoPage() {
           <div className="form-half">
             <p className="header-1">Let's plan your next trip together</p>
             <p className="where"> Where would you like to go? </p>
-            <SearchBar />
+            <SearchBar LocationNameKey={"LocationName"}/>
             <button className="next-button" onClick={goToScreen2}>
               Next
             </button>
