@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import '../../css/PopUp.css'
 import '../../css/closeButton.css'
+import '../../css/Activity.css'
 import StarRatings from 'react-star-ratings';
-import axios from 'axios';
 
 const locations = [
   { 
@@ -139,6 +139,7 @@ async function getNearbyPlaces(lat, lng, radius, type) {
     const [type, setType] = useState('restaurant'); // initial value
     
     useEffect(() => {
+      console.log('Fetching nearby places for lat:', lat, 'lng:', lng); // Add this line
       async function fetchNearbyPlaces() {
         try {
           const response = await getNearbyPlaces(lat, lng, radius, type);
@@ -168,20 +169,27 @@ async function getNearbyPlaces(lat, lng, radius, type) {
       console.log(`Added ${popupLocation.name} to the list`);
       setPopupLocation(null); // Close the popup
     }
+    function handlePlaceClick(place) {
+      console.log('Clicked place:', place);
+      // Add your code here to handle the click event
+    }
 
   return (
     <div className="map-container">
       {location && (
         <div className="side-menu">
         {nearbyPlaces && nearbyPlaces.map((place, index) => (
-          <div key={index}>
+          <div key={index} className="place" onClick={() => handlePlaceClick(place)}>
           <h3>{place.name}</h3>
           <p>{place.vicinity}</p>
           {place.photoReference && (
           <img src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photoReference}&key=${apiKey  }`} alt={place.name} />
         )}
-  </div>
-))}
+        <p>Rating: {place.rating}</p> 
+        <p>Price Level: {place.priceLevel}</p> 
+        
+    </div>
+    ))}
       </div>
       )}
       {popupLocation && (

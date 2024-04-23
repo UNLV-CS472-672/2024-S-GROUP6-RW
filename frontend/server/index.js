@@ -21,6 +21,10 @@ app.get('/nearbyPlaces', async (req, res) => {
         name: place.name,
         address: place.vicinity,
         photoReference,
+        rating: place.rating, // Add this line
+        priceLevel: place.price_level, // Add this line
+        lat: place.geometry.location.lat,
+        lng: place.geometry.location.lng, 
       };
     });
     console.log(places);
