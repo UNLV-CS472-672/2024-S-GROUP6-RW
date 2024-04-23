@@ -5,118 +5,8 @@ import '../../css/closeButton.css'
 import '../../css/Activity.css'
 import StarRatings from 'react-star-ratings';
 
-const locations = [
-  { 
-    lat: 36.1173, 
-    lng: -115.1761, //las vegas
-    popularLocations: [
-      { name: 'Las Vegas Welcome Sign', description: "The Welcome to Fabulous Las Vegas sign is a Las Vegas landmark.", rating: 5, image: 'https://media-cdn.tripadvisor.com/media/photo-m/1280/2a/34/2d/28/caption.jpg', price: '$' },
-      { name: 'MGM Park', description: "Park MGM Las Vegas is in the heart of all there is to do on the Las Vegas Strip.", rating: 3, image: 'https://ik.imgkit.net/3vlqs5axxjf/external/ik-seo/https://www.cfmedia.vfmleonardo.com/imageRepo/7/0/143/431/660/Park_MGM_-_Hero_2_Cropped_O/Park-MGM-Exterior.jpg?tr=w-780%2Ch-437%2Cfo-auto', price: '$$' },
-      { name: 'Sphere', description: "Sphere is a music and entertainment arena", rating: 4, image: 'https://www.rollingstone.com/wp-content/uploads/2023/06/MSG-Sphere1_credit-MSG-Sphere.jpg?w=1581&h=1028&crop=1', price: '$$$' }
-    ]
-  },
-  { 
-    lat: 51.0844, 
-    lng: 10.4057, 
-    popularLocations: [
-      { name: 'Germany', description: "Germany is a country in Central Europe.", image: 'https://www.deutschland.de/sites/default/files/styles/image_carousel_mobile/public/media/image/tdt_29092020_1_staat_16_laender_schwerin.jpg?itok=4PP80WP4', price: '$$', rating: 4 }
-    ]
-  },
-  { 
-    lat: 46.6870, 
-    lng: 2.4018, 
-    popularLocations: [
-      { name: 'France', description: "France is a country located in Western Europe.", image: 'https://www.travelandleisure.com/thmb/9xr8CFGR14sLvR4IhLwKV64fEV0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TAL-Eiffel-Tower-BESTFRANCE0323-dada0673f8764c099b68d01695ef8057.jpg', price: '$$$', rating: 5 }
-    ]
-  },
-  { 
-    lat: 20.2855, 
-    lng: -158.3992, 
-    popularLocations: [
-      { name: 'Hawaii', description: "Hawaii is a U.S. state located in the Pacific Ocean.", image: 'https://www.travelandleisure.com/thmb/9xr8CFGR14sLvR4IhLwKV64fEV0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TAL-Eiffel-Tower-BESTFRANCE0323-dada0673f8764c099b68d01695ef8057.jpg', price: '$$$', rating: 4 }
-    ]
-  },
-  { 
-    lat: 41.8908, 
-    lng: 12.4783, 
-    popularLocations: [
-      { name: 'Rome', description: "Rome is the capital city of Italy.", image: 'https://www.travelandleisure.com/thmb/9xr8CFGR14sLvR4IhLwKV64fEV0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TAL-Eiffel-Tower-BESTFRANCE0323-dada0673f8764c099b68d01695ef8057.jpg', price: '$$$', rating: 5 }
-    ]
-  },
-  { 
-    lat: 35.9784, 
-    lng: 139.7402, 
-    popularLocations: [
-      { name: 'Tokyo', description: "Tokyo is the capital city of Japan.", image: 'https://hips.hearstapps.com/hmg-prod/images/high-angle-view-of-tokyo-skyline-at-dusk-japan-royalty-free-image-1664309926.jpg', price: '$$', rating: 4 }
-    ]
-  },
-  { 
-    lat: 20.7936, 
-    lng: -156.3311, 
-    popularLocations: [
-      { name: 'Maui', description: "Maui is an island in Hawaii.", image: 'https://a.cdn-hotels.com/gdcs/production81/d1269/0cffe15a-7fdf-4e75-9415-92eaf78e2f73.jpg', price: '$$$', rating: 5 }
-    ]
-  },
-  { 
-    lat: 24.5571, 
-    lng: -78.0586, 
-    popularLocations: [
-      { name: 'Bahamas', description: "The Bahamas is a country in the Caribbean.", image: 'https://thepointsguy.global.ssl.fastly.net/us/originals/2022/03/HI_B_KSchaler.jpg', price: '$$$', rating: 4 }
-    ]
-  },
-  { 
-    lat: 51.5093, 
-    lng: -0.1222, 
-    popularLocations: [
-      { name: 'London', description: "London is the capital city of England.", image: 'https://a.cdn-hotels.com/gdcs/production153/d1371/e6c1f55e-51ac-41d5-8c63-2d0c63faf59e.jpg', price: '$$$', rating: 5 }
-    ]
-  },
-  { 
-    lat: -16.5085, 
-    lng: -151.7429, 
-    popularLocations: [
-      { name: 'Bora Bora', description: "Bora Bora is an island in French Polynesia.", image: 'https://cache.marriott.com/content/dam/marriott-renditions/BOBXR/bobxr-exterior-aerialview-1580-hor-wide.jpg?output-quality=70&interpolation=progressive-bilinear&downsize=2880px:*', price: '$$$$', rating: 5 }
-    ]
-  },
-  { 
-    lat: -17.6499, 
-    lng: -149.4379, 
-    popularLocations: [
-      { name: 'Tahiti', description: "Tahiti is the largest island in French Polynesia.", image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTE6IkkwdqD57Dvlbe3JEwPtwEMNxX_0UKfeIIjADevwA&s', price: '$$$$', rating: 4 }
-    ]
-  },
-  { 
-    lat: 40.7110, 
-    lng: -74.0127, 
-    popularLocations: [
-      { name: 'New York', description: "New York City is the most populous city in the United States.", image: 'https://cdn.britannica.com/61/93061-050-99147DCE/Statue-of-Liberty-Island-New-York-Bay.jpg', price: '$$$', rating: 5 }
-    ]
-  },
-  { 
-    lat: -8.4087, 
-    lng: 115.1839, 
-    popularLocations: [
-      { name: 'Bali', description: "Bali is an island and province of Indonesia.", image: 'https://media.cntraveler.com/photos/63f4f4fc0630e21ed8088321/1:1/w_1280%2Ch_1280%2Cc_limit/GettyImages-1145042281.jpeg', price: '$$$', rating: 4 }
-    ]
-  },
-  {
-    lat: 43.7692, 
-    lng: 11.2601,
-    popularLocations:[
-      { name: "Florence", description: "Florence is the capital city of the Italian region of Tuscany.", image: "https://content.r9cdn.net/rimg/dimg/ee/c3/840e901d-city-25345-158f32d4e66.jpg?width=1366&height=768&xhint=1940&yhint=1356&crop=true", price:'$$$', rating: 5 }
-    ]
-  },
-  {
-    lat: -13.1611, 
-    lng: -72.5502, 
-    popularLocations: [
-      {name: "Machu Picchu", description: "Machu Picchu is an Incan citadel set high in the Andes Mountains in Peru.", image: "https://travel.home.sndimg.com/content/dam/images/travel/fullset/2014/05/28/50/Machu-Picchu-Mountain.rend.hgtvcom.1280.1280.suffix/1491584261034.jpeg",price: '$$$', rating: 5 }
-    ]
-  }
-]
 
-let apiKey='AIzaSyCOhJAyiZTOhX4qQDYicsGHDXWxbsZyZKs'
-
+let apiKey=process.env.REACT_APP_GOOGLE_PLACES_API_KEY
 
 async function getNearbyPlaces(lat, lng, radius, type) {
   const response = await fetch(`http://localhost:5000/nearbyPlaces?lat=${lat}&lng=${lng}&radius=${radius}&type=${type}`);
@@ -132,12 +22,11 @@ async function getNearbyPlaces(lat, lng, radius, type) {
  
   
   const ActComponent = ({ lat, lng }) => {
-    const location = locations.find(location => location.lat === lat && location.lng === lng);
-    const [popupLocation, setPopupLocation] = useState(null);
+    const [selectedPlace, setSelectedPlace] = useState(null);
     const [nearbyPlaces, setNearbyPlaces] = useState([]);
     const [radius, setRadius] = useState(50); // initial value
     const [type, setType] = useState('restaurant'); // initial value
-    
+
     useEffect(() => {
       console.log('Fetching nearby places for lat:', lat, 'lng:', lng); // Add this line
       async function fetchNearbyPlaces() {
@@ -153,63 +42,49 @@ async function getNearbyPlaces(lat, lng, radius, type) {
           console.error('Error fetching nearby places:', error);
         }
       }
-    
+
       fetchNearbyPlaces();
     }, [lat, lng]);
-  
-    const handleClickImage = (popularLocation) => {
-      setPopupLocation(popularLocation);
-    };
+
+    function handlePlaceClick(place) {
+      setSelectedPlace(place);
+    }
   
     function handleClose() {
-      setPopupLocation(null);
-    }
-  
-    const handleAddToList = () => {
-      console.log(`Added ${popupLocation.name} to the list`);
-      setPopupLocation(null); // Close the popup
-    }
-    function handlePlaceClick(place) {
-      console.log('Clicked place:', place);
-      // Add your code here to handle the click event
+      setSelectedPlace(null);
     }
 
-  return (
-    <div className="map-container">
-      {location && (
-        <div className="side-menu">
-        {nearbyPlaces && nearbyPlaces.map((place, index) => (
-          <div key={index} className="place" onClick={() => handlePlaceClick(place)}>
-          <h3>{place.name}</h3>
-          <p>{place.vicinity}</p>
-          {place.photoReference && (
-          <img src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photoReference}&key=${apiKey  }`} alt={place.name} />
+    return (
+      <div className="map-container">
+        {(
+          <div className="side-menu">
+            {nearbyPlaces && nearbyPlaces.map((place, index) => (
+              <div key={index} className="place" onClick={() => handlePlaceClick(place)}>
+                <h3>{place.name}</h3>
+                <p>{place.vicinity}</p>
+                {place.photoReference && (
+                  <img src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photoReference}&key=${apiKey}`} alt={place.name} />
+                )}
+                <p>Rating: {place.rating}</p>
+                <p>Price Level: {place.priceLevel}</p>
+              </div>
+            ))}
+          </div>
         )}
-        <p>Rating: {place.rating}</p> 
-        <p>Price Level: {place.priceLevel}</p> 
-        
-    </div>
-    ))}
-      </div>
-      )}
-      {popupLocation && (
+        {selectedPlace && (
         <div className="popup">
-          <button className="close-button" onClick={handleClose}>X</button>
-          <img src={popupLocation.image} alt={popupLocation.name} />
-          <h2>{popupLocation.name}</h2>
-          <StarRatings
-            rating={popupLocation.rating}
-            starRatedColor="gold"
-            numberOfStars={5}
-            name='rating'
-            starDimension="20px"
-          />
-          <p>{popupLocation.description}</p>
-          <button onClick={handleAddToList}>Add to List</button>
+          <button onClick={handleClose}>Close</button>
+          <h2>{selectedPlace.name}</h2>
+          <p>{selectedPlace.vicinity}</p>
+          {selectedPlace.photoReference && (
+            <img src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${selectedPlace.photoReference}&key=${apiKey}`} alt={selectedPlace.name} />
+          )}
+          <p>Rating: {selectedPlace.rating}</p>
+          <p>Price Level: {selectedPlace.priceLevel}</p>
         </div>
       )}
-    </div>
-  );
-};
+      </div>
+    );
+  };
   
   export default ActComponent;
