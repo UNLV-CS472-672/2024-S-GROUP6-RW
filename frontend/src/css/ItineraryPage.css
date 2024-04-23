@@ -1,0 +1,36 @@
+.pushdown {
+    
+    
+}
+
+.banner-container {
+    position: relative;
+    width: 100%;
+}
+.itin-banner {
+    height: 300px;
+    object-position: center top;
+}
+
+.itin-header {
+    position: absolute;
+    top: 40%; 
+    left: 5%;
+    font-size: 50px;
+    font-weight: 500;
+    color: white;
+    text-shadow: 2px 3px 5px black;
+}
+
+.itin-date {
+    position: absolute;
+    top: 73%; 
+    left: 5%;
+    font-size: 20px;
+    font-weight: 500;
+    color: white;
+    text-shadow: 2px 3px 5px black;
+}
+.testt {
+    font-size: 40px;
+}
