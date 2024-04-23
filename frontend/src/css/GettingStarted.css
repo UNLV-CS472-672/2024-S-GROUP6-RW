@@ -11,23 +11,22 @@
   justify-content: center;
   height: 100vh; 
   position: relative; 
-  text-align: center; 
+ 
 }
 
 .first-description {
-  font-size: 60px; 
+  font-size: 7.5vh; 
   color: black; 
   margin: 0; 
   padding: 0; 
 
   transform: translateY(-100%);
   animation: slideIn 2s forwards;
+  position: relative;
 }
 
 .headerr {
-  font-size: 28px;
-  margin: -20px 20px;
-
+  font-size: 4vh;
   transform: translateY(-100%);
   animation: slideIn 2s forwards;
 }
@@ -39,16 +38,16 @@
 }
 
 .getStartedButton {
-  border-radius: 15px; 
+  border-radius: 2.8vh; 
   background-color: #36446C; 
   color: white; 
   border: none; 
-  padding: 10px 20px; 
+  padding: .8vh 2vh; 
   cursor: pointer; 
-  margin-top: 30px;
+  margin-top: 4vh;
   font-family: 'Radley';
-  letter-spacing: 1px;
-  font-size: 16px;
+  letter-spacing: 0.5vh;
+  font-size: 2.8vh;
   transition: background-color 0.3s;
   transform: translateY(100%);
   animation: slideIn 2s forwards;
