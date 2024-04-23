@@ -1,3 +1,16 @@
+.title-event-bar {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.itinerary-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
 .itinerary-title.MuiTypography-root {
     font-family: 'Radley';
@@ -6,13 +19,30 @@
     padding: 15px;
 }
 
-.add-day-btn {
-    border: 1px solid black;
-    border-radius: 8px;
-    background-color: transparent;
+.spacer {
+    flex-grow: 1;
 }
 
-.add-day-btn:hover {
+.create-event-btn-cpy button{
+    font-size: 18px;
+    font-family: 'Radley';
+    font-weight: 400;
+    background-color: transparent;
+    border-radius: 8px;
+    border: 1px solid black;
+}
+
+.create-event-btn-cpy button:hover {
     background-color: #F2F1EF;
     cursor: pointer;
+}
+
+.create-event-btn-contents {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.create-event-icon {
+    margin-left: 5px;
 }

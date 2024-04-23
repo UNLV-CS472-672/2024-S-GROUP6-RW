@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { red } from "@mui/material/colors";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -19,18 +20,17 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import IconButton from "@mui/material/IconButton";
-import EditIcon from '@mui/icons-material/Edit';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
+import DeleteIcon from "@mui/icons-material/Delete";
 import TodayIcon from '@mui/icons-material/Today';
 import "../../css/ItineraryAccordion.css"
 
 const ItineraryAccordion = ({
-  key,
   day,
   dayNum,
   events,
   onClickEditButton,
+  onDeleteDay,
 }) => {
 
   const dayObj = new Date(day); // Date object to store the specific day of the itinerary
@@ -41,6 +41,10 @@ const ItineraryAccordion = ({
          && item.start.getMonth() === dayObj.getMonth()
          && item.start.getYear() === dayObj.getYear());
   });
+
+  const handleDeleteDayClick = () => {
+    onDeleteDay(day);
+  }
 
   return (
     <div className="itin-accordion">
@@ -79,6 +83,24 @@ const ItineraryAccordion = ({
               </TimelineItem>
             ))}
           </Timeline>
+          <div
+            className="edit-delete-btn"
+            style={{ position: "absolute", bottom: 5, right: 11 }}
+          >
+            <IconButton
+              className="delete-event-btn"
+              onClick={handleDeleteDayClick}
+              sx={{
+                color: "transparent",
+                "&:hover": {
+                  color: red[700],
+                  cursor: "pointer",
+                },
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </div>
         </AccordionDetails>
       </Accordion>
     </div>

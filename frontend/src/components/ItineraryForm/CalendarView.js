@@ -8,10 +8,8 @@ import "../../css/EditView.css";
 import "../../css/ReactBigCalendar.css";
 
 import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
-import NotesSharpIcon from "@mui/icons-material/NotesSharp";
 
 import {
   Dialog,
@@ -21,17 +19,15 @@ import {
   Button,
   Input,
   InputLabel,
-  InputBase,
   FormControl,
   Typography,
-  TextField,
 } from "@mui/material";
 
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { deepOrange, orange, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 
 const DnDCalendar = withDragAndDrop(Calendar)
 
@@ -46,18 +42,10 @@ const EditView = ({
   const dayObj = new Date(day); //Convert day string to date object
 
   const [showEditDialog, setShowEditDialog] = useState(false);
-  const [showCreateEventDialog, setShowCreateEventDialog] = useState(false);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [title, setTitle] = useState("");
   const [selectedActivity, setSelectedActivity] = useState(null);
-
-  //State Variables for New Event (Create Event)
-  const [createTitle, setCreateTitle] = useState("");
-  const [createStartTime, setCreateStartTime] = useState(dayjs(dayObj));
-  const [createEndTime, setCreateEndTime] = useState(dayjs(dayObj));
-  const [createLocation, setCreateLocation] = useState("");
-  const [createDescription, setCreateDescription] = useState("");
 
   const handleEditButtonClick = (event, e) => {
     setSelectedActivity(event);
@@ -69,14 +57,6 @@ const EditView = ({
   const handleEditDialogClose = () => {
     setShowEditDialog(false);
     setSelectedActivity(null);
-  };
-
-  const handleCreateEventDialogClose = () => {
-    setShowCreateEventDialog(false);
-    //Reset States
-    setCreateTitle("");
-    setCreateLocation("");
-    setCreateDescription("");
   };
 
   const handleSave = () => {
@@ -114,34 +94,6 @@ const EditView = ({
     }
   };
 
-  const handleCreateEvent = () => {
-    if (createStartTime && createEndTime && createStartTime.isBefore(createEndTime)) {
-      const newEvent = {
-        id: userActivities.length + 1,
-        title: createTitle || "No Title",
-        start: createStartTime.toDate(), // Convert Dayjs object to JavaScript Date object
-        end: createEndTime.toDate(), // Convert Dayjs object to JavaScript Date object
-        description: createDescription || "",
-        location: createLocation || "",
-      };
-      const updatedActivity = [...userActivities, newEvent];
-      updatedActivity.sort((actObjx, actObjy) => {
-        return actObjx.start - actObjy.start;
-      }); //Sort them depending on the activites start time
-      onUpdatedActivities(updatedActivity); //Pass to the parent component.
-      setShowCreateEventDialog(false); //Close the create event dialog
-
-      //Reset states
-      setCreateTitle("");
-      setCreateStartTime(dayjs(dayObj));
-      setCreateEndTime(dayjs(dayObj));
-      setCreateLocation("");
-      setCreateDescription("");
-    } else {
-      /* Required Fields are missing case */
-    }
-  };
-
   // Calendar Events Customization Functions
   const moveEvent = useCallback(
     ({ event, start, end, isAllDay: dropToAllDaySlot = false}) => {
@@ -166,13 +118,6 @@ const EditView = ({
 
   return (
     <>
-      <br></br>
-      <br></br>
-      <div className="button-section">
-        <IconButton className="calendar-close-btn" onClick={onClickCloseButton}>
-          <CloseIcon />
-        </IconButton>
-      </div>
       <div className="calendar-div">
         {/* Adjust height as needed */}
         <DnDCalendar
@@ -193,6 +138,11 @@ const EditView = ({
             event: CustomEventComponent
           }}
         />
+      </div>
+      <div className="button-section">
+        <IconButton className="calendar-close-btn" onClick={onClickCloseButton}>
+          <CloseIcon />
+        </IconButton>
       </div>
       <Dialog
         className="edit-dialog"
@@ -257,77 +207,6 @@ const EditView = ({
           <Button onClick={handleSave}>Save</Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        className="create-event-dialog"
-        open={showCreateEventDialog}
-        onClose={handleCreateEventDialogClose}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>Create Event</DialogTitle>
-        <DialogContent className="create-event-dialog-content">
-          <div className="activity-titleform-div">
-            <FormControl
-              className="activity-title-formcontrol"
-              variant="standard"
-            >
-              <TextField
-                className="activity-title-input"
-                label="Title"
-                variant="standard"
-                value={createTitle}
-                onChange={(e) => setCreateTitle(e.target.value)}
-              ></TextField>
-            </FormControl>
-          </div>
-          <div className="start-end-timepicker">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                label="Start Time"
-                value={createStartTime}
-                onChange={(newStartTime) => setCreateStartTime(newStartTime)}
-              />
-              <DateTimePicker
-                label="End Time"
-                value={createEndTime}
-                onChange={(newEndTime) => setCreateEndTime(newEndTime)}
-              />
-            </LocalizationProvider>
-          </div>
-          <div className="address-input">
-            <InputBase
-              placeholder="Search Address"
-              value={createLocation}
-              onChange={(e) => setCreateLocation(e.target.value)}
-            />
-          </div>
-          <div className="description-input">
-            <NotesSharpIcon style={{ marginBottom: -6, paddingRight: 5 }} />
-            <InputBase
-              className="description-inputbase"
-              placeholder="Description"
-              value={createDescription}
-              onChange={(e) => setCreateDescription(e.target.value)}
-              multiline
-            />
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCreateEventDialogClose}>Cancel</Button>
-          <Button onClick={handleCreateEvent}>Save</Button>
-        </DialogActions>
-      </Dialog>
-      <Button
-        className="create-event-btn"
-        variant="outlined"
-        endIcon={<AddIcon />}
-        onClick={() => setShowCreateEventDialog(true)}
-        sx={{
-          marginTop: 2,
-        }}
-      >
-        Create
-      </Button>
     </>
   );
 };
