@@ -63,7 +63,7 @@
   font-size: 28px;
   margin-top: 0;
   margin-bottom: 10px;
-  animation: hide 2s forwards;
+  animation: hide 3s forwards;
 }
 
 .getStartedButton {
@@ -78,14 +78,23 @@
   letter-spacing: 1px;
   font-size: 16px;
   transition: background-color 0.3s;
-  animation: hide 2s forwards;
+  animation: hide2 3s forwards;
 }
 
 @keyframes hide {
   0% { opacity:0;}
   25% {opacity: 0;}
-  50% {opacity: 25%;}
-  75% {opacity: 50%}
+  40% {opacity: 0%;}
+  75% {opacity: 0.8}
+  100% { opacity:1;} 
+}
+
+@keyframes hide2 {
+  0% { opacity:0;}
+  25% {opacity: 0;}
+  40% {opacity: 0;}
+  75% {opacity: 0;}
+  90% {opacity: 0.8;}
   100% { opacity:1;} 
 }
 

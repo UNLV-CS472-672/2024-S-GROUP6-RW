@@ -3,13 +3,6 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogActions from "@mui/material/DialogActions";
 import Activity from "./Activity";
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -43,7 +36,7 @@ const ItineraryAccordion = ({
     <div className="itin-accordion">
       <Accordion defaultExpanded sx={{width: '80%'}}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>{day}</Typography>
+          <Typography style={{ fontFamily: 'Radley, serif' }}>{day}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Timeline>
