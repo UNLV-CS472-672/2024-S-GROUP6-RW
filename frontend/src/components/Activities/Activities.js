@@ -115,8 +115,6 @@ const locations = [
   }
 ]
 
-let apiKey='AIzaSyCOhJAyiZTOhX4qQDYicsGHDXWxbsZyZKs'
-
 
 async function getNearbyPlaces(lat, lng, radius, type) {
   const response = await fetch(`http://localhost:5000/nearbyPlaces?lat=${lat}&lng=${lng}&radius=${radius}&type=${type}`);
