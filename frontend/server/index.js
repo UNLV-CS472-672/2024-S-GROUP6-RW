@@ -9,7 +9,8 @@ app.use(cors());
 
 app.get('/nearbyPlaces', async (req, res) => {
   const { lat, lng, radius, type } = req.query;
-  const apiKey = 'AIzaSyCOhJAyiZTOhX4qQDYicsGHDXWxbsZyZKs' // Get API key from environment variables
+  const apiKey = process.env.REACT_APP_GOOGLE_PLACES_API_KEY; 
+// Get API key from environment variables
 
   try {
     const response = await fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&key=${apiKey}`);
@@ -24,6 +25,7 @@ app.get('/nearbyPlaces', async (req, res) => {
         rating: place.rating, // Add this line
         priceLevel: place.price_level, // Add this line
         lat: place.geometry.location.lat,
+
         lng: place.geometry.location.lng, 
       };
     });
