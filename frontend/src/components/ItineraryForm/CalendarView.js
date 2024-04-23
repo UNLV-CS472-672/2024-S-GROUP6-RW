@@ -4,7 +4,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import moment from "moment";
-import "../../css/EditView.css";
+import "../../css/CalendarView.css";
 import "../../css/ReactBigCalendar.css";
 
 import IconButton from "@mui/material/IconButton";
