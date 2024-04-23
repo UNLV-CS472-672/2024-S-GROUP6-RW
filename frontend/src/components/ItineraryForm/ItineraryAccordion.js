@@ -34,7 +34,7 @@ const ItineraryAccordion = ({
 
   return (
     <div className="itin-accordion">
-      <Accordion defaultExpanded sx={{width: '80%'}}>
+      <Accordion sx={{width: '60%'}}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography style={{ fontFamily: 'Radley, serif' }}>{day}</Typography>
         </AccordionSummary>

@@ -26,27 +26,19 @@ import { deepPurple } from '@mui/material/colors'
 // Upcoming trip 
 const currTrip = [
   {
-    url: "mchouse.jpg",
-    title: "ur moms house",
+    url: "lasv.jpg",
+    title: "Las Vegas",
     width: "50%",
     height: "50%",
-    location: "ur house",
-    date: "June 10-12, 2024",
+    location: "Las Vegas",
+    date: "06/10/2024 - 06/13/2024",
     itinerary: "Itinerary: \n Explore the city \n Visit the musuem",
   },
 ];
 
 // Past trips
 const pastTrip = [
-  {
-    url: "/test.jpg",
-    title: "Las Vegas",
-    width: "50%",
-    height: "50%",
-    location: "Las Vegas, Nevada",
-    date: "Dec 30, 2023 - Jan 2, 2024 ",
-    itinerary: "Itinerary: \n Visit Fremont Street \n Go to Mob Musuem \n Drive Through Red Rock Canyon",
-  },
+  
   {
     url: "hobbithome.jpg",
     title: "New Zealand",
@@ -66,10 +58,10 @@ const pastTrip = [
     itinerary: "Itinerary: \n Seoul \n Busan \n Jeju Island ",
   },
   {
-    url: "tokyo.jpg",
+    url: "japan.jpg",
     title: "Japan",
-    width: "50%",
-    height: "50%",
+    width: "60%",
+    height: "80%",
     location: "Tokyo, Japan",
     date: "Sep 29- Oct 13, 2023",
     itinerary: "Itinerary: \n Fushimi Inari-taisha Shrine \n Dotombori District \n Osaka\nDay trip to Mount Fuji \n",
@@ -245,7 +237,7 @@ export default function TripDropDown() {
          
           {/*Current trips*/}
           <Accordion >
-            <AccordionDetails sx={{ backgroundColor: "#afd2e9" }}>
+            <AccordionDetails>
               
               {/*Grid for current trips */} 
               <Grid container spacing={5}>
