@@ -3,28 +3,22 @@ import { Grid, Avatar, Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 // Import placeholder image
-import Red from "../../images/avatars/beagle.jpg";
+import Beagle from "../../images/avatars/beagle.jpg";
 
 export default function FriendsTab({ textColor, behindTextBlur }) {
 
   // Mock friends list until we implement handlers to get data from backend
   const friendInfo = [
-    { img: Red, username: "Friend 1" },
-    { img: Red, username: "Friend 2" },
-    { img: Red, username: "Friend 3" },
-    { img: Red, username: "Friend 4" },
-    { img: Red, username: "Friend 5" },
-    { img: Red, username: "Friend 6" },
-    { img: Red, username: "Friend 7" },
-    { img: Red, username: "Friend 8" },
-    { img: Red, username: "Friend 9" },
-    { img: Red, username: "Friend 10" },
-    { img: Red, username: "Friend 11" },
-    { img: Red, username: "Friend 12" },
-    { img: Red, username: "Friend 13" },
-    { img: Red, username: "Friend 14" },
-    { img: Red, username: "Friend 15" },
-    { img: Red, username: "Friend 16" },
+    { img: Beagle, username: "Bob" },
+    { img: Beagle, username: "Joe" },
+    { img: Beagle, username: "Paul" },
+    { img: Beagle, username: "Emily" },
+    { img: Beagle, username: "Dennis" },
+    { img: Beagle, username: "Ashley" },
+    { img: Beagle, username: "Cassandra" },
+    { img: Beagle, username: "Brian" },
+    { img: Beagle, username: "Sam" },
+    { img: Beagle, username: "Montgomery" },
   ];
   console.log(textColor);
 
@@ -81,7 +75,7 @@ export default function FriendsTab({ textColor, behindTextBlur }) {
                   }}
                 />
                 <Typography // To the right of image display username
-                  sx={{ fontSize: "1.5vw", textTransform: "uppercase", color: textColor }}
+                  sx={{ fontSize: "1.5vw", fontFamily: "Radley", textTransform: "uppercase", color: textColor }}
                 >
                   {friend.username}
                 </Typography>

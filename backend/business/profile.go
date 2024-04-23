@@ -5,7 +5,6 @@ import (
 	"backend/models"
 	"errors"
 	"time"
-
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -76,6 +75,7 @@ func EditProfile(profile models.Profile, database db.Database) (*models.Profile,
 	// Collect updates to profile
 	update := bson.M{}
 
+	// This never runs because profile.Modifications is empty
 	for _, entry := range profile.Modifications {
 		switch entry.FieldName {
 		case "Username":
@@ -106,6 +106,8 @@ func EditProfile(profile models.Profile, database db.Database) (*models.Profile,
 			return nil, errors.New("invalid field provided: " + entry.FieldName)
 		}
 	}
+
+	update["About"] = profile.About
 
 	document, err = database["ProfileDetails"].UpdateDocument(bson.M{"Username": existingProfile.Username}, update, "Profile")
 
