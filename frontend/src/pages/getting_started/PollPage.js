@@ -6,8 +6,8 @@ function PollPage() {
   return (
     <>
       <div className="poll-div">
-      <p className="poll-header">What days are you available?</p>
-      <DateAvailability />
+        <p className="poll-header">What days are you available?</p>
+        <DateAvailability />
       </div>
     </>
   );
