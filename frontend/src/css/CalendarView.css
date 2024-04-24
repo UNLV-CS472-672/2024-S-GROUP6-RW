@@ -1,4 +1,3 @@
-
 /* Custom Component Styling */
 
 .activity-title-div {
@@ -31,4 +30,8 @@
   width: 260px;
 }
 
+/* Calendar Close Button */
+.cal-close-btn-container {
+  padding: 10px;
+}
 

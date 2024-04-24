@@ -139,7 +139,7 @@ const EditView = ({
           }}
         />
       </div>
-      <div className="button-section">
+      <div className="cal-close-btn-container">
         <IconButton className="calendar-close-btn" onClick={onClickCloseButton}>
           <CloseIcon />
         </IconButton>

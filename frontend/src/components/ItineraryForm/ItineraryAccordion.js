@@ -70,8 +70,8 @@ const ItineraryAccordion = ({
                   {event.start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
                 </TimelineOppositeContent>
                 <TimelineSeparator>
-                  <TimelineDot />
-                  {index !== events.length - 1 && <TimelineConnector />}
+                  <TimelineDot sx={{ backgroundColor: 'black'}} />
+                  {index !== events.length - 1 && <TimelineConnector sx={{ backgroundColor: 'black'}} />}
                 </TimelineSeparator>
                 <TimelineContent>
                   <Activity

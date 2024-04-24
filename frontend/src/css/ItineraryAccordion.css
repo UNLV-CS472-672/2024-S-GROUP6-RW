@@ -27,3 +27,12 @@
     font-weight: 400;
     font-size: 18px;
 }
+
+/* For the time label for each activity in the accordion */
+.css-ymt5it-MuiTypography-root-MuiTimelineOppositeContent-root {
+    font-family: 'Radley' !important;
+    font-size: 18px !important;
+    font-weight: 1000;
+}
+
+

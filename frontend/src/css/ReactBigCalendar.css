@@ -18,13 +18,15 @@
 /*For Date label on calendar*/
 .rbc-toolbar-label {
   font-size: 35px;
-  font-weight: 700;
+  font-weight: 400;
+  font-family: 'Radley'
 }
 
 /*For Today, Back, Next Button*/
-/* .rbc-btn-group {
-    visibility: hidden;
-} */
+.rbc-btn-group button{
+  font-family: 'Radley';
+  font-size: 15px;
+}
 
 /*Week View */
 
