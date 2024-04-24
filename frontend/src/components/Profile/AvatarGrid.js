@@ -6,61 +6,42 @@ export default function AvatarGrid({
   selectedImg,
   addCustomAvatar,
 }) {
+
+/**
+ * ChatGPT was used to help teach how to use file readers
+ * and Image() to load and display images. It also showed
+ * me how to reduce file sizes using canvas.
+ * (ChatGPT 3.5, 1)
+ */
+
   const plus = { img: add_picture, title: "Add Picture" };
 
   const uploadAvatar = (event) => {
     const file = event.target.files[0];
-
     if (file) {
-      // Check if the file type is an image
-      if (!file.type.startsWith("image/")) {
-        console.log("Please select an image file.");
-        return;
+        // Check if the file type is an image
+        if (!file.type.startsWith("image/")) {
+          console.log("Please select an image file.");
+          return;
+        }
+
+       // Add the resized image to your custom avatars
+       if (avatars[0].id === 0) {
+        avatars.shift();
       }
 
-      // Create an image element to load the image
-      const img = new Image();
-      img.onload = function () {
-        // Create a canvas element
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-
-        // Calculate the new dimensions to fit within 500x500 pixels
-        let newWidth = this.width;
-        let newHeight = this.height;
-        if (newWidth > 500 || newHeight > 500) {
-          const aspectRatio = newWidth / newHeight;
-          if (newWidth > newHeight) {
-            newWidth = 500;
-            newHeight = Math.floor(500 / aspectRatio);
-          } else {
-            newHeight = 500;
-            newWidth = Math.floor(500 * aspectRatio);
-          }
-        }
-
-        // Resize the image
-        canvas.width = newWidth;
-        canvas.height = newHeight;
-        ctx.drawImage(img, 0, 0, newWidth, newHeight);
-
-        // Get the resized image data
-        const resizedImageData = canvas.toDataURL(file.type);
-        console.log("Image size: " + resizedImageData.length + " bytes");
-
-        // Add the resized image to your custom avatars
-        if (avatars[0].id === 0) {
-          avatars.shift();
-        }
+      // ai-gen start (ChatGPT 3.5, 0)
+      const reader = new FileReader();
+      reader.onload = () => {
+        const imgData = reader.result;
         addCustomAvatar([
-          { img: resizedImageData, title: "Custom Picture", id: 0 },
+          { img: imgData, title: "Custom Picture", id: 0 },
           ...avatars,
         ]);
-        selectAvatar({ img: resizedImageData, title: "Custom Picture", id: 0 }); // Set the selectedImg to the uploaded image
+        selectAvatar({ img: imgData, title: "Custom Picture", id: 0 }); // Set the selectedImg to the uploaded image
       };
-
-      // Load the image
-      img.src = URL.createObjectURL(file);
+      reader.readAsDataURL(file);
+      // ai-gen end
     }
   };
 
@@ -84,6 +65,7 @@ export default function AvatarGrid({
           />
         </label>
         <input
+          data-testid="avatar-uploading"
           type="file"
           id="avatar-upload"
           accept="image/*"
@@ -94,6 +76,7 @@ export default function AvatarGrid({
       {avatars.map((avatar, index) => (
         <Grid item xs={3} justifyContent="left" key={index}>
           <Avatar
+            data-testid={`picture-${index}`}
             src={avatar.img}
             alt={avatar.title}
             style={styles.avatar}

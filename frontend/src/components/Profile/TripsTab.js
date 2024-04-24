@@ -84,7 +84,7 @@ export default function TripsTab() {
           >
             <Card // Setup a clickable link for trip
               component={Link}
-              to={trip.link}
+              to={trip.url}
             >
               <CardActionArea>
                 <CardMedia // Display image of trip

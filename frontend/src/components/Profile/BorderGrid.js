@@ -29,6 +29,7 @@ export default function BorderGrid({ borders, selectedBorder }) {
           >
             {/* Avatar component representing the border preview */}
             <Avatar
+              data-testid={`border-${index}`}
               src={border.preview} // Set the source of the Avatar image
               alt={border.title} // Alt text for the Avatar image
               style={styles.border} // Apply custom styles

@@ -95,10 +95,10 @@ export default function EditProfilePic({
             </div>
           )}
           {selectedTab === 1 && (
-            <div style={{ height: "21vw", overflow: "auto", }}>
+            <div data-testid="color-picker" style={{ height: "21vw", overflow: "auto", }}>
               <BorderGrid borders={borders} selectedBorder={selectedBorder} />
               {/* Color picker for selecting border color */}
-              <div style={styles.colorPickers}>
+              <div  style={styles.colorPickers}>
                 <CompactPicker color={color} onChange={handleColorChange} />
               </div>
             </div>
@@ -113,7 +113,7 @@ export default function EditProfilePic({
           )}
         </Box>
         {/* Save button */}
-        <Button variant="contained" style={styles.saveButton} onClick={handleSaveButtonClick}>
+        <Button data-testid="save-button" variant="contained" style={styles.saveButton} onClick={handleSaveButtonClick}>
           Save Changes...
         </Button>
       </div>
