@@ -1,10 +1,8 @@
-// 2024-S-GROUP6-RW\frontend\src\components\GatheringInfo\SearchBar.js
-
 import React, { useState, useEffect } from 'react';
 import './SearchBar.css';
 import { saveToLocal } from '../../utils/LocalStorageManager';
 
-function SearchBar({ LocationNameKey} ) {
+function SearchBar({ LocationNameKey, LocationCoordinatesKey }) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
@@ -25,8 +23,12 @@ function SearchBar({ LocationNameKey} ) {
         }
 
         const data = await response.json();
-        const cityNames = data.map((item) => item.display_name);
-        setSuggestions(cityNames);
+        const cityDetails = data.map((item) => ({
+          name: item.display_name,
+          lat: item.lat,
+          lon: item.lon
+        }));
+        setSuggestions(cityDetails);
       } catch (error) {
         console.error('Error:', error);
         // Handle fetch error
@@ -42,11 +44,11 @@ function SearchBar({ LocationNameKey} ) {
     setQuery(event.target.value);
   };
 
-  const handleSuggestionClick = (cityName) => {
-    setQuery(cityName);
+  const handleSuggestionClick = ({ name, lat, lon }) => {
+    setQuery(name);
     setSuggestions([]); // Clear suggestions
-    console.log(cityName);
-    saveToLocal(LocationNameKey, cityName);
+    saveToLocal(LocationNameKey, name);
+    saveToLocal(LocationCoordinatesKey, { lat, lon });
   };
 
   return (
@@ -62,7 +64,7 @@ function SearchBar({ LocationNameKey} ) {
         <ul className="suggestions">
           {suggestions.map((suggestion, index) => (
             <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-              {suggestion}
+              {suggestion.name}
             </li>
           ))}
         </ul>
