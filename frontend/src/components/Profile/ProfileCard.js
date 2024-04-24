@@ -3,7 +3,7 @@ import { Tabs, Tab, Box, IconButton } from "@mui/material";
 import FriendsTab from "./FriendsTab";
 import AboutTab from "./AboutTab";
 import TripsTab from "./TripsTab";
-import EditProfilePic from "./EditProfilePic";
+import EditProfile from "./EditProfile";
 import NameTag from "./NameTag";
 import PaletteIcon from "@mui/icons-material/Palette";
 import EditIcon from "@mui/icons-material/Edit";
@@ -132,7 +132,7 @@ export default function ProfileCard({ name, allowEdit, image, about, selection, 
 
   const [pictures,setPictures] = useState(pics);
   const [selectedTab, setSelectedTab] = useState(0);
-  const [editProfilePicOpen, setEditProfilePicOpen] = useState(false);
+  const [editProfileOpen, setEditProfileOpen] = useState(false);
   const [selectedImg, setSelectedImg] = useState(customPicFound ? pictures[userPicture] : pictures[userPicture-1]);
   const [SelectedBorder, setSelectedBorder] = useState(borders[userBorder]?.border || Default_Border);
   const [selectedBorderId, setSelectedBorderId] = useState(borders[userBorder]?.id || 0);
@@ -197,17 +197,17 @@ const handleChange = (event, newValue) => {
 };
 
 // Function to open edit profile pic dialog
-const handleEditProfilePicOpen = () => {
+const handleEditProfileOpen = () => {
   // Enable palette button and open edit profile pic dialog
   setPaletteEnabled(true);
-  setEditProfilePicOpen(true);
+  setEditProfileOpen(true);
 };
 
 // Function to close edit profile pic dialog
-const handleEditProfilePicClose = () => {
+const handleEditProfileClose = () => {
   // Disable palette button and close edit profile pic dialog
   setPaletteEnabled(false);
-  setEditProfilePicOpen(false);
+  setEditProfileOpen(false);
 };
 
 // Function to set new profile picture
@@ -223,9 +223,9 @@ const setNewBorder = (border) => {
   setSelectedBorderId(border.id);
 };
 
-// Function to set new custom avatars
-const setNewCustomAvatars = (avatars) => {
-  // Update pictures state with the new custom avatars
+// Function to set custom avatar
+const setCustomAvatars = (avatars) => {
+  // Update pictures state with custom avatar
   setPictures(avatars);
 };
 
@@ -275,7 +275,7 @@ const setNewBackdrop = (backdrop) => {
                 : "0.3vw solid transparent",
             }}
           >
-            <IconButton data-testid="palette-button" style={{...styles.paletteButton, border: `0.15vw solid ${textColor}`}} onClick={handleEditProfilePicOpen} ref={paletteButtonRef}>
+            <IconButton data-testid="palette-button" style={{...styles.paletteButton, border: `0.15vw solid ${textColor}`}} onClick={handleEditProfileOpen} ref={paletteButtonRef}>
               <PaletteIcon style={{...styles.paletteIcon, color: textColor}}/>
             </IconButton>
           </div>)}
@@ -324,15 +324,15 @@ const setNewBackdrop = (backdrop) => {
         {selectedTab === 1 && <div data-testid="friends-tab"><FriendsTab  textColor={textColor} behindTextBlur={behindTextBlur} /></div>}
         {selectedTab === 2 && <div data-testid="trips-tab"><TripsTab /></div>}
       </div>
-      <EditProfilePic // Pop up that displays only when profile picture is clicked
-        open={editProfilePicOpen}
-        onClose={handleEditProfilePicClose}
+      <EditProfile // Pop up that displays only when profile picture is clicked
+        open={editProfileOpen}
+        onClose={handleEditProfileClose}
         anchorEl={paletteButtonRef.current}
         selectedImg={(image) => setNewPicture(image)}
         selectedBorder={(border) => setNewBorder(border)}
         selectedBackdrop={(backdrop) => setNewBackdrop(backdrop)}
         setBorderColor={setBorderColor}
-        addCustomAvatar={(avatar) => setNewCustomAvatars(avatar)}
+        addCustomAvatar={(avatar) => setCustomAvatars(avatar)}
         pictures={pictures}
         borders={borders}
         backdrops={backdrops}
