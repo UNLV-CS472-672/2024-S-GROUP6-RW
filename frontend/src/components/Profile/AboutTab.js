@@ -18,6 +18,7 @@ export default function AboutTab({ editMode, description, setDescription, textCo
             {editMode ? (
                 // Use TextInput for editable mode
                 <TextInput
+                    data-testid="text-input"
                     placeholder="Enter description"
                     value={description}
                     onChangeText={handleChange}

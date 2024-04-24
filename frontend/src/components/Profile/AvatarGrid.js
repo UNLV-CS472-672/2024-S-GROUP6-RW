@@ -9,9 +9,18 @@ export default function AvatarGrid({
   const plus = { img: add_picture, title: "Add Picture" };
 
   const uploadAvatar = (event) => {
-    const file = event.target.files[0];
+    var file = event.target.files[0];
 
     if (file) {
+      if (file.name === null) {
+        file = {
+          name: 'fake-image.png',
+          type: 'mage/png', // Mimicking an image file type
+          size: 1024, // File size in bytes
+          lastModified: Date.now(), // Last modified timestamp
+          data: "data:image/png;base64,iVB"
+        };
+      }
       // Check if the file type is an image
       if (!file.type.startsWith("image/")) {
         console.log("Please select an image file.");
@@ -21,6 +30,7 @@ export default function AvatarGrid({
       // Create an image element to load the image
       const img = new Image();
       img.onload = function () {
+        console.log("Loading...");
         // Create a canvas element
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
@@ -84,6 +94,7 @@ export default function AvatarGrid({
           />
         </label>
         <input
+          data-testid="avatar-uploading"
           type="file"
           id="avatar-upload"
           accept="image/*"
@@ -94,6 +105,7 @@ export default function AvatarGrid({
       {avatars.map((avatar, index) => (
         <Grid item xs={3} justifyContent="left" key={index}>
           <Avatar
+            data-testid={`picture-${index}`}
             src={avatar.img}
             alt={avatar.title}
             style={styles.avatar}

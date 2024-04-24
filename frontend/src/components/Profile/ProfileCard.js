@@ -101,7 +101,7 @@ export default function ProfileCard({ name, allowEdit, image, about, selection, 
   }
 
     // Array of border SVG components
-  const borders = [
+  var borders = [
     { border: Default_Border, preview: Default_Preview, id: 0 },
     { border: Star_Border, preview: Star_Preview, id: 1 },
     { border: Spike_Border, preview: Spike_Preview, id: 2 },
@@ -113,7 +113,7 @@ export default function ProfileCard({ name, allowEdit, image, about, selection, 
   ];
 
     // Array of backdrop images
-  const backdrops = [
+  var backdrops = [
     { img: Grass, title: "Grass", textColor: "black", nameGradient: "linear-gradient(#57B000, #A1DF50)", id: 0 },
     { img: Ocean, title: "Ocean", textColor: "black", nameGradient: "linear-gradient(#00B0DC, lightblue)", id: 1 },
     { img: Valley, title: "Valley", textColor: "black", nameGradient: "linear-gradient(#9D92DF, #FFE5B4)", id: 2 },
@@ -126,17 +126,17 @@ export default function ProfileCard({ name, allowEdit, image, about, selection, 
   const [selectedTab, setSelectedTab] = useState(0);
   const [editProfilePicOpen, setEditProfilePicOpen] = useState(false);
   const [selectedImg, setSelectedImg] = useState(customPicFound ? pictures[userPicture] : pictures[userPicture-1]);
-  const [SelectedBorder, setSelectedBorder] = useState(borders[userBorder].border);
-  const [selectedBorderId, setSelectedBorderId] = useState(borders[userBorder].id);
+  const [SelectedBorder, setSelectedBorder] = useState(borders[userBorder]?.border || Default_Border);
+  const [selectedBorderId, setSelectedBorderId] = useState(borders[userBorder]?.id || 0);
   const [borderColor, setBorderColor] = useState(userColor);
   const [selectedBackdrop, setSelectedBackdrop] = useState(backdrops[userBackdrop]);
-  const [textColor, setTextColor] = useState(backdrops[userBackdrop].textColor);
+  const [textColor, setTextColor] = useState(backdrops[userBackdrop]?.textColor || "black");
   const [description, setDescription] = useState(about);
   const [paletteEnabled, setPaletteEnabled] = useState(false);
   const [editEnabled, setEditEnabled] = useState(false);
-  const [nameGradient, setNameGradient] = useState(backdrops[userBackdrop].nameGradient);
-  const [behindTextBlur, setBehindTextBlur] = useState(backdrops[userBackdrop].textColor === "white" ? "rgba(0, 0, 0, 0.4)" : "rgba(255, 255, 255, 0.4)");
-  const [currentCount, setCurrentCount] = useState(description.length);
+  const [nameGradient, setNameGradient] = useState(backdrops[userBackdrop]?.nameGradient || "linear-gradient(#57B000, #A1DF50)");
+  const [behindTextBlur, setBehindTextBlur] = useState((backdrops[userBackdrop]?.textColor || "black") === "white" ? "rgba(0, 0, 0, 0.4)" : "rgba(255, 255, 255, 0.4)");
+  const [currentCount, setCurrentCount] = useState(description?.length || 0);
   const maxCharLimit = 300;
 
 // Function to save profile data
@@ -154,13 +154,13 @@ const handleSaveData = () => {
       dataString = dataString + pictures[0].img;
     }
     dataString = dataString + "%" + description;
-    dataString = dataString + "%" + selectedImg.id + "-" + selectedBorderId + "-" + borderColor + "-" + selectedBackdrop.id;
+    dataString = dataString + "%" + (selectedImg?.id || 1) + "-" + selectedBorderId + "-" + borderColor + "-" + (selectedBackdrop?.id || 0);
 
     // Update previous selections with the current selections
     setPreviousPicture(selectedImg.id);
     setPreviousBorder(selectedBorderId)
     setPreviousColor(borderColor)
-    setPreviousBackdrop(selectedBackdrop.id);
+    setPreviousBackdrop(selectedBackdrop?.id || 0);
 
     // Log the dataString and save profile data via API
     console.log(dataString);
@@ -238,11 +238,11 @@ const setNewBackdrop = (backdrop) => {
 
   return (
     <>
-    <Box
+    <Box data-testid="backdrop-image"
       style={{
         ...styles.container,
         border: "0.4vw solid black",
-        backgroundImage: `url(${selectedBackdrop.img})`,
+        backgroundImage: `url(${selectedBackdrop?.img || Valley})`,
         backgroundSize: "cover",
       }}
     >
@@ -254,7 +254,7 @@ const setNewBackdrop = (backdrop) => {
             stroke="black"
             strokeWidth="0.15vw" // Corrected the attribute name
           />
-          <img src={selectedImg.img} style={styles.image} alt="Profile" />
+          <img data-testid="profile-picture" src={selectedImg?.img || Beagle} style={styles.image} alt="Profile" />
         </Box>
         <NameTag name={name} nameGradient={nameGradient} />
       </Box>
@@ -267,7 +267,7 @@ const setNewBackdrop = (backdrop) => {
                 : "0.3vw solid transparent",
             }}
           >
-            <IconButton style={{...styles.paletteButton, border: `0.15vw solid ${textColor}`}} onClick={handleEditProfilePicOpen} ref={paletteButtonRef}>
+            <IconButton data-testid="palette-button" style={{...styles.paletteButton, border: `0.15vw solid ${textColor}`}} onClick={handleEditProfilePicOpen} ref={paletteButtonRef}>
               <PaletteIcon style={{...styles.paletteIcon, color: textColor}}/>
             </IconButton>
           </div>)}
@@ -301,7 +301,7 @@ const setNewBackdrop = (backdrop) => {
         >
           <Tab label="About" style={{...styles.tab, color: textColor}} />
           <Tab label="Friends" style={{...styles.tab, color: textColor}} />
-          <Tab label="Trips" style={{...styles.tab, color: textColor}} />
+          <Tab data-testid="trip-label" label="Trips" style={{...styles.tab, color: textColor}} />
         </Tabs>
         {selectedTab === 0 && (
           <AboutTab
@@ -313,8 +313,8 @@ const setNewBackdrop = (backdrop) => {
             maxCharLimit={maxCharLimit}
           />
         )}
-        {selectedTab === 1 && <FriendsTab textColor={textColor} behindTextBlur={behindTextBlur} />}
-        {selectedTab === 2 && <TripsTab  />}
+        {selectedTab === 1 && <div data-testid="friends-tab"><FriendsTab  textColor={textColor} behindTextBlur={behindTextBlur} /></div>}
+        {selectedTab === 2 && <div data-testid="trips-tab"><TripsTab /></div>}
       </div>
       <EditProfilePic // Pop up that displays only when profile picture is clicked
         open={editProfilePicOpen}
