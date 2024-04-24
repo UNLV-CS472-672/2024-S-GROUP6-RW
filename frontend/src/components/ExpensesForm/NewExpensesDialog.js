@@ -162,7 +162,7 @@ const NewExpenseDialog = ({
 				amount,
 				payer,
 				date,
-				description,
+				description: description || "",
 			});
 		} else {
 			onAddExpense({
@@ -171,7 +171,7 @@ const NewExpenseDialog = ({
 				amount,
 				payer,
 				date,
-				description,
+				description: description || "",
 			});
 		}
 
@@ -212,13 +212,14 @@ const NewExpenseDialog = ({
 					variant="outlined"
 					sx={{ mr: 1, mt: 1 }}
 					onClick={handleClickOpen}
+					data-testid="new-expense-button"
 				>
 					New expense
 				</Button>
 			)}
 			{/* show the edit button if the new data is false */}
 			{!newData && (
-				<Button onClick={handleClickOpen}>
+				<Button onClick={handleClickOpen} data-testid="edit-button">
 					<EditIcon />
 				</Button>
 			)}
@@ -255,6 +256,7 @@ const NewExpenseDialog = ({
 								label="Name"
 								type="text"
 								fullWidth
+								data-testid="name-field"
 								// ai-gen start (ChatGPT-4.0, 0)
 								value={name || ""}
 								// ai-gen end
@@ -267,6 +269,7 @@ const NewExpenseDialog = ({
 								label="Amount"
 								type="number"
 								fullWidth
+								data-testid="amount-field"
 								// ai-gen start (ChatGPT-4.0, 0)
 								value={amount || ""}
 								// ai-gen end
@@ -279,6 +282,7 @@ const NewExpenseDialog = ({
 								label="Paid by:"
 								type="text"
 								fullWidth
+								data-testid="payer-field"
 								// ai-gen start (ChatGPT-4.0, 0)
 								value={payer || ""}
 								// ai-gen end
@@ -291,6 +295,7 @@ const NewExpenseDialog = ({
 								margin="dense"
 								type="date"
 								fullWidth
+								data-testid="date-field"
 								// ai-gen start (ChatGPT-4.0, 0)
 								value={date || formatDateForInput(new Date())}
 								onChange={(e) => setDate(e.target.value)}
@@ -329,8 +334,14 @@ const NewExpenseDialog = ({
 				</DialogContent>
 				{/* buttons for cancel and add */}
 				<DialogActions>
-					<Button onClick={handleClose}>Cancel</Button>
-					<Button onClick={handleAdd} color="primary">
+					<Button onClick={handleClose} data-testid="close-button">
+						Cancel
+					</Button>
+					<Button
+						onClick={handleAdd}
+						data-testid="add-button"
+						color="primary"
+					>
 						Add
 					</Button>
 				</DialogActions>

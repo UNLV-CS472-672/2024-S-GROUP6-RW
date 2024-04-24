@@ -13,6 +13,7 @@ function ProfilePage() {
   const [allowEdit, setAllowEdit] = useState(false);
   const [username, setUsername] = useState(getFromLocal("username")); // Initializing username from local storage
   const location = useLocation(); // Getting the current location from react-router-dom
+  console.log(location.pathname)
   const [foundUser, setFoundUser] = useState(false); // State variable to track if the user is found
   const [image, setImage] = useState(""); // State variable for the user's profile image
   const [desc, setDesc] = useState(""); // State variable for the user's profile description
@@ -40,7 +41,10 @@ function ProfilePage() {
   const handleFetchUserData = async () => {
     try {
       if (isAuth && location) {
+        console.log(location.pathname)
         let tmp = location.pathname.split("/").slice(-1)[0]; // Extracting the username from the URL
+        console.log(tmp)
+        console.log(username)
 
         // Determine if this is the user's profile
         if (tmp === username) {

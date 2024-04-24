@@ -136,6 +136,7 @@ const History = ({ transactions, sudoUser }) => {
 				borderRadius: "16px",
 				color: theme.palette.text.primary,
 				overflow: "hidden",
+				fontFamily: "Radley",
 				// ai-gen end
 			}}
 		>
@@ -148,6 +149,7 @@ const History = ({ transactions, sudoUser }) => {
 						lg: "400px",
 					},
 					overflowY: "auto",
+					fontFamily: "Radley",
 				}}
 			>
 				<Box
@@ -155,15 +157,36 @@ const History = ({ transactions, sudoUser }) => {
 					justifyContent="space-between"
 					alignItems="center"
 					mb={2}
+					fontFamily="Radley"
+					sx={{ fontFamily: "Radley" }}
 				>
-					<Typography variant="h6" align="left">
+					<Typography
+						variant="h6"
+						align="left"
+						fontFamily="Radley"
+						sx={{ fontFamily: "Radley" }}
+					>
 						History
 					</Typography>
 
-					<Box display="flex" width="100%" justifyContent={"right"}>
-						<Box width={150} marginRight={2} marginLeft={2}>
+					<Box
+						display="flex"
+						width="100%"
+						justifyContent={"right"}
+						fontFamily="Radley"
+						sx={{ fontFamily: "Radley" }}
+					>
+						<Box
+							width={150}
+							marginRight={2}
+							marginLeft={2}
+							fontFamily="Radley"
+							sx={{ fontFamily: "Radley" }}
+						>
 							{/* Search bar */}
 							<TextField
+								fontFamily="Radley"
+								sx={{ fontFamily: "Radley" }}
 								fullWidth
 								variant="outlined"
 								label="Search"
@@ -173,15 +196,29 @@ const History = ({ transactions, sudoUser }) => {
 						</Box>
 
 						{/* Dropdown to select search field */}
-						<FormControl>
+						<FormControl fontFamily="Radley">
 							<Select
 								labelId="search-field-label"
 								id="search-field"
 								value={searchField}
 								onChange={handleSearchFieldChange}
+								fontFamily="Radley"
+								sx={{ fontFamily: "Radley" }}
 							>
-								<MenuItem value="payer">Payer</MenuItem>
-								<MenuItem value="payee">Payee</MenuItem>
+								<MenuItem
+									fontFamily="Radley"
+									sx={{ fontFamily: "Radley" }}
+									value="payer"
+								>
+									Payer
+								</MenuItem>
+								<MenuItem
+									fontFamily="Radley"
+									sx={{ fontFamily: "Radley" }}
+									value="payee"
+								>
+									Payee
+								</MenuItem>
 							</Select>
 						</FormControl>
 					</Box>
@@ -196,6 +233,7 @@ const History = ({ transactions, sudoUser }) => {
 				*/}
 				{/* ai-gen start (chatGPT 4, 2)*/}
 				<Paper
+					fontFamily="Radley"
 					elevation={3}
 					sx={{
 						overflow: "auto",
@@ -203,17 +241,32 @@ const History = ({ transactions, sudoUser }) => {
 						"&::-webkit-scrollbar": {
 							display: "none",
 						},
+						fontFamily: "Radley",
 					}}
 				>
 					{/* ai-gen end */}
 					{Object.keys(transactionsByMonth)
 						.sort((a, b) => new Date(b) - new Date(a))
 						.map((month) => (
-							<Accordion key={month}>
-								<AccordionSummary expandIcon={<ExpandMoreIcon />}>
-									<Typography>{month}</Typography>
+							<Accordion
+								key={month}
+								fontFamily="Radley"
+								sx={{ fontFamily: "Radley" }}
+							>
+								<AccordionSummary
+									fontFamily="Radley"
+									sx={{ fontFamily: "Radley" }}
+									expandIcon={<ExpandMoreIcon />}
+								>
+									<Typography
+										fontFamily="Radley"
+										sx={{ fontFamily: "Radley" }}
+									>
+										{month}
+									</Typography>
 								</AccordionSummary>
 								<AccordionDetails
+									fontFamily="Radley"
 									sx={{
 										//ai-gen (ChatGPT-4.0, 1)
 										maxHeight: "200px",
@@ -222,17 +275,25 @@ const History = ({ transactions, sudoUser }) => {
 											display: "none",
 											// ai-gen end
 										},
+										fontFamily: "Radley",
 									}}
 								>
-									<List>
+									<List
+										fontFamily="Radley"
+										sx={{ fontFamily: "Radley" }}
+									>
 										{transactionsByMonth[month].map(
 											(transaction, index) => (
 												// ai-gen start (ChatGPT-4.0, 1)
 												<ListItem
+													fontFamily="Radley"
+													sx={{ fontFamily: "'Radley', serif" }}
 													key={`${transaction.id}-${transaction.amount}-${transaction.date}-${index}`}
 												>
 													{/* ai-gen end */}
 													<ListItemText
+														fontFamily="Radley"
+														sx={{ fontFamily: "'Radley', serif" }}
 														primary={
 															transaction.payer === sudoUser
 																? `You paid ${transaction.payee} $${transaction.amount}`

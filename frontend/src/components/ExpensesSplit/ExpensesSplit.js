@@ -38,6 +38,8 @@ function ExpensesSplit() {
 				<div>
 					{/*/ ai-gen start (ChatGPT-4.0, 2)*/}
 					<EditIcon
+						data-testid="edit-icon"
+						aria-label="edit"
 						color="primary"
 						onClick={() => {
 							const person = {
