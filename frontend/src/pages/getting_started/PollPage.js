@@ -10,6 +10,7 @@ function PollPage() {
         <DateAvailability />
       </div>
     </>
+
   );
 }
 

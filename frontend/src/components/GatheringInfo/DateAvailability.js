@@ -4,27 +4,43 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
-import "../../css/PollPage.css";
 
+import "../../css/PollPage.css";
+import "./DateAvailability.css";
+
+/**
+ * ChatGPT was used in order to assist the documenting of this component. The component was examined,
+ * and ChatGPT was requested to comment sections of code extensively. This set a baseline
+ * for me to read through the documentation and make adjustments whereever I felt it was necessary.
+ * (ChatGPT-3.5, 2)
+ */
+
+// Initialize momentLocalizer for react-big-calendar
 const localizer = momentLocalizer(moment);
 
+/**
+ * Component for managing date availability and events.
+ * Allows users to input their availability, view events on a calendar, and edit/delete events.
+ */
 const DateAvailability = () => {
-  const [events, setEvents] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [name, setName] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [usedColors, setUsedColors] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedDateEvents, setSelectedDateEvents] = useState([]);
+  // State variables for managing events, form input, and UI state
+  const [events, setEvents] = useState([]); // Array of events
+  const [startDate, setStartDate] = useState(""); // Start date input
+  const [endDate, setEndDate] = useState(""); // End date input
+  const [name, setName] = useState(""); // Name input
+  const [submitted, setSubmitted] = useState(false); // Form submission flag
+  const [usedColors, setUsedColors] = useState([]); // Array of used colors for events
+  const [selectedEvent, setSelectedEvent] = useState(null); // Selected event for edit/delete
+  const [editDialogOpen, setEditDialogOpen] = useState(false); // Edit dialog open/close flag
+  const [selectedDate, setSelectedDate] = useState(null); // Selected date for displaying events
+  const [selectedDateEvents, setSelectedDateEvents] = useState([]); // Events for the selected date
 
-  // Define color palette
+  // Define color palette for events
+  // ChatGPT was used in order to recommend these hex codes
+
+  // ai-gen start (ChatGPT-3.5, 1)
   const colorPalette = [
     "#007bff", // Blue
-    "#6610f2", // Purple
-    "#6f42c1", // Indigo
     "#e83e8c", // Pink
     "#dc3545", // Red
     "#fd7e14", // Orange
@@ -33,10 +49,11 @@ const DateAvailability = () => {
     "#20c997", // Teal
     "#17a2b8", // Cyan
   ];
+  // ai-gen end
 
-  // Handle submit event
+  // Function to handle form submission
   const handleSubmit = () => {
-    // Handle form validation
+    // Validate form inputs
     if (!startDate || !endDate || !name) {
       return;
     }
@@ -54,6 +71,9 @@ const DateAvailability = () => {
     }
 
     // Find color for the name or generate a new one
+    // ChatGPT was used in order to assist with the creation of assigning unique colors
+
+    // ai-gen start (ChatGPT-3.5, 1)
     let color = usedColors.find((entry) => entry.name === name)?.color;
     if (!color) {
       color = colorPalette.find(
@@ -64,6 +84,7 @@ const DateAvailability = () => {
       }
       setUsedColors([...usedColors, { name, color }]); // Add new name-color pair to usedColors
     }
+    // ai-gen end
 
     // Create new event object
     const newEvent = {
@@ -80,10 +101,10 @@ const DateAvailability = () => {
     setStartDate("");
     setEndDate("");
     setName("");
-    setSubmitted(true);
+    setSubmitted(true); // Set form submission flag
   };
 
-  // Handle edit event
+  // Function to handle editing an event
   const handleEditSubmit = () => {
     // Ensure start and end dates are valid
     if (!startDate || !endDate) {
@@ -107,20 +128,20 @@ const DateAvailability = () => {
     setEditDialogOpen(false);
   };
 
-  // Handle delete event
+  // Function to handle deleting an event
   const handleDeleteEvent = () => {
     const updatedEvents = events.filter((event) => event !== selectedEvent);
     setEvents(updatedEvents);
     setEditDialogOpen(false); // Close the edit dialog after deletion
   };
 
-  // Handle event click
+  // Function to handle clicking on an event
   const handleEventClick = (event) => {
     setSelectedEvent(event); // Set selected event
     setEditDialogOpen(true); // Open edit dialog
   };
 
-  // Handle click on "x more" text
+  // Function to handle clicking on "x more" text
   const handleMoreTextClick = (date) => {
     setSelectedDate(date);
     const eventsForSelectedDate = events.filter(
@@ -139,12 +160,14 @@ const DateAvailability = () => {
         <p>Name: {selectedEvent?.title}</p>
         <input
           type="date"
+          data-testid="editStartDate"
           value={startDate}
           min={moment().format("YYYY-MM-DD")}
           onChange={(e) => setStartDate(e.target.value)}
         />
         <input
           type="date"
+          data-testid="editEndDate"
           value={endDate}
           min={startDate || moment().format("YYYY-MM-DD")}
           onChange={(e) => setEndDate(e.target.value)}
@@ -163,7 +186,9 @@ const DateAvailability = () => {
     </Dialog>
   );
 
-  // Customize event styles
+  // Function to customize event styles
+  // ChatGPT was used in order to assist with the CSS of this section
+  // ai-gen start (ChatGPT-3.5, 0)
   const eventStyleGetter = (event, start, end, isSelected) => {
     const style = {
       backgroundColor: event.color,
@@ -176,8 +201,9 @@ const DateAvailability = () => {
       style: style,
     };
   };
+  // ai-gen end
 
-  // Customize the rendering of the day slot with "x more" text
+  // Function to customize the rendering of the day slot with "x more" text
   const customDayPropGetter = (date) => {
     const eventsForDate = events.filter(
       (event) =>
@@ -193,6 +219,7 @@ const DateAvailability = () => {
     return {};
   };
 
+  // Function to calculate potential travel dates
   const getPotentialTravelDates = () => {
     const travelDates = [];
 
@@ -236,33 +263,38 @@ const DateAvailability = () => {
     return travelDates;
   };
 
-  // Get potential travel dates
+  // Calculate potential travel dates
   const potentialTravelDates = getPotentialTravelDates();
 
   return (
     <div>
+      {/* Form for inputting availability */}
       <div>
         <input
           type="date"
+          data-testid="startDate"
           value={startDate}
           min={moment().format("YYYY-MM-DD")}
           onChange={(e) => setStartDate(e.target.value)}
         />
         <input
           type="date"
+          data-testid="endDate"
           value={endDate}
           min={startDate ? startDate : moment().format("YYYY-MM-DD")}
           onChange={(e) => setEndDate(e.target.value)}
         />
-
         <input
           type="text"
+          data-testid="name"
           value={name}
           placeholder="Name"
           onChange={(e) => setName(e.target.value)}
         />
         <button onClick={handleSubmit}>Submit</button>
       </div>
+
+      {/* Display calendar after form submission */}
       {submitted && (
         <div style={{ height: "500px" }}>
           <Calendar
@@ -277,7 +309,11 @@ const DateAvailability = () => {
           />
         </div>
       )}
+
+      {/* Display edit dialog */}
       {editDialog}
+
+      {/* Display events for selected date */}
       {selectedDate && (
         <div>
           <h2>{moment(selectedDate).format("MMM D, YYYY")}</h2>
@@ -288,7 +324,11 @@ const DateAvailability = () => {
           </ul>
         </div>
       )}
+{/* Display potential travel dates */}
       <p className="pot-header">Potential Travel Dates:</p>
+
+      
+  
       <ul>
         {potentialTravelDates.map((date, index) => (
           <li key={index}>{date}</li>

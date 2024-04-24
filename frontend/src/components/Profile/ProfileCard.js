@@ -8,99 +8,236 @@ import NameTag from "./NameTag";
 import PaletteIcon from "@mui/icons-material/Palette";
 import EditIcon from "@mui/icons-material/Edit";
 import { useTheme } from "@mui/material/styles";
+import { saveProfile } from "../../utils/ApiManager";
 
-import { useAuth } from "../../auth/AuthContext";
+// Import images for avatars
+import Beagle from "../../images/avatars/beagle.jpg";
+import Bear from "../../images/avatars/bear.jpg";
+import Tiger from "../../images/avatars/tiger.jpg";
+import Camel from "../../images/avatars/camel.jpg";
+import Dolphin from "../../images/avatars/dolphin.jpg";
+import Eagle from "../../images/avatars/eagle.jpg";
+import Fox from "../../images/avatars/fox.jpg";
+import Iguana from "../../images/avatars/iguana.jpg";
+import Panda from "../../images/avatars/panda.jpg";
+import Red_Panda from "../../images/avatars/red_panda.jpg";
 
-import defaultPic from "../../images/avatars/beagle.jpg";
-import { ReactComponent as DefaultBorder } from "../../images/borders/Default_Border.svg";
-import defaultBackdrop from "../../images/backdrops/grass.jpg";
+// Import SVG components for borders
+import { ReactComponent as Default_Border } from "../../images/borders/Default_Border.svg";
+import { ReactComponent as Star_Border } from "../../images/borders/Star_Border.svg";
+import { ReactComponent as Spike_Border } from "../../images/borders/Spike_Border.svg";
+import { ReactComponent as Flower_Border } from "../../images/borders/Flower_Border.svg";
+import { ReactComponent as Hole_Border } from "../../images/borders/Hole_Border.svg";
+import { ReactComponent as Bone_Border } from "../../images/borders/Bone_Border.svg";
+import { ReactComponent as Wave_Border } from "../../images/borders/Wave_Border.svg";
+import { ReactComponent as Helix_Border } from "../../images/borders/Helix_Border.svg";
 
-export default function ProfileContainer({ name, enableEdit, userData }) {
-  // const isMobile = useMediaQuery(theme.breakpoints.down("sm")); Will implement later
+// Import preview images for borders
+import Default_Preview from "../../images/border_previews/Default_Preview.png";
+import Star_Preview from "../../images/border_previews/Star_Preview.png";
+import Spike_Preview from "../../images/border_previews/Spike_Preview.png";
+import Flower_Preview from "../../images/border_previews/Flower_Preview.png";
+import Hole_Preview from "../../images/border_previews/Hole_Preview.png";
+import Bone_Preview from "../../images/border_previews/Bone_Preview.png";
+import Wave_Preview from "../../images/border_previews/Wave_Preview.png";
+import Helix_Preview from "../../images/border_previews/Helix_Preview.png";
+
+// Import images for backdrops
+import Valley from "../../images/backdrops/valley.jpg";
+import Grass from "../../images/backdrops/grass.jpg";
+import Ocean from "../../images/backdrops/ocean.jpg";
+import City from "../../images/backdrops/city.jpg";
+import Desert from "../../images/backdrops/desert.jpg";
+import Space from "../../images/backdrops/space.jpg";
+
+export default function ProfileCard({ name, allowEdit, image, about, selection, setAlertMessage, setAlertSucceeded, setShowAlert }) {
+  // useRef for the palette button
   const paletteButtonRef = useRef(null);
   const theme = useTheme();
 
-  const profilePic = { img: defaultPic, title: "default picture" };
+  // Variables to hold user selections
+  var userPicture;
+  var userBorder;
+  var userColor;
+  var userBackdrop;
+
+  // Destructure user selections from selection prop
+  if (selection) {
+    const [a, b, c, d] = selection.split('-');
+    userPicture = a;
+    userBorder = b;
+    userColor = c;
+    userBackdrop = d;
+  }
+
+  // State variables for previous selections
+  const [previousPicture, setPreviousPicture] = useState(userPicture);
+  const [previousBorder, setPreviousBorder] = useState(userBorder);
+  const [previousColor, setPreviousColor] = useState(userColor);
+  const [previousBackdrop, setPreviousBackdrop] = useState(userBackdrop);
+
+  // Boolean to track if a custom picture is found
+  var customPicFound = false;
+
+  // Array of default avatar images
+  var pics = [
+    { img: Beagle, title: "Beagle", id: 1 },
+    { img: Bear, title: "Bear", id: 2 },
+    { img: Tiger, title: "Tiger", id: 3 },
+    { img: Camel, title: "Camel", id: 4 },
+    { img: Dolphin, title: "Dolphin", id: 5 },
+    { img: Eagle, title: "Eagle", id: 6 },
+    { img: Fox, title: "Fox", id: 7 },
+    { img: Iguana, title: "Iguana", id: 8 },
+    { img: Panda, title: "Panda", id: 9 },
+    { img: Red_Panda, title: "Red_Panda", id: 10 },
+  ];
+
+  // Check if custom image is provided
+  if (image !== "") {
+    // If custom image exists, add it to the pics array
+    pics = [{img: image, title: "Custom", id: 0}, ...pics];
+    customPicFound = true;
+  }
+
+    // Array of border SVG components
+  const borders = [
+    { border: Default_Border, preview: Default_Preview, id: 0 },
+    { border: Star_Border, preview: Star_Preview, id: 1 },
+    { border: Spike_Border, preview: Spike_Preview, id: 2 },
+    { border: Flower_Border, preview: Flower_Preview, id: 3 },
+    { border: Hole_Border, preview: Hole_Preview, id: 4 },
+    { border: Bone_Border, preview: Bone_Preview, id: 5 },
+    { border: Wave_Border, preview: Wave_Preview, id: 6 },
+    { border: Helix_Border, preview: Helix_Preview, id: 7 },
+  ];
+
+    // Array of backdrop images
+  const backdrops = [
+    { img: Grass, title: "Grass", textColor: "black", nameGradient: "linear-gradient(#57B000, #A1DF50)", id: 0 },
+    { img: Ocean, title: "Ocean", textColor: "black", nameGradient: "linear-gradient(#00B0DC, lightblue)", id: 1 },
+    { img: Valley, title: "Valley", textColor: "black", nameGradient: "linear-gradient(#9D92DF, #FFE5B4)", id: 2 },
+    { img: City, title: "City", textColor: "white", nameGradient: "linear-gradient(#9300FF, #C8ADFD)", id: 3 },
+    { img: Desert, title: "Desert", textColor: "black", nameGradient: "linear-gradient(#ED8438, #EDBB97)", id: 4 },
+    { img: Space, title: "Space", textColor: "white", nameGradient: "linear-gradient(#A0A0A0, white)", id: 5 },
+  ]
+
+  const [pictures,setPictures] = useState(pics);
   const [selectedTab, setSelectedTab] = useState(0);
   const [editProfilePicOpen, setEditProfilePicOpen] = useState(false);
-  const [selectedImg, setSelectedImg] = useState(profilePic);
-  const [SelectedBorder, setSelectedBorder] = useState(DefaultBorder);
-  const [borderColor, setBorderColor] = useState("black");
-  const [selectedBackdrop, setSelectedBackdrop] = useState({img: defaultBackdrop, title: "Grass", textColor: "black"});
-  const [textColor, setTextColor] = useState("black");
-  const [selectedBanner, setSelectedBanner] = useState(null);
-  const [displayBanner, setDisplayBanner] = useState(false);
-  const [customAvatars, setCustomAvatars] = useState([]);
-  const [description, setDescription] = useState("“Twenty years from now you will be more disappointed by the things you didn’t do than by the ones you did do. So throw off the bowlines. Sail away from the safe harbor. Catch the trade winds in your sails. Explore. Dream. Discover.”\n― Mark Twain");
+  const [selectedImg, setSelectedImg] = useState(customPicFound ? pictures[userPicture] : pictures[userPicture-1]);
+  const [SelectedBorder, setSelectedBorder] = useState(borders[userBorder].border);
+  const [selectedBorderId, setSelectedBorderId] = useState(borders[userBorder].id);
+  const [borderColor, setBorderColor] = useState(userColor);
+  const [selectedBackdrop, setSelectedBackdrop] = useState(backdrops[userBackdrop]);
+  const [textColor, setTextColor] = useState(backdrops[userBackdrop].textColor);
+  const [description, setDescription] = useState(about);
   const [paletteEnabled, setPaletteEnabled] = useState(false);
   const [editEnabled, setEditEnabled] = useState(false);
-  const [textGradient, setTextGradient] = useState("linear-gradient(#57B000, #A1DF50)");
-  const [behindTextBlur, setBehindTextBlur] = useState("rgba(255, 255, 255, 0.4)");
+  const [nameGradient, setNameGradient] = useState(backdrops[userBackdrop].nameGradient);
+  const [behindTextBlur, setBehindTextBlur] = useState(backdrops[userBackdrop].textColor === "white" ? "rgba(0, 0, 0, 0.4)" : "rgba(255, 255, 255, 0.4)");
   const [currentCount, setCurrentCount] = useState(description.length);
   const maxCharLimit = 300;
 
-  const handleEditMode = () => {
-    if (!editEnabled) {
-      setEditEnabled(true);
-    } else {
-      setEditEnabled(false);
+// Function to save profile data
+const handleSaveData = () => {
+  var dataString = "";
+  // Check if any changes have been made to the profile
+  if (selectedImg.id == previousPicture && selectedBorderId == previousBorder && borderColor == previousColor && selectedBackdrop.id == previousBackdrop) {
+    // If no changes found, display a message and set showAlert to true
+    setAlertMessage("No changes found...");
+    setAlertSucceeded(false);
+    setShowAlert(true);
+  } else {
+    // If changes found, construct the dataString for saving profile
+    if (pictures[0].id === 0) {
+      dataString = dataString + pictures[0].img;
     }
-  };
+    dataString = dataString + "%" + description;
+    dataString = dataString + "%" + selectedImg.id + "-" + selectedBorderId + "-" + borderColor + "-" + selectedBackdrop.id;
 
-  const handleChange = (event, newValue) => {
-    setSelectedTab(newValue);
-  };
+    // Update previous selections with the current selections
+    setPreviousPicture(selectedImg.id);
+    setPreviousBorder(selectedBorderId)
+    setPreviousColor(borderColor)
+    setPreviousBackdrop(selectedBackdrop.id);
 
-  const handleEditProfilePicOpen = () => {
-    setPaletteEnabled(true);
-    setEditProfilePicOpen(true);
-  };
-
-  const handleEditProfilePicClose = () => {
-    setPaletteEnabled(false);
-    setEditProfilePicOpen(false);
-  };
-
-  const setNewPicture = (image) => {
-    setSelectedImg(image);
-  };
-
-  const setNewBorder = (border) => {
-    setSelectedBorder(border);
-  };
-
-  const setNewCustomAvatars = (avatars) => {
-    if (customAvatars.length === 3) {
-      customAvatars.pop();
-    }
-    setCustomAvatars(avatars);
-  };
-
-  const setNewBackdrop = (backdrop) => {
-    setSelectedBackdrop(backdrop);
-    setTextColor(backdrop.textColor);
-    if (backdrop.title === "Grass") {
-      setTextGradient("linear-gradient(#57B000, #A1DF50)");
-    } else if (backdrop.title === "Ocean") {
-      setTextGradient("linear-gradient(#00B0DC, lightblue)");
-    } else if (backdrop.title === "Valley") {
-      setTextGradient("linear-gradient(#9D92DF, #FFE5B4)");
-    } else if (backdrop.title === "City") {
-      setTextGradient("linear-gradient(#9300FF, #C8ADFD)");
-    } else if (backdrop.title === "Desert") {
-      setTextGradient("linear-gradient(#ED8438, #EDBB97)");
-    } else if (backdrop.title === "Space") {
-      setTextGradient("linear-gradient(#A0A0A0, white)");
-    }
-    
-    if (backdrop.textColor === "white") {
-      setBehindTextBlur("rgba(0, 0, 0, 0.4)");
-    } else {
-      setBehindTextBlur("rgba(255, 255, 255, 0.4)");
-    }
+    // Log the dataString and save profile data via API
+    console.log(dataString);
+    saveProfile(dataString);
+    // Display success message and set showAlert to true
+    setAlertMessage("Changes have been saved!!");
+    setAlertSucceeded(true);
+    setShowAlert(true);
   }
+}
+
+// Function to toggle edit mode
+const handleEditMode = () => {
+  // Toggle editEnabled state between true and false
+  if (!editEnabled) {
+    setEditEnabled(true);
+  } else {
+    setEditEnabled(false);
+  }
+};
+
+// Function to handle tab change
+const handleChange = (event, newValue) => {
+  // Update selectedTab state with the new tab value
+  setSelectedTab(newValue);
+};
+
+// Function to open edit profile pic dialog
+const handleEditProfilePicOpen = () => {
+  // Enable palette button and open edit profile pic dialog
+  setPaletteEnabled(true);
+  setEditProfilePicOpen(true);
+};
+
+// Function to close edit profile pic dialog
+const handleEditProfilePicClose = () => {
+  // Disable palette button and close edit profile pic dialog
+  setPaletteEnabled(false);
+  setEditProfilePicOpen(false);
+};
+
+// Function to set new profile picture
+const setNewPicture = (image) => {
+  // Update selectedImg state with the new image
+  setSelectedImg(image);
+};
+
+// Function to set new border
+const setNewBorder = (border) => {
+  // Update selectedBorder and selectedBorderId states with the new border
+  setSelectedBorder(border.border);
+  setSelectedBorderId(border.id);
+};
+
+// Function to set new custom avatars
+const setNewCustomAvatars = (avatars) => {
+  // Update pictures state with the new custom avatars
+  setPictures(avatars);
+};
+
+// Function to set new backdrop
+const setNewBackdrop = (backdrop) => {
+  // Update selectedBackdrop, textColor, nameGradient, and behindTextBlur states with the new backdrop
+  setSelectedBackdrop(backdrop);
+  setTextColor(backdrop.textColor);
+  setNameGradient(backdrop.nameGradient);
+  
+  // Update behindTextBlur state based on the backdrop's text color
+  if (backdrop.textColor === "white") {
+    setBehindTextBlur("rgba(0, 0, 0, 0.4)");
+  } else {
+    setBehindTextBlur("rgba(255, 255, 255, 0.4)");
+  }
+}
 
   return (
+    <>
     <Box
       style={{
         ...styles.container,
@@ -110,15 +247,6 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
       }}
     >
       <Box style={styles.profileBox}>
-          {displayBanner && (<Box style={styles.bannerBox}>
-            {selectedBanner && (
-              <img
-                src={selectedBanner.img}
-                style={styles.bannerImage}
-                alt="Banner"
-              />
-            )}
-          </Box>)}
         <Box style={styles.avatarBox}>
           <SelectedBorder
             style={styles.border}
@@ -126,17 +254,12 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
             stroke="black"
             strokeWidth="0.15vw" // Corrected the attribute name
           />
-          <button
-            style={styles.button}
-            onClick={handleEditProfilePicOpen}
-          >
-            <img src={selectedImg.img} style={styles.image} alt="Profile" />
-          </button>
+          <img src={selectedImg.img} style={styles.image} alt="Profile" />
         </Box>
-        <NameTag name={name} textGradient={textGradient} />
+        <NameTag name={name} nameGradient={nameGradient} />
       </Box>
       <div style={styles.tabBox}>
-      <div
+          {allowEdit && (<div
             style={{
               ...styles.paletteContainer,
               border: paletteEnabled
@@ -147,9 +270,9 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
             <IconButton style={{...styles.paletteButton, border: `0.15vw solid ${textColor}`}} onClick={handleEditProfilePicOpen} ref={paletteButtonRef}>
               <PaletteIcon style={{...styles.paletteIcon, color: textColor}}/>
             </IconButton>
-          </div>
+          </div>)}
         {selectedTab === 0 && (<>
-          <div
+          {allowEdit && (<div
             style={{
               ...styles.editContainer,
               border: editEnabled
@@ -160,7 +283,7 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
             <IconButton style={{...styles.editButton, border: `0.15vw solid ${textColor}`}} onClick={handleEditMode}>
               <EditIcon style={{...styles.editIcon, color: textColor}}/>
             </IconButton>
-          </div>
+          </div>)}
           {/* Display the fraction n/m */}
           {editEnabled && (<p style={{...styles.charCounter, color: textColor}}>{`${currentCount}/${maxCharLimit}`}</p>)}
         </>)}
@@ -199,18 +322,20 @@ export default function ProfileContainer({ name, enableEdit, userData }) {
         anchorEl={paletteButtonRef.current}
         selectedImg={(image) => setNewPicture(image)}
         selectedBorder={(border) => setNewBorder(border)}
-        selectedBanner={(banner) => setSelectedBanner(banner)}
-        displayBanner={displayBanner}
-        setDisplayBanner={setDisplayBanner}
         selectedBackdrop={(backdrop) => setNewBackdrop(backdrop)}
         setBorderColor={setBorderColor}
         addCustomAvatar={(avatar) => setNewCustomAvatars(avatar)}
-        currentCustomAvatars={customAvatars}
+        pictures={pictures}
+        borders={borders}
+        backdrops={backdrops}
+        onSave={handleSaveData}
       />
     </Box>
+    </>
   );
 }
 
+// Styles for the ProfileCard component
 const styles = {
   container: {
     display: "flex",
@@ -281,7 +406,6 @@ const styles = {
     background: "transparent",
     objectFit: "cover",
     objectPosition: "center",
-    cursor: "pointer",
     padding: 0,
     borderRadius: "50%",
     position: "relative",

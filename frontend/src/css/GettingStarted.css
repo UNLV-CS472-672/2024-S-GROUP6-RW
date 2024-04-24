@@ -11,12 +11,13 @@
   justify-content: center;
   height: 100vh; 
   position: relative; 
-  text-align: center; 
+ 
 }
+
 
 .first-description { 
   z-index: 5;
-  font-size: 60px; 
+  font-size: 7.5vh;
   color: black; 
   margin: 0; 
   padding: 0; 
@@ -56,6 +57,7 @@
   0% { opacity:0; left: 0%;} 
   50% { opacity:0; left: 0%;} 
   100% { left: 25%; }  
+
 }
 
 .headerr {
@@ -68,16 +70,17 @@
 }
 
 .getStartedButton {
-  border-radius: 15px; 
+  border-radius: 2.8vh; 
   background-color: #36446C; 
   color: white; 
   border: none; 
-  padding: 10px 20px; 
+  padding: .8vh 2vh; 
   cursor: pointer; 
-  margin-top: 0px;
-  font-family: 'Radley'; 
-  letter-spacing: 1px;
-  font-size: 16px;
+
+  margin-top: 4vh;
+  font-family: 'Radley';
+  letter-spacing: 0.5vh;
+  font-size: 2.8vh;
   transition: background-color 0.3s;
   animation: hide2 3s forwards;
 }
