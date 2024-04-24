@@ -1,3 +1,13 @@
-.poll-page-container {
-  margin-top: 50px; /* Adjust the top margin as needed */
+
+.poll-div {
+    margin-top: 90px;
 }
+
+.poll-header {
+    font-size: 30px;
+}
+
+.pot-header {
+    font-size: 25px;
+}
+

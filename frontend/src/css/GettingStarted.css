@@ -14,27 +14,59 @@
  
 }
 
-.first-description {
-  font-size: 7.5vh; 
+
+.first-description { 
+  z-index: 5;
+  font-size: 60px;
   color: black; 
   margin: 0; 
   padding: 0; 
 
-  transform: translateY(-100%);
-  animation: slideIn 2s forwards;
+  position: absolute;
+  overflow: hidden;
+  display: inline-block;
+  margin: 0;
+  margin-left: 200px;
+  animation: showup 1s forwards, slideaway 1s forwards 1s;
+}
+
+.rw-line {
+  width: 700px;
   position: relative;
+  display: inline-block;
+  margin: 0;
+  font-size: 60px; 
+  color: black; 
+  animation: slidein 2s forwards;
+}
+
+
+@keyframes showup {
+  0% {opacity:0;}
+  20% {opacity:0.2;}
+  50% {opacity:0.5;}
+  100% {opacity:1;}
+}
+
+@keyframes slideaway {
+  from { transform: translateX(0); }
+  to { transform: translateX(-186px); }
+}
+
+@keyframes slidein {
+  0% { opacity:0; left: 0%;} 
+  50% { opacity:0; left: 0%;} 
+  100% { left: 25%; }  
+
 }
 
 .headerr {
-  font-size: 4vh;
-  transform: translateY(-100%);
-  animation: slideIn 2s forwards;
-}
-
-@keyframes slideIn {
-  to {
-    transform: translateY(0);
-  }
+  position: relative;
+  font-size: 28px;
+  top: -9px;
+  margin-top: 0;
+  margin-bottom: 5px;
+  animation: hide 3s forwards;
 }
 
 .getStartedButton {
@@ -44,13 +76,34 @@
   border: none; 
   padding: .8vh 2vh; 
   cursor: pointer; 
-  margin-top: 4vh;
+
+  margin-top: 4px;
   font-family: 'Radley';
-  letter-spacing: 0.5vh;
+  padding: 10px 20px;
   font-size: 2.8vh;
   transition: background-color 0.3s;
-  transform: translateY(100%);
-  animation: slideIn 2s forwards;
+  animation: hide2 3s forwards;
+}
+
+@keyframes hide {
+  0% { opacity:0;}
+  25% {opacity: 0;}
+  40% {opacity: 0%;}
+  75% {opacity: 0.8}
+  100% { opacity:1;} 
+}
+
+@keyframes hide2 {
+  0% { opacity:0;}
+  25% {opacity: 0;}
+  40% {opacity: 0;}
+  75% {opacity: 0;}
+  90% {opacity: 0.8;}
+  100% { opacity:1;} 
+}
+
+.getStartedButton:hover {
+  background-color: #586a9c;
 }
 
 .background {
@@ -113,7 +166,7 @@
   font-size: 3rem;
   font-weight: 800;
   background: #fff;
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

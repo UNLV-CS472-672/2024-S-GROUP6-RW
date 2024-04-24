@@ -39,14 +39,17 @@ function GettingStartedPage() {
   return (
     <>
       <div class="first-section">
-        <div className="first-description">
-           Welcome to RightWay
+
+        <div className="testbg">
+        <p className = "first-description">
+          Plan your trip </p>
+
+        <p className="rw-line"> the RightWay</p>
         </div>
-        
-        <div className="headerr">
-          Group trips made easy
-        </div>
-        
+
+        <p className="headerr"> Group trips made easy</p>
+
+
         <img className="background" 
         src="thatNEWnew.jpg" />
 

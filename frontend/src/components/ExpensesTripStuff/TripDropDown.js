@@ -26,27 +26,19 @@ import { deepPurple } from '@mui/material/colors'
 // Upcoming trip 
 const currTrip = [
   {
-    url: "mchouse.jpg",
-    Title: "ur moms house",
+    url: "lasv.jpg",
+    title: "Las Vegas",
     width: "50%",
     height: "50%",
-    LocationName: "ur house",
-    StartDate: "June 10-12, 2024",
+    location: "Las Vegas",
+    date: "06/10/2024 - 06/13/2024",
+
     itinerary: "Itinerary: \n Explore the city \n Visit the musuem",
   },
 ];
 
 // Past trips
 const pastTrip = [
-  {
-    url: "/test.jpg",
-    Title: "Las Vegas",
-    width: "50%",
-    height: "50%",
-    LocationName: "Las Vegas, Nevada",
-    StartDate: "Dec 30, 2023 - Jan 2, 2024 ",
-    itinerary: "Itinerary: \n Visit Fremont Street \n Go to Mob Musuem \n Drive Through Red Rock Canyon",
-  },
   {
     url: "hobbithome.jpg",
     Title: "New Zealand",
@@ -66,12 +58,13 @@ const pastTrip = [
     itinerary: "Itinerary: \n Seoul \n Busan \n Jeju Island ",
   },
   {
-    url: "tokyo.jpg",
-    Title: "Japan",
-    width: "50%",
-    height: "50%",
-    LocationName: "Tokyo, Japan",
-    StartDate: "Sep 29- Oct 13, 2023",
+    url: "japan.jpg",
+    title: "Japan",
+    width: "60%",
+    height: "80%",
+    location: "Tokyo, Japan",
+    date: "Sep 29- Oct 13, 2023",
+
     itinerary: "Itinerary: \n Fushimi Inari-taisha Shrine \n Dotombori District \n Osaka\nDay trip to Mount Fuji \n",
   },
   {
@@ -119,7 +112,7 @@ const StyledMenu = styled((props) => (
     marginTop: theme.spacing(1),
     minWidth: 180,
     color: 
-      theme.palette.mode === 'light' ? 'rgb(24, 20, 38)' : theme.palette.grey[300],
+      theme.palette.mode === 'light' ? 'rgb(0, 0, 0)' : theme.palette.grey[300],
     boxShadow:
       'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
     '& .MuiMenu-list': {
@@ -245,7 +238,7 @@ export default function TripDropDown() {
          
           {/*Current trips*/}
           <Accordion >
-            <AccordionDetails sx={{ backgroundColor: "#afd2e9" }}>
+            <AccordionDetails>
               
               {/*Grid for current trips */} 
               <Grid container spacing={5}>

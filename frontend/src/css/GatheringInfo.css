@@ -48,9 +48,8 @@
 
 
 .next-button {
-    position: relative;
-    top: 20px;
-    left: 275px;
+    align-self: center;
+    margin-top: 20px;
     padding: 10px 20px;
     width: 80px;
     background-color: #36446C; 
@@ -62,10 +61,14 @@
     font-family: 'Radley';
 }
 
+.next-button:hover {
+  background-color: #586a9c;
+}
+
 .secondNext-button {
-  position: relative;
-  bottom: 75px;
-  left:850px;
+  position: absolute;
+  align-self: center;
+  margin-top: 330px;
   padding: 10px 20px;
   width: 80px;
   background-color: #36446C; 
@@ -76,6 +79,11 @@
   transition: background-color 0.3s ease;
   font-family: 'Radley';
 }
+
+.secondNext-button:hover {
+  background-color: #586a9c;
+}
+
 .third-section {
   position: relative;
   margin-top: 100px;
