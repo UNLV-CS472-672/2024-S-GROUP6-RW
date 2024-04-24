@@ -65,7 +65,13 @@ async function getNearbyPlaces(lat, lng, radius, type) {
                 {place.photoReference && (
                   <img src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photoReference}&key=${apiKey}`} alt={place.name} />
                 )}
-                <p>Rating: {place.rating}</p>
+                <StarRatings
+                  rating={place.rating}
+                  starRatedColor="gold"
+                  numberOfStars={5}
+                  name='rating'
+                  starDimension="20px"
+                />
                 <p>Price Level: {place.priceLevel}</p>
               </div>
             ))}
