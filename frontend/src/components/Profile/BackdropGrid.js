@@ -30,6 +30,7 @@ export default function BackdropGrid({ backdrops, selectedBackdrop }) {
           >
             {/* Box component representing the backdrop image */}
             <Box
+                data-testid={`backdrop-${index}`}
                 style={{...styles.backdrop, backgroundImage: `url(${backdrop.img})`}} // Set background image
                 onClick={() => selectBackdrop(backdrop)} // Handle click event to select the backdrop
                 >
