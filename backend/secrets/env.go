@@ -22,6 +22,16 @@ func LoadEnv() error {
 
 	resultPath := []string{}
 
+	procPath := ""
+
+	// Handle Windows-style path with drive name
+	if pathSplit[0] == "" && len(pathSplit) > 1 && strings.Contains(pathSplit[1], ":") {
+		procPath = pathSplit[1]   // Add the drive name
+		pathSplit = pathSplit[2:] // Remove the drive name and the separator
+	} else {
+		procPath = "/"
+	}
+
 	for _, str := range pathSplit {
 		resultPath = append(resultPath, str)
 
@@ -29,8 +39,6 @@ func LoadEnv() error {
 			break
 		}
 	}
-
-	procPath := "/"
 
 	for _, str := range resultPath {
 		procPath = filepath.Join(procPath, str)
