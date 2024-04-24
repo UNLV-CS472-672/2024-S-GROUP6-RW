@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../css/PrefButtons.css';
 import SignInPopUp from '../GatheringInfo/SignInPopUp';
-import { saveToLocal } from '../../utils/LocalStorageManager';
+import { saveToLocal, getFromLocal } from '../../utils/LocalStorageManager';
+import { useAuth } from '../../auth/AuthContext';
+import { CreateTrip } from '../../utils/ApiManager';
 
 const PrefButtons = () => {
   // State to control the visibility of the SignInPopUp
@@ -11,6 +13,7 @@ const PrefButtons = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const categories = ['Beaches', 'Theme Parks', 'Shopping', 'Shows', 'Museums', 'Thrilling', 'Nightlife', 'Nature', 'Art & Culture', 'Tourist Attractions', 'Food'];
   const navigate = useNavigate();
+  const { isAuth } = useAuth();
 
   const toggleCategory = (category) => {
     setSelectedCategories((prev) => {
@@ -30,12 +33,27 @@ const PrefButtons = () => {
 
   const handleSubmit = () => {
     console.log("Selected Categories:", selectedCategories);
-    
-    // When the user has finished through the gathering info pages we saved the trip title as they're getting started trip
-    // This will also allow us to decide whether we need to do an API call when logging in or registering for saving trip data
-    saveToLocal("tripTitle","Getting Started Trip");
 
-    setShowSignInPopUp(true);
+
+    // Retrieve the location name from local storage
+    const fullLocationName = getFromLocal('LocationName');
+    if (fullLocationName) {
+
+      // Split the location name at the comma and take the first part. Example: Las Vegas from Las Vegas, Nevada, United States
+      const locationName = fullLocationName.split(',')[0];
+
+    // Save the first part of the location name as the trip title
+    saveToLocal("tripTitle",`Trip To ${locationName}`);
+  } else {
+    console.log("No location name found in local storage.");
+  }
+    if(!isAuth){
+      setShowSignInPopUp(true);
+    }else{
+      CreateTrip();
+
+      navigate('/my-trips');
+    }
 };
 
   return (

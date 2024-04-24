@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useAuth } from "./../../auth/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { clearLocalDataOnSignout } from "../../utils/LocalStorageManager";
 
 function LogoutPage() {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ function LogoutPage() {
 
   useEffect(() => {
     logout();
+    clearLocalDataOnSignout();
     navigate("/")
   }, [logout]);
 
