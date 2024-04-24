@@ -25,9 +25,9 @@ func LoadEnv() error {
 	procPath := ""
 
 	// Handle Windows-style path with drive name
-	if pathSplit[0] == "" && len(pathSplit) > 1 && strings.Contains(pathSplit[1], ":") {
-		procPath = pathSplit[1]   // Add the drive name
-		pathSplit = pathSplit[2:] // Remove the drive name and the separator
+	if len(pathSplit) > 1 && strings.Contains(pathSplit[0], ":") {
+		procPath = pathSplit[0]   // Add the drive name
+		pathSplit = pathSplit[1:] // Remove the drive name and the separator
 	} else {
 		procPath = "/"
 	}
