@@ -149,6 +149,7 @@ export default function ProfileCard({ name, allowEdit, image, about, selection, 
 
 // Function to save profile data
 const handleSaveData = () => {
+  console.log("Hello?")
   var dataString = "";
   // Check if any changes have been made to the profile
   if (selectedImg.id == previousPicture && selectedBorderId == previousBorder && borderColor == previousColor && selectedBackdrop.id == previousBackdrop) {
@@ -161,8 +162,9 @@ const handleSaveData = () => {
     if (pictures[0].id === 0) {
       dataString = dataString + pictures[0].img;
     }
+    console.log("Selected Image Id: " + selectedImg.id);
     dataString = dataString + "%" + description;
-    dataString = dataString + "%" + (selectedImg?.id || 1) + "-" + selectedBorderId + "-" + borderColor + "-" + (selectedBackdrop?.id || 0);
+    dataString = dataString + "%" + (selectedImg?.id || 0) + "-" + selectedBorderId + "-" + borderColor + "-" + (selectedBackdrop?.id || 0);
 
     // Update previous selections with the current selections
     setPreviousPicture(selectedImg.id);
@@ -171,7 +173,7 @@ const handleSaveData = () => {
     setPreviousBackdrop(selectedBackdrop?.id || 0);
 
     // Log the dataString and save profile data via API
-    console.log(dataString);
+    console.log("Data String: " + dataString);
     saveProfile(dataString);
     // Display success message and set showAlert to true
     setAlertMessage("Changes have been saved!!");
