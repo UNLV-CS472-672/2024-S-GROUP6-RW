@@ -90,6 +90,24 @@ func CreateInvoice(invoice models.Invoice, database db.Database) (*models.Invoic
 		return nil, errors.New("failed to convert model to Invoice")
 	}
 
+	// Add invoice to parent expense
+	existingExpense.InvoiceIDs = append(existingExpense.InvoiceIDs, insertedInvoice.ID)
+
+	_, err = database["ExpenseDetails"].UpdateDocument(bson.M{"_id": existingExpense.ID}, bson.M{"InvoiceIDs": existingExpense.InvoiceIDs}, "Expense")
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Add invoice to payee's invoice list
+	existingUser.InvoiceIDs = append(existingUser.InvoiceIDs, insertedInvoice.ID)
+
+	_, err = database["UserDetails"].UpdateDocument(bson.M{"_id": existingUser.ID}, bson.M{"InvoiceIDs": existingUser.InvoiceIDs}, "User")
+
+	if err != nil {
+		return nil, err
+	}
+
 	return insertedInvoice, nil
 }
 
