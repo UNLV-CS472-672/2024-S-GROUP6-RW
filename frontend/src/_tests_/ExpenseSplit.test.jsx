@@ -13,26 +13,26 @@ const setup = () => {
 // 1. Test the ExpensesSplit component
 describe("ExpensesSplit", () => {
 	// 1.1. Test the rendering of the ExpensesSplit component
-	it("renders without crashing", () => {
+	test("renders without crashing", () => {
 		render(<ExpensesSplit />);
 		expect(screen.getByText("Split Menu")).toBeInTheDocument();
 	});
 
 	// 1.2. Test the AddPersonDialog open
-	it('opens the AddPersonDialog when the "Add Expense" button is clicked', () => {
+	test('opens the AddPersonDialog when the "Add Expense" button is clicked', () => {
 		render(<ExpensesSplit />);
 		fireEvent.click(screen.getByText("Add Expense"));
 		expect(screen.getByText("Split Method")).toBeInTheDocument();
 	});
 
 	// 1.3. Test the AddPersonDialog close
-	it('adds a person when the "Add" button in the AddPersonDialog is clicked', () => {
+	test('adds a person when the "Add" button in the AddPersonDialog is clicked', () => {
 		setup();
 		expect(screen.getByText("Split Menu")).toBeInTheDocument();
 	});
 
 	// 1.4. Test the DetailDialog open
-	it("opens the DetailDialog when the edit icon is clicked", () => {
+	test("opens the DetailDialog when the edit icon is clicked", () => {
 		setup();
 		expect(screen.getByText("Split Menu")).toBeInTheDocument();
 		//the edit icon is not work or cant find
@@ -42,7 +42,7 @@ describe("ExpensesSplit", () => {
 	});
 
 	// 1.5. Test the DetailDialog close
-	it('edits a person when the "Save" button in the DetailDialog is clicked', async () => {
+	test('edits a person when the "Save" button in the DetailDialog is clicked', async () => {
 		setup();
 		//same for this as cant find
 		fireEvent.click(screen.getByTestId("edit-icon"));
