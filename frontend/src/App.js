@@ -18,6 +18,9 @@ import FriendsPage from "./pages/friends/FriendsPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import AccountPage from "./pages/account/AccountPage";
 import PollPage from "./pages/getting_started/PollPage";
+import AboutUs from "./pages/getting_started/AboutUs";
+import HowItWorks from "./pages/getting_started/HowItWorks";
+
 
 // import nav components
 import NavBar from "./components/NavBar/NavBar";
@@ -73,6 +76,7 @@ function AppContent() {
   const theme = useTheme();
   const [openSignIn, setOpenSignIn] = useState(false);
 
+
   // Apply the background color to the body element
   useEffect(() => {
     // Apply the background color to the body element
@@ -96,9 +100,13 @@ function AppContent() {
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/poll" element={<PollPage />} />
+        <Route path="/about-us" element={<AboutUs/>} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
+
       </Routes>
     </div>
   );
+
 }
 
 export default App;

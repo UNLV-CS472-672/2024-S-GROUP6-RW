@@ -3,8 +3,8 @@ import ItineraryAccordion from "../../components/ItineraryForm/ItineraryAccordio
 import EditView from "../../components/ItineraryForm/EditView";
 import { format } from "date-fns"; // Importing the format function from date-fns library
 import { getFromLocal } from "../../utils/LocalStorageManager";
+import "../../css/ItineraryPage.css";
 
- 
 const ItineraryPage = () => {
   // State variables using useState hook
   const [currentCity] = useState("N/A"); // Current city, set to "Your City"
@@ -25,7 +25,7 @@ const ItineraryPage = () => {
 
   useEffect(() => {
     //const startDateFromStorage = localStorage.getItem('startDate');
-    const startDate = getFromLocal('startDate');
+    const startDate = getFromLocal("startDate");
 
     if (startDate) {
       const start = new Date(startDate);
@@ -40,15 +40,15 @@ const ItineraryPage = () => {
 
   const generateItinerary = (startDate) => {
     //const endDateFromStorage = localStorage.getItem('endDate');
-    const endDate = getFromLocal('endDate');
+    const endDate = getFromLocal("endDate");
 
     if (endDate) {
       const end = new Date(endDate);
       if (startDate && end.toString() !== "Invalid Date") {
         const tripLength = calculateNumberOfDays(startDate, end);
-        const newItinerary = Array.from({ length: tripLength }, (_, index) => (
+        const newItinerary = Array.from({ length: tripLength }, (_, index) =>
           new Date(startDate.getTime() + index * 86400000).toDateString()
-        ));
+        );
         setItinerary(newItinerary);
       }
     }
@@ -58,10 +58,11 @@ const ItineraryPage = () => {
     return Math.round(Math.abs((startDate - endDate) / 86400000)) + 1;
   };
 
-
   const handleAddDay = () => {
-    setItinerary(prevItinerary => {
-      const newDay = new Date(selectedStartDate.getTime() + prevItinerary.length * 86400000);
+    setItinerary((prevItinerary) => {
+      const newDay = new Date(
+        selectedStartDate.getTime() + prevItinerary.length * 86400000
+      );
       return [...prevItinerary, newDay.toDateString()];
     });
   };
@@ -69,23 +70,27 @@ const ItineraryPage = () => {
 
   const handleUpdateActivities = (updatedActivities) => {
     setUserActivities(updatedActivities);
-  }
+  };
 
   // JSX rendering
   return (
-    <div>
+    <div className="pushdown">
       <div>
         {showEditScreen ? (
-          <EditView 
+          <EditView
             day={selectedItinDay}
             userActivities={userActivities}
             onUpdatedActivities={handleUpdateActivities}
             onClickCloseButton={handleCloseEditScreen}
           />
         ) : (
-          <>
-            <h1>Itinerary</h1>
-            <h2>Current City: {currentCity}</h2>
+          <div>
+            <div className="banner-container">
+              <img className="itin-banner" src="/lasv.jpg" />
+              <p className="itin-header">Itinerary for: Las Vegas</p>
+              <p className="itin-date"> 04/24/2024 - 04/30/2024 </p>
+            </div>
+
             {itinerary.map((day, index) => (
               <ItineraryAccordion
                 key={index}
@@ -95,12 +100,11 @@ const ItineraryPage = () => {
               />
             ))}
             <button onClick={handleAddDay}>Add Day</button>
-          </>
+          </div>
         )}
       </div>
     </div>
   );
 };
-
 
 export default ItineraryPage; // Exporting the ItineraryPage component

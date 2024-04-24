@@ -16,20 +16,8 @@ function FriendsContainer() {
 	return (
 		<Box class="container" //Sets Background color of box area
 			sx={{ width: "100%", bgcolor: "background.paper" }}>
-			<Tabs //Sets the names and style for each tab name
-				value={value}
-				onChange={handleChange}
-				textColor="secondary"
-				indicatorColor="secondary"
-				centered
-			>
-                <Tab label="Add/Remove Friend" />
-				<Tab label="Friend List" />
-			</Tabs>
-			{value  //Links each tab to a component file 
-				=== 0 && <AddRemoveFriends />}
-			{value
-				=== 1 && <FriendList />}
+
+			<FriendList />
 		</Box>
 	);
 }

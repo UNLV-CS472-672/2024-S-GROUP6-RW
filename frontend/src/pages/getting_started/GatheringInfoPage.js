@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Typography from "@mui/material/Typography";
 import "../../css/GatheringInfo.css";
 import DatePickerComponent from "../../components/ItineraryForm/DatePickerComponent";
 import SearchBar from "../../components/GatheringInfo/SearchBar";
