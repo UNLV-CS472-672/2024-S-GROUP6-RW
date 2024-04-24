@@ -16,11 +16,12 @@ const Data = generateData(sudoUser);
 // Styling for the Paper component that wraps the components in the Expense Dashboard page
 // ai-gen start (chatGPT 4.0, 1)
 const Item = styled(Paper)(({ theme }) => ({
-	backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-	...theme.typography.body2,
+	//backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+	//...theme.typography.body2,
 	padding: theme.spacing(2),
 	textAlign: "center",
 	color: theme.palette.text.secondary,
+	fontFamily: "Radley",
 }));
 // ai-gen end
 
@@ -176,10 +177,10 @@ function ExpenseDashBoard() {
 		.filter((e) => e.payer === sudoUser)
 		.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
 	const totalOwe = expenses
-		.filter((e) => e.type === "owe")
+		.filter((e) => e.payee === sudoUser && e.type === "owe")
 		.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
 	const totalGetBack = expenses
-		.filter((e) => e.type === "get back")
+		.filter((e) => e.payee === sudoUser && e.type === "get back")
 		.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
 
 	//console.log("Initial Data:", Data);
