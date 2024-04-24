@@ -1,15 +1,21 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import { fireEvent as fireEvent2 } from "@testing-library/react-native";
-import ProfileCard from "../components/Profile/ProfileCard"; // adjust this import as necessary
-import userEvent from "@testing-library/user-event";
-import AboutTab from '../components/Profile/AboutTab';
-import "jest-canvas-mock";
+import { BrowserRouter } from "react-router-dom"; // Import BrowserRouter for routing
+import { render, screen, waitFor, fireEvent } from "@testing-library/react"; // Import testing utilities
+import ProfileCard from "../components/Profile/ProfileCard"; // Import the ProfileCard component
+import userEvent from "@testing-library/user-event"; // Import userEvent for simulating user interactions
 
-// Inside your test file, provide a mocked context with the necessary properties
+/**
+ * ChatGPT was used to help teach me how
+ * to unit tests certain elements of the profile,
+ * such as mocking imported functions and how
+ * to get components from text or test id. Also
+ * used it to help document some of the test code.
+ * (ChatGPT 3.5, 1)
+ */
+
+// Mocked authentication context
 const mockAuthContext = {
-  isAuth: true, // or provide a boolean value as per your test scenario
+  isAuth: true, 
 };
 
 // Mock the useAuth hook to return the mocked context
@@ -32,15 +38,18 @@ describe("ProfileCard", () => {
     jest.clearAllMocks();
   });
 
+  // Test rendering ProfileCard component without crashing
   test("renders ProfileCard component without crashing", () => {
     render(<ProfileCard />);
   });
 
+  // Test rendering the correct username
   test("renders the correct username", () => {
     render(<ProfileCard name="TESTUSER" />);
     expect(screen.getByText("TESTUSER")).toBeInTheDocument();
   });
 
+  // Test showing the user friend list
   test("show the user friend list", async () => {
     const { getByText, findByTestId } = render(
       <ProfileCard name="TESTUSER" allowEdit={true} />
@@ -52,6 +61,7 @@ describe("ProfileCard", () => {
     expect(friendsTab).toBeInTheDocument();
   });
 
+  // Test showing the user trip list
   test("show the user trip list", async () => {
     const { getByText, findByTestId } = render(
       <BrowserRouter>
@@ -65,6 +75,7 @@ describe("ProfileCard", () => {
     expect(tripsTab).toBeInTheDocument();
   });
 
+  // Test checking if customization appears
   test("check if customization appears", async () => {
     const { getByTestId } = render(
       <ProfileCard name="TESTUSER" allowEdit={true} />
@@ -78,6 +89,7 @@ describe("ProfileCard", () => {
     });
   });
 
+  // Test user clicks on a different default picture and it changes
   test("user clicks on a different default picture and it changes", async () => {
     // Render the ProfileCard component
     const { getByText, getByTestId } = render(
@@ -109,6 +121,7 @@ describe("ProfileCard", () => {
     });
   });
 
+  // Test user saves their changes
   test("user saves their changes", async () => {
     // Render the ProfileCard component
     const { getByText, getByTestId, rerender } = render(
@@ -156,7 +169,7 @@ describe("ProfileCard", () => {
     // Click the picture to change it
     userEvent.click(screen.getByText("Save Changes..."));
 
-    // Wait for 2 seconds
+    // Wait for some time
     await new Promise((resolve) => setTimeout(resolve, 200));
 
     // Simulate page refresh by re-rendering the component with the same props
@@ -167,6 +180,7 @@ describe("ProfileCard", () => {
     expect(refreshedPicture).not.toBe(initialPicture);
   });
 
+  // Test user changes their backdrop
   test("user changes their backdrop", async () => {
     // Render the ProfileCard component
     const { getByText, getByTestId } = render(
@@ -193,7 +207,7 @@ describe("ProfileCard", () => {
       userEvent.click(screen.getByText("Backdrop"));
     });
 
-    // Wait for 2 seconds
+    // Wait for some time
     await new Promise((resolve) => setTimeout(resolve, 200));
 
     // Get the picture to click (e.g., picture with test ID "picture-5")
@@ -212,6 +226,7 @@ describe("ProfileCard", () => {
     });
   });
 
+  // Test parsing the user customization selections obtained by database fetch call
   test("Parse the user customization selections obtained by database fetch call", () => {
     // Render the ProfileCard component
     const { getByText, getByTestId } = render(
@@ -231,18 +246,18 @@ describe("ProfileCard", () => {
     expect(selectedBackdrop).toBe("url(grass.jpg)");
   });
 
+  // Test allowing uploading profile picture
   test('allows uploading profile picture', async () => {
-
- // Mock the Image constructor
- window.Image = jest.fn().mockImplementation(() => ({
-  onload: null, // Mocking onload to be null initially
-  src: null, // Mocking src to be null initially
-  addEventListener: jest.fn().mockImplementation((event, callback) => {
-    if (event === 'load') {
-      this.onload = callback; // Assigning the onload callback
-    }
-  }),
-}));
+    // Mock the Image constructor
+    window.Image = jest.fn().mockImplementation(() => ({
+      onload: null, // Mocking onload to be null initially
+      src: null, // Mocking src to be null initially
+      addEventListener: jest.fn().mockImplementation((event, callback) => {
+        if (event === 'load') {
+          this.onload = callback; // Assigning the onload callback
+        }
+      }),
+    }));
 
     // Render the ProfileCard component with some initial data
     const { getByTestId, queryByTestId } = render(
@@ -266,22 +281,20 @@ describe("ProfileCard", () => {
       expect(queryByTestId('picture-1')).toBeInTheDocument();
     });
   
-
     const inputFile = getByTestId('avatar-uploading'); // Get the input element by test id
     
-  // Create a fake image file
-  const file = new File(['(⌐□_□)'], 'fake-image.png', { type: 'image/png' });
-  const imageSrc = URL.createObjectURL(file);
-
-  // Mock the Image.prototype.onload function
-
-  // Trigger the uploadAvatar function by changing the input file
-  fireEvent.change(inputFile, { target: { files: [file] } });
+    // Create a fake image file
+    const file = new File(['(⌐□_□)'], 'fake-image.png', { type: 'image/png' });
+    const imageSrc = URL.createObjectURL(file);
   
+    // Trigger the uploadAvatar function by changing the input file
+    fireEvent.change(inputFile, { target: { files: [file] } });
+    
     // Verify that the new picture has an id of 0
     expect(queryByTestId('picture-0')).toBeInTheDocument();
   });
 
+  // Test getting different size name tags
   test("Get different size name tags", () => {
     // Render the ProfileCard component
     const { getByText, getByTestId, rerender } = render(
@@ -306,9 +319,9 @@ describe("ProfileCard", () => {
     expect(tenCharsFontSize).toBe("3.9vw");
   });
 
-
+  // Test user changes their border
   test("User changes their border", async () => {
- // Render the ProfileCard component
+    // Render the ProfileCard component
     const { container, getByText, getByTestId } = render(
       <ProfileCard name="TESTUSER" allowEdit={true} />
     );
@@ -329,16 +342,17 @@ describe("ProfileCard", () => {
       userEvent.click(screen.getByText("Border"));
     });
 
-    // Wait for 2 seconds
+    // Wait for some time
     await new Promise((resolve) => setTimeout(resolve, 200));
 
     // Get the picture to click (e.g., picture with test ID "border-1")
     const borderToClick = await getByTestId("border-1");
-  // Click the border to change it
-  userEvent.click(borderToClick);
 
-     // Wait for 2 seconds
-     await new Promise((resolve) => setTimeout(resolve, 200));
+    // Click the border to change it
+    userEvent.click(borderToClick);
+
+    // Wait for some time
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
     // Wait for the profile picture to change
     await waitFor(() => {

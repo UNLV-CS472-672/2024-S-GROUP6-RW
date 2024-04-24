@@ -11,48 +11,37 @@ export default function AvatarGrid({
  * ChatGPT was used to help teach how to use file readers
  * and Image() to load and display images. It also showed
  * me how to reduce file sizes using canvas.
- * (ChatGPT 3.5, 2)
+ * (ChatGPT 3.5, 1)
  */
 
   const plus = { img: add_picture, title: "Add Picture" };
 
   const uploadAvatar = (event) => {
-    var file = event.target.files[0];
-
+    const file = event.target.files[0];
     if (file) {
-      if (file.name === null) {
-        file = {
-          name: 'fake-image.png',
-          type: 'mage/png', // Mimicking an image file type
-          size: 1024, // File size in bytes
-          lastModified: Date.now(), // Last modified timestamp
-          data: "data:image/png;base64,iVB"
-        };
-      }
-      // Check if the file type is an image
-      if (!file.type.startsWith("image/")) {
-        console.log("Please select an image file.");
-        return;
-      }
-
-      // ai-gen start (ChatGPT-3.5, 2)
-      const img = new Image();
-      img.onload = function () {
-        console.log("Loading...");
-
-        // Add the resized image to your custom avatars
-        if (avatars[0].id === 0) {
-          avatars.shift();
+        // Check if the file type is an image
+        if (!file.type.startsWith("image/")) {
+          console.log("Please select an image file.");
+          return;
         }
+
+       // Add the resized image to your custom avatars
+       if (avatars[0].id === 0) {
+        avatars.shift();
+      }
+
+      // ai-gen start (ChatGPT 3.5, 0)
+      const reader = new FileReader();
+      reader.onload = () => {
+        const imgData = reader.result;
         addCustomAvatar([
-          { img: file.data, title: "Custom Picture", id: 0 },
+          { img: imgData, title: "Custom Picture", id: 0 },
           ...avatars,
         ]);
-        selectAvatar({ img: file.data, title: "Custom Picture", id: 0 }); // Set the selectedImg to the uploaded image
+        selectAvatar({ img: imgData, title: "Custom Picture", id: 0 }); // Set the selectedImg to the uploaded image
       };
-
-      // Load the image
-      img.src = URL.createObjectURL(file);
+      reader.readAsDataURL(file);
+      // ai-gen end
     }
   };
 

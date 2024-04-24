@@ -50,6 +50,14 @@ import City from "../../images/backdrops/city.jpg";
 import Desert from "../../images/backdrops/desert.jpg";
 import Space from "../../images/backdrops/space.jpg";
 
+/**
+ * ChatGPT was used to comment the following code
+ * and provide recommendations of certain MUI components
+ * and React functions I could use. However, the code
+ * was my own implementation.
+ * (ChatGPT 3.5, 2)
+ */
+
 export default function ProfileCard({ name, allowEdit, image, about, selection, setAlertMessage, setAlertSucceeded, setShowAlert }) {
   // useRef for the palette button
   const paletteButtonRef = useRef(null);
