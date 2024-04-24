@@ -8,6 +8,7 @@ import StarRatings from 'react-star-ratings';
 
 let apiKey=process.env.REACT_APP_GOOGLE_PLACES_API_KEY
 
+//ai gen start (chat gpt 3.5, 2)
 async function getNearbyPlaces(lat, lng, radius, type) {
   const response = await fetch(`http://localhost:5000/nearbyPlaces?lat=${lat}&lng=${lng}&radius=${radius}&type=${type}`);
   if (!response.ok) {
@@ -17,6 +18,7 @@ async function getNearbyPlaces(lat, lng, radius, type) {
   }
   return await response.json();
 }
+//ai gen stop
 
 
  
@@ -27,6 +29,7 @@ async function getNearbyPlaces(lat, lng, radius, type) {
     const [radius, setRadius] = useState(50); // initial value
     const [type, setType] = useState('restaurant'); // initial value
 
+    //ai gen start (chat gpt 3.5, 2)
     useEffect(() => {
       console.log('Fetching nearby places for lat:', lat, 'lng:', lng); // Add this line
       async function fetchNearbyPlaces() {
@@ -45,6 +48,7 @@ async function getNearbyPlaces(lat, lng, radius, type) {
 
       fetchNearbyPlaces();
     }, [lat, lng]);
+    //ai gen stop
 
     function handlePlaceClick(place) {
       setSelectedPlace(place);
