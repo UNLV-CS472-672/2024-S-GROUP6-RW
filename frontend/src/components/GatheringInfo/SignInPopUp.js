@@ -33,7 +33,7 @@ const SignInPopUp = ({ open, handleClose }) => {
     >
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Would you like to sign in to save your data for next time? If you do not sign in, you can still continue without saving.
+          Would you like to sign in to save your data? If you do not sign in, you can still continue without saving.
         </DialogContentText>
       </DialogContent>
       <DialogActions>

@@ -13,7 +13,6 @@ import TripsExpensesPage from "./pages/expenses/TripsExpensesPage";
 import MyTripsPage from "./pages/my_trips/MyTripsPage";
 import LoginPage from "./pages/Auth_Pages/LoginPage";
 import RegisterPage from "./pages/Auth_Pages/RegisterPage";
-import LogoutPage from "./pages/Auth_Pages/LogoutPage";
 import FriendsPage from "./pages/friends/FriendsPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import AccountPage from "./pages/account/AccountPage";
@@ -98,7 +97,6 @@ function AppContent() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/profile/:username" element={<ProfilePage />} />
         <Route path="/friends" element={<FriendsPage />} />
-        <Route path="/logout" element={<LogoutPage />} />
         <Route path="/poll" element={<PollPage />} />
         <Route path="/about-us" element={<AboutUs/>} />
         <Route path="/how-it-works" element={<HowItWorks />} />
