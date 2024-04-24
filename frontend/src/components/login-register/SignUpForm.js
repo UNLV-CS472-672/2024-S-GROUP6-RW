@@ -11,7 +11,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { saveToLocal, getFromLocal } from "../../utils/LocalStorageManager";
 import { useNavigate } from 'react-router-dom';
-import { gettingStartedCreateTrip } from "../../utils/ApiManager";
+import { CreateTrip } from "../../utils/ApiManager";
 
 const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
 	const { login } = useAuth();
@@ -97,13 +97,8 @@ const SignUpForm = ({ open, onClick, onClose, onSubmit }) => {
 						// Store username and email in local storage
 						saveToLocal('username', Username);
 						saveToLocal('email', Email);
-						
-						const tripTitle = getFromLocal('tripTitle');
-						console.log(`Register Sign in tripTitle: ${tripTitle}`);
-						if (tripTitle == "Getting Started Trip"){
-							saveToLocal("Getting Started Trip!", "tripTitle");
-							gettingStartedCreateTrip();
-						}
+
+						CreateTrip();
 
 						navigate('/my-trips');
 					} else {

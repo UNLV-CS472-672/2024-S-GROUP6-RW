@@ -25,11 +25,8 @@ export const removeFromLocal = (key) => {
 };
 
 export const clearLocalDataOnSignout = () => {
-    // Trips
-    localStorage.removeItem('LocationName');
-    localStorage.removeItem('trips');
-    localStorage.removeItem('activities');
-
+    localStorage.clear();
+    console.log("All local storage data has been cleared.");
 };
 
   

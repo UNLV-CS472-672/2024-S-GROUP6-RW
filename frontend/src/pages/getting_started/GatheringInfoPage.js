@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Typography from "@mui/material/Typography";
 import "../../css/GatheringInfo.css";
 import DatePickerComponent from "../../components/ItineraryForm/DatePickerComponent";
 import SearchBar from "../../components/GatheringInfo/SearchBar";
@@ -63,7 +62,7 @@ function GatheringInfoPage() {
           <div className="form-half">
             <p className="header-1">Let's plan your next trip together</p>
             <p className="where"> Where would you like to go? </p>
-            <SearchBar />
+            <SearchBar LocationNameKey={"LocationName"}/>
             <button className="next-button" onClick={goToScreen2}>
               Next
             </button>
