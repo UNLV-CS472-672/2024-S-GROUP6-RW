@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../css/PopUp.css'
 import '../../css/closeButton.css'
-import '../../css/Activity.css'
+import '../../css/Activities.css'
 import StarRatings from 'react-star-ratings';
 
 
