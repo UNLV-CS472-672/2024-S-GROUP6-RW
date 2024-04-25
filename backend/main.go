@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/business"
+	"backend/db"
 	"backend/handlers"
 	"backend/secrets"
 	"fmt"
@@ -28,14 +29,24 @@ func main() {
 		MaxAge: 12 * time.Hour,
 	}))
 
-	// Set up JWT authentication
-	business.JWTSetup()
-
 	// Set up ENV data
 	err := secrets.LoadEnv()
 
 	if err != nil {
 		log.Fatal("Failed to load .env data.")
+	}
+
+	// Set up JWT and Mongo with .env values
+	err = business.JWTSetup()
+
+	if err != nil {
+		log.Fatal("Failed to setup JWT.")
+	}
+
+	err = db.MongoSetup()
+
+	if err != nil {
+		log.Fatal("Failed to setup Mongo.")
 	}
 
 	// User Interface

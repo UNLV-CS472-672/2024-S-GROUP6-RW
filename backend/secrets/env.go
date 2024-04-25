@@ -2,6 +2,7 @@ package secrets
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -18,8 +19,7 @@ func LoadEnv() error {
 		return err
 	}
 
-	// pathSplit := strings.Split(dir, string(filepath.Separator))
-	pathSplit := strings.Split(dir, "\\")
+	pathSplit := strings.Split(dir, string(filepath.Separator))
 
 	resultPath := []string{}
 
@@ -60,6 +60,8 @@ func LoadEnv() error {
 		parts := strings.Split(pair, "=")
 		key := parts[0]
 		value := parts[1]
+
+		fmt.Printf("Key: %s | Value: %s\n", key, value)
 
 		if len(parts) > 2 {
 			for i := range len(parts) - 2 {
