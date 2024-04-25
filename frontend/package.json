@@ -74,7 +74,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4",
     "@testing-library/user-event": "^14.5.2",
+    "babel-jest": "^29.7.0",
     "axios-mock-adapter": "^1.22.0",
     "babel-core": "^7.0.0-bridge.0",
     "jest-localstorage-mock": "^2.4.26",
