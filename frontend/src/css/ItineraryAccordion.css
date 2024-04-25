@@ -3,3 +3,36 @@
     justify-content: center;
     padding-bottom: 10px;
 }
+
+.accordion-contents-div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.calendar-view-btn {
+    border: none;
+    border-radius: 8px;
+    background-color: transparent;
+}
+
+.calendar-view-btn:hover {
+    background-color: #F2F1EF;
+    cursor: pointer;
+}
+
+.accordion-contents-div .MuiTypography-root {
+    padding-left: 7px;
+    font-family: 'Radley';
+    font-weight: 400;
+    font-size: 18px;
+}
+
+/* For the time label for each activity in the accordion */
+.css-ymt5it-MuiTypography-root-MuiTimelineOppositeContent-root {
+    font-family: 'Radley' !important;
+    font-size: 18px !important;
+    font-weight: 1000;
+}
+
+

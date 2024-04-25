@@ -41,7 +41,11 @@ const Activity = ({ activity }) => {
 
   return (
     <div className="activity">
-      <Button onClick={handleOpenDialog}>{title}</Button>
+      <div className="activity-title-btn-container">
+        <Button onClick={handleOpenDialog}>
+          <Typography>{title}</Typography>
+        </Button>
+      </div>
       <Dialog
         open={isDialogOpen}
         onClose={handleCloseDialog}
