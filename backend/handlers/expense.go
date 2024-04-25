@@ -53,6 +53,8 @@ func GetAllExpensesHandler(c *gin.Context) {
 		return
 	}
 
+	// TODO: select relavent information from the expenses to return to client
+
 	fmt.Println("Success.")
 
 	// Return OK status to client
@@ -76,6 +78,8 @@ func GetExpenseHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	// TODO: select relavent information from the expense to return to client
 
 	fmt.Println("Success.")
 

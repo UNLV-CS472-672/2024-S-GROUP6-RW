@@ -19,10 +19,8 @@ import TodayIcon from "@mui/icons-material/Today";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CloseIcon from "@mui/icons-material/Close";
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { useTheme } from "@mui/material/styles";
-import "./Activity.css";
+import "../../css/Activity.css"
 
 import cityImg from "../../images/itinerary_img/los-angeles-city.jpg";
 
@@ -41,18 +39,8 @@ const Activity = ({ activity }) => {
     setDialogOpen(false);
   };
 
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
-
-  const style = {
-    transition,
-    transform: CSS.Transform.toString(transform),
-    // backgroundColor:
-    //   theme.palette.mode === "dark" ? "#424242" : "#f0f0f0", // Adjust background color based on theme
-  };
-
   return (
-    <div ref={setNodeRef} style={style} className="activity">
+    <div className="activity">
       <Button onClick={handleOpenDialog}>{title}</Button>
       <Dialog
         open={isDialogOpen}

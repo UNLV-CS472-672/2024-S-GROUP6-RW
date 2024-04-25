@@ -2,7 +2,9 @@ package main
 
 import (
 	"backend/business"
+	"backend/db"
 	"backend/handlers"
+	"backend/secrets"
 	"fmt"
 	"log"
 	"time"
@@ -16,19 +18,36 @@ func main() {
 
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
-        AllowOrigins:     []string{"http://localhost:3000"}, // Adjust as needed
-        AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
-        AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
-        ExposeHeaders:    []string{"Content-Length"},
-        AllowCredentials: true,
-        AllowOriginFunc: func(origin string) bool {
-            return origin == "http://localhost:3000" // Adjust as needed
-        },
-        MaxAge: 12 * time.Hour,
-    }))
+		AllowOrigins:     []string{"http://localhost:3000"}, // Adjust as needed
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			return origin == "http://localhost:3000" // Adjust as needed
+		},
+		MaxAge: 12 * time.Hour,
+	}))
 
-	// Set up JWT authentication
-	business.JWTSetup()
+	// Set up ENV data
+	err := secrets.LoadEnv()
+
+	if err != nil {
+		log.Fatal("Failed to load .env data.")
+	}
+
+	// Set up JWT and Mongo with .env values
+	err = business.JWTSetup()
+
+	if err != nil {
+		log.Fatal("Failed to setup JWT.")
+	}
+
+	err = db.MongoSetup()
+
+	if err != nil {
+		log.Fatal("Failed to setup Mongo.")
+	}
 
 	// User Interface
 	r.POST("/register", handlers.RegisterHandler)

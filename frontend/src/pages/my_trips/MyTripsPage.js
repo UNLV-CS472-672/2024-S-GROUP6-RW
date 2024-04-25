@@ -1,7 +1,6 @@
 import React from "react";
-import ButtonBaseDemo from "../../components/ExpensesTripStuff/TripsList";
-import "../../css/MyTrips.css"
-import TripDropDown from "../../components/ExpensesTripStuff/TripDropDown";
+import "../../css/MyTrips.css";
+import ShowTrips from "../../components/ExpensesTripStuff/ShowTrips";
 
 
 function MyTripsPage() {
@@ -10,7 +9,7 @@ function MyTripsPage() {
       <div className="container">
         <div className="title-container">
           <h2>My Trips</h2>
-            <TripDropDown />
+            <ShowTrips />
         </div>
       </div>
     </div>

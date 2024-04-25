@@ -75,7 +75,7 @@ func (mc *MockCollection) UpdateDocument(filter bson.M, content bson.M, modelTyp
 	}
 
 	// Acquire the document's ID
-	tmp, err := result.GetValue("ID")
+	tmp, err := result.GetValue("_id")
 
 	if err != nil {
 		return nil, err

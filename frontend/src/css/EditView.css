@@ -1,0 +1,31 @@
+.big-calendar {
+    margin-top: 60px;
+    height: 85vh;
+    width: 90vw;
+    /* font-family: Arial, Helvetica, sans-serif; */
+}
+
+/*For Today, Back, Next Button*/
+/* .rbc-btn-group {
+    visibility: hidden;
+} */
+
+/* .add-event-btn {
+    
+} */
+
+/* .rbc-event {
+    background-color:brown;
+}
+
+.rbc-event-content {
+    background-color: blueviolet;
+} */
+
+.activity-title-editbtn {
+    display: flex;
+    gap: 30px;
+}
+
+/*Edit Dialog*/
+

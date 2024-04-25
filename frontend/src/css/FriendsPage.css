@@ -1,11 +1,8 @@
 body {
     margin-top: 20px;
-    background-color: #f4f6f9;
 }
 
-.container {
-    background-color: blanchedalmond;
-}
+
 
 .card {
     transition: all 0.5s;

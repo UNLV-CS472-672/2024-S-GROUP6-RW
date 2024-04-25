@@ -3,6 +3,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
+import { getFromLocal } from "../../utils/LocalStorageManager";
 import {
   AppBar,
   Box,
@@ -31,8 +32,9 @@ const props = {
 };
 
 function ResponsiveAppBar({ user }) {
-  const { isAuth } = useAuth();
-  const navigate = useNavigate();
+	const { isAuth } = useAuth();
+	const username = getFromLocal("username");
+	const navigate = useNavigate();
 
   // this is mean that the menu is not open for the 3 lines menu
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -49,7 +51,7 @@ function ResponsiveAppBar({ user }) {
   const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
   const handleCloseNavMenu = () => setAnchorElNav(null);
   const handleCloseUserMenu = () => setAnchorElUser(null);
-
+  
   // pages that we will use In general
   const generalPages = ["About Us", "How it works"];
   // settings that we will use for user
@@ -66,60 +68,84 @@ function ResponsiveAppBar({ user }) {
     "Logout",
   ];
 
-  // render the menu items
-  // items is the array of items that we want to render
-  // handleClose is the function that we want to call when we click on the item
-  const renderMenuItems = (items, handleClose) =>
-    // map the items and return the MenuItem component
-    items.map((item) => (
-      // key is the item that we want to render and onClick is the function that we want to call when we click on the item
-      <MenuItem
-        key={item}
-        onClick={handleClose}
-        component={Link}
-        to={`/${item.toLowerCase().replace(" ", "")}`}
-      >
-        <Typography textAlign="center">{item}</Typography>
-      </MenuItem>
-    ));
+	// render the menu items
+	// items is the array of items that we want to render
+	// handleClose is the function that we want to call when we click on the item
+	const renderMenuItems = (items, handleClose) =>
+		// map the items and return the MenuItem component
+		items.map((item) =>  {
+
+			if (item === "Profile") {
+				console.log("Profile clicked.");
+
+				return (
+					// key is the item that we want to render and onClick is the function that we want to call when we click on the item
+					<MenuItem
+						key={item}
+						onClick={handleClose}
+						component={Link}
+						to={`/${item.toLowerCase().replace(" ", "")}/${username}`}
+					>
+						<Typography textAlign="center">{item}</Typography>
+					</MenuItem>
+				);
+			}  else {
+			return (
+				// key is the item that we want to render and onClick is the function that we want to call when we click on the item
+				<MenuItem
+					key={item}
+					onClick={handleClose}
+					component={Link}
+					to={`/${item.toLowerCase().replace(" ", "")}`}
+				>
+					<Typography textAlign="center">{item}</Typography>
+				</MenuItem>
+			);
+		}
+});
+
+	useEffect(() => {
+		console.log(`navbar isAuth: ${isAuth}`);
+		if (username === "") {
+			console.log("user not signed in");
+		} else {
+			console.log(`username: ${username}`);
+		}
+	}, [isAuth, navigate]);
 
   useEffect(() => {
     console.log(`navbar isAuth: ${isAuth}`);
   }, [isAuth, navigate]);
 
-  return (
-    // AppBar is the component that we use to create the app bar
-    <AppBar
-      position="fixed"
-      sx={{
-        background:
-          "linear-gradient( rgba(155, 155, 155, 1.0)10%, rgba(0, 0, 0, 0))",
-        boxShadow: "none",
-        fontFamily: "'Radley', serif",
-      }}
-    >
-      {/* Container and Toolbar allows the Navbar to be responsive*/}
-      <Container maxWidth="x1">
-        <Toolbar disableGutters>
-          {/*<AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />*/}
-          {/*<img src="newlogo.jpg" />*/}
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to="/"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              ml: 3,
-              mr: 4,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "'Radley', serif",
-              color: "black",
-              textDecoration: "none",
-            }}
-          >
-            RightWay
-          </Typography>
+
+	return (
+		// AppBar is the component that we use to create the app bar
+		<AppBar position="fixed" sx={{
+			background: "linear-gradient( rgba(69, 68, 67, 1.0)10%, rgba(0, 0, 0, 0))",
+			boxShadow: "none",
+			fontFamily: "'Radley', serif",
+		  }}> 
+			{/* Container and Toolbar allows the Navbar to be responsive*/}
+			<Container maxWidth="x1">
+				<Toolbar disableGutters>
+					{/*<AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />*/}
+					{/*<img src="newlogo.jpg" />*/}
+					<Typography
+						variant="h6"
+						noWrap
+						component={Link}
+						to="/"
+						href="#app-bar-with-responsive-menu"
+						sx={{
+							mr: 2,
+							display: { xs: "none", md: "flex" },
+							fontFamily: "'Radley', serif",
+							color: "white",
+							textDecoration: "none",
+						}}
+					>
+						RightWay
+					</Typography>
 
           {/* Add 3 lines menu for the responsive */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>

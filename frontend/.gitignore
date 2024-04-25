@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+frontend/server/node_modules
 /.pnp
 .pnp.js
 
@@ -85,3 +86,4 @@ yarn.lock
 .github/ISSUE_TEMPLATE/documentation-needed.md
 .github/ISSUE_TEMPLATE/feature-development-enhancement.md
 frontend/package-lock.json
+frontend/server/package-lock.json

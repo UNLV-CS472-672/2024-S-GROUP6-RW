@@ -187,7 +187,7 @@ func DeleteUser(user models.User, database db.Database) error {
 		}
 
 		if existingUser.ID == existingTrip.TripOwnerID {
-			existingTrip.Username = user.Username
+			existingTrip.TripOwner = user.Username
 
 			err := DeleteTrip(*existingTrip, database)
 
@@ -379,5 +379,5 @@ func DeleteUser(user models.User, database db.Database) error {
 		}
 	}
 
-	return nil
+	return database["UserDetails"].DeleteDocument(bson.M{"_id": existingUser.ID}, "User")
 }

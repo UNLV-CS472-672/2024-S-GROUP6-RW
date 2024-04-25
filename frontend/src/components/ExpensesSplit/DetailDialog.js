@@ -21,11 +21,16 @@ const DetailDialog = ({ open, onClose, row, isEditing, onEdit }) => {
 			<DialogTitle>Expense Details</DialogTitle>
 			<DialogContent></DialogContent>
 			<DialogActions>
-				<Button onClick={onClose} color="primary">
+				<Button
+					onClick={onClose}
+					color="primary"
+					data-testid="close-button"
+				>
 					Close
 				</Button>
 				{isEditing && (
 					<Button
+						data-testid="save-button"
 						onClick={() => {
 							onEdit(editedPerson);
 							onClose();

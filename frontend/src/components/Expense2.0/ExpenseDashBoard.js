@@ -11,17 +11,21 @@ import { styled } from "@mui/material/styles";
 const sudoUser = "Sudo";
 const Data = generateData(sudoUser);
 
+// notes: need to export functions to be able to do unit test with it
+
 // Styling for the Paper component that wraps the components in the Expense Dashboard page
 // ai-gen start (chatGPT 4.0, 1)
 const Item = styled(Paper)(({ theme }) => ({
-	backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-	...theme.typography.body2,
+	//backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+	//...theme.typography.body2,
 	padding: theme.spacing(2),
 	textAlign: "center",
 	color: theme.palette.text.secondary,
+	fontFamily: "Radley",
 }));
 // ai-gen end
 
+/*
 // Function to delete an activity **note -> this is not work yet as
 // the data is link to multiple users so this will ned to be responsible for that too
 function deleteActivity(activityId, expenses, categories) {
@@ -61,9 +65,10 @@ function deleteCategory(categoryName, expenses, categories) {
 
 	return { updatedExpenses, updatedCategories };
 }
+*/
 
 // Function to create a new expense item based on the struct of the data
-function createExpense(newExpense, expenses, sudoUser) {
+export function createExpense(newExpense, expenses, sudoUser) {
 	return {
 		id: generateNewId(),
 		date: new Date().toDateString(),
@@ -82,7 +87,7 @@ function createExpense(newExpense, expenses, sudoUser) {
 }
 
 // Function to update the categories with the new expense item added to the data
-function updateCategoriesWithNewExpense(newExpenseItem, categories) {
+export function updateCategoriesWithNewExpense(newExpenseItem, categories) {
 	// Check if the category of the new expense item already exists
 	const newCategories = [...categories]; // copy the data
 	const categoryIndex = newCategories.findIndex(
@@ -102,7 +107,7 @@ function updateCategoriesWithNewExpense(newExpenseItem, categories) {
 
 // Function to add a new expense item to the data and this will be responsible for the
 // update of the categories and expenses
-function addExpense(newExpense, expenses, categories, sudoUser) {
+export function addExpense(newExpense, expenses, categories, sudoUser) {
 	const newExpenseItem = createExpense(newExpense, expenses, sudoUser);
 	const updatedExpenses = [...expenses, newExpenseItem]; // add the new expense item to the expenses
 	const updatedCategories = updateCategoriesWithNewExpense(
@@ -133,6 +138,7 @@ function ExpenseDashBoard() {
 		setCategories(updatedCategories);
 	};
 
+	/*
 	// Function to delete an activity from the data
 	const handleDeleteActivity = (activityId) => {
 		const { updatedExpenses, updatedCategories } = deleteActivity(
@@ -162,6 +168,7 @@ function ExpenseDashBoard() {
 		//console.log("After delete cat1: ", updatedExpenses);
 		//console.log("After delete cat2: ", updatedCategories);
 	};
+	*/
 
 	// Calculate the total spend, total owe, and total get back
 	// and this will be responsible for the calculation of the total spend, total owe, and total get back
@@ -170,10 +177,10 @@ function ExpenseDashBoard() {
 		.filter((e) => e.payer === sudoUser)
 		.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
 	const totalOwe = expenses
-		.filter((e) => e.type === "owe")
+		.filter((e) => e.payee === sudoUser && e.type === "owe")
 		.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
 	const totalGetBack = expenses
-		.filter((e) => e.type === "get back")
+		.filter((e) => e.payee === sudoUser && e.type === "get back")
 		.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
 
 	//console.log("Initial Data:", Data);
@@ -236,8 +243,8 @@ function ExpenseDashBoard() {
 								sudoUser={sudoUser}
 								categories={categories}
 								setCategories={setCategories}
-								onDeleteActivity={handleDeleteActivity}
-								onDeleteCategory={handleDeleteCategory}
+								//onDeleteActivity={handleDeleteActivity}
+								//onDeleteCategory={handleDeleteCategory}
 							/>
 						</Item>
 					</Grid>

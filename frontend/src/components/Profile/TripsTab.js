@@ -1,5 +1,4 @@
 // TripsTab.js
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Box,
@@ -14,44 +13,7 @@ import { useTheme } from "@mui/material/styles";
 const tripInfo = [
   {
     url: "/mchouse.jpg",
-    title: "ur moms house",
-    width: "50%",
-    height: "50%",
-  },
-  {
-    url: "/hobbithome.jpg",
-    title: "Hobbit Home",
-    width: "50%",
-    height: "50%",
-  },
-
-  {
-    url: "/paris.jpg",
-    title: "Paris",
-    width: "50%",
-    height: "50%",
-  },
-  {
-    url: "/seoul.jpg",
-    title: "Seoul",
-    width: "50%",
-    height: "50%",
-  },
-  {
-    url: "/test.jpg",
-    title: "Las Vegas",
-    width: "50%",
-    height: "50%",
-  },
-  {
-    url: "/tokyo.jpg",
-    title: "Tokyo",
-    width: "50%",
-    height: "50%",
-  },
-  {
-    url: "/mchouse.jpg",
-    title: "ur moms house",
+    title: "Your House",
     width: "50%",
     height: "50%",
   },
@@ -96,7 +58,7 @@ export default function TripsTab() {
     <div
       style={{
         marginTop: "1vw",
-        height: "63vh",
+        maxHeight: "31vw",
         overflowY: "auto", // Add overflowY to enable vertical scrolling
         scrollbarWidth: "none", // Hide scrollbar for Firefox
         "&::-webkit-scrollbar": {
@@ -122,7 +84,7 @@ export default function TripsTab() {
           >
             <Card // Setup a clickable link for trip
               component={Link}
-              to={trip.link}
+              to={trip.url}
             >
               <CardActionArea>
                 <CardMedia // Display image of trip
@@ -150,6 +112,7 @@ export default function TripsTab() {
                 >
                   <Typography // Overlay trip title on top of trip image
                     variant="h5"
+                    style={{fontFamily: "Radley"}}
                   >
                     {trip.title}
                   </Typography>

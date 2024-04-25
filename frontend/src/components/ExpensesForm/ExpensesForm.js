@@ -31,7 +31,7 @@ const placesData = [
 
 //this will be used to store data from database later on
 // will ahve to modify
-const cols = [
+export const cols = [
 	{ field: "name", headerName: "Name", width: 150 },
 	{ field: "amount", headerName: "Amount ($)", width: 150 },
 	{ field: "payer", headerName: "Payer", width: 150 },
@@ -241,9 +241,13 @@ const ExpenseForm = () => {
 							<Grid item xs={12} sm={2}>
 								{/* Add select dropdown */}
 								<Select
+									labelId="search-type-label"
 									value={searchType}
 									onChange={(e) => setSearchType(e.target.value)}
 									fullWidth
+									inputProps={{
+										"aria-label": "Search Type",
+									}}
 								>
 									<MenuItem value="name">Name</MenuItem>
 									<MenuItem value="payer">Payer</MenuItem>
@@ -293,6 +297,7 @@ const ExpenseForm = () => {
 									/>
 									{/* delete button*/}
 									<Button
+										data-testid="deleteButton"
 										onClick={() => handleRemoveExpense(params.value)}
 									>
 										<DeleteIcon />

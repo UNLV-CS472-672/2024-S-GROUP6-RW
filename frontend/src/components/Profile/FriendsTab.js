@@ -3,36 +3,30 @@ import { Grid, Avatar, Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 // Import placeholder image
-import Red from "../../images/avatars/Red.jpg";
+import Beagle from "../../images/avatars/beagle.jpg";
 
-export default function FriendsTab() {
-  const theme = useTheme();
+export default function FriendsTab({ textColor, behindTextBlur }) {
 
   // Mock friends list until we implement handlers to get data from backend
   const friendInfo = [
-    { img: Red, username: "Friend 1" },
-    { img: Red, username: "Friend 2" },
-    { img: Red, username: "Friend 3" },
-    { img: Red, username: "Friend 4" },
-    { img: Red, username: "Friend 5" },
-    { img: Red, username: "Friend 6" },
-    { img: Red, username: "Friend 7" },
-    { img: Red, username: "Friend 8" },
-    { img: Red, username: "Friend 9" },
-    { img: Red, username: "Friend 10" },
-    { img: Red, username: "Friend 11" },
-    { img: Red, username: "Friend 12" },
-    { img: Red, username: "Friend 13" },
-    { img: Red, username: "Friend 14" },
-    { img: Red, username: "Friend 15" },
-    { img: Red, username: "Friend 16" },
+    { img: Beagle, username: "Bob" },
+    { img: Beagle, username: "Joe" },
+    { img: Beagle, username: "Paul" },
+    { img: Beagle, username: "Emily" },
+    { img: Beagle, username: "Dennis" },
+    { img: Beagle, username: "Ashley" },
+    { img: Beagle, username: "Cassandra" },
+    { img: Beagle, username: "Brian" },
+    { img: Beagle, username: "Sam" },
+    { img: Beagle, username: "Montgomery" },
   ];
+  console.log(textColor);
 
   return (
     <div
       style={{
         marginTop: "1vw",
-        height: "63vh",
+        maxHeight: "24.5vw",
         overflowY: "auto", // Add overflowY to enable vertical scrolling
         scrollbarWidth: "none", // Hide scrollbar for Firefox
         "&::-webkit-scrollbar": {
@@ -66,7 +60,8 @@ export default function FriendsTab() {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  border: `0.15vw solid ${theme.palette.text.primary}`,
+                  border: `0.15vw solid ${textColor}`,
+                  background: `${behindTextBlur}`,
                 }}
               >
                 <Avatar // First show friend's profile image
@@ -76,11 +71,11 @@ export default function FriendsTab() {
                     width: "3vw",
                     height: "3vw",
                     margin: "1vw",
-                    border: "0.1vw solid black",
+                    border: `0.1vw solid ${textColor}`,
                   }}
                 />
                 <Typography // To the right of image display username
-                  sx={{ fontSize: "1.5vw", textTransform: "uppercase" }}
+                  sx={{ fontSize: "1.5vw", fontFamily: "Radley", textTransform: "uppercase", color: textColor }}
                 >
                   {friend.username}
                 </Typography>

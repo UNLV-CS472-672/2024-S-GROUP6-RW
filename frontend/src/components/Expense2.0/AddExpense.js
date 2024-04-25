@@ -24,7 +24,7 @@ const initialExpenseData = {
 };
 
 // Function to validate the form data
-function validateFormData(expenseData) {
+export function validateFormData(expenseData) {
 	const { userName, title, category, amount } = expenseData;
 
 	//we only check user name if split method is not none
@@ -41,7 +41,7 @@ function validateFormData(expenseData) {
 }
 
 // Function to handle the split method
-function handleSplitMethod(expenseData) {
+export function handleSplitMethod(expenseData) {
 	if (expenseData.splitMethod === "equal") {
 		expenseData.amount = (parseFloat(expenseData.amount) / 2).toFixed(2);
 	}
@@ -108,11 +108,13 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 		<Box
 			// ai-gen start (ChatGPT-4.0, 1)
 			component="form"
+			fontFamily="Radley"
 			sx={{
 				"& .MuiTextField-root": { m: 1, width: "25ch" },
 				p: 2,
 				display: "flex",
 				flexDirection: "column",
+				fontFamily: "Radley",
 			}}
 			// ai-gen end
 			noValidate={false} // do extra validation
@@ -122,7 +124,13 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 			{/* Display the error message if there's any */}
 			{message && <Alert severity="error">{message}</Alert>}
 
-			<Typography variant="h6">Add Expense</Typography>
+			<Typography
+				variant="h6"
+				fontFamily="Radley"
+				sx={{ fontFamily: "Radley" }}
+			>
+				Add Expense
+			</Typography>
 
 			<Grid container spacing={3}>
 				<Grid
@@ -141,8 +149,17 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 					}}
 				>
 					{/* Split Method */}
-					<FormControl fullWidth margin="normal">
-						<InputLabel id="split-method-label" sx={{ color: "black" }}>
+					<FormControl
+						fullWidth
+						margin="normal"
+						fontFamily="Radley"
+						sx={{ fontFamily: "Radley" }}
+					>
+						<InputLabel
+							id="split-method-label"
+							sx={{ color: "black", fontFamily: "Radley" }}
+							fontFamily="Radley"
+						>
 							Split Method
 						</InputLabel>
 						<Select
@@ -151,17 +168,45 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 							value={splitMethod}
 							label="Split Method"
 							name="splitMethod"
+							fontFamily="Radley"
 							onChange={handleChange}
+							sx={{ fontFamily: "Radley" }}
 						>
-							<MenuItem value="none">No Split</MenuItem>
-							<MenuItem value="equal">Split Equally</MenuItem>
-							<MenuItem value="specific">Specific Costs</MenuItem>
+							<MenuItem
+								value="none"
+								fontFamily="Radley"
+								sx={{ fontFamily: "Radley" }}
+							>
+								No Split
+							</MenuItem>
+							<MenuItem
+								value="equal"
+								fontFamily="Radley"
+								sx={{ fontFamily: "Radley" }}
+							>
+								Split Equally
+							</MenuItem>
+							<MenuItem
+								value="specific"
+								fontFamily="Radley"
+								sx={{ fontFamily: "Radley" }}
+							>
+								Specific Costs
+							</MenuItem>
 						</Select>
 					</FormControl>
 
 					{/* User Name */}
-					<FormControl fullWidth>
-						<InputLabel id="userName-label" sx={{ color: "black" }}>
+					<FormControl
+						fullWidth
+						fontFamily="Radley"
+						sx={{ fontFamily: "Radley" }}
+					>
+						<InputLabel
+							id="userName-label"
+							sx={{ color: "black", fontFamily: "Radley" }}
+							fontFamily="Radley"
+						>
 							User Name
 						</InputLabel>
 						<Select
@@ -171,12 +216,14 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 							value={userName}
 							onChange={handleChange}
 							disabled={splitMethod === "none"}
+							fontFamily="Radley"
 							sx={{
 								// ai-gen start (ChatGPT-4.0, 0)
 								"&.Mui-disabled": {
 									color: "black",
 									backgroundColor: "#ddd",
 								},
+								fontFamily: "Radley",
 								// ai-gen end
 							}}
 						>
@@ -189,8 +236,17 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 					</FormControl>
 
 					{/* Category */}
-					<FormControl fullWidth margin="normal">
-						<InputLabel id="category-label" sx={{ color: "black" }}>
+					<FormControl
+						fullWidth
+						margin="normal"
+						fontFamily="Radley"
+						sx={{ fontFamily: "Radley" }}
+					>
+						<InputLabel
+							id="category-label"
+							sx={{ color: "black", fontFamily: "Radley" }}
+							fontFamily="Radley"
+						>
 							Category
 						</InputLabel>
 						<Select
@@ -199,9 +255,15 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 							name="category"
 							value={category}
 							onChange={handleChange}
+							fontFamily="Radley"
+							sx={{ fontFamily: "Radley" }}
 						>
 							{categories.map(([categoryName]) => (
-								<MenuItem key={categoryName} value={categoryName}>
+								<MenuItem
+									sx={{ fontFamily: "Radley" }}
+									key={categoryName}
+									value={categoryName}
+								>
 									{categoryName}
 								</MenuItem>
 							))}
@@ -256,6 +318,7 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 						>
 							{/* Title, Amount, Description */}
 							<TextField
+								fontFamily="Radley"
 								required
 								fullWidth
 								id="expense-title"
@@ -264,10 +327,12 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 								value={title}
 								onChange={handleChange}
 								InputLabelProps={{
-									style: { color: "black" },
+									style: { color: "black", fontFamily: "Radley" },
 								}}
+								sx={{ fontFamily: "Radley" }}
 							/>
 							<TextField
+								fontFamily="Radley"
 								required
 								fullWidth
 								id="expense-amount"
@@ -277,10 +342,12 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 								onChange={handleChange}
 								type="number"
 								InputLabelProps={{
-									style: { color: "black" },
+									style: { color: "black", fontFamily: "Radley" },
 								}}
+								sx={{ fontFamily: "Radley" }}
 							/>
 							<TextField
+								fontFamily="Radley"
 								fullWidth
 								id="expense-description"
 								label="Description"
@@ -291,14 +358,20 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 								onChange={handleChange}
 								margin="normal"
 								InputLabelProps={{
-									style: { color: "black" },
+									style: { color: "black", fontFamily: "Radley" },
 								}}
+								sx={{ fontFamily: "Radley" }}
 							/>
 						</Grid>
 					</Grid>
 				</Grid>
 				<Grid item xs={12}>
-					<Button variant="contained" type="submit">
+					<Button
+						variant="contained"
+						type="submit"
+						fontFamily="Radley"
+						sx={{ fontFamily: "Radley", backgroundColor: "#36446C" }}
+					>
 						Save Expense
 					</Button>
 				</Grid>

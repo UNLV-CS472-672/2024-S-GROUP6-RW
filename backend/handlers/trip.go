@@ -1,3 +1,4 @@
+// 2024-S-GROUP6-RW\backend\handlers\trip.go
 package handlers
 
 import (
@@ -14,7 +15,7 @@ import (
 )
 
 func CreateTripHandler(c *gin.Context) {
-	fmt.Printf("%s | Attempting to create a trip.\n", time.Now())
+	fmt.Printf("\n%s | Attempting to create a trip.\n", time.Now())
 
 	// Store request data into Trip instance
 	var trip models.Trip
@@ -25,11 +26,15 @@ func CreateTripHandler(c *gin.Context) {
 		return // Failed to bind data. Exit handler
 	}
 
-	fmt.Println(trip)
+	fmt.Printf("Printing the trip: \n%s.\n", trip)
 
 	database := db.GetMongoDatabase()
 
+	fmt.Printf("connected to database\n")
+
 	_, err := business.CreateTrip(trip, database)
+
+	fmt.Printf("Done CreateTrip business\n")
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -62,7 +67,7 @@ func GetAllTripsHandler(c *gin.Context) {
 		return
 	}
 
-	// TODO: Replace ID content in each trip textual data from respective documents
+	// TODO: select relavent information from the trips to return to client
 
 	fmt.Println("Success.")
 
@@ -89,6 +94,8 @@ func GetTripHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	// TODO: select relavent information from the trip to return to client
 
 	fmt.Println("Success.")
 
