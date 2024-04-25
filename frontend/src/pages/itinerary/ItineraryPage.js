@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 import ItineraryAccordion from "../../components/ItineraryForm/ItineraryAccordion"; // Importing the ItineraryAccordion component
-import CalendarView from "../../components/ItineraryForm/CalendarView";
-import "../../css/ItineraryPage.css";
+import CalendarView from "../../components/ItineraryForm/CalendarView"; //Import Calendar View
+import "../../css/ItineraryPage.css"; // CSS File
 import { format } from "date-fns"; // Importing the format function from date-fns library
 import { getFromLocal } from "../../utils/LocalStorageManager";
-
-import AddIcon from "@mui/icons-material/Add";
-import NotesSharpIcon from "@mui/icons-material/NotesSharp";
-import { LuCalendarPlus } from "react-icons/lu";
 import { PiCalendarPlusLight } from "react-icons/pi";
 import { IconContext } from "react-icons";
 
+//Material UI
 import {
   Dialog,
   DialogTitle,
@@ -23,14 +20,15 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-
+import AddIcon from "@mui/icons-material/Add";
+import NotesSharpIcon from "@mui/icons-material/NotesSharp";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const ItineraryPage = () => {
-  //User entered start / end date
+  //User entered start / end date from getting started page
   const startDate = getFromLocal("startDate");
   const endDate = getFromLocal("endDate");
   const startDateObj = dayjs(startDate);
@@ -53,7 +51,7 @@ const ItineraryPage = () => {
 
   const handleShowCalendarView = (day) => {
     setShowCalendarView(true); // Show Calendar View when button is clicked
-    setSelectedItinDay(day);
+    setSelectedItinDay(day); // Set the calendar views date to the one selected by the user
     setCreateStartTime(dayjs(day)); //Set the start time according to each day's accordion
     setCreateEndTime(dayjs(day)); //Set the start time according to each day's accordion
   };
@@ -65,9 +63,6 @@ const ItineraryPage = () => {
   };
 
   useEffect(() => {
-    //const startDateFromStorage = localStorage.getItem('startDate');
-    //const startDate = getFromLocal("startDate");
-
     if (startDate) {
       const start = new Date(startDate);
       if (start.toString() !== "Invalid Date") {
@@ -79,34 +74,36 @@ const ItineraryPage = () => {
     }
   }, []);
 
+  //Function generates the itinerary based on a given start date and end date
+  // ai-gen start (ChatGPT-3.5, 1)
   const generateItinerary = (startDate) => {
-    //const endDateFromStorage = localStorage.getItem('endDate');
-    //const endDate = getFromLocal("endDate");
-
-    if (endDate) {
+    if (endDate) { //If there is an end date available
       const end = new Date(endDate);
-      if (startDate && end.toString() !== "Invalid Date") {
-        const tripLength = calculateNumberOfDays(startDate, end);
-        const newItinerary = Array.from({ length: tripLength }, (_, index) =>
-          new Date(startDate.getTime() + index * 86400000).toDateString()
+      if (startDate && end.toString() !== "Invalid Date") { //If start date exists and end date is valid
+        const tripLength = calculateNumberOfDays(startDate, end); //Calculate number of days between the start and end date
+        const newItinerary = Array.from({ length: tripLength }, (_, index) => //Populate itinerary array
+          new Date(startDate.getTime() + index * 86400000).toDateString() //Calculate date and turn to dateString()
         );
         setItinerary(newItinerary);
       }
     }
   };
+  //ai-gen end
 
+  // ai-gen start (ChatGPT-3.5, 0)
   const calculateNumberOfDays = (startDate, endDate) => {
     return Math.round(Math.abs((startDate - endDate) / 86400000)) + 1;
   };
+  // ai-gen end
 
+  // Adds a day to the list of itineraries at the end. 
+  // ai-gen start (ChatGPT-3.5, 1)
   const handleAddDay = () => {
-    console.log(selectedStartDate);
     setItinerary((prevItinerary) => {
       let newDay;
-      if (prevItinerary.length === 0) {
-        //If there are no days
+      if (prevItinerary.length === 0) { //If there are no days
         newDay = new Date(selectedStartDate.getTime());
-        newDay.setDate(newDay.getDate()); //startDate being adde
+        newDay.setDate(newDay.getDate()); //startDate being added
       } else {
         const lastDayString = prevItinerary[prevItinerary.length - 1];
         const lastDay = new Date(lastDayString);
@@ -116,27 +113,34 @@ const ItineraryPage = () => {
       return [...prevItinerary, newDay.toDateString()];
     });
   };
-  //day: format(newDay, "EEEE, MMMM dd, yyyy"), // Convert newDay to a string representation
+  // ai-gen end
 
+
+  /* Deletes the itinerary/day that was selected by the user */
+  // ai-gen start (ChatGPT-3.5, 1)
   const handleDeleteDay = (deletingDay) => {
     setItinerary((prevItinerary) =>
       prevItinerary.filter((day) => day !== deletingDay)
     );
   };
+  // ai-gen end
 
+  /* Any time an activity is updates, is handled by this */
   const handleUpdateActivities = (updatedActivities) => {
     setUserActivities(updatedActivities);
   };
 
+  /* Creates a new event/activity from given user input */
+  // ai-gen start (ChatGPT-3.5, 2)
   const handleCreateEvent = () => {
     if (
       createStartTime &&
       createEndTime &&
       createStartTime.isBefore(createEndTime)
-    ) {
+    ) { //If the user provided a input for the start and end time, and if the start date is before end date.
       const newEvent = {
         id: userActivities.length + 1,
-        title: createTitle || "No Title",
+        title: createTitle || "No Title", // No event title default to "No Title"
         start: createStartTime.toDate(), // Convert Dayjs object to JavaScript Date object
         end: createEndTime.toDate(), // Convert Dayjs object to JavaScript Date object
         description: createDescription || "",
@@ -160,10 +164,12 @@ const ItineraryPage = () => {
     }
   };
 
+  /* Create event button shows the dialogue for user input */
   const handleCreateEventBtnClick = () => {
     setShowCreateEventDialog(true);
   };
 
+  /* When closing the dialogue, reset the states of the input (if user closed dialogue without finishing input) */
   const handleCreateEventDialogClose = () => {
     setShowCreateEventDialog(false);
     //Reset States
