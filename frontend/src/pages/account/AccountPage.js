@@ -9,8 +9,6 @@ import {
   TextField,
 } from "@mui/material";
 import "../../css/AccountPage.css";
-import ComplexityPassChecker from "../../components/ComplexityPassChecker/ComplexityPassChecker";
-
 function AccountPage() {
   const [currentUsername, setCurrentUsername] = useState("TestAccount");
   const [currentPassword, setCurrentPassword] = useState("Password1"); // Default current password
@@ -196,7 +194,6 @@ function AccountPage() {
                 <li>Password must contain at least one capital letter</li>
                 <li>Password must contain at least one number</li>
               </ul>
-              <ComplexityPassChecker value={newPassword} />
               <TextField
                 margin="dense"
                 id="confirmPassword"
