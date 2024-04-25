@@ -1,3 +1,7 @@
+.itin-accordion-container {
+    padding: 30px;
+}
+
 .itinerary-banner {
   background-image: url(../../public/lasv.jpg);
   height: 160px;
