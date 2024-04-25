@@ -17,10 +17,12 @@ import (
 var jwtSecretKey []byte
 var jwt_err error
 
-func JWTSetup() {
+func JWTSetup() error {
 	var tmp string
 	tmp, jwt_err = secrets.GetEnv("JWT")
 	jwtSecretKey = []byte(tmp)
+
+	return jwt_err
 }
 
 // GenerateJWT creates a JWT token for a given username

@@ -61,10 +61,15 @@ const Activity = ({ activity, sudoUser, onEditActivity, onDeleteActivity }) => {
 	}
 
 	return (
-		<ListItem key={activity.id}>
+		<ListItem key={activity.id} fontFamily="Radley">
 			<ListItemText
+				fontFamily="Radley"
 				primary={activity.name}
-				secondary={<Typography color={color}>{secondaryText}</Typography>}
+				secondary={
+					<Typography color={color} fontFamily="Radley">
+						{secondaryText}
+					</Typography>
+				}
 			/>
 			{/*
 			<Button onClick={() => onEditActivity(activity.id)}>
@@ -113,9 +118,9 @@ const ActivityCategory = ({
 	});
 
 	return (
-		<Accordion key={category}>
-			<AccordionSummary expandIcon={<ExpandMoreIcon />}>
-				<Typography>{category}</Typography>
+		<Accordion key={category} fontFamily="Radley">
+			<AccordionSummary expandIcon={<ExpandMoreIcon />} fontFamily="Radley">
+				<Typography fontFamily="Radley">{category}</Typography>
 				{/*
 				<Button onClick={() => onEditCategory(category)}>
 					<EditIcon />
@@ -127,6 +132,7 @@ const ActivityCategory = ({
 			</AccordionSummary>
 
 			<AccordionDetails
+				fontFamily="Radley"
 				sx={{
 					// ai-gen (ChatGPT-4.0, 1)
 					maxHeight: "600px",
@@ -138,11 +144,12 @@ const ActivityCategory = ({
 				}}
 			>
 				<ActivityTabs
+					fontFamily="Radley"
 					value={tab}
 					onChange={handleTabChange}
 					labels={labels}
 				/>
-				<List>
+				<List fontFamily="Radley">
 					{filteredActivities.map((activity) => (
 						<Activity
 							key={activity.id}
@@ -201,6 +208,7 @@ const Activities = ({
 
 	return (
 		<Card
+			fontFamily="Radley"
 			sx={{
 				// ai-gen (ChatGPT-4.0, 1)
 				background: theme.palette.background.paper,
@@ -208,22 +216,31 @@ const Activities = ({
 				color: theme.palette.text.primary,
 				overflow: "hidden",
 				height: "600px",
+				fontFamily: "Radley",
 				// ai-gen end
 			}}
 		>
 			{/*Struct is similar to History.js*/}
-			<CardContent sx={{ height: "680px", overflowY: "auto" }}>
+			<CardContent
+				fontFamily="Radley"
+				sx={{ height: "680px", overflowY: "auto", fontFamily: "Radley" }}
+			>
 				<Box
 					display="flex"
 					justifyContent="space-between"
 					alignItems="center"
+					fontFamily="Radley"
 					mb={2}
 				>
-					<Typography variant="h6">Activities</Typography>
+					<Typography variant="h6" fontFamily="Radley">
+						Activities
+					</Typography>
 
 					<Button
 						variant="contained"
+						fontFamily="Radley"
 						startIcon={<AddIcon />}
+						sx={{ backgroundColor: "#36446C", fontFamily: "Radley" }}
 						onClick={handleClickOpen}
 					>
 						Add Category
@@ -246,15 +263,16 @@ const Activities = ({
 
 			{/*Dialog for adding a new category*/}
 			<Dialog open={open} onClose={handleClose}>
-				<DialogTitle>Add a new category</DialogTitle>
+				<DialogTitle fontFamily="Radley">Add a new category</DialogTitle>
 
 				{/*Use JS normal form isntead of MUI as we only need to ask for category name so no need to be fancy*/}
 				<form onSubmit={handleSubmit}>
-					<DialogContent>
-						<DialogContentText>
+					<DialogContent fontFamily="Radley">
+						<DialogContentText fontFamily="Radley">
 							Please enter the name of the new category.
 						</DialogContentText>
 						<TextField
+							fontFamily="Radley"
 							autoFocus
 							margin="dense"
 							id="name"
@@ -267,9 +285,21 @@ const Activities = ({
 							}
 						/>
 					</DialogContent>
-					<DialogActions>
-						<Button onClick={handleClose}>Cancel</Button>
-						<Button type="submit">Add</Button>
+					<DialogActions fontFamily="Radley">
+						<Button
+							fontFamily="Radley"
+							onClick={handleClose}
+							sx={{ fontFamily: "Radley" }}
+						>
+							Cancel
+						</Button>
+						<Button
+							fontFamily="Radley"
+							type="submit"
+							sx={{ fontFamily: "Radley" }}
+						>
+							Add
+						</Button>
 					</DialogActions>
 				</form>
 			</Dialog>

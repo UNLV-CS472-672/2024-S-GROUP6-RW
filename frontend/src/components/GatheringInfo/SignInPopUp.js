@@ -8,6 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
 import SignInDialog from "./../login-register/SignInDialog";
+import {getFromLocal } from '../../utils/LocalStorageManager';
 
 const SignInPopUp = ({ open, handleClose }) => {
   const [showSignInDialog, setShowSignInDialog] = useState(false);
@@ -20,7 +21,10 @@ const SignInPopUp = ({ open, handleClose }) => {
 
   const handleContinue = () => {
     handleClose(); // Close the modal
-    navigate('/map'); // Navigate to the map page
+    const coords = (getFromLocal('LocationCoordinates'));
+    const {lat, lon} = coords;
+    const url = `/map?lat=${lat}&lng=${lon}`;
+    navigate(url); // Navigate to the map page
   };
 
   return (
@@ -33,7 +37,7 @@ const SignInPopUp = ({ open, handleClose }) => {
     >
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Would you like to sign in to save your data for next time? If you do not sign in, you can still continue without saving.
+          Would you like to sign in to save your data? If you do not sign in, you can still continue without saving.
         </DialogContentText>
       </DialogContent>
       <DialogActions>

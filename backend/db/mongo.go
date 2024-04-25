@@ -14,7 +14,14 @@ import (
 
 type Database map[string]models.CollectionType
 
-var connection_URI, env_err = secrets.GetEnv("MONGO")
+var connection_URI string
+var env_err error
+
+func MongoSetup() error {
+	connection_URI, env_err = secrets.GetEnv("MONGO")
+
+	return env_err
+}
 
 func ConnectToMongoDB(db_name, collection_name string) *mongo.Collection {
 	if env_err != nil {

@@ -6,11 +6,21 @@ import { Box, Grid, Card, CardContent, Typography } from "@mui/material";
 // Card component -> responsible for displaying the overview card
 const OverviewCard = ({ title, amount, color }) => (
 	<Card
-		sx={{ minWidth: 200, background: color, borderRadius: "15px", margin: 1 }}
+		sx={{
+			minWidth: 200,
+			background: color,
+			borderRadius: "15px",
+			margin: 1,
+			fontFamily: "Radley",
+		}}
 	>
 		<CardContent>
 			<Typography
-				sx={{ fontSize: 14, color: "text.secondary" }}
+				sx={{
+					fontSize: 14,
+					color: "text.secondary, fontFamily: 'Radley'",
+					fontWeight: 500,
+				}}
 				gutterBottom // adds space at the bottom of the text
 			>
 				{title}
@@ -19,7 +29,11 @@ const OverviewCard = ({ title, amount, color }) => (
 			<Typography
 				variant="h4" // use this to change the boldness of the text of the $$
 				component="div"
-				sx={{ color: "text.primary" }}
+				sx={{
+					color: "text.primary",
+					fontFamily: "Radley",
+					fontWeight: 500,
+				}}
 			>
 				${amount}
 			</Typography>
@@ -31,17 +45,17 @@ function Overview({ totalSpend, totalOwe, totalGetBack }) {
 	// this will take the data that pass in the expense dash board and update the overview card
 	const cards = [
 		{
-			title: "Total spend",
+			title: "Group Total:",
 			amount: totalSpend.toFixed(2),
 			color: "primary.main",
 		},
 		{
-			title: "You owe",
+			title: "You owe:",
 			amount: totalOwe.toFixed(2),
 			color: "secondary.main",
 		},
 		{
-			title: "You get back",
+			title: "You get back:",
 			amount: totalGetBack.toFixed(2),
 			color: "success.main",
 		},
@@ -52,6 +66,7 @@ function Overview({ totalSpend, totalOwe, totalGetBack }) {
 			sx={{
 				flexGrow: 1,
 				color: "text.primary",
+				fontFamily: "Radley",
 				backgroundColor: "background.default",
 				padding: 1,
 				marginLeft: -1,

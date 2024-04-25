@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Tabs, Tab, Box } from "@mui/material";
-import FriendsContainer from "../../components/FriendsPage/FriendsContainer";
+import FriendList from "../../components/FriendsPage/BoxFriend";
 import "../../css/FriendsPage2.css";
 
 //This page is to showcase any friends the user has.
@@ -10,7 +10,7 @@ function FriendsPage() {
     <>
       <div className="friends-container">
         <p className="friends-header">Friends</p>
-        <FriendsContainer />
+        <FriendList />
       </div>
     </>
   );
