@@ -61,6 +61,13 @@ func LoadEnv() error {
 		key := parts[0]
 		value := parts[1]
 
+		if len(parts) > 2 {
+			for i := range len(parts) - 2 {
+				value += "="
+				value += parts[i+2]
+			}
+		}
+
 		envData[key] = value
 	}
 
