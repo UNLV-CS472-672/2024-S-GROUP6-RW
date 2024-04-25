@@ -17,10 +17,8 @@ func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	document, err := database["UserDetails"].FindDocument(bson.M{"Username": trip.TripOwner}, "User")
 
 	if err != nil {
-		fmt.Printf("failed to find User: \n%s.\n", err)
 		return nil, err
 	}
-	
 
 	tripOwner, ok := document.(*models.User)
 
