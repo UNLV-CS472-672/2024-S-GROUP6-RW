@@ -26,7 +26,6 @@
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.10",
     "enzyme": "^3.11.0",
-    "jest-canvas-mock": "^2.5.2",
     "lodash": "^4.17.21",
     "lottie-react": "^2.4.0",
     "react": "^18.2.0",
@@ -80,6 +79,7 @@
     "babel-jest": "^29.7.0",
     "axios-mock-adapter": "^1.22.0",
     "babel-core": "^7.0.0-bridge.0",
+    "jest-canvas-mock": "^2.5.2",
     "jest-localstorage-mock": "^2.4.26",
     "ts-jest": "^29.1.2"
   }
