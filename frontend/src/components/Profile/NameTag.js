@@ -6,7 +6,7 @@ export default function NameTag({ name, nameGradient }) {
   // Function to dynamically adjust font size based on the length of the name
   const handleWidth = () => {
     // Adjust font size based on the length of the name
-    if (name.length > 12) {
+    if ((name?.length || 13) > 12) {
       return "3vw";
     } else if (name.length > 10) {
       return "3.5vw";

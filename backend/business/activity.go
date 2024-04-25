@@ -76,7 +76,7 @@ func CreateActivity(activity models.Activity, database db.Database) (*models.Act
 		"ActivityIDs": existingTrip.ActivityIDs,
 	}
 
-	_, err = database["ActivityDetails"].UpdateDocument(bson.M{"_id": existingTrip.ID}, update, "Trip")
+	_, err = database["TripDetails"].UpdateDocument(bson.M{"_id": existingTrip.ID}, update, "Trip")
 
 	if err != nil {
 		return nil, err
