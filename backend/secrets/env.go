@@ -2,6 +2,7 @@ package secrets
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -12,13 +13,17 @@ import (
 var envData map[string]string
 
 func LoadEnv() error {
-	dir, err := os.Getwd()
+	// dir, err := os.Getwd()
+	var err error
 
-	if err != nil {
-		return err
-	}
+	// if err != nil {
+	// 	return err
+	// }
 
-	pathSplit := strings.Split(dir, string(filepath.Separator))
+	dir := "C:\\Users\\wpseb\\Documents\\2024-S-GROUP6-RW\\backend"
+
+	// pathSplit := strings.Split(dir, string(filepath.Separator))
+	pathSplit := strings.Split(dir, "\\")
 
 	resultPath := []string{}
 
@@ -46,6 +51,8 @@ func LoadEnv() error {
 
 	procPath = filepath.Join(procPath, "backend")
 	procPath = filepath.Join(procPath, ".env")
+
+	fmt.Println(procPath)
 
 	err = godotenv.Load(procPath)
 
