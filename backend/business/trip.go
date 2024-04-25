@@ -7,7 +7,7 @@ import (
 	"backend/models"
 	"backend/utility"
 	"errors"
-	"fmt"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -25,7 +25,6 @@ func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	tripOwner, ok := document.(*models.User)
 
 	if !ok {
-		fmt.Println("failed to convert model to User")
 		return nil, errors.New("failed to convert model to User")
 	}
 
@@ -33,7 +32,6 @@ func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	_, err = database["TripDetails"].FindDocument(bson.M{"TripOwnerID": tripOwner.ID, "Title": trip.Title}, "Trip")
 
 	if err == nil {
-		fmt.Println("trip already exists")
 		return nil, errors.New("trip already exists")
 	}
 
@@ -58,7 +56,6 @@ func CreateTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 	insertedTrip, ok := document.(*models.Trip)
 
 	if !ok {
-		fmt.Println("failed to convert model to Trip")
 		return nil, errors.New("failed to convert model to Trip")
 	}
 
@@ -186,6 +183,31 @@ func EditTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 			}
 
 			update["TripOwnerID"] = existingUser.ID
+
+			// Also add new owner to trip
+			members, ok := update["MemberIDs"]
+
+			var memberList []primitive.ObjectID
+
+			if !ok {
+				memberList = existingTrip.MemberIDs
+			} else {
+				memberList, ok = members.([]primitive.ObjectID)
+
+				if !ok {
+					return nil, errors.New("failed to convert member list to ObjectID array")
+				}
+			}
+
+			found, _ := utility.Find(memberList[:], existingUser.ID)
+
+			if found {
+				return nil, errors.New("cannot set user to owner and add them to the trip")
+			}
+
+			memberList = append(memberList, existingUser.ID)
+
+			update["MemberIDs"] = memberList
 		case "Title":
 			title, ok := entry.Data.(string)
 
@@ -203,7 +225,19 @@ func EditTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 
 			update["LocationName"] = location
 		case "AddMembers":
-			memberList := existingTrip.MemberIDs
+			members, ok := update["MemberIDs"]
+
+			var memberList []primitive.ObjectID
+
+			if !ok {
+				memberList = existingTrip.MemberIDs
+			} else {
+				memberList, ok = members.([]primitive.ObjectID)
+
+				if !ok {
+					return nil, errors.New("failed to convert member list to ObjectID array")
+				}
+			}
 
 			userList, ok := entry.Data.([]string)
 
@@ -237,11 +271,32 @@ func EditTrip(trip models.Trip, database db.Database) (*models.Trip, error) {
 				}
 
 				memberList = append(memberList, existingUser.ID)
+
+				// Also add trip to member's trip list
+				existingUser.TripIDs = append(existingUser.TripIDs, existingTrip.ID)
+
+				_, err = database["UserDetails"].UpdateDocument(bson.M{"_id": existingUser.ID}, bson.M{"TripIDs": existingUser.TripIDs}, "User")
+
+				if err != nil {
+					return nil, err
+				}
 			}
 
 			update["MemberIDs"] = memberList
 		case "RemoveMembers":
-			memberList := existingTrip.MemberIDs
+			members, ok := update["MemberIDs"]
+
+			var memberList []primitive.ObjectID
+
+			if !ok {
+				memberList = existingTrip.MemberIDs
+			} else {
+				memberList, ok = members.([]primitive.ObjectID)
+
+				if !ok {
+					return nil, errors.New("failed to convert member list to ObjectID array")
+				}
+			}
 
 			userList, ok := entry.Data.([]string)
 
