@@ -34,6 +34,20 @@ body {
     background: #6572b8;
 }
 
+.input {
+    display: inline-block;
+    border-radius: 12px;
+    padding: 8px 16px;
+}
+
+.button {
+    border-radius: 12px;
+    background-color: black;
+    color: white;
+    padding: 15px 32px;
+    display: inline-block;
+}
+
 .card .body {
     padding: 20px;
 }
