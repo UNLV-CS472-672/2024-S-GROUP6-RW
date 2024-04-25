@@ -73,6 +73,10 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/user-event": "^14.5.2"
+    "@testing-library/user-event": "^14.5.2",
+    "axios-mock-adapter": "^1.22.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "jest-localstorage-mock": "^2.4.26",
+    "ts-jest": "^29.1.2"
   }
 }

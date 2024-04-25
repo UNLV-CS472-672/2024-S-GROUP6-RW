@@ -16,7 +16,7 @@ function MapPageTemp() {
   }
 
   return (
-    <div className="map-container">
+    <div className="map-container" data-testid="map-block">
       <GoogleMapBlock
         height="100vh"
         width="100vw"
