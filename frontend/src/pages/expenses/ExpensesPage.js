@@ -7,9 +7,9 @@ import ExpensesForm from "../../components/ExpensesForm/ExpensesForm";
 function ExpensesPage() {
 	const [value, setValue] = React.useState(0);
 
-	const handleChange = (event, newValue) => {
+	/*const handleChange = (event, newValue) => {
 		setValue(newValue);
-	};
+	};*/
 
 	return (
 		<Box sx={{ width: "100%", bgcolor: "background.paper", mt: 9 }}>
