@@ -1,6 +1,5 @@
 import React from "react";
-import ButtonBaseDemo from "../../components/ExpensesTripStuff/TripsList";
-import "../../css/MyTrips.css"
+import "../../css/MyTrips.css";
 import ShowTrips from "../../components/ExpensesTripStuff/ShowTrips";
 
 
