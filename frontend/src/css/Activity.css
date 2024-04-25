@@ -1,25 +1,19 @@
-.place {
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-    transition: box-shadow 0.3s ease;
-  }
-  
-  .place:hover {
-    background-color: #f0f0f0;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  }
-  
-  .place h3 {
-    margin: 0 0 10px 0;
+.activity {
+    margin-top: -5px;
+    touch-action: none;
+}
+
+.activity-title-btn-container {
+    width: 50%;
+}
+
+.activity-title-btn-container .MuiTypography-root {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    
+    font-family: 'Radley';
     font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .place p {
-    margin: 0;
-    font-size: 14px;
-    color: #666;
-  }
+    color: black;
+} 
