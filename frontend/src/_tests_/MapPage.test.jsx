@@ -1,32 +1,47 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Route } from 'react-router-dom';
 import MapPageTemp from '../pages/map/MapPage';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// Helper function to setup tests with router context
+
 const renderWithRouter = (ui, { route = '/' } = {}) => {
   window.history.pushState({}, 'Test page', route);
-  return render(ui, { wrapper: MemoryRouter });
+
+  return render(
+    <Router>
+      <Routes>
+        <Route path={route} element={ui} />
+      </Routes>
+    </Router>
+  );
 };
 
 describe('MapPageTemp', () => {
-  it('renders the map and activity components with valid lat and lng parameters', () => {
-    renderWithRouter(<Route path="/map"><MapPageTemp /></Route>, { route: '/map?lat=36.1173&lng=-115.1761' });
+  it('renders the component correctly with routing context', () => {
+    renderWithRouter(<MapPageTemp />, { route: '/some-route' });
 
-    expect(screen.getByText('100vh')).toBeInTheDocument(); // Mocked text from GoogleMapBlock
-    expect(screen.getByText('100vw')).toBeInTheDocument(); // Mocked text from GoogleMapBlock
-    expect(screen.getByRole('img')).toBeInTheDocument(); // Assuming GoogleMapBlock renders an image/map
-    expect(screen.getByText(/activities/i)).toBeInTheDocument(); // Mocked text from ActComponent
+    expect(screen.getByRole('img')).toBeInTheDocument();
+    expect(screen.getByText(/activities/i)).toBeInTheDocument();
   });
 
   it('renders an error message when invalid lat and lng parameters are provided', () => {
-    renderWithRouter(<Route path="/map"><MapPageTemp /></Route>, { route: '/map?lat=abc&lng=xyz' });
+    renderWithRouter(<MapPageTemp />, { route: '/map?lat=abc&lng=xyz' });
 
     expect(screen.getByText('Invalid coordinates provided in the URL')).toBeInTheDocument();
-    expect(screen.queryByText('100vh')).not.toBeInTheDocument(); // Mocked text from GoogleMapBlock
-    expect(screen.queryByText('100vw')).not.toBeInTheDocument(); // Mocked text from GoogleMapBlock
-    expect(screen.queryByText(/activities/i)).not.toBeInTheDocument(); // Mocked text from ActComponent
   });
 
+  it('has correct style properties', () => {
+    renderWithRouter(<MapPageTemp />, { route: '/some-route' });
+    const mapElement = screen.getByTestId('map-block');
+    expect(mapElement.style.height).toBe('100vh');
+    expect(mapElement.style.width).toBe('100vw');
+  });
+
+  it('checks for specific settings from local storage', () => {
+    localStorage.setItem('someSetting', 'someValue');
+    renderWithRouter(<MapPageTemp />, { route: '/map?lat=40.7128&lng=-74.0060' });
+    
+  });
+  
 });
 

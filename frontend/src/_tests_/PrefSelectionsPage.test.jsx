@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import PrefSelectionPage from '../../getting_started/PrefSelectionsPage';
+import PrefSelectionPage from '../pages/getting_started/PrefSelectionsPage';
 
 describe('PrefSelectionPage', () => {
   test('renders the preference selection and date availability sections correctly', () => {
