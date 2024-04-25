@@ -21,11 +21,23 @@ describe("DateAvailability", () => {
     const endDateInput = getByTestId("endDate");
     const nameInput = getByTestId("name");
 
-    fireEvent.change(startDateInput, { target: { value: "2024-04-23" } });
-    fireEvent.change(endDateInput, { target: { value: "2024-04-24" } });
+    fireEvent.change(startDateInput, { target: { value: "2024-06-13" } });
+    fireEvent.change(endDateInput, { target: { value: "2024-06-14" } });
     fireEvent.change(nameInput, { target: { value: "JohnDoe" } });
 
     userEvent.click(screen.getByText("Submit"));
+
+    await waitFor(() => {
+      expect(screen.getByText("April 2024")).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByText("Next"));
+    await waitFor(() => {
+      expect(screen.getByText("May 2024")).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByText("Next"));
+    await waitFor(() => {
+      expect(screen.getByText("June 2024")).toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(screen.getByText("JohnDoe")).toBeInTheDocument();
@@ -38,18 +50,30 @@ describe("DateAvailability", () => {
     const endDateInput = getByTestId("endDate");
     const nameInput = getByTestId("name");
 
-    fireEvent.change(startDateInput, { target: { value: "2024-04-23" } });
-    fireEvent.change(endDateInput, { target: { value: "2024-04-24" } });
+    fireEvent.change(startDateInput, { target: { value: "2024-06-13" } });
+    fireEvent.change(endDateInput, { target: { value: "2024-06-14" } });
     fireEvent.change(nameInput, { target: { value: "JohnDoe" } });
 
     userEvent.click(screen.getByText("Submit"));
 
     await waitFor(() => {
+      expect(screen.getByText("April 2024")).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByText("Next"));
+    await waitFor(() => {
+      expect(screen.getByText("May 2024")).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByText("Next"));
+    await waitFor(() => {
+      expect(screen.getByText("June 2024")).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
       expect(screen.getByText("JohnDoe")).toBeInTheDocument();
     });
 
-    fireEvent.change(startDateInput, { target: { value: "2024-04-24" } });
-    fireEvent.change(endDateInput, { target: { value: "2024-04-25" } });
+    fireEvent.change(startDateInput, { target: { value: "2024-06-13" } });
+    fireEvent.change(endDateInput, { target: { value: "2024-06-14" } });
     fireEvent.change(nameInput, { target: { value: "JaneDoe" } });
 
     userEvent.click(screen.getByText("Submit"));
@@ -59,7 +83,7 @@ describe("DateAvailability", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText("April 24, 2024")).toBeInTheDocument();
+      expect(screen.getByText("June 13, 2024")).toBeInTheDocument();
     });
   });
 
@@ -69,11 +93,23 @@ describe("DateAvailability", () => {
     const endDateInput = getByTestId("endDate");
     const nameInput = getByTestId("name");
 
-    fireEvent.change(startDateInput, { target: { value: "2024-04-23" } });
-    fireEvent.change(endDateInput, { target: { value: "2024-04-24" } });
+    fireEvent.change(startDateInput, { target: { value: "2024-06-13" } });
+    fireEvent.change(endDateInput, { target: { value: "2024-06-14" } });
     fireEvent.change(nameInput, { target: { value: "JohnDoe" } });
 
     userEvent.click(screen.getByText("Submit"));
+
+    await waitFor(() => {
+      expect(screen.getByText("April 2024")).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByText("Next"));
+    await waitFor(() => {
+      expect(screen.getByText("May 2024")).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByText("Next"));
+    await waitFor(() => {
+      expect(screen.getByText("June 2024")).toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(screen.getByText("JohnDoe")).toBeInTheDocument();
@@ -92,11 +128,23 @@ describe("DateAvailability", () => {
     const endDateInput = getByTestId("endDate");
     const nameInput = getByTestId("name");
 
-    fireEvent.change(startDateInput, { target: { value: "2024-04-23" } });
-    fireEvent.change(endDateInput, { target: { value: "2024-04-24" } });
+    fireEvent.change(startDateInput, { target: { value: "2024-06-13" } });
+    fireEvent.change(endDateInput, { target: { value: "2024-06-14" } });
     fireEvent.change(nameInput, { target: { value: "JohnDoe" } });
 
     userEvent.click(screen.getByText("Submit"));
+
+    await waitFor(() => {
+      expect(screen.getByText("April 2024")).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByText("Next"));
+    await waitFor(() => {
+      expect(screen.getByText("May 2024")).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByText("Next"));
+    await waitFor(() => {
+      expect(screen.getByText("June 2024")).toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(screen.getByText("JohnDoe")).toBeInTheDocument();
@@ -111,8 +159,8 @@ describe("DateAvailability", () => {
     const editStartDate = getByTestId("editStartDate");
     const editEndDate = getByTestId("editEndDate");
 
-    fireEvent.change(editStartDate, { target: { value: "2024-04-25" } });
-    fireEvent.change(editEndDate, { target: { value: "2024-04-26" } });
+    fireEvent.change(editStartDate, { target: { value: "2024-06-17" } });
+    fireEvent.change(editEndDate, { target: { value: "2024-06-17" } });
 
     userEvent.click(screen.getByText("Save"));
 
@@ -120,7 +168,7 @@ describe("DateAvailability", () => {
       expect(screen.getByText("JohnDoe")).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByText("25"));
+    userEvent.click(screen.getByText("17"));
 
     await waitFor(() => {
       expect(screen.getByText("JohnDoe")).toBeInTheDocument();
@@ -133,11 +181,23 @@ describe("DateAvailability", () => {
     const endDateInput = getByTestId("endDate");
     const nameInput = getByTestId("name");
 
-    fireEvent.change(startDateInput, { target: { value: "2024-04-23" } });
-    fireEvent.change(endDateInput, { target: { value: "2024-04-24" } });
+    fireEvent.change(startDateInput, { target: { value: "2024-06-13" } });
+    fireEvent.change(endDateInput, { target: { value: "2024-06-14" } });
     fireEvent.change(nameInput, { target: { value: "JohnDoe" } });
 
     userEvent.click(screen.getByText("Submit"));
+
+    await waitFor(() => {
+      expect(screen.getByText("April 2024")).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByText("Next"));
+    await waitFor(() => {
+      expect(screen.getByText("May 2024")).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByText("Next"));
+    await waitFor(() => {
+      expect(screen.getByText("June 2024")).toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(screen.getByText("JohnDoe")).toBeInTheDocument();

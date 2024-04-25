@@ -324,11 +324,9 @@ const DateAvailability = () => {
           </ul>
         </div>
       )}
-{/* Display potential travel dates */}
+      {/* Display potential travel dates */}
       <p className="pot-header">Potential Travel Dates:</p>
 
-      
-  
       <ul>
         {potentialTravelDates.map((date, index) => (
           <li key={index}>{date}</li>
