@@ -12,6 +12,7 @@ app.get('/nearbyPlaces', async (req, res) => {
   const apiKey = process.env.REACT_APP_GOOGLE_PLACES_API_KEY; 
 // Get API key from environment variables
 
+//ai gen start (chat gpt 3.5, 1)
   try {
     const response = await fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&key=${apiKey}`);
     const data = await response.json();
@@ -29,6 +30,8 @@ app.get('/nearbyPlaces', async (req, res) => {
         lng: place.geometry.location.lng, 
       };
     });
+    //ai gen stop
+    
     console.log(places);
     res.json(places);
   } catch (error) {
