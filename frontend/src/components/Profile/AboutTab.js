@@ -2,6 +2,14 @@ import React, { useState } from "react";
 import { TextInput, View } from "react-native";
 import { Typography } from "@mui/material";
 
+/**
+ * ChatGPT was used for recommendations for
+ * having editable text elements. This was how
+ * I used TextInput for editing the About tab.
+ * /**
+ * (ChatGPT 3.5, 2)
+ */
+
 export default function AboutTab({ editMode, description, setDescription, textColor, maxCharLimit, currentCount }) {
 
     // Handle input changes
@@ -18,6 +26,7 @@ export default function AboutTab({ editMode, description, setDescription, textCo
             {editMode ? (
                 // Use TextInput for editable mode
                 <TextInput
+                    data-testid="text-input"
                     placeholder="Enter description"
                     value={description}
                     onChangeText={handleChange}
