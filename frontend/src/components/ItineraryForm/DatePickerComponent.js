@@ -34,8 +34,9 @@ const DatePickerComponent = ({ startDateKey, endDateKey }) => {
   };
 
   
+  //Handles when all of the necessary information is inputted
   const handleComplete = () => {
-    if (startDate && endDate && startDate <= endDate) {
+    if (startDate && endDate && startDate <= endDate) { //If the start date, end date is selected, and start date is earlier
       navigate('/prefselection');
     }
   };

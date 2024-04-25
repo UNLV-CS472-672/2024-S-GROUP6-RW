@@ -29,11 +29,13 @@ const ItineraryAccordion = ({
   const dayObj = new Date(day); // Date object to store the specific day of the itinerary
 
   //Filters only the itinerary on the specific day
+  // ai-gen start (ChatGPT-3.5, 0)
   const filteredActivities = events.filter((item) => {
     return (item.start.getDate() === dayObj.getDate() 
          && item.start.getMonth() === dayObj.getMonth()
          && item.start.getYear() === dayObj.getYear());
   });
+  // ai-gen end
 
   const handleDeleteDayClick = () => {
     onDeleteDay(day);
@@ -45,7 +47,7 @@ const ItineraryAccordion = ({
         <AccordionSummary 
           expandIcon={<ExpandMoreIcon />}
           sx={{
-            flexDirection: 'row-reverse',
+            flexDirection: 'row-reverse', //Expand button exists on the other side
           }}
         >
         <div className="accordion-contents-div">

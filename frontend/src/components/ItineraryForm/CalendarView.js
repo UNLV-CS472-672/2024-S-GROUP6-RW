@@ -1,21 +1,21 @@
 import React, { useCallback, useState } from "react";
 import { Calendar, Views, momentLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import moment from "moment";
+
+// Styles
 import "../../css/CalendarView.css";
 import "../../css/ReactBigCalendar.css";
 
-import IconButton from "@mui/material/IconButton";
+// Material-UI Icons and Components
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
-
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  IconButton,
   Button,
   Input,
   InputLabel,
@@ -23,15 +23,16 @@ import {
   Typography,
 } from "@mui/material";
 
+// Date and Time Picker components from MUI
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { red } from "@mui/material/colors";
 
-const DnDCalendar = withDragAndDrop(Calendar)
+const DnDCalendar = withDragAndDrop(Calendar); //Adds drag and drop functionality to calendar
 
-const localizer = momentLocalizer(moment);
+const localizer = momentLocalizer(moment); //Initialize momentLocalizer for calendar
 
 const EditView = ({
   day,
@@ -39,8 +40,10 @@ const EditView = ({
   onUpdatedActivities,
   onClickCloseButton,
 }) => {
+
   const dayObj = new Date(day); //Convert day string to date object
 
+  //State Variables
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
@@ -59,12 +62,14 @@ const EditView = ({
     setSelectedActivity(null);
   };
 
+  // ai-gen start (ChatGPT-3.5, 1)
+  //Saves changes that the user put in the edit dialogue
   const handleSave = () => {
-    if (selectedActivity) {
+    if (selectedActivity) { //If any activity is selected
       const index = userActivities.findIndex(
-        (item) => item.id === selectedActivity.id
+        (item) => item.id === selectedActivity.id //Finds which activity is selected 
       );
-      if (index !== -1) {
+      if (index !== -1) { //If it finds a proper index.
         console.log(startTime);
         const updatedEvents = [...userActivities];
         updatedEvents[index] = {
@@ -72,49 +77,52 @@ const EditView = ({
           start: startTime ? new Date(startTime) : selectedActivity.start,
           end: endTime ? new Date(endTime) : selectedActivity.end,
           title: title || selectedActivity.title,
-        };
+        }; //Update activity with new information
         updatedEvents.sort((actObjx, actObjy) => {
           return actObjx.start - actObjy.start;
         }); //Sort them depending on the activites start time
         onUpdatedActivities(updatedEvents); //Pass the updated activity back to the parent
       }
-      setShowEditDialog(false);
-      setSelectedActivity(null);
+      setShowEditDialog(false); //Close the dialogue
+      setSelectedActivity(null); //No activities is selected yet.
     }
   };
 
+  //
   const handleDelete = () => {
     if (selectedActivity) {
       const updatedUserActivities = userActivities.filter(
-        (item) => item.id !== selectedActivity.id
-      );
+        (item) => item.id !== selectedActivity.id //Filter all activities except the one we are deleting
+      )
       onUpdatedActivities(updatedUserActivities); //Pass new array to the parent.
-      setShowEditDialog(false);
-      setSelectedActivity(null);
+      setShowEditDialog(false); //Close the dialogue
+      setSelectedActivity(null); //No activities is selected yet.
     }
   };
 
   // Calendar Events Customization Functions
+  //Sets events with the new start/end time according to the new time slots dropped to
   const moveEvent = useCallback(
     ({ event, start, end, isAllDay: dropToAllDaySlot = false}) => {
-      const { allDay } = event;
-      if (!allDay && dropToAllDaySlot) {
-        event.allDay = true;
+      const { allDay } = event; //Extract allDay prop from an event
+      if (!allDay && dropToAllDaySlot) { //If event is not an all day event and put to the all day slot
+        event.allDay = true; //Now event becomes an all day event
       }
 
-      const index = userActivities.findIndex((item) => item.id === event.id);
+      const index = userActivities.findIndex((item) => item.id === event.id); //Find index of existing events
       if (index !== -1) {
         const updatedActivities = [...userActivities];
         updatedActivities[index] = {
           ...updatedActivities[index],
           start,
           end,
-        };
+        }; //Update the activity with the new start time and end time 
         onUpdatedActivities(updatedActivities);
       }
     },
     [userActivities, onUpdatedActivities]
   );
+  //ai-gen end
 
   return (
     <>
@@ -126,13 +134,13 @@ const EditView = ({
           defaultView={Views.DAY} // Display day view by default
           views={[Views.DAY, Views.WEEK, Views.MONTH]} // Only show day view
           selectable={true} // Allow selecting time slots
-          step={15} // Time slot interval in minutes
-          timeslots={4} // Number of time slots per hour
+          step={15} // 15 min time slot
+          timeslots={4} // Number of time slots per hour (4x15 = hr)
           defaultDate={dayObj} // Display chosen day of the itinerary
           localizer={localizer}
           onSelectEvent={handleEditButtonClick}
           draggableAccessor={ (event) => true}
-          resizable={false}
+          resizable={false} //Events not resizable
           onEventDrop={moveEvent}
           components={{
             event: CustomEventComponent
@@ -211,6 +219,7 @@ const EditView = ({
   );
 };
 
+// ai-gen start (ChatGPT-3.5, 2)
 const CustomEventComponent = (event) => {
   return (
     <div className="activity-title-div">
@@ -229,3 +238,4 @@ const CustomEventComponent = (event) => {
   );
 };
 export default EditView;
+// ai-gen end
