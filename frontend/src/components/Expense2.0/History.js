@@ -29,25 +29,26 @@ function flattenTransactions(transactions) {
 // ai-gen end
 
 // Function to group transactions by month and year
-function groupTransactionsByMonth(flatTransactions) {
-	// acc = accumulator (initial value is an empty object) and transaction is the current value in the array
-	return flatTransactions.reduce((acc, transaction) => {
-		if (transaction.date) {
-			const month =
-				transaction.date.split(" ")[1] +
-				" " +
-				transaction.date.split(" ")[3];
-			if (!acc[month]) {
-				acc[month] = [];
-			}
-			acc[month].push(transaction);
+// fixing it cause it give undefined when test with unit test before
+export function groupTransactionsByMonth(transactions) {
+	return transactions.reduce((groups, transaction) => {
+		const date = new Date(transaction.date); // we need to sue this to prevent the undefined
+		const monthYear = `${date.toLocaleString("default", {
+			month: "short",
+		})} ${date.getFullYear()}`;
+
+		if (!groups[monthYear]) {
+			groups[monthYear] = [];
 		}
-		return acc;
+
+		groups[monthYear].push(transaction);
+
+		return groups;
 	}, {});
 }
 
 // Function to sort transactions by date in descending order
-function sortTransactionsByDate(monthSections) {
+export function sortTransactionsByDate(monthSections) {
 	Object.keys(monthSections).forEach((month) => {
 		monthSections[month].sort((a, b) => {
 			const dateA = new Date(a.date);
@@ -59,7 +60,7 @@ function sortTransactionsByDate(monthSections) {
 }
 
 // Function to filter transactions based on the search term and field
-function filterTransactions(flatTransactions, searchTerm, searchField) {
+export function filterTransactions(flatTransactions, searchTerm, searchField) {
 	return flatTransactions.filter(
 		(transaction) =>
 			// Check if the search field is payer or payee and if the search term is included in the field
@@ -71,7 +72,7 @@ function filterTransactions(flatTransactions, searchTerm, searchField) {
 }
 
 // Function to group filtered transactions by month and year after filtering
-function groupFilteredTransactionsByMonth(filteredTransactions) {
+export function groupFilteredTransactionsByMonth(filteredTransactions) {
 	return filteredTransactions.reduce((groups, transaction) => {
 		const date = new Date(transaction.date);
 		// we are using en-US locale but this can be change

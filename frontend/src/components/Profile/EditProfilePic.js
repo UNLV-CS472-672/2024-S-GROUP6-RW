@@ -1,121 +1,32 @@
 import React, { useState } from "react";
 import { CompactPicker } from "react-color";
-import { Popover, Typography, Tabs, Tab, Box, Button, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { Popover, Typography, Tabs, Tab, Box, Button } from "@mui/material";
 import AvatarGrid from "./AvatarGrid";
 import BorderGrid from "./BorderGrid";
 import BackdropGrid from "./BackdropGrid";
 
-// Import your images
-import Beagle from "../../images/avatars/beagle.jpg";
-import Bear from "../../images/avatars/bear.jpg";
-import Tiger from "../../images/avatars/tiger.jpg";
-import Camel from "../../images/avatars/camel.jpg";
-import Dolphin from "../../images/avatars/dolphin.jpg";
-import Eagle from "../../images/avatars/eagle.jpg";
-import Fox from "../../images/avatars/fox.jpg";
-import Iguana from "../../images/avatars/iguana.jpg";
-import Panda from "../../images/avatars/panda.jpg";
-import Red_Panda from "../../images/avatars/red_panda.jpg";
-
-import { ReactComponent as Default_Border } from "../../images/borders/Default_Border.svg";
-import { ReactComponent as Star_Border } from "../../images/borders/Star_Border.svg";
-import { ReactComponent as Spike_Border } from "../../images/borders/Spike_Border.svg";
-import { ReactComponent as Flower_Border } from "../../images/borders/Flower_Border.svg";
-import { ReactComponent as Hole_Border } from "../../images/borders/Hole_Border.svg";
-import { ReactComponent as Bone_Border } from "../../images/borders/Bone_Border.svg";
-import { ReactComponent as Wave_Border } from "../../images/borders/Wave_Border.svg";
-import { ReactComponent as Helix_Border } from "../../images/borders/Helix_Border.svg";
-import Default_Preview from "../../images/border_previews/Default_Preview.png";
-import Star_Preview from "../../images/border_previews/Star_Preview.png";
-import Spike_Preview from "../../images/border_previews/Spike_Preview.png";
-import Flower_Preview from "../../images/border_previews/Flower_Preview.png";
-import Hole_Preview from "../../images/border_previews/Hole_Preview.png";
-import Bone_Preview from "../../images/border_previews/Bone_Preview.png";
-import Wave_Preview from "../../images/border_previews/Wave_Preview.png";
-import Helix_Preview from "../../images/border_previews/Helix_Preview.png";
-
-// Import your images
-import Valley from "../../images/backdrops/valley.jpg";
-import Grass from "../../images/backdrops/grass.jpg";
-import Ocean from "../../images/backdrops/ocean.jpg";
-import City from "../../images/backdrops/city.jpg";
-import Desert from "../../images/backdrops/desert.jpg";
-import Space from "../../images/backdrops/space.jpg";
-
+// EditProfilePic component for customizing profile picture, border, and backdrop
 export default function EditProfilePic({
   open,
   onClose,
   anchorEl,
   selectedImg,
   selectedBorder,
-  selectedBanner,
-  displayBanner,
-  setDisplayBanner,
   selectedBackdrop,
   setBorderColor,
   addCustomAvatar,
-  currentCustomAvatars,
+  pictures,
+  borders,
+  backdrops,
+  onSave,
 }) {
-  const [selectedTab, setSelectedTab] = React.useState(0);
-  const [chromePickerOpen, setChromePickerOpen] = useState(false);
+  // State for managing selected tab and color picker visibility
+  const [selectedTab, setSelectedTab] = useState(0);
   const [color, setColor] = React.useState("black");
 
-  const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-  });
-
-    // Array of image paths
-  // Array of image objects with required properties
-  const pictures = [
-    { img: Beagle, title: "Beagle" },
-    { img: Bear, title: "Bear" },
-    { img: Tiger, title: "Tiger" },
-    { img: Camel, title: "Camel" },
-    { img: Dolphin, title: "Dolphin" },
-    { img: Eagle, title: "Eagle" },
-    { img: Fox, title: "Fox" },
-    { img: Iguana, title: "Iguana" },
-    { img: Panda, title: "Panda" },
-    { img: Red_Panda, title: "Red_Panda" },
-  ];
-  const borders = [
-    { border: Default_Border, preview: Default_Preview },
-    { border: Star_Border, preview: Star_Preview },
-    { border: Spike_Border, preview: Spike_Preview },
-    { border: Flower_Border, preview: Flower_Preview },
-    { border: Hole_Border, preview: Hole_Preview },
-    { border: Bone_Border, preview: Bone_Preview },
-    { border: Wave_Border, preview: Wave_Preview },
-    { border: Helix_Border, preview: Helix_Preview },
-  ];
-
-  const backdrops = [
-    { img: Grass, title: "Grass", textColor: "black" },
-    { img: Ocean, title: "Ocean", textColor: "black" },
-    { img: Valley, title: "Valley", textColor: "black" },
-    { img: City, title: "City", textColor: "white" },
-    { img: Desert, title: "Desert", textColor: "black" },
-    { img: Space, title: "Space", textColor: "white" },
-  ]
-  // Calculate the width of the Popover based on whether the Border tab is selected
-  //const popoverWidth = selectedTab === 1 ? "36vw" : "22vw";
-
+  // Function to handle tab change
   const handleChange = (event, newValue) => {
-    if (newValue === 1) {
-      setChromePickerOpen(true);
-    } else {
-      setChromePickerOpen(false);
-    }
-
+    // Set the selected tab
     setSelectedTab(newValue);
   };
 
@@ -125,70 +36,13 @@ export default function EditProfilePic({
     setBorderColor(updatedColor.hex); // Update borderColor state
   };
 
-    // Update borderColor state when color changes
-    const handleDisplayBanner = (event) => {
-      const isChecked = event.target.checked;
-      if (isChecked) {
-        setDisplayBanner(false);
-      } else {
-        setDisplayBanner(true);
-      }
-  
-    };
-
-  const uploadBanner = (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-      // Check if the file type is an image
-      if (!file.type.startsWith("image/")) {
-        console.log("Please select an image file.");
-        return;
-      }
-
-      // Create an image element to load the image
-      const img = new Image();
-      img.onload = function () {
-        // Create a canvas element
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-
-        // Calculate the new dimensions to fit within 500x500 pixels
-        let newWidth = this.width;
-        let newHeight = this.height;
-        if (newWidth > 800 || newHeight > 200) {
-          const aspectRatio = newWidth / newHeight;
-          if (newWidth > newHeight) {
-            newWidth = 800;
-            newHeight = Math.floor(800 / aspectRatio);
-          } else {
-            newHeight = 200;
-            newWidth = Math.floor(200 * aspectRatio);
-          }
-        }
-
-        // Resize the image
-        canvas.width = newWidth;
-        canvas.height = newHeight;
-        ctx.drawImage(img, 0, 0, newWidth, newHeight);
-
-        // Get the resized image data
-        var resizedImageData = canvas.toDataURL(file.type);
-        // Convert Data URL to Blob
-        const resizedImageBlob = new Blob([resizedImageData], {
-          type: file.type,
-        });
-        console.log("Banner size: " + resizedImageBlob.size + " bytes");
-
-        selectedBanner({ img: resizedImageData, title: "Custom Picture" });
-      };
-
-      // Load the image
-      img.src = URL.createObjectURL(file);
-    }
+  // Function to handle save button click
+  const handleSaveButtonClick = () => {
+    onSave(); // Call the onSave function passed as prop
   };
 
   return (
+    // Popover component for displaying customization options
     <Popover
       open={open}
       onClose={onClose}
@@ -201,10 +55,10 @@ export default function EditProfilePic({
         vertical: "top",
         horizontal: "right",
       }}
-      sx={styles.popover}
     >
-      {/* Make the popover draggable */}
+      {/* Popover content */}
       <div style={styles.popoverContainer}>
+        {/* Header */}
         <Typography
           align="center"
           variant="h6"
@@ -212,6 +66,7 @@ export default function EditProfilePic({
         >
           Customize
         </Typography>
+        {/* Tabs for selecting customization options */}
         <Box style={styles.tabBox}>
           <Tabs
             value={selectedTab}
@@ -221,91 +76,67 @@ export default function EditProfilePic({
             TabIndicatorProps={{
               style: {
                 backgroundColor: "black",
-              }
+              },
             }}
             variant="fullWidth"
           >
             <Tab label="Picture" style={styles.tab} />
-            <Tab label="Border"  style={styles.tab} />
-            <Tab label="Banner"  style={styles.tab} />
-            <Tab label="Backdrop"  style={styles.tab} />
+            <Tab label="Border" style={styles.tab} />
+            <Tab label="Backdrop" style={styles.tab} />
           </Tabs>
           {/* Content for the tabs */}
           {selectedTab === 0 && (
+            <div style={{ height: "21vw" }}>
               <AvatarGrid
                 avatars={pictures}
                 selectedImg={selectedImg}
                 addCustomAvatar={(avatar) => addCustomAvatar(avatar)}
-                customAvatars={currentCustomAvatars}
               />
+            </div>
           )}
           {selectedTab === 1 && (
+            <div style={{ height: "21vw", overflow: "auto", }}>
               <BorderGrid borders={borders} selectedBorder={selectedBorder} />
-          )}
-          {chromePickerOpen && (
-            <>
-            <div style={styles.colorPickers}>
-              <CompactPicker
-              color={color}
-              onChange={handleColorChange}
-            />
+              {/* Color picker for selecting border color */}
+              <div style={styles.colorPickers}>
+                <CompactPicker color={color} onChange={handleColorChange} />
+              </div>
             </div>
-            </>
           )}
           {selectedTab === 2 && (
-              <div style={styles.bannerBox}>
-                  <Button
-                    component="label"
-                    role={undefined}
-                    variant="contained"
-                    tabIndex={-1}
-                    style={{backgroundColor: "black", fontFamily: "Radley"}}
-                  >Upload Banner...
-                  <VisuallyHiddenInput type="file" onChange={uploadBanner}/>
-                  </Button>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox defaultChecked={!displayBanner} onChange={handleDisplayBanner}
-                        sx={{ '&.Mui-checked': {
-                            color: "black",
-                          },}}/>
-                        }
-                      style={{fontFamily: "Radley"}}
-                      label={
-                        <Typography
-                          style={{fontFamily: "Radley"}}>
-                          Make Banner Transparent
-                        </Typography>} />
-                  </FormGroup>
-                  
-              </div>
-          )}
-          {selectedTab === 3 && (
-              <BackdropGrid backdrops={backdrops} selectedBackdrop={selectedBackdrop} />
+            <div style={{ height: "21vw", overflow: "auto", }}>
+              <BackdropGrid
+                backdrops={backdrops}
+                selectedBackdrop={selectedBackdrop}
+              />
+            </div>
           )}
         </Box>
-        </div>
+        {/* Save button */}
+        <Button variant="contained" style={styles.saveButton} onClick={handleSaveButtonClick}>
+          Save Changes...
+        </Button>
+      </div>
     </Popover>
   );
 }
 
+// Styles for the EditProfilePic component
 const styles = {
-  popover: {
-     postion: "relative",
-  },
   popoverContainer: {
-    postion: "relative",
+    position: "relative",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    justifyContent: "space-between", // Add this property
     width: "32vw",
-    height: "30vw",
+    height: "34vw",
   },
   tabBox: {
     width: "95%",
     height: "100%",
     padding: "0.75vw",
+    marginBottom: "auto", // Add margin-bottom auto to push content to the top
   },
   tabs: {
     alignItems: "center",
@@ -314,10 +145,10 @@ const styles = {
     marginLeft: "auto",
     marginRight: "auto",
   },
-  tab: { 
+  tab: {
     height: "100%",
     padding: "1vw 0vw",
-    fontSize: "1vw", 
+    fontSize: "1vw",
     fontWeight: "500",
     fontFamily: "Radley",
     minWidth: "6vw",
@@ -339,5 +170,15 @@ const styles = {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-  }
-}
+  },
+  saveButton: {
+    backgroundColor: "black",
+    fontFamily: "Radley",
+    fontSize: "1vw",
+    lineHeight: "1vw",
+    padding: "0.8vw",
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginBottom: "2vw",
+  },
+};

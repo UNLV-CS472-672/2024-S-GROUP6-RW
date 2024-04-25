@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import DateAvailability from "../../components/GatheringInfo/DateAvailability";
+import "../../css/PollPage.css";
 
 function PollPage() {
   return (
     <>
-      <h2>What are your availabilities?</h2>
-      <DateAvailability />
+      <div className="poll-div">
+        <p className="poll-header">What days are you available?</p>
+        <DateAvailability />
+      </div>
     </>
+
   );
 }
 

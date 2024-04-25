@@ -121,7 +121,7 @@ function ResponsiveAppBar({ user }) {
 	return (
 		// AppBar is the component that we use to create the app bar
 		<AppBar position="fixed" sx={{
-			background: "linear-gradient( rgba(155, 155, 155, 1.0)10%, rgba(0, 0, 0, 0))",
+			background: "linear-gradient( rgba(69, 68, 67, 1.0)10%, rgba(0, 0, 0, 0))",
 			boxShadow: "none",
 			fontFamily: "'Radley', serif",
 		  }}> 
@@ -140,7 +140,7 @@ function ResponsiveAppBar({ user }) {
 							mr: 2,
 							display: { xs: "none", md: "flex" },
 							fontFamily: "'Radley', serif",
-							color: "black",
+							color: "white",
 							textDecoration: "none",
 						}}
 					>

@@ -1,48 +1,75 @@
-.title-event-bar {
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
+.itinerary-banner {
+  background-image: url(../../public/lasv.jpg);
+  height: 160px;
+  position: relative;
+  background-position: center center;
 }
 
-.itinerary-title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+.itin-title-date-btn {
+  height: 100%;
+  padding-top: 40px;
+  position: relative;
 }
 
 .itinerary-title.MuiTypography-root {
-    font-family: 'Radley';
-    font-size: 35px;
-    font-weight: 500;
-    padding: 15px;
+  font-family: "Radley";
+  font-size: 50px;
+  font-weight: 500;
+  color: white;
+  text-shadow: 2px 3px 5px black;
 }
 
-.spacer {
-    flex-grow: 1;
+.itin-dates.MuiTypography-root {
+  font-family: "Radley";
+  font-size: 20px;
+  font-weight: 500;
+  color: white;
+  text-shadow: 2px 3px 5px black;
 }
 
-.create-event-btn-cpy button{
-    font-size: 18px;
-    font-family: 'Radley';
-    font-weight: 400;
-    background-color: transparent;
-    border-radius: 8px;
-    border: 1px solid black;
+.create-event-btn-div {
+  position: absolute;
+  right: 30px;
+  bottom: 10px;
 }
 
-.create-event-btn-cpy button:hover {
-    background-color: #F2F1EF;
-    cursor: pointer;
+.create-event-btn-div button {
+  font-size: 18px;
+  font-family: "Radley";
+  font-weight: 400;
+  background-color: white;
+  border-radius: 8px;
+  border: none;
+}
+
+.create-event-btn-div button:hover {
+  background-color: #f2f1ef;
+  cursor: pointer;
 }
 
 .create-event-btn-contents {
-    display: flex;
-    align-items: center;
-    padding: 5px;
+  display: flex;
+  align-items: center;
+  padding: 5px;
 }
 
 .create-event-icon {
-    margin-left: 5px;
+  margin-left: 5px;
+}
+
+@media (max-width: 600px) {
+  .itinerary-banner {
+    height: 215px;
+  }
+
+  .itin-title-date-btn {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .create-event-btn-div {
+    position: static;
+    margin-top: 10px;
+  }
 }

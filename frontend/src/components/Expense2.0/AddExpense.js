@@ -24,7 +24,7 @@ const initialExpenseData = {
 };
 
 // Function to validate the form data
-function validateFormData(expenseData) {
+export function validateFormData(expenseData) {
 	const { userName, title, category, amount } = expenseData;
 
 	//we only check user name if split method is not none
@@ -41,7 +41,7 @@ function validateFormData(expenseData) {
 }
 
 // Function to handle the split method
-function handleSplitMethod(expenseData) {
+export function handleSplitMethod(expenseData) {
 	if (expenseData.splitMethod === "equal") {
 		expenseData.amount = (parseFloat(expenseData.amount) / 2).toFixed(2);
 	}

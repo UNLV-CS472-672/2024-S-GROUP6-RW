@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import './SearchBar.css';
+import { saveToLocal } from '../../utils/LocalStorageManager';
 
-function SearchBar() {
+function SearchBar({ LocationNameKey} ) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
@@ -44,6 +45,8 @@ function SearchBar() {
   const handleSuggestionClick = (cityName) => {
     setQuery(cityName);
     setSuggestions([]); // Clear suggestions
+    console.log(cityName);
+    saveToLocal(LocationNameKey, cityName);
   };
 
   return (
