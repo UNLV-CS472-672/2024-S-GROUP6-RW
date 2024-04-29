@@ -17,3 +17,111 @@
     font-size: 18px;
     color: black;
 } 
+
+/* Pop up window CSS */
+
+.dialog-content .MuiTypography-root{ 
+    font-family: 'Radley';
+}
+
+.editable-content {
+    padding: 5px;
+}
+
+/* Title of dialog */
+.title-input-container {
+    padding-left: 13px;
+}
+
+.title-input {
+    padding-left: 5px;
+}
+
+.title-input-editmode{
+    background-color: #f2f1ef;
+}
+
+.title-input-container .MuiInputBase-input{
+    font-family: 'Radley';
+    font-size: 30px;
+}
+
+.title-input-container .MuiTypography-root {
+    font-family: 'Radley';
+    font-size: 30px;
+}
+
+.dt-tm-lc-dsc-container {
+    padding-top: 10px;
+    padding-left: 15px;
+}
+
+.date-time-container {
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+}
+
+.date-time-container .MuiTypography-root {
+    font-family: 'Radley';
+    font-size: 20px;
+    padding: 5px;
+}
+
+.date-time-container button{
+    background-color: #f2f1ef;
+    border: none;
+    border-radius: 5px;
+    padding: 0;
+}
+
+.date-time-container button:hover {
+    cursor: pointer;
+}
+
+
+/* Date Icon (calendar) and Date label */
+.date-section-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Time Icon and Time label */
+.time-section-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.location-address-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding-bottom: 10px;
+}
+
+.location-text.MuiTypography-root{
+    font-size: 20px;
+}
+
+.description-text-activity.MuiTypography-root {
+    font-size: 20px;
+}
+
+.description-inputbase-activity.MuiInputBase-root {
+    padding-left: 30px;
+}
+
+.description-inputbase-activity .MuiInputBase-input{
+    font-family: 'Radley';
+    font-size: 18px;
+    width: 60ch;
+    padding-left: 5px;
+}
+
+.description-inputbase-activity-editmode .MuiInputBase-input {
+    background-color: #f2f1ef;
+}
