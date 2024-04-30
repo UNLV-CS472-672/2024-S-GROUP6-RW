@@ -88,9 +88,10 @@ const EditView = ({
     }
   };
 
-  //
+  //Deletes the selected event (Asks users if they really want to before deleting)
   const handleDelete = () => {
-    if (selectedActivity) {
+    const confirmDelete = window.confirm("Delete Event?");
+    if (selectedActivity && confirmDelete) {
       const updatedUserActivities = userActivities.filter(
         (item) => item.id !== selectedActivity.id //Filter all activities except the one we are deleting
       )

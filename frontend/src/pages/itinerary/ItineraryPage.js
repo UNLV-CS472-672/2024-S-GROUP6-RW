@@ -119,9 +119,12 @@ const ItineraryPage = () => {
   /* Deletes the itinerary/day that was selected by the user */
   // ai-gen start (ChatGPT-3.5, 1)
   const handleDeleteDay = (deletingDay) => {
-    setItinerary((prevItinerary) =>
-      prevItinerary.filter((day) => day !== deletingDay)
-    );
+    const confirmDelete = window.confirm("Delete Day?");
+    if (confirmDelete) {
+      setItinerary((prevItinerary) =>
+        prevItinerary.filter((day) => day !== deletingDay)
+      );
+    }
   };
   // ai-gen end
 
