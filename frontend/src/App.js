@@ -18,6 +18,7 @@ import AccountPage from "./pages/account/AccountPage";
 import PollPage from "./pages/getting_started/PollPage";
 import AboutUs from "./pages/getting_started/AboutUs";
 import HowItWorks from "./pages/getting_started/HowItWorks";
+import LogoutPage from "./pages/Auth_Pages/LogoutPage";
 
 
 // import nav components
@@ -85,6 +86,7 @@ function AppContent() {
       <NavBar />
       <Routes>
         <Route path="/" element={<GettingStartedPage />} />
+        <Route path="/logout" element={<LogoutPage />} />
         <Route path="/prefselection" element={<PrefSelectionPage />} />
         <Route path="/map" element={<MapPage />} />
         <Route path="/gatheringinfo" element={<GatheringInfoPage />} />
