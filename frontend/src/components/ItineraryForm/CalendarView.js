@@ -117,6 +117,9 @@ const EditView = ({
           start,
           end,
         }; //Update the activity with the new start time and end time 
+        updatedActivities.sort((actObjx, actObjy) => {
+          return actObjx.start - actObjy.start;
+        }); //Sort them depending on the activites start time
         onUpdatedActivities(updatedActivities);
       }
     },
