@@ -37,6 +37,11 @@
     padding-left: 5px;
 }
 
+.title-input .MuiInputBase-readOnly {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .title-input-editmode{
     background-color: #f2f1ef;
 }
@@ -96,6 +101,7 @@
     gap: 5px;
 }
 
+/* Location Icon and Location Label */
 .location-address-container {
     display: flex;
     align-items: center;
@@ -107,6 +113,7 @@
     font-size: 20px;
 }
 
+/* Description Area */
 .description-text-activity.MuiTypography-root {
     font-size: 20px;
 }
@@ -123,5 +130,35 @@
 }
 
 .description-inputbase-activity-editmode .MuiInputBase-input {
+    background-color: #f2f1ef;
+}
+
+/* Dialog Actions CSS */
+
+.delete-edit-btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cancel-save-btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.cancel-save-btn-container button{
+    font-family: 'Radley';
+    font-size: 18px;
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+.cancel-save-btn-container button:hover {
+    cursor: pointer;
     background-color: #f2f1ef;
 }

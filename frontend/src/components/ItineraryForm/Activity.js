@@ -3,7 +3,8 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import TodayIcon from "@mui/icons-material/Today";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
 import {
   Typography,
@@ -15,13 +16,13 @@ import {
   IconButton,
   Input,
   InputBase,
-} from "@mui/material"
+} from "@mui/material";
 
-import "../../css/Activity.css"
+import "../../css/Activity.css";
 import AddressAutoFill from "../../components/ItineraryForm/AddressAutoFill";
 
-
 import cityImg from "../../images/itinerary_img/los-angeles-city.jpg";
+import { red } from "@mui/material/colors";
 
 const Activity = ({ activity }) => {
   const { id, title, start, end, description, location } = activity; //Get all activity information as a prop
@@ -30,21 +31,24 @@ const Activity = ({ activity }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const theme = useTheme();
 
-  //Handles open dialogue 
+  //Handles open dialogue
   const handleOpenDialog = (event) => {
     console.log("Opening dialog...");
     setDialogOpen(true);
   };
 
   //Handles closing the dialogue
-  const handleCloseDialog = () => {
+  const handleCloseDialog = (event, reason) => {
+    if (reason && reason === "backdropClick") { //Prevent closing dialog when clicking outside the dialog
+      return;
+    }
     setDialogOpen(false);
   };
 
   //Toggle Edit Mode
   const toggleEditMode = () => {
     setIsEditMode((prev) => !prev); //Set it to the opposite mode.
-  }
+  };
 
   return (
     <div className="activity">
@@ -53,13 +57,12 @@ const Activity = ({ activity }) => {
           <Typography>{title}</Typography>
         </Button>
       </div>
-      <Dialog
-        open={isDialogOpen}
-        onClose={handleCloseDialog}
-        maxWidth="md"
-      >
-        <div className="dialog-content" style={{height: 550, width: 650}}>
-          <div className="x-button" style={{ position: 'absolute', top: 0, right: 0 }}>
+      <Dialog open={isDialogOpen} onClose={handleCloseDialog} maxWidth="md">
+        <div className="dialog-content" style={{ height: 545, width: 650 }}>
+          <div
+            className="x-button"
+            style={{ position: "absolute", top: 0, right: 0 }}
+          >
             <IconButton
               aria-label="close"
               onClick={handleCloseDialog}
@@ -67,7 +70,7 @@ const Activity = ({ activity }) => {
                 color: (theme) => theme.palette.grey[500],
               }}
             >
-              <CloseIcon /> 
+              <CloseIcon />
             </IconButton>
           </div>
           <CardMedia
@@ -82,60 +85,112 @@ const Activity = ({ activity }) => {
           />
           <div className="editable-content">
             <div className="title-input-container">
-              <InputBase className={`title-input ${isEditMode ? 'title-input-editmode' : ''}`} defaultValue={title} readOnly={!isEditMode} />
+              <InputBase
+                className={`title-input ${isEditMode ? "title-input-editmode" : ""}`}
+                defaultValue={title}
+                readOnly={!isEditMode}
+              />
             </div>
             <div className="dt-tm-lc-dsc-container">
               <div className="date-time-container">
                 <div className="date-section-container">
-                  <TodayIcon/>
+                  <TodayIcon />
                   {isEditMode ? (
                     <button className="date-btn">
-                      <Typography>{start.toLocaleString('default', {weekday: 'long', month: 'short', day:'2-digit'})}</Typography>
+                      <Typography>
+                        {start.toLocaleString("default", {
+                          weekday: "long",
+                          month: "short",
+                          day: "2-digit",
+                        })}
+                      </Typography>
                     </button>
                   ) : (
-                    <Typography>{start.toLocaleString('default', {weekday: 'long', month: 'short', day:'2-digit'})}</Typography>
+                    <Typography>
+                      {start.toLocaleString("default", {
+                        weekday: "long",
+                        month: "short",
+                        day: "2-digit",
+                      })}
+                    </Typography>
                   )}
                 </div>
                 <div className="time-section-container">
-                  <AccessTimeIcon/>
+                  <AccessTimeIcon />
                   {isEditMode ? (
                     <button className="time-btn">
-                      <Typography>{start.toLocaleString('default', {hour: 'numeric', minute: 'numeric'})} ~ {end.toLocaleString('default', {hour: 'numeric', minute: 'numeric'})}</Typography>
+                      <Typography>
+                        {start.toLocaleString("default", {
+                          hour: "numeric",
+                          minute: "numeric",
+                        })}{" "}
+                        ~{" "}
+                        {end.toLocaleString("default", {
+                          hour: "numeric",
+                          minute: "numeric",
+                        })}
+                      </Typography>
                     </button>
                   ) : (
-                    <Typography>{start.toLocaleString('default', {hour: 'numeric', minute: 'numeric'})} ~ {end.toLocaleString('default', {hour: 'numeric', minute: 'numeric'})}</Typography>
+                    <Typography>
+                      {start.toLocaleString("default", {
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}{" "}
+                      ~{" "}
+                      {end.toLocaleString("default", {
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}
+                    </Typography>
                   )}
                 </div>
               </div>
               <div className="location-address-container">
-                <LocationOnIcon style={{ marginBottom: 1 }} />
+                <LocationOnIcon style={{ marginBottom: 3 }} />
                 <AddressAutoFill isEditMode={isEditMode}></AddressAutoFill>
               </div>
-              <Typography className="description-text-activity" >Description</Typography>
+              <Typography className="description-text-activity">
+                Description
+              </Typography>
               <InputBase
-                className={`description-inputbase-activity ${isEditMode ? 'description-inputbase-activity-editmode' : ''}`}
+                className={`description-inputbase-activity ${
+                  isEditMode ? "description-inputbase-activity-editmode" : ""
+                }`}
                 defaultValue={description}
-                placeholder={!isEditMode ? '' : 'Enter description...'}
+                placeholder={!isEditMode ? "" : "Enter description..."}
                 minRows={5}
                 multiline
                 readOnly={!isEditMode}
               />
             </div>
           </div>
-          <DialogActions>
+          <DialogActions className={`${!isEditMode ? "delete-edit-btn-grp" : ""}`}>
             {isEditMode ? (
-              <Button onClick={toggleEditMode}>Cancel</Button>
+              <div className="cancel-save-btn-container">
+                <button onClick={toggleEditMode}>Cancel</button>
+                <button>Save</button>
+              </div>
             ) : (
-              <IconButton
-                onClick={toggleEditMode}
-                sx={{
-                  color: "black",
-                }}
-              >
-                <EditIcon /> 
-              </IconButton>
+              <div className="delete-edit-btn-container">
+                <IconButton
+                  className="delete-event-btn"
+                  sx={{
+                    color: "black",
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+                <IconButton
+                  onClick={toggleEditMode}
+                  sx={{
+                    color: "black",
+                  }}
+                >
+                  <EditIcon />
+                </IconButton>
+              </div>
             )}
-            {isEditMode && <Button>Save</Button>}
           </DialogActions>
         </div>
       </Dialog>
