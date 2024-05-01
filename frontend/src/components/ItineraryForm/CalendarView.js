@@ -34,7 +34,7 @@ const DnDCalendar = withDragAndDrop(Calendar); //Adds drag and drop functionalit
 
 const localizer = momentLocalizer(moment); //Initialize momentLocalizer for calendar
 
-const CalendarView = ({
+const EditView = ({
   day,
   userActivities,
   onUpdatedActivities,
@@ -88,10 +88,9 @@ const CalendarView = ({
     }
   };
 
-  //Deletes the selected event (Asks users if they really want to before deleting)
+  //
   const handleDelete = () => {
-    const confirmDelete = window.confirm("Delete Event?");
-    if (selectedActivity && confirmDelete) {
+    if (selectedActivity) {
       const updatedUserActivities = userActivities.filter(
         (item) => item.id !== selectedActivity.id //Filter all activities except the one we are deleting
       )
@@ -118,9 +117,6 @@ const CalendarView = ({
           start,
           end,
         }; //Update the activity with the new start time and end time 
-        updatedActivities.sort((actObjx, actObjy) => {
-          return actObjx.start - actObjy.start;
-        }); //Sort them depending on the activites start time
         onUpdatedActivities(updatedActivities);
       }
     },
@@ -241,5 +237,5 @@ const CustomEventComponent = (event) => {
     </div>
   );
 };
-export default CalendarView;
+export default EditView;
 // ai-gen end
