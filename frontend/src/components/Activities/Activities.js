@@ -26,7 +26,7 @@ async function getNearbyPlaces(lat, lng, radius, type) {
   const ActComponent = ({ lat, lng }) => {
     const [selectedPlace, setSelectedPlace] = useState(null);
     const [nearbyPlaces, setNearbyPlaces] = useState([]);
-    const [radius, setRadius] = useState(50); // initial value
+    const [radius, setRadius] = useState(500); // initial value
     const [type, setType] = useState('restaurant'); // initial value
 
     //ai gen start (chat gpt 3.5, 2)
