@@ -135,7 +135,7 @@
 
 /* Dialog Actions CSS */
 
-.delete-edit-btn-container {
+.edit-mode-container {
     width: 100%;
     display: flex;
     justify-content: space-between;

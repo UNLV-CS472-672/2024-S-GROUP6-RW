@@ -167,20 +167,22 @@ const Activity = ({ activity }) => {
           </div>
           <DialogActions className={`${!isEditMode ? "delete-edit-btn-grp" : ""}`}>
             {isEditMode ? (
+            <div className="edit-mode-container">
+              <IconButton
+                className="delete-event-btn"
+                sx={{
+                  color: red[700],
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>
               <div className="cancel-save-btn-container">
                 <button onClick={toggleEditMode}>Cancel</button>
                 <button>Save</button>
               </div>
+            </div>
             ) : (
               <div className="delete-edit-btn-container">
-                <IconButton
-                  className="delete-event-btn"
-                  sx={{
-                    color: "black",
-                  }}
-                >
-                  <DeleteIcon />
-                </IconButton>
                 <IconButton
                   onClick={toggleEditMode}
                   sx={{
