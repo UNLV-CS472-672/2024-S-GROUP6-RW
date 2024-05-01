@@ -19,7 +19,6 @@ import {
 } from "@mui/material";
 
 import "../../css/Activity.css";
-import AddressAutoFill from "../../components/ItineraryForm/AddressAutoFill";
 
 import cityImg from "../../images/itinerary_img/los-angeles-city.jpg";
 import { red } from "@mui/material/colors";
