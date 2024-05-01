@@ -34,7 +34,7 @@ const DnDCalendar = withDragAndDrop(Calendar); //Adds drag and drop functionalit
 
 const localizer = momentLocalizer(moment); //Initialize momentLocalizer for calendar
 
-const EditView = ({
+const CalendarView = ({
   day,
   userActivities,
   onUpdatedActivities,
@@ -241,5 +241,5 @@ const CustomEventComponent = (event) => {
     </div>
   );
 };
-export default EditView;
+export default CalendarView;
 // ai-gen end
