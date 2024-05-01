@@ -88,7 +88,7 @@ const ItineraryPage = () => {
             <div className="banner-container">
               <img className="itin-banner" src="/lasv.jpg" />
               <p className="itin-header">Itinerary for: Las Vegas</p>
-              <p className="itin-date"> 04/24/2024 - 04/30/2024 </p>
+              <p className="itin-date"> 04/25/2024 - 04/30/2024 </p>
             </div>
 
             {itinerary.map((day, index) => (
