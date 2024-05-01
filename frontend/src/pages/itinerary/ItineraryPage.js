@@ -22,13 +22,10 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import NotesSharpIcon from "@mui/icons-material/NotesSharp";
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import AddressAutoFill from "../../components/ItineraryForm/AddressAutoFill";
-import SearchBar from "../../components/GatheringInfo/SearchBar";
 
 const ItineraryPage = () => {
   //User entered start / end date from getting started page
@@ -122,16 +119,13 @@ const ItineraryPage = () => {
   /* Deletes the itinerary/day that was selected by the user */
   // ai-gen start (ChatGPT-3.5, 1)
   const handleDeleteDay = (deletingDay) => {
-    const confirmDelete = window.confirm("Delete Day?");
-    if (confirmDelete) {
-      setItinerary((prevItinerary) =>
-        prevItinerary.filter((day) => day !== deletingDay)
-      );
-    }
+    setItinerary((prevItinerary) =>
+      prevItinerary.filter((day) => day !== deletingDay)
+    );
   };
   // ai-gen end
 
-  /* Any time an activity is updated, is handled by this */
+  /* Any time an activity is updates, is handled by this */
   const handleUpdateActivities = (updatedActivities) => {
     setUserActivities(updatedActivities);
   };
@@ -225,7 +219,7 @@ const ItineraryPage = () => {
         fullWidth
       >
         <DialogTitle>Create Event</DialogTitle>
-        <DialogContent className="create-event-dialog-content" sx={{height: 295}}>
+        <DialogContent className="create-event-dialog-content">
           <div className="activity-titleform-div">
             <FormControl
               className="activity-title-formcontrol"
@@ -256,23 +250,21 @@ const ItineraryPage = () => {
               />
             </LocalizationProvider>
           </div>
-          <div className="address-input-itin-page">
-            <LocationOnIcon style={{ marginBottom: 3, marginLeft: -3}} />
+          <div className="address-input">
             <InputBase
               placeholder="Search Address"
               value={createLocation}
               onChange={(e) => setCreateLocation(e.target.value)}
             />
           </div>
-          <div className="description-input-itin-page">
+          <div className="description-input">
             <NotesSharpIcon style={{ marginBottom: -6, paddingRight: 5 }} />
             <InputBase
-              className="description-inputbase-itin-page"
+              className="description-inputbase"
               placeholder="Description"
               value={createDescription}
               onChange={(e) => setCreateDescription(e.target.value)}
               multiline
-              minRows={4}
             />
           </div>
         </DialogContent>

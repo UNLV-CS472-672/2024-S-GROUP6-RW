@@ -77,15 +77,3 @@
     margin-top: 10px;
   }
 }
-
-.address-input-itin-page {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 3px;
-}
-
-.description-input-itin-page .MuiInputBase-input {
-    background-color: #f2f1ef;
-    width: 500px;
-}
