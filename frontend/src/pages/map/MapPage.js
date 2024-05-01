@@ -7,12 +7,13 @@ import '../../css/MapPageTemp.css'; // Import the CSS file
 function MapPageTemp() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const lat = parseFloat(params.get('lat'));
-  const lng = parseFloat(params.get('lng'));
+  let lat = parseFloat(params.get('lat'));
+  let lng = parseFloat(params.get('lng'));
 
   // Check if lat and lng are valid numbers
   if (isNaN(lat) || isNaN(lng)) {
-    return <div>Invalid coordinates provided in the URL</div>;
+    lat=36.1173;
+    lng=-115.1761;
   }
 
   return (
