@@ -150,7 +150,7 @@ const Activity = ({ activity }) => {
                 <InputBase
                   className={`location-inputbase ${isEditMode ? "location-inputbase-editmode" : ""}`}
                   placeholder="Search Address"
-                  value={location}
+                  defaultValue={location}
                   readOnly={!isEditMode}
                 />
               </div>
