@@ -55,6 +55,7 @@ func GetAllTripsHandler(c *gin.Context) {
 
 	// Bind JSON body to User
 	if !models.BindData(c, &user) {
+		fmt.Println("Binding error")
 		return // Failed to bind data. Exit handler
 	}
 
@@ -63,6 +64,7 @@ func GetAllTripsHandler(c *gin.Context) {
 	tripList, err := business.GetAllTrips(user, database)
 
 	if err != nil {
+		fmt.Println("business error")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
