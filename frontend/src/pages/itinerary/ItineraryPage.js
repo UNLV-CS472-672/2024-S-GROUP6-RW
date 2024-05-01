@@ -22,6 +22,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import NotesSharpIcon from "@mui/icons-material/NotesSharp";
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -224,7 +225,7 @@ const ItineraryPage = () => {
         fullWidth
       >
         <DialogTitle>Create Event</DialogTitle>
-        <DialogContent className="create-event-dialog-content" sx={{height: 340}}>
+        <DialogContent className="create-event-dialog-content" sx={{height: 295}}>
           <div className="activity-titleform-div">
             <FormControl
               className="activity-title-formcontrol"
@@ -255,7 +256,8 @@ const ItineraryPage = () => {
               />
             </LocalizationProvider>
           </div>
-          <div className="address-input">
+          <div className="address-input-itin-page">
+            <LocationOnIcon style={{ marginBottom: 3, marginLeft: -3}} />
             <InputBase
               placeholder="Search Address"
               value={createLocation}
@@ -270,6 +272,7 @@ const ItineraryPage = () => {
               value={createDescription}
               onChange={(e) => setCreateDescription(e.target.value)}
               multiline
+              minRows={4}
             />
           </div>
         </DialogContent>
