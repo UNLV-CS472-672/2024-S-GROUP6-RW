@@ -128,6 +128,11 @@ const ItineraryPage = () => {
   /* Deletes the itinerary/day that was selected by the user */
   // ai-gen start (ChatGPT-3.5, 1)
   const handleDeleteDay = (deletingDay) => {
+    if (itinerary.length === 1) {
+      alert("Itinerary must have at least one day!");
+      return;
+    }
+
     const confirmDelete = window.confirm("Delete Day?");
     if (confirmDelete) {
       setItinerary((prevItinerary) => {
