@@ -1,52 +1,34 @@
 import React, { useState, useContext } from "react";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogContentText from "@mui/material/DialogContentText";
+import CardMedia from "@mui/material/CardMedia";
+import IconButton from "@mui/material/IconButton";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import TodayIcon from "@mui/icons-material/Today";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
-import {
-  Typography,
-  Button,
-  Dialog,
-  DialogContentText,
-  DialogActions,
-  CardMedia,
-  IconButton,
-  Input,
-  InputBase,
-} from "@mui/material";
-
-import "../../css/Activity.css";
+import "../../css/Activity.css"
 
 import cityImg from "../../images/itinerary_img/los-angeles-city.jpg";
-import { red } from "@mui/material/colors";
 
 const Activity = ({ activity }) => {
-  const { id, title, start, end, description, location } = activity; //Get all activity information as a prop
+  const { id, title, location, date, time, description, photo } = activity; //Get all activity information as a prop
 
   const [isDialogOpen, setDialogOpen] = useState(false); //Control pop up window visibility
-  const [isEditMode, setIsEditMode] = useState(false);
   const theme = useTheme();
 
-  //Handles open dialogue
+  //Handles open dialogue 
   const handleOpenDialog = (event) => {
     console.log("Opening dialog...");
     setDialogOpen(true);
   };
 
   //Handles closing the dialogue
-  const handleCloseDialog = (event, reason) => {
-    if (reason && reason === "backdropClick") { //Prevent closing dialog when clicking outside the dialog
-      return;
-    }
+  const handleCloseDialog = () => {
     setDialogOpen(false);
-  };
-
-  //Toggle Edit Mode
-  const toggleEditMode = () => {
-    setIsEditMode((prev) => !prev); //Set it to the opposite mode.
   };
 
   return (
@@ -56,12 +38,14 @@ const Activity = ({ activity }) => {
           <Typography>{title}</Typography>
         </Button>
       </div>
-      <Dialog open={isDialogOpen} onClose={handleCloseDialog} maxWidth="md">
-        <div className="dialog-content" style={{ height: 550, width: 650 }}>
-          <div
-            className="x-button"
-            style={{ position: "absolute", top: 0, right: 0 }}
-          >
+      <Dialog
+        open={isDialogOpen}
+        onClose={handleCloseDialog}
+        maxWidth="md"
+        fullWidth //Uses the biggest dialogue size
+      >
+        <div className="dialog-content" style={{height: 600}}>
+          <div className="x-button" style={{ position: 'absolute', top: 0, right: 0 }}>
             <IconButton
               aria-label="close"
               onClick={handleCloseDialog}
@@ -69,135 +53,42 @@ const Activity = ({ activity }) => {
                 color: (theme) => theme.palette.grey[500],
               }}
             >
-              <CloseIcon />
+              <CloseIcon /> 
             </IconButton>
           </div>
           <CardMedia
             component="img"
+            height="300"
             image={cityImg}
             alt={title}
             style={{
-              marginBottom: 5,
-              maxHeight: "160px",
+              marginBottom: 16,
+              maxHeight: "225px",
               objectfit: "cover",
             }}
           />
-          <div className="editable-content">
-            <div className="title-input-container">
-              <InputBase
-                className={`title-input ${isEditMode ? "title-input-editmode" : ""}`}
-                defaultValue={title}
-                readOnly={!isEditMode}
-              />
-            </div>
-            <div className="dt-tm-lc-dsc-container">
-              <div className="date-time-container">
-                <div className="date-section-container">
-                  <TodayIcon />
-                  {isEditMode ? (
-                    <button className="date-btn">
-                      <Typography>
-                        {start.toLocaleString("default", {
-                          weekday: "long",
-                          month: "short",
-                          day: "2-digit",
-                        })}
-                      </Typography>
-                    </button>
-                  ) : (
-                    <Typography>
-                      {start.toLocaleString("default", {
-                        weekday: "long",
-                        month: "short",
-                        day: "2-digit",
-                      })}
-                    </Typography>
-                  )}
-                </div>
-                <div className="time-section-container">
-                  <AccessTimeIcon />
-                  {isEditMode ? (
-                    <button className="time-btn">
-                      <Typography>
-                        {start.toLocaleString("default", {
-                          hour: "numeric",
-                          minute: "numeric",
-                        })}{" "}
-                        ~{" "}
-                        {end.toLocaleString("default", {
-                          hour: "numeric",
-                          minute: "numeric",
-                        })}
-                      </Typography>
-                    </button>
-                  ) : (
-                    <Typography>
-                      {start.toLocaleString("default", {
-                        hour: "numeric",
-                        minute: "numeric",
-                      })}{" "}
-                      ~{" "}
-                      {end.toLocaleString("default", {
-                        hour: "numeric",
-                        minute: "numeric",
-                      })}
-                    </Typography>
-                  )}
-                </div>
-              </div>
-              <div className="location-address-container">
-                <LocationOnIcon style={{ marginBottom: 3 }} />
-                <InputBase
-                  className={`location-inputbase ${isEditMode ? "location-inputbase-editmode" : ""}`}
-                  placeholder="Search Address"
-                  defaultValue={location}
-                  readOnly={!isEditMode}
-                />
-              </div>
-              <Typography className="description-text-activity">
-                Description
-              </Typography>
-              <InputBase
-                className={`description-inputbase-activity ${
-                  isEditMode ? "description-inputbase-activity-editmode" : ""
-                }`}
-                defaultValue={description}
-                placeholder={!isEditMode ? "" : "Enter description..."}
-                minRows={5}
-                multiline
-                readOnly={!isEditMode}
-              />
-            </div>
-          </div>
-          <DialogActions className={`${!isEditMode ? "delete-edit-btn-grp" : ""}`}>
-            {isEditMode ? (
-            <div className="edit-mode-container">
-              <IconButton
-                className="delete-event-btn"
-                sx={{
-                  color: red[700],
-                }}
-              >
-                <DeleteIcon />
-              </IconButton>
-              <div className="cancel-save-btn-container">
-                <button onClick={toggleEditMode}>Cancel</button>
-                <button>Save</button>
-              </div>
-            </div>
-            ) : (
-              <div className="delete-edit-btn-container">
-                <IconButton
-                  onClick={toggleEditMode}
-                  sx={{
-                    color: "black",
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
-              </div>
-            )}
-          </DialogActions>
+          <Typography
+            variant="subtitle1"
+            style={{ paddingTop: 4, paddingBottom: 4 }}
+          >
+            <LocationOnIcon style={{ marginBottom: -6 }} /> {location}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            style={{ paddingTop: 4, paddingBottom: 4 }}
+          >
+            <TodayIcon style={{ marginBottom: -6 }} /> {date}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            style={{ paddingTop: 4, paddingBottom: 4 }}
+          >
+            <AccessTimeIcon style={{ marginBottom: -6 }} /> {time}
+          </Typography>
+          <DialogContentText style={{ marginTop: 16 }}>
+            <header>Description:</header>
+            {description}
+          </DialogContentText>
         </div>
       </Dialog>
     </div>
