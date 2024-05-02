@@ -1,9 +1,10 @@
 .trips-container{
-
+	width: 100vw;
+	height: 100vh;
+	background-image: url("../images/my_trips/background.jpg");
+	background-size: cover;
 }
 
-
-
 .title-container {
-	padding-top: 50px; 
+	padding-top: 60px; 
 }

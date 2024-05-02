@@ -9,6 +9,7 @@ import PaletteIcon from "@mui/icons-material/Palette";
 import EditIcon from "@mui/icons-material/Edit";
 import { useTheme } from "@mui/material/styles";
 import { saveProfile } from "../../utils/ApiManager";
+import { saveToLocal } from "../../utils/LocalStorageManager";
 
 // Import images for avatars
 import Beagle from "../../images/avatars/beagle.jpg";
@@ -179,6 +180,8 @@ const handleSaveData = () => {
     setAlertMessage("Changes have been saved!!");
     setAlertSucceeded(true);
     setShowAlert(true);
+
+    saveToLocal("avatar",selectedImg.img);
   }
 }
 

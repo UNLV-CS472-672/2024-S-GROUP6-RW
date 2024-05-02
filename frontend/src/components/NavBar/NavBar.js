@@ -26,6 +26,7 @@ import {
 } from "@mui/icons-material";
 import { ColorModeContext } from "../../components/NavBar/ToggleTheme";
 import { Link } from "react-router-dom";
+import Default from "../../images/avatars/beagle.jpg"
 
 const props = {
   userDetails: () => {},
@@ -35,6 +36,13 @@ function ResponsiveAppBar({ user }) {
 	const { isAuth } = useAuth();
 	const username = getFromLocal("username");
 	const navigate = useNavigate();
+
+  var avatar;
+  if (getFromLocal("avatar") === null) {
+    avatar = Default;
+  } else {
+    avatar = getFromLocal("avatar");
+  }
 
   // this is mean that the menu is not open for the 3 lines menu
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -60,7 +68,7 @@ function ResponsiveAppBar({ user }) {
     "Itinerary",
     "Expenses",
     "Map",
-    "Friends"
+//     "Friends"
   ];
   const dropPages = [
     "Profile",
@@ -223,7 +231,7 @@ function ResponsiveAppBar({ user }) {
           </Box>
 
           {/* Add theme color toggle */}
-          <IconButton
+          {/* <IconButton
             onClick={colorMode.toggleColorMode}
             color="black"
             sx={{ mr: 1 }}
@@ -233,7 +241,7 @@ function ResponsiveAppBar({ user }) {
             ) : (
               <Brightness4Icon />
             )}
-          </IconButton>
+          </IconButton> */}
 
           {/* if the user is logged in then we will show the user pages
             & if not -> display getting started page */}
@@ -267,7 +275,7 @@ function ResponsiveAppBar({ user }) {
             >
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, mr: 1 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar style={{border: "0.1vw solid black"}} alt="Remy Sharp" src={avatar} />
                 </IconButton>
               </Tooltip>
 

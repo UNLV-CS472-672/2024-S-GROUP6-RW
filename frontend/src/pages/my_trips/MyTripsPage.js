@@ -8,7 +8,7 @@ function MyTripsPage() {
     <div className="trips-container">
       <div className="container">
         <div className="title-container">
-          <h2>My Trips</h2>
+          <h2 style={{fontSize: "3vw", lineHeight: "1.5vw"}}>My Trips</h2>
             <ShowTrips />
         </div>
       </div>
