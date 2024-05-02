@@ -30,8 +30,8 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const ItineraryPage = () => {
   //User entered start / end date from getting started page
-  const startDate = getFromLocal("startDate");
-  const endDate = getFromLocal("endDate");
+  const [startDate, setStartDate] = useState(getFromLocal("startDate"));
+  const [endDate, setEndDate] = useState(getFromLocal("endDate"));
   const startDateObj = dayjs(startDate);
   const endDateObj = dayjs(endDate);
 
@@ -113,6 +113,14 @@ const ItineraryPage = () => {
       }
       return [...prevItinerary, newDay.toDateString()];
     });
+
+    // Update the end date state variable
+    setEndDate((prevEndDate) => {
+      const newEndDate = prevEndDate
+        ? dayjs(prevEndDate).add(1, "day").toDate()
+        : selectedStartDate;
+      return newEndDate;
+    });
   };
   // ai-gen end
 
@@ -122,9 +130,24 @@ const ItineraryPage = () => {
   const handleDeleteDay = (deletingDay) => {
     const confirmDelete = window.confirm("Delete Day?");
     if (confirmDelete) {
-      setItinerary((prevItinerary) =>
-        prevItinerary.filter((day) => day !== deletingDay)
-      );
+      setItinerary((prevItinerary) => {
+        let newEndDate = prevItinerary[prevItinerary.length - 1];
+        let newStartDate = prevItinerary[0];
+        if (prevItinerary.length === 1) {
+          newStartDate = null;
+          newEndDate = null;
+        } else {
+          if (prevItinerary[prevItinerary.length - 1] === deletingDay) {
+            newEndDate = prevItinerary[prevItinerary.length - 2];
+          }
+          if (prevItinerary[0] === deletingDay) {
+            newStartDate = prevItinerary[1];
+          }
+        }
+        setStartDate(newStartDate);
+        setEndDate(newEndDate);
+        return prevItinerary.filter((day) => day !== deletingDay);
+      });
     }
   };
   // ai-gen end
@@ -191,8 +214,11 @@ const ItineraryPage = () => {
             Itinerary for: Las Vegas
           </Typography>
           <Typography className="itin-dates">
-            {" "}
-            04/24/2024 - 04/30/2024{" "}
+            {startDate && endDate && (
+              <Typography>
+                {format(startDate, 'MM/dd/yyyy')} - {format(endDate, 'MM/dd/yyyy')}
+              </Typography>
+            )}
           </Typography>
           <div className="create-event-btn-div">
             <button
