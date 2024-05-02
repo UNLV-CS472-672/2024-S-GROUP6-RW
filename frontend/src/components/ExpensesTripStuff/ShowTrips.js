@@ -4,6 +4,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { getFromLocal } from "../../utils/LocalStorageManager";
+import { format } from "date-fns";
+import dayjs from "dayjs";
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
@@ -147,6 +150,8 @@ export default function ShowTrips() {
   {/* Handles the event open/close of a modal */}
   const [openModal, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const startDate = getFromLocal("startDate");
+  const endDate = getFromLocal("endDate");
 
   const handleOpenModal = (image) => {
     setSelectedImage(image);
@@ -260,7 +265,7 @@ export default function ShowTrips() {
                             </Typography>
 
                             <Typography variant="subtitle1" style={{ color: "white", fontSize: "1.2vw", fontFamily: "Radley", fontWeight: "600" }}>
-                              {trip.date}
+                              {format(startDate,"MM/dd/yyyy")} - {format(endDate,"MM/dd/yyyy")}
                             </Typography>
                           </div>
 
