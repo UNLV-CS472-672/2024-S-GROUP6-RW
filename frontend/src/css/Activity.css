@@ -113,6 +113,17 @@
     font-size: 20px;
 }
 
+.location-inputbase.MuiInputBase-root {
+    width: 376px;
+    font-family: 'Radley';
+    font-size: 20px;
+    padding-left: 5px;
+}
+
+.location-inputbase-editmode.MuiInputBase-root {
+    background-color: #f2f1ef;
+}
+
 /* Description Area */
 .description-text-activity.MuiTypography-root {
     font-size: 20px;

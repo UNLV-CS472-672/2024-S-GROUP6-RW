@@ -19,7 +19,6 @@ import {
 } from "@mui/material";
 
 import "../../css/Activity.css";
-import AddressAutoFill from "../../components/ItineraryForm/AddressAutoFill";
 
 import cityImg from "../../images/itinerary_img/los-angeles-city.jpg";
 import { red } from "@mui/material/colors";
@@ -58,7 +57,7 @@ const Activity = ({ activity }) => {
         </Button>
       </div>
       <Dialog open={isDialogOpen} onClose={handleCloseDialog} maxWidth="md">
-        <div className="dialog-content" style={{ height: 545, width: 650 }}>
+        <div className="dialog-content" style={{ height: 550, width: 650 }}>
           <div
             className="x-button"
             style={{ position: "absolute", top: 0, right: 0 }}
@@ -148,7 +147,12 @@ const Activity = ({ activity }) => {
               </div>
               <div className="location-address-container">
                 <LocationOnIcon style={{ marginBottom: 3 }} />
-                <AddressAutoFill isEditMode={isEditMode}></AddressAutoFill>
+                <InputBase
+                  className={`location-inputbase ${isEditMode ? "location-inputbase-editmode" : ""}`}
+                  placeholder="Enter Address"
+                  defaultValue={location}
+                  readOnly={!isEditMode}
+                />
               </div>
               <Typography className="description-text-activity">
                 Description
