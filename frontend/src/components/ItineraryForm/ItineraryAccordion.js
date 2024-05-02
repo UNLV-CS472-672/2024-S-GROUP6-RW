@@ -66,7 +66,7 @@ const ItineraryAccordion = ({
                 </TimelineOppositeContent>
                 <TimelineSeparator>
                   <TimelineDot sx={{ backgroundColor: 'black'}} />
-                  {index !== events.length - 1 && <TimelineConnector sx={{ backgroundColor: 'black'}} />}
+                  {filteredActivities.length > 1 && index !== filteredActivities.length - 1 && <TimelineConnector sx={{ backgroundColor: 'black'}} />}
                 </TimelineSeparator>
                 <TimelineContent>
                   <Activity

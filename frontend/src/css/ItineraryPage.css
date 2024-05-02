@@ -23,7 +23,7 @@
   text-shadow: 2px 3px 5px black;
 }
 
-.itin-dates.MuiTypography-root {
+.itin-dates .MuiTypography-root {
   font-family: "Radley";
   font-size: 20px;
   font-weight: 500;
@@ -76,4 +76,16 @@
     position: static;
     margin-top: 10px;
   }
+}
+
+.address-input-itin-page {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 3px;
+}
+
+.description-input-itin-page .MuiInputBase-input {
+    background-color: #f2f1ef;
+    width: 500px;
 }
